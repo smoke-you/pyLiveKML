@@ -12,7 +12,7 @@ Tracking information from several (up to three) commercial flights is displayed 
 aircraft Placemark is created only once, when the aircraft is selected.  The Placemark then moves as the position (LLA) 
 and heading data is updated using KML <Change> tags.
 
-Note that playback is not aligned to the timestamps of the data points.  Each time the <NetworkLink> loaded into GEP
+Note that playback is not aligned to the timestamps of the data points.  Each time the `<NetworkLink>` loaded into GEP
 requests an update, the next point is retrieved from the list.  The update interval is set to 0.5s, but there may be 
 considerably more time between points.
 
