@@ -14,7 +14,7 @@ Tracking information from several (up to three) commercial flights is published 
 positions (Placemarks) under individual Folders, one Folder per selected aircraft.  Placemarks are not changed; rather, 
 as the window moves, leading Placemarks are created and trailing Placemarks are deleted.  
 
-Note that playback is not aligned to the timestamps of the data points.  Each time the <NetworkLink> loaded into GEP
+Note that playback is not aligned to the timestamps of the data points.  Each time the `<NetworkLink>` loaded into GEP
 requests an update, the next point is retrieved from the list.  The update interval is set to 0.5s, but there may be 
 considerably more time between points.
 
