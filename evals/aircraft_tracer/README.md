@@ -10,9 +10,6 @@ Tracking information from several (up to three) commercial flights is displayed 
 Folders, one Folder per aircraft.  All the Placemarks for the selected flights will, over time, be displayed in GEP. 
 Data is loaded over time to avoid the perceptible refresh delay that would occur if circa 6000 Placemarks were created 
 in a single Update tag.
-Note that playback is not aligned to the timestamps of the data points.  Each time the <NetworkLink> loaded into GEP
-requests an update, the next point is retrieved from the list.  The update interval is set to 0.5s, but there may be 
-considerably more time between points.
 
 # Commandline Interface
 
