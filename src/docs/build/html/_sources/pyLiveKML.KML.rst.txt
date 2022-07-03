@@ -1,0 +1,53 @@
+pyLiveKML.KML package
+=====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pyLiveKML.KML.KMLObjects
+
+Submodules
+----------
+
+pyLiveKML.KML.GeoCoordinates module
+-----------------------------------
+
+.. automodule:: pyLiveKML.KML.GeoCoordinates
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyLiveKML.KML.KML module
+------------------------
+
+.. automodule:: pyLiveKML.KML.KML
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyLiveKML.KML.NetworkLinkControl module
+---------------------------------------
+
+.. automodule:: pyLiveKML.KML.NetworkLinkControl
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyLiveKML.KML.Vec2 module
+-------------------------
+
+.. automodule:: pyLiveKML.KML.Vec2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pyLiveKML.KML
+   :members:
+   :undoc-members:
+   :show-inheritance:

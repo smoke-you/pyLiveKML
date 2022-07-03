@@ -1,0 +1,625 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>pyLiveKML.KML package &#8212; pyLiveKML 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/groundwork.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyLiveKML.KML.KMLObjects package" href="pyLiveKML.KML.KMLObjects.html" />
+    <link rel="prev" title="pyLiveKML package" href="pyLiveKML.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyLiveKML.KML.KMLObjects.html" title="pyLiveKML.KML.KMLObjects package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyLiveKML.html" title="pyLiveKML package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyLiveKML 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >src</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pyLiveKML.html" accesskey="U">pyLiveKML package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyLiveKML.KML package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pylivekml-kml-package">
+<h1>pyLiveKML.KML package<a class="headerlink" href="#pylivekml-kml-package" title="Permalink to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html">pyLiveKML.KML.KMLObjects package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.BalloonStyle">pyLiveKML.KML.KMLObjects.BalloonStyle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.ColorStyle">pyLiveKML.KML.KMLObjects.ColorStyle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Container">pyLiveKML.KML.KMLObjects.Container module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Document">pyLiveKML.KML.KMLObjects.Document module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Feature">pyLiveKML.KML.KMLObjects.Feature module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Folder">pyLiveKML.KML.KMLObjects.Folder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Geometry">pyLiveKML.KML.KMLObjects.Geometry module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Icon">pyLiveKML.KML.KMLObjects.Icon module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.IconStyle">pyLiveKML.KML.KMLObjects.IconStyle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.LabelStyle">pyLiveKML.KML.KMLObjects.LabelStyle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.LineString">pyLiveKML.KML.KMLObjects.LineString module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.LineStyle">pyLiveKML.KML.KMLObjects.LineStyle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.LinearRing">pyLiveKML.KML.KMLObjects.LinearRing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Link">pyLiveKML.KML.KMLObjects.Link module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.ListStyle">pyLiveKML.KML.KMLObjects.ListStyle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.NetworkLink">pyLiveKML.KML.KMLObjects.NetworkLink module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Object">pyLiveKML.KML.KMLObjects.Object module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Placemark">pyLiveKML.KML.KMLObjects.Placemark module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Point">pyLiveKML.KML.KMLObjects.Point module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.PolyStyle">pyLiveKML.KML.KMLObjects.PolyStyle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Polygon">pyLiveKML.KML.KMLObjects.Polygon module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Style">pyLiveKML.KML.KMLObjects.Style module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.StyleMap">pyLiveKML.KML.KMLObjects.StyleMap module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.StyleSelector">pyLiveKML.KML.KMLObjects.StyleSelector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.SubStyle">pyLiveKML.KML.KMLObjects.SubStyle module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-pyLiveKML.KML.GeoCoordinates">
+<span id="pylivekml-kml-geocoordinates-module"></span><h2>pyLiveKML.KML.GeoCoordinates module<a class="headerlink" href="#module-pyLiveKML.KML.GeoCoordinates" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.GeoCoordinates.GeoCoordinates">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.GeoCoordinates.</span></span><span class="sig-name descname"><span class="pre">GeoCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.GeoCoordinates.GeoCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The GeoCoordinates type describes a single instance of a Lon-Lat-Alt (LLA) position, as used in
+<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Point" title="pyLiveKML.KML.KMLObjects.Point"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, <a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.LineString" title="pyLiveKML.KML.KMLObjects.LineString"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineString</span></code></a> and
+<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.LinearRing" title="pyLiveKML.KML.KMLObjects.LinearRing"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinearRing</span></code></a> objects. Note that the GeoCoordinates type is <em>not</em> explicitly
+referenced by the KML specification; rather, it is a construct of convenience for the pyLiveKML package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lon</strong> (<em>float</em>) – The longitude.</p></li>
+<li><p><strong>lat</strong> (<em>float</em>) – The latitude.</p></li>
+<li><p><strong>alt</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The (optional) altitude.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>lon</strong> (<em>float</em>) – The longitude, in decimal degrees.</p></li>
+<li><p><strong>lat</strong> (<em>float</em>) – The latitude, in decimal degrees.</p></li>
+<li><p><strong>alt</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The (optional) altitude, in metres.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pyLiveKML.KML.KML">
+<span id="pylivekml-kml-kml-module"></span><h2>pyLiveKML.KML.KML module<a class="headerlink" href="#module-pyLiveKML.KML.KML" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.AltitudeMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">AltitudeMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.AltitudeMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of options for KML &lt;altitudeMode&gt; tags, generally used in e.g. objects that derive from
+<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Geometry" title="pyLiveKML.KML.KMLObjects.Geometry"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geometry</span></code></a>. Refer to the KML documentation at
+<a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.AltitudeMode.ABSOLUTE">
+<span class="sig-name descname"><span class="pre">ABSOLUTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'absolute'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.AltitudeMode.ABSOLUTE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.AltitudeMode.CLAMP_TO_GROUND">
+<span class="sig-name descname"><span class="pre">CLAMP_TO_GROUND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'clampToGround'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.AltitudeMode.CLAMP_TO_GROUND" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.AltitudeMode.RELATIVE_TO_GROUND">
+<span class="sig-name descname"><span class="pre">RELATIVE_TO_GROUND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'relativeToGround'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.AltitudeMode.RELATIVE_TO_GROUND" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ColorMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">ColorMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.ColorMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of options for KML &lt;colorMode&gt; tags, specifically for objects that derive from
+<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.ColorStyle" title="pyLiveKML.KML.KMLObjects.ColorStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorStyle</span></code></a>. Refer to the KML documentation at
+<a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ColorMode.NORMAL">
+<span class="sig-name descname"><span class="pre">NORMAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('normal',)</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ColorMode.NORMAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ColorMode.RANDOM">
+<span class="sig-name descname"><span class="pre">RANDOM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'random'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ColorMode.RANDOM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.DisplayMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">DisplayMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.DisplayMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of options for KML &lt;displayMode&gt; tags, specifically for
+<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.BalloonStyle" title="pyLiveKML.KML.KMLObjects.BalloonStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">BalloonStyle</span></code></a> objects. Refer to the KML documentation at
+<a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.DisplayMode.DEFAULT">
+<span class="sig-name descname"><span class="pre">DEFAULT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'default'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.DisplayMode.DEFAULT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.DisplayMode.HIDE">
+<span class="sig-name descname"><span class="pre">HIDE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hide'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.DisplayMode.HIDE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">ItemIconMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Flag</span></code></p>
+<p>Enumeration of options for KML &lt;ItemIcon&gt;&lt;state&gt; tags, specifically for
+<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.ListStyle" title="pyLiveKML.KML.KMLObjects.ListStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListStyle</span></code></a> objects. Refer to the KML documentation at
+<a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.CLOSED">
+<span class="sig-name descname"><span class="pre">CLOSED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'closed'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.CLOSED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.CLOSED_ERROR">
+<span class="sig-name descname"><span class="pre">CLOSED_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'closed</span> <span class="pre">error'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.CLOSED_ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.CLOSED_FETCHING0">
+<span class="sig-name descname"><span class="pre">CLOSED_FETCHING0</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'closed</span> <span class="pre">fetching0'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.CLOSED_FETCHING0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.CLOSED_FETCHING1">
+<span class="sig-name descname"><span class="pre">CLOSED_FETCHING1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'closed</span> <span class="pre">fetching1'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.CLOSED_FETCHING1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.CLOSED_FETCHING2">
+<span class="sig-name descname"><span class="pre">CLOSED_FETCHING2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'closed</span> <span class="pre">fetching2'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.CLOSED_FETCHING2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.ERROR">
+<span class="sig-name descname"><span class="pre">ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'error'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.OPEN">
+<span class="sig-name descname"><span class="pre">OPEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'open'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.OPEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.OPEN_ERROR">
+<span class="sig-name descname"><span class="pre">OPEN_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'open</span> <span class="pre">error'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.OPEN_ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.OPEN_FETCHING0">
+<span class="sig-name descname"><span class="pre">OPEN_FETCHING0</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'open</span> <span class="pre">fetching0'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.OPEN_FETCHING0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.OPEN_FETCHING1">
+<span class="sig-name descname"><span class="pre">OPEN_FETCHING1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'open</span> <span class="pre">fetching1'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.OPEN_FETCHING1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ItemIconMode.OPEN_FETCHING2">
+<span class="sig-name descname"><span class="pre">OPEN_FETCHING2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'open</span> <span class="pre">fetching2'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ItemIconMode.OPEN_FETCHING2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.KML_UPDATE_CONTAINER_LIMIT_DEFAULT">
+<span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">KML_UPDATE_CONTAINER_LIMIT_DEFAULT</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.KML_UPDATE_CONTAINER_LIMIT_DEFAULT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default maximum number of <a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Feature" title="pyLiveKML.KML.KMLObjects.Feature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code></a> objects that will be included in each 
+synchronization update emitted by a <a class="reference internal" href="#module-pyLiveKML.KML.NetworkLinkControl" title="pyLiveKML.KML.NetworkLinkControl"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkLinkControl</span></code></a> object.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ListItemType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">ListItemType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.ListItemType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of options for KML &lt;listItemType&gt; tags, specifically for
+<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.ListStyle" title="pyLiveKML.KML.KMLObjects.ListStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListStyle</span></code></a> objects. Refer to the KML documentation at
+<a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ListItemType.CHECK">
+<span class="sig-name descname"><span class="pre">CHECK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'check'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ListItemType.CHECK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ListItemType.CHECK_HIDE_CHILDREN">
+<span class="sig-name descname"><span class="pre">CHECK_HIDE_CHILDREN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'checkHideChildren'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ListItemType.CHECK_HIDE_CHILDREN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ListItemType.CHECK_OFF_ONLY">
+<span class="sig-name descname"><span class="pre">CHECK_OFF_ONLY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'checkOffOnly'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ListItemType.CHECK_OFF_ONLY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ListItemType.RADIO_FOLDER">
+<span class="sig-name descname"><span class="pre">RADIO_FOLDER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'radioFolder'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ListItemType.RADIO_FOLDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.RefreshMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">RefreshMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.RefreshMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of options for KML &lt;refreshMode&gt; tags, specifically for
+<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Link" title="pyLiveKML.KML.KMLObjects.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a> objects. Refer to the KML documentation at
+<a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.RefreshMode.ON_CHANGE">
+<span class="sig-name descname"><span class="pre">ON_CHANGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'onChange'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.RefreshMode.ON_CHANGE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.RefreshMode.ON_EXPIRE">
+<span class="sig-name descname"><span class="pre">ON_EXPIRE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'onExpire'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.RefreshMode.ON_EXPIRE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.RefreshMode.ON_INTERVAL">
+<span class="sig-name descname"><span class="pre">ON_INTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'onInterval'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.RefreshMode.ON_INTERVAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.State">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">State</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.State" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of possible states that objects derived from KML <a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Object" title="pyLiveKML.KML.KMLObjects.Object"><code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code></a> may hold.
+The ‘State’ enumeration is specific to the <code class="xref py py-mod docutils literal notranslate"><span class="pre">pyLiveKML</span></code> package, i.e. it is <em>not</em> part of the KML specification.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.State.CHANGING">
+<span class="sig-name descname"><span class="pre">CHANGING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.State.CHANGING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.State.CREATED">
+<span class="sig-name descname"><span class="pre">CREATED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.State.CREATED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.State.CREATING">
+<span class="sig-name descname"><span class="pre">CREATING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.State.CREATING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.State.DELETE_CHANGED">
+<span class="sig-name descname"><span class="pre">DELETE_CHANGED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.State.DELETE_CHANGED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.State.DELETE_CREATED">
+<span class="sig-name descname"><span class="pre">DELETE_CREATED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.State.DELETE_CREATED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.State.IDLE">
+<span class="sig-name descname"><span class="pre">IDLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.State.IDLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.StyleState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">StyleState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.StyleState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of options for KML &lt;Pair&gt;&lt;key&gt; tags, specifically for
+<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.StyleMap" title="pyLiveKML.KML.KMLObjects.StyleMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">StyleMap</span></code></a> objects. Refer to the KML documentation at
+<a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.StyleState.HIGHLIGHT">
+<span class="sig-name descname"><span class="pre">HIGHLIGHT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'highlight'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.StyleState.HIGHLIGHT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.StyleState.NORMAL">
+<span class="sig-name descname"><span class="pre">NORMAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'normal'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.StyleState.NORMAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.UnitsEnum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">UnitsEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.UnitsEnum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of options for KML &lt;unitsEnum&gt; tags, specifically for <code class="xref py py-class docutils literal notranslate"><span class="pre">Vec2</span></code>
+instances in e.g. <a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.IconStyle" title="pyLiveKML.KML.KMLObjects.IconStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">IconStyle</span></code></a> objects. Refer to the KML documentation at
+<a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.UnitsEnum.FRACTION">
+<span class="sig-name descname"><span class="pre">FRACTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'fraction'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.UnitsEnum.FRACTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.UnitsEnum.INSET_PIXELS">
+<span class="sig-name descname"><span class="pre">INSET_PIXELS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'insetPixels'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.UnitsEnum.INSET_PIXELS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.UnitsEnum.PIXELS">
+<span class="sig-name descname"><span class="pre">PIXELS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pixels'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.UnitsEnum.PIXELS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.Vec2Type">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">Vec2Type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.Vec2Type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of possible sub-types for KML <code class="xref py py-class docutils literal notranslate"><span class="pre">Vec2</span></code> objects.  Refer to the KML
+documentation at <a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.Vec2Type.HOTSPOT">
+<span class="sig-name descname"><span class="pre">HOTSPOT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hotSpot'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.Vec2Type.HOTSPOT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ViewRefreshMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">ViewRefreshMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.KML.ViewRefreshMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of options for KML &lt;viewRefreshMode&gt; tags, specifically for
+<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Link" title="pyLiveKML.KML.KMLObjects.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a> objects. Refer to the KML documentation at
+<a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ViewRefreshMode.NEVER">
+<span class="sig-name descname"><span class="pre">NEVER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'never'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ViewRefreshMode.NEVER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ViewRefreshMode.ON_REGION">
+<span class="sig-name descname"><span class="pre">ON_REGION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'onRegion'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ViewRefreshMode.ON_REGION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ViewRefreshMode.ON_REQUEST">
+<span class="sig-name descname"><span class="pre">ON_REQUEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'onRequest'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ViewRefreshMode.ON_REQUEST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.ViewRefreshMode.ON_STOP">
+<span class="sig-name descname"><span class="pre">ON_STOP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'onStop'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.ViewRefreshMode.ON_STOP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.kml_header">
+<span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">kml_header</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'&lt;?xml</span> <span class="pre">version=&quot;1.0&quot;</span> <span class="pre">encoding=&quot;UTF-8&quot;?&gt;'</span></em><a class="headerlink" href="#pyLiveKML.KML.KML.kml_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>The XML tag that opens any XML document, including any KML document.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyLiveKML.KML.KML.kml_tag">
+<span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.KML.</span></span><span class="sig-name descname"><span class="pre">kml_tag</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Element</span></span></span><a class="headerlink" href="#pyLiveKML.KML.KML.kml_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct the opening &lt;kml&gt; tag, with namespaces, for a KML document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The &lt;kml&gt; tag, with namespaces, that encloses the contents of a KML document.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>etree.Element</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pyLiveKML.KML.NetworkLinkControl">
+<span id="pylivekml-kml-networklinkcontrol-module"></span><h2>pyLiveKML.KML.NetworkLinkControl module<a class="headerlink" href="#module-pyLiveKML.KML.NetworkLinkControl" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.NetworkLinkControl.NetworkLinkControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.NetworkLinkControl.</span></span><span class="sig-name descname"><span class="pre">NetworkLinkControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_href</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#pyLiveKML.KML.KMLObjects.Container.Container" title="pyLiveKML.KML.KMLObjects.Container.Container"><span class="pre">Container</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.NetworkLinkControl.NetworkLinkControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The NetworkLinkControl class synchronizes the internal state of a KML object tree rooted in its
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">container</span></code> attribute with GEP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_href</strong> (<em>str</em>) – The URI of the KML document that will be synchronized by this
+<a class="reference internal" href="#module-pyLiveKML.KML.NetworkLinkControl" title="pyLiveKML.KML.NetworkLinkControl"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkLinkControl</span></code></a>. Note that the specified document <em>must</em> already have been created
+in GEP in order to be synchronized.</p></li>
+<li><p><strong>container</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#pyLiveKML.KML.KMLObjects.Container.Container" title="pyLiveKML.KML.KMLObjects.Container.Container"><em>Container</em></a><em>]</em>) – The KML <a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Container" title="pyLiveKML.KML.KMLObjects.Container"><code class="xref py py-class docutils literal notranslate"><span class="pre">Container</span></code></a> that will be the
+root of the tree of KML <a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Feature" title="pyLiveKML.KML.KMLObjects.Feature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code></a> instances managed and synchronized by this
+<a class="reference internal" href="#module-pyLiveKML.KML.NetworkLinkControl" title="pyLiveKML.KML.NetworkLinkControl"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkLinkControl</span></code></a>.  Note that if no <a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Container" title="pyLiveKML.KML.KMLObjects.Container"><code class="xref py py-class docutils literal notranslate"><span class="pre">Container</span></code></a>, or
+None, is specified then a <a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Folder" title="pyLiveKML.KML.KMLObjects.Folder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Folder</span></code></a> instance named ‘Root’ will be instantiated
+for it.</p></li>
+<li><p><strong>update_limit</strong> (<em>int</em>) – The (approximate) maximum number of Create, Change and/or Delete KML tags that will be
+generated as a result of any single synchronization update.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>container</strong> (<a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#pyLiveKML.KML.KMLObjects.Container.Container" title="pyLiveKML.KML.KMLObjects.Container.Container"><em>Container</em></a>) – The root of the tree of KML <a class="reference internal" href="pyLiveKML.KML.KMLObjects.html#module-pyLiveKML.KML.KMLObjects.Feature" title="pyLiveKML.KML.KMLObjects.Feature"><code class="xref py py-class docutils literal notranslate"><span class="pre">Feature</span></code></a> instances that this
+<a class="reference internal" href="#module-pyLiveKML.KML.NetworkLinkControl" title="pyLiveKML.KML.NetworkLinkControl"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkLinkControl</span></code></a> synchronizes.</p></li>
+<li><p><strong>target_href</strong> (<em>str</em>) – The URI of the KML document that will be synchronized by this
+<a class="reference internal" href="#module-pyLiveKML.KML.NetworkLinkControl" title="pyLiveKML.KML.NetworkLinkControl"><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkLinkControl</span></code></a>.</p></li>
+<li><p><strong>update_limit</strong> (<em>int</em>) – The (approximate) maximum number of KML objects that will be synchronized by any single
+synchronization update.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyLiveKML.KML.NetworkLinkControl.NetworkLinkControl.update_kml">
+<span class="sig-name descname"><span class="pre">update_kml</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Element</span></span></span><a class="headerlink" href="#pyLiveKML.KML.NetworkLinkControl.NetworkLinkControl.update_kml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a synchronization update by parsing the <code class="xref py py-attr docutils literal notranslate"><span class="pre">container</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The synchronization update.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>etree.Element</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyLiveKML.KML.Vec2">
+<span id="pylivekml-kml-vec2-module"></span><h2>pyLiveKML.KML.Vec2 module<a class="headerlink" href="#module-pyLiveKML.KML.Vec2" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyLiveKML.KML.Vec2.Vec2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyLiveKML.KML.Vec2.</span></span><span class="sig-name descname"><span class="pre">Vec2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyLiveKML.KML.KML.Vec2Type" title="pyLiveKML.KML.KML.Vec2Type"><span class="pre">Vec2Type</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Vec2Type.HOTSPOT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyLiveKML.KML.KML.UnitsEnum" title="pyLiveKML.KML.KML.UnitsEnum"><span class="pre">UnitsEnum</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">UnitsEnum.FRACTION</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyLiveKML.KML.KML.UnitsEnum" title="pyLiveKML.KML.KML.UnitsEnum"><span class="pre">UnitsEnum</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">UnitsEnum.FRACTION</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyLiveKML.KML.Vec2.Vec2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>KML field, per the documentation at <a class="reference external" href="https://developers.google.com/kml/documentation/kmlreference#kml-fields">https://developers.google.com/kml/documentation/kmlreference#kml-fields</a>, that
+is used to define the reference point, handle, or <em>hotspot</em> for an icon in GEP.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec_type</strong> (<a class="reference internal" href="#pyLiveKML.KML.KML.Vec2Type" title="pyLiveKML.KML.KML.Vec2Type"><em>Vec2Type</em></a>) – The sub-type of the Vec2 object. Defaults to ‘hotSpot’.</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – The x value of the Vec2; defaults to 0.5.</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – The y value of the Vec2; defaults to 0.5.</p></li>
+<li><p><strong>x_units</strong> (<a class="reference internal" href="#pyLiveKML.KML.KML.UnitsEnum" title="pyLiveKML.KML.KML.UnitsEnum"><em>UnitsEnum</em></a>) – The units type of the Vec2 object’s x value. Defaults to ‘fraction’.</p></li>
+<li><p><strong>y_units</strong> (<a class="reference internal" href="#pyLiveKML.KML.KML.UnitsEnum" title="pyLiveKML.KML.KML.UnitsEnum"><em>UnitsEnum</em></a>) – The units type of the Vec2 object’s y value. Defaults to ‘fraction’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>vec_type</strong> (<a class="reference internal" href="#pyLiveKML.KML.KML.Vec2Type" title="pyLiveKML.KML.KML.Vec2Type"><em>Vec2Type</em></a>) – The sub-type of the Vec2 object. Defaults to ‘hotSpot’.</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – The x value of the Vec2; defaults to 0.5.</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – The y value of the Vec2; defaults to 0.5.</p></li>
+<li><p><strong>x_units</strong> (<a class="reference internal" href="#pyLiveKML.KML.KML.UnitsEnum" title="pyLiveKML.KML.KML.UnitsEnum"><em>UnitsEnum</em></a>) – The units type of the Vec2 object’s x value. Defaults to ‘fraction’.</p></li>
+<li><p><strong>y_units</strong> (<a class="reference internal" href="#pyLiveKML.KML.KML.UnitsEnum" title="pyLiveKML.KML.KML.UnitsEnum"><em>UnitsEnum</em></a>) – The units type of the Vec2 object’s y value. Defaults to ‘fraction’.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyLiveKML.KML.Vec2.Vec2.xml">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">xml</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Element</span></em><a class="headerlink" href="#pyLiveKML.KML.Vec2.Vec2.xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>An XML representation of this object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyLiveKML.KML">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pyLiveKML.KML" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">pyLiveKML.KML package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-pyLiveKML.KML.GeoCoordinates">pyLiveKML.KML.GeoCoordinates module</a></li>
+<li><a class="reference internal" href="#module-pyLiveKML.KML.KML">pyLiveKML.KML.KML module</a></li>
+<li><a class="reference internal" href="#module-pyLiveKML.KML.NetworkLinkControl">pyLiveKML.KML.NetworkLinkControl module</a></li>
+<li><a class="reference internal" href="#module-pyLiveKML.KML.Vec2">pyLiveKML.KML.Vec2 module</a></li>
+<li><a class="reference internal" href="#module-pyLiveKML.KML">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pyLiveKML.html"
+                          title="previous chapter">pyLiveKML package</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pyLiveKML.KML.KMLObjects.html"
+                          title="next chapter">pyLiveKML.KML.KMLObjects package</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/modules/pyLiveKML.KML.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyLiveKML.KML.KMLObjects.html" title="pyLiveKML.KML.KMLObjects package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pyLiveKML.html" title="pyLiveKML package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyLiveKML 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >src</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="pyLiveKML.html" >pyLiveKML package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyLiveKML.KML package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, reprobate.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+# Default ignored files
+/build/doctrees/
+/source/
+/make.bat
+/Makefile
+/sphinx-build.bat

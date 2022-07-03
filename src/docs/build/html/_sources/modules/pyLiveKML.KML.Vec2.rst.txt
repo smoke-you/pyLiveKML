@@ -1,0 +1,29 @@
+﻿pyLiveKML.KML.Vec2
+==================
+
+.. automodule:: pyLiveKML.KML.Vec2
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Vec2
+   
+   
+
+   
+   
+   
+
+
+

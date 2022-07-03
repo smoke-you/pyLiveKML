@@ -1,0 +1,18 @@
+pyLiveKML package
+=================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pyLiveKML.KML
+
+Module contents
+---------------
+
+.. automodule:: pyLiveKML
+   :members:
+   :undoc-members:
+   :show-inheritance:

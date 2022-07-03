@@ -1,0 +1,4 @@
+# Default ignored files
+/__pycache__/
+/KML/__pycache__/
+/KML/KMLObjects/__pycache__/
