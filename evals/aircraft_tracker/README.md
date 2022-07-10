@@ -3,8 +3,8 @@
 This example project is intended to demonstrate:
 * Using Flask as the application+webserver for pyLiveKML
 * Subclassing KML Placemarks, including:
-    * Dynamically updating KML object properties, e.g. the <description> tag
-    * Overriding KML methods to alter how a KML object is published to GEP
+    * Dynamically updating KML object properties, e.g. the LLA coordinates and the `<description>` KML tag.
+    * Overriding KML methods to alter how a KML object is published to GEP.
 
 # What Does it Do?
 
