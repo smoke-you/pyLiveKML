@@ -1,7 +1,7 @@
 # Purpose
 
 This example project is intended to demonstrate:
-* Using Flask as the webserver for pyLiveKML
+* Using Flask as the application+webserver for pyLiveKML
 * Subclassing KML Placemarks, including:
     * Translating a simple 2D shape projected onto the xy-plane to a geospatial object (polygon) located at specific LLA coordinates
 * Dynamically reconfiguring KML Placemarks, e.g. by:
