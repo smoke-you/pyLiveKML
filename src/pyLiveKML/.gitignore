@@ -2,3 +2,9 @@
 /__pycache__/
 /KML/__pycache__/
 /KML/KMLObjects/__pycache__/
+/build/
+/dist/
+/pyLiveKML.egg-info/
+/pyproject.toml
+/LICENCE
+/README.md

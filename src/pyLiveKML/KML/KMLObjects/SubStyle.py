@@ -1,6 +1,6 @@
 from abc import ABC
 
-from pyLiveKML.KML.KMLObjects.Object import Object
+from .Object import Object
 
 
 class SubStyle(Object, ABC):

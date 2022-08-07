@@ -1,9 +1,9 @@
 from abc import ABC
 from typing import Optional, Iterable, Iterator
 
-from pyLiveKML.KML.KML import State
-from pyLiveKML.KML.KMLObjects.Object import Object
-from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
+from ..KML import State
+from ..KMLObjects.Object import Object
+from ..KMLObjects.StyleSelector import StyleSelector
 
 
 class Feature(Object, ABC):

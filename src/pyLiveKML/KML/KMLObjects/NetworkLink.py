@@ -2,10 +2,10 @@ from typing import Optional, Iterator
 
 from lxml import etree
 
-from pyLiveKML.KML.KML import RefreshMode
-from pyLiveKML.KML.KMLObjects.Feature import Feature
-from pyLiveKML.KML.KMLObjects.Link import Link
-from pyLiveKML.KML.KMLObjects.Object import ObjectChild
+from ..KML import RefreshMode
+from .Feature import Feature
+from .Link import Link
+from .Object import ObjectChild
 
 
 class NetworkLink(Feature):

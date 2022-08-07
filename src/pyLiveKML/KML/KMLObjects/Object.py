@@ -3,7 +3,7 @@ from typing import Optional, NamedTuple, Iterator
 from uuid import uuid4
 from lxml import etree
 
-from pyLiveKML.KML.KML import State
+from ..KML import State
 
 
 class Object(ABC):

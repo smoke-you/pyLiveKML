@@ -2,8 +2,8 @@ from typing import Optional
 
 from lxml import etree
 
-from pyLiveKML.KML.KML import ColorMode
-from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
+from ..KML import ColorMode
+from .ColorStyle import ColorStyle
 
 
 class PolyStyle(ColorStyle):

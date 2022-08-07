@@ -1,8 +1,8 @@
 from typing import Optional, Iterable
 
-from pyLiveKML.KML.KMLObjects.Feature import Feature
-from pyLiveKML.KML.KMLObjects.Container import Container
-from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
+from .Feature import Feature
+from .Container import Container
+from .StyleSelector import StyleSelector
 
 
 class Document(Container):

@@ -2,8 +2,8 @@ from typing import Optional
 
 from lxml import etree
 
-from pyLiveKML.KML.KML import DisplayMode
-from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
+from ..KML import DisplayMode
+from .SubStyle import SubStyle
 
 
 class BalloonStyle(SubStyle):

@@ -2,10 +2,10 @@ from typing import Optional, Iterator
 
 from lxml import etree
 
-from pyLiveKML.KML.KMLObjects.Feature import Feature
-from pyLiveKML.KML.KMLObjects.Geometry import Geometry
-from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
-from pyLiveKML.KML.KMLObjects.Object import ObjectChild
+from .Feature import Feature
+from .Geometry import Geometry
+from .StyleSelector import StyleSelector
+from .Object import ObjectChild
 
 
 class Placemark(Feature):

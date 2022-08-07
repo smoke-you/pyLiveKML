@@ -2,7 +2,7 @@ from typing import Optional
 
 from lxml import etree
 
-from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
+from .ColorStyle import ColorStyle
 
 
 class LineStyle(ColorStyle):

@@ -2,8 +2,8 @@ from typing import Optional
 
 from lxml import etree
 
-from pyLiveKML.KML.KML import ListItemType, ItemIconMode
-from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
+from ..KML import ListItemType, ItemIconMode
+from .SubStyle import SubStyle
 
 
 class ListStyle(SubStyle):

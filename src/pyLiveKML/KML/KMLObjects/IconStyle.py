@@ -2,9 +2,9 @@ from typing import Optional
 
 from lxml import etree
 
-from pyLiveKML.KML.KML import ColorMode
-from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
-from pyLiveKML.KML.Vec2 import Vec2
+from ..KML import ColorMode
+from .ColorStyle import ColorStyle
+from ..Vec2 import Vec2
 
 
 class IconStyle(ColorStyle):

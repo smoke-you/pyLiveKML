@@ -2,8 +2,8 @@ from typing import Optional
 
 from lxml import etree
 
-from pyLiveKML.KML.KML import RefreshMode
-from pyLiveKML.KML.KMLObjects.Object import Object
+from ..KML import RefreshMode
+from .Object import Object
 
 
 class Link(Object):

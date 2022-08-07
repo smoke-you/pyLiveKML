@@ -2,9 +2,9 @@ from typing import Optional, Iterable, Iterator
 
 from lxml import etree
 
-from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from pyLiveKML.KML.KML import AltitudeMode
-from pyLiveKML.KML.KMLObjects.Geometry import Geometry
+from ..GeoCoordinates import GeoCoordinates
+from ..KML import AltitudeMode
+from .Geometry import Geometry
 
 
 class LinearRing(Geometry):

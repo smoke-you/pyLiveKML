@@ -2,9 +2,9 @@ from typing import Optional
 
 from lxml import etree
 
-from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
-from pyLiveKML.KML.KMLObjects.Container import Container
-from pyLiveKML.KML.KMLObjects.Folder import Folder
+from .KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from .KMLObjects.Container import Container
+from .KMLObjects.Folder import Folder
 
 
 class NetworkLinkControl:

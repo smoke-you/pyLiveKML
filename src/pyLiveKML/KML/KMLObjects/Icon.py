@@ -2,8 +2,8 @@ from typing import Optional, NamedTuple
 
 from lxml import etree
 
-from pyLiveKML.KML.KML import RefreshMode
-from pyLiveKML.KML.KMLObjects.Link import Link
+from ..KML import RefreshMode
+from .Link import Link
 
 
 GxParams = NamedTuple('GxParams', [('x', int), ('y', int), ('w', int), ('h', int)])

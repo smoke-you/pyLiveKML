@@ -3,10 +3,10 @@ from typing import Optional, Iterable, NamedTuple, Iterator
 
 from lxml import etree
 
-from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, State
-from pyLiveKML.KML.KMLObjects.Feature import Feature
-from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
-from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
+from ..KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, State
+from .Feature import Feature
+from .Object import Object, ObjectChild
+from .StyleSelector import StyleSelector
 
 
 class Container(list[Feature], Feature, ABC):

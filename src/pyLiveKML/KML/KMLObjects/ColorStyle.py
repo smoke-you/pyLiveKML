@@ -1,8 +1,8 @@
 from abc import ABC
 from typing import Optional
 
-from pyLiveKML.KML.KML import ColorMode
-from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
+from ..KML import ColorMode
+from .SubStyle import SubStyle
 
 
 class ColorStyle(SubStyle, ABC):

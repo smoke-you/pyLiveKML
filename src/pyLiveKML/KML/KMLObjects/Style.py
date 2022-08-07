@@ -2,14 +2,14 @@ from typing import Optional, Iterator
 
 from lxml import etree
 
-from pyLiveKML.KML.KMLObjects.BalloonStyle import BalloonStyle
-from pyLiveKML.KML.KMLObjects.IconStyle import IconStyle
-from pyLiveKML.KML.KMLObjects.LabelStyle import LabelStyle
-from pyLiveKML.KML.KMLObjects.LineStyle import LineStyle
-from pyLiveKML.KML.KMLObjects.ListStyle import ListStyle
-from pyLiveKML.KML.KMLObjects.Object import ObjectChild
-from pyLiveKML.KML.KMLObjects.PolyStyle import PolyStyle
-from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
+from .BalloonStyle import BalloonStyle
+from .IconStyle import IconStyle
+from .LabelStyle import LabelStyle
+from .LineStyle import LineStyle
+from .ListStyle import ListStyle
+from .Object import ObjectChild
+from .PolyStyle import PolyStyle
+from .StyleSelector import StyleSelector
 
 
 class Style(StyleSelector):

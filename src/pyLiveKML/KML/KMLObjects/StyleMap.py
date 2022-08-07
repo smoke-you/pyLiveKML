@@ -2,9 +2,9 @@ from typing import Optional, Iterator
 
 from lxml import etree
 
-from pyLiveKML.KML.KMLObjects.Object import ObjectChild
-from pyLiveKML.KML.KMLObjects.Style import Style
-from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
+from .Object import ObjectChild
+from .Style import Style
+from .StyleSelector import StyleSelector
 
 
 class StyleMap(StyleSelector):

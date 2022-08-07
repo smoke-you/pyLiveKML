@@ -2,10 +2,10 @@ from typing import Optional, Iterable, Iterator
 
 from lxml import etree
 
-from pyLiveKML.KML.KML import AltitudeMode, State
-from pyLiveKML.KML.KMLObjects.Geometry import Geometry
-from pyLiveKML.KML.KMLObjects.LinearRing import LinearRing
-from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+from ..KML import AltitudeMode, State
+from .Geometry import Geometry
+from .LinearRing import LinearRing
+from .Object import Object, ObjectChild
 
 
 class Polygon(Geometry):

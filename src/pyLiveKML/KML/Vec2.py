@@ -1,6 +1,6 @@
 from lxml import etree
 
-from pyLiveKML.KML.KML import UnitsEnum, Vec2Type
+from .KML import UnitsEnum, Vec2Type
 
 
 class Vec2:
