@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pyLiveKML Geometry App</title>
+</head>
+<body>
+    <script>
+        function setSelect(src) {
+            let body;
+            if (Array.isArray(src))
+                body = src.map((x) => {return {id:x.name,checked:x.checked};});
+            else
+                body = {id:src.name,checked:src.checked};
+            fetch("/geometry/select", {
+                method: "POST", 
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(body)
+            });
+        }
+        async function sendControl(body) {
+            await fetch("/geometry/control", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(body)
+            }).then((resp) => resp.json()).catch(console.error);
+        }
+        async function setLLA(llaParent) {
+            const id = llaParent.dataset.geoid;
+            const lat = llaParent.children[0].value;
+            const lon = llaParent.children[1].value;
+            const alt = llaParent.children[2].value;
+            await sendControl({req:{origin:{id:id,lat:lat,lon:lon,alt:alt}}});
+        }
+        async function setFill(fillParent) {
+            const id = fillParent.dataset.geoid;
+            const rgb = fillParent.children[0].value;
+            const alpha = fillParent.children[1].value;
+            await sendControl({req:{fill:{id:id,rgb:rgb,alpha:alpha}}});
+        }
+        async function setBorder(borderParent) {
+            const id = borderParent.dataset.geoid;
+            const rgb = borderParent.children[0].value;
+            const alpha = borderParent.children[1].value;
+            await sendControl({req:{border:{id:id,rgb:rgb,alpha:alpha}}});
+        }
+        async function applyRotation(rotParent) {
+            const id = borderParent.dataset.geoid;
+            const zrot = borderParent.children[0].value;
+            await sendControl({req:{rotate:{id:id,value:zrot}}});
+        }
+        function checkAll() {
+            items = Array(...document.getElementsByClassName("geometry-check"))
+            items.map((x) => {x.checked = true;});
+            setSelect(items);
+        }
+        function uncheckAll() {
+            items = Array(...document.getElementsByClassName("geometry-check"))
+            items.map((x) => {x.checked = false;});
+            setSelect(items);
+        }
+    </script>
+    <table>
+        <tr>
+            <th>Show</th>
+            <th>Geo Object</th>
+            <th>LLA</th>
+            <th>Fill</th>
+            <th>Border</th>
+            <th>Rotate</th>
+        </tr>
+        {% for item in geolist %}
+        <tr>
+            <td><input type="checkbox" 
+                    id="geometry-{{ item.id }}" 
+                    name="{{ item.id }}" 
+                    onchange="setSelect(this)" 
+                    class="geometry-check"
+                    {% if item.selected %}checked{% endif %}
+                ></td>
+            <td><label for="geometry-{{ item.id }}">{{ item.name }}</label></td>
+            <td data-geoid="{{ item.id }}">
+                <input type="number" id="lat-{{ item.id }}" style="width:10ch;text-align-last:right;" 
+                    min="-90.0" max="89.999" step="0.001" onchange="setLLA(this.parentElement)">
+                <input type="number" id="lon-{{ item.id }}" style="width:10ch;text-align-last:right;" 
+                    min="-180.0" max="179.999" step="0.001" onchange="setLLA(this.parentElement)">
+                <input type="number" id="alt-{{ item.id }}" style="width:10ch;text-align-last:right;" 
+                    min="0" max="10000" step="10" onchange="setLLA(this.parentElement)">
+            </td>
+            <td data-geoid="{{ item.id }}">
+                <input type="color" id="fill-rgb-{{ item.id }}" style="width:4ch;height:3ch" 
+                    onchange="setFill(this.parentElement)">
+                <input type="number" id="fill-alpha-{{ item.id }}" style="width:6ch;text-align-last:right" 
+                    min="0" max="255" onchange="setFill(this.parentElement)">
+            </td>
+            <td data-geoid="{{ item.id }}">
+                <input type="color" id="border-rgb-{{ item.id }}" style="width:4ch;height:3ch" 
+                    onchange="setBorder(this.parentElement)">
+                <input type="number" id="border-alpha-{{ item.id }}" style="width:6ch;text-align-last:right" 
+                    min="0" max="255" onchange="setBorder(this.parentElement)">
+            </td>
+            <td data-geoid="{{ item.id }}">
+                <input type="number" id="rotate-z-{{ item.id }}" style="width:6ch;text-align-last:right"
+                    min="-90" max="90" step="1">
+                <button onclick="applyRotation(this.parentElement)">GO</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <button onclick="checkAll()">All On</button>
+    <button onclick="uncheckAll()">All Off</button>
+    <br>
+    <script>
+        {% for item in geolist %}
+        document.getElementById("lat-{{ item.id }}").value = "{{ item.origin.lat }}";
+        document.getElementById("lon-{{ item.id }}").value = "{{ item.origin.lon }}";
+        document.getElementById("alt-{{ item.id }}").value = "{{ item.origin.alt }}";
+        document.getElementById("fill-rgb-{{ item.id }}").value = "#{{ item.fill_rgb }}";
+        document.getElementById("fill-alpha-{{ item.id }}").value = "{{ item.fill_alpha }}";
+        document.getElementById("border-rgb-{{ item.id }}").value = "#{{ item.border_rgb }}";
+        document.getElementById("border-alpha-{{ item.id }}").value = "{{ item.border_alpha }}";
+        document.getElementById("rotate-z-{{ item.id }}").value = "0";
+        {% endfor %}
+    </script>
+</body>

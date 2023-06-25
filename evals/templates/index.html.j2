@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />    
+    <title>pyLiveKML Demo</title>
+</head>
+<body>
+    <script>
+        window.addEventListener("load", (ev) => {fetch("/clear", {method: "POST"})});
+        async function setUpdateSz(value) {
+            await fetch("/control", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({req:{updateSz:value}})
+            }).then((resp) => resp.json()).catch(console.error);
+        }
+    </script>
+    <table>
+        <tr>
+            <th>App</th>
+            <th>Description</th>
+        </tr>
+        {% for app in applist %}
+        <tr>
+            <td style="vertical-align:text-top;padding-right:8px"><a href="{{ app.path }}/">{{ app.name }}</a></td>
+            <td style="vertical-align:text-top;padding-right:8px">
+                {% for line in app.description %}<span>{{ line }}</span><br>{% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <label for="kml-update-sz">KML Update Size: </label>
+    <input type="number" id="kml-update-sz" min="{{ updateSz.min }}" max="{{ updateSz.max }}" onchange="setUpdateSz(this.value)">
+    <br>
+    <br>
+    <label for="gep-link-text">GEP link: </label>
+    <input type="text" id="gep-link-text" readonly></label>
+    <br>
+    <script>
+        document.getElementById("kml-update-sz").value = "{{ updateSz.value }}";
+        const linkTextField = document.getElementById("gep-link-text");
+        const linkText = window.location.protocol + "//" + window.location.host + "/loader.kml";
+        linkTextField.value = linkText;
+        linkTextField.style.width = linkText.length + "ch";
+    </script>
+</body>

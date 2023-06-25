@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pyLiveKML Tracker App</title>
+</head>
+<body>
+    <script>
+        function submit_select(src) {
+            let body;
+            if (Array.isArray(src))
+                body = src.map((x) => {return {id:x.name,checked:x.checked};});
+            else
+                body = {id:src.name,checked:src.checked};
+            fetch("/tracker/select", {
+                method: "POST", 
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(body)
+            });
+        }
+        function checkAll() {
+            items = Array(...document.getElementsByClassName("aircraft-check"))
+            items.map((x) => {x.checked = true;});
+            submit_select(items);
+        }
+        function uncheckAll() {
+            items = Array(...document.getElementsByClassName("aircraft-check"))
+            items.map((x) => {x.checked = false;});
+            submit_select(items);
+        }
+    </script>
+    <table>
+        <tr>
+            <th>Show</th>
+            <th>Aircraft</th>
+        </tr>
+        {% for item in aircraftlist %}
+        <tr>
+            <td><input type="checkbox" 
+                    id="tracker-{{ item.id }}" 
+                    name="{{ item.id }}" 
+                    onchange="submit_select(this)" 
+                    class="aircraft-check"
+                    {% if item.selected %}checked{% endif %}
+                ></td>
+            <td><label for="tracker-{{ item.id }}">{{ item.name }}</label></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <button onclick="checkAll()">All On</button>
+    <button onclick="uncheckAll()">All Off</button>
+</body>

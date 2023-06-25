@@ -1,3 +1,7 @@
 # Default ignored files
 /__pycache__/
-/geometry/__pycache__/
+/apps/__pycache__/
+/apps/aircraft_tracer/__pycache__/
+/apps/aircraft_tracker/__pycache__/
+/apps/aircraft_trail/__pycache__/
+/apps/geometry/__pycache__/

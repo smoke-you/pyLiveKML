@@ -1,0 +1,2 @@
+Displays a single position for each selected aircraft.
+At each update, the Placemarks for the aircraft are updated to reflect a new historical position.

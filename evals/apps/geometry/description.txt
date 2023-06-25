@@ -1,0 +1,4 @@
+Displays two polygons, a ring and an ellipse.
+The ring is clamped to ground and its altitude is fixed, whereas the ellipse is floating and its altitude can be changed.
+Both polygons can be individually moved to new coordinates (LL/LLA), and have the colours (ARGB) of their border and fill changed.
+Both polgons can be individually rotated around their local z-axis, although this has no effect on the ring as it is symmetrical.

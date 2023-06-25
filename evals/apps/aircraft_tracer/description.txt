@@ -1,0 +1,2 @@
+Displays all of the historical positions for the selected aircraft, over time.
+At each update, "KML Update Size" positions (from the index page) are added to the head of the trace.
