@@ -93,7 +93,7 @@ async def _():
 
 @app.get('/favicon.ico')
 async def _():
-    return FileResponse(local_dir.joinpath('static/img/favicon.jpg'))
+    return FileResponse(local_dir.joinpath('static/img/earth.png'))
 
 
 @app.get('/')

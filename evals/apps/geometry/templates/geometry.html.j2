@@ -46,8 +46,8 @@
             await sendControl({req:{border:{id:id,rgb:rgb,alpha:alpha}}});
         }
         async function applyRotation(rotParent) {
-            const id = borderParent.dataset.geoid;
-            const zrot = borderParent.children[0].value;
+            const id = rotParent.dataset.geoid;
+            const zrot = rotParent.children[0].value;
             await sendControl({req:{rotate:{id:id,value:zrot}}});
         }
         function checkAll() {
