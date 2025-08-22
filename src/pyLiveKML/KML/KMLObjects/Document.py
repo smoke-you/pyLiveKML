@@ -1,8 +1,7 @@
-from typing import Optional, Iterable
+from typing import Iterable
 
-from .Feature import Feature
-from .Container import Container
-from .StyleSelector import StyleSelector
+from pyLiveKML.KML.KMLObjects.Feature import Feature, Container
+from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
 
 class Document(Container):
@@ -11,19 +10,19 @@ class Document(Container):
     :class:`~pyLiveKML.KML.KMLObjects.Document` objects are containers for :class:`~pyLiveKML.KML.KMLObjects.Feature`
     objects, including other :class:`~pyLiveKML.KML.KMLObjects.Container` instances.
 
-    :param Optional[str] name: The (optional) name for this :class:`~pyLiveKML.KML.KMLObjects.Document` that will
+    :param str|None name: The (optional) name for this :class:`~pyLiveKML.KML.KMLObjects.Document` that will
         be displayed in GEP.
-    :param Optional[bool] visibility: The (optional) initial visibility for this
+    :param bool|None visibility: The (optional) initial visibility for this
         :class:`~pyLiveKML.KML.KMLObjects.Document` in GEP.
-    :param Optional[bool] is_open: Optional flag to indicate whether the
+    :param bool|None is_open: Optional flag to indicate whether the
         :class:`~pyLiveKML.KML.KMLObjects.Document` will be displayed as 'open' in the GEP user List View.
-    :param Optional[str] style_url: An (optional) style URL, generally a reference to a global
+    :param str|None style_url: An (optional) style URL, generally a reference to a global
         :class:`~pyLiveKML.KML.KMLObjects.StyleSelector` in a parent of this
         :class:`~pyLiveKML.KML.KMLObjects.Document`.
-    :param Optional[Iterable[StyleSelector]] styles: An (optional) iterable of
+    :param Iterable[StyleSelector]|None styles: An (optional) iterable of
         :class:`~pyLiveKML.KML.KMLObjects.StyleSelector` instances that will be local to this
         :class:`~pyLiveKML.KML.KMLObjects.Document`.
-    :param Optional[Iterable[Feature]] features: An (optional) iterable of
+    :param Iterable[Feature]|None features: An (optional) iterable of
         :class:`~pyLiveKML.KML.KMLObjects.Feature` instances to be enclosed by this
         :class:`~pyLiveKML.KML.KMLObjects.Document`.
     """
@@ -36,12 +35,12 @@ class Document(Container):
 
     def __init__(
         self,
-        name: Optional[str] = None,
-        visibility: Optional[bool] = None,
-        is_open: Optional[bool] = None,
-        style_url: Optional[str] = None,
-        styles: Optional[Iterable[StyleSelector]] = None,
-        features: Optional[Iterable[Feature]] = None,
+        name: str | None = None,
+        visibility: bool | None = None,
+        is_open: bool | None = None,
+        style_url: str | None = None,
+        styles: Iterable[StyleSelector] | None = None,
+        features: Iterable[Feature] | None = None,
     ):
         Container.__init__(
             self,

@@ -1,11 +1,11 @@
-from typing import Optional, Iterator
+from typing import Iterator
 
 from lxml import etree  # type: ignore
 
-from ..KML import RefreshMode
-from .Feature import Feature
-from .Link import Link
-from .Object import ObjectChild
+from pyLiveKML.KML.KML import RefreshMode
+from pyLiveKML.KML.KMLObjects.Feature import Feature
+from pyLiveKML.KML.KMLObjects.Link import Link
+from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 
 
 class NetworkLink(Feature):
@@ -13,24 +13,24 @@ class NetworkLink(Feature):
     :class:`~pyLiveKML.KML.KMLObjects.NetworkLink` objects are typically used to direct GEP to periodically retrieve a
     file from a specified href.
 
-    :param Optional[str] name: The (optional) text that will be displayed in the GEP user List View as the name of the
+    :param str|None name: The (optional) text that will be displayed in the GEP user List View as the name of the
         :class:`~pyLiveKML.KML.KMLObjects.NetworkLink`.
-    :param Optional[str] href: An (optional) href for the file that will be loaded by the
+    :param str|None href: An (optional) href for the file that will be loaded by the
         :class:`~pyLiveKML.KML.KMLObjects.NetworkLink`.
-    :param Optional[RefreshMode] refresh_mode: The (optional) refresh mode that will be used for file loading.
-    :param Optional[float] refresh_interval: The (optional) refresh interval, in seconds, that will be used for file
+    :param RefreshMode|None refresh_mode: The (optional) refresh mode that will be used for file loading.
+    :param float|None refresh_interval: The (optional) refresh interval, in seconds, that will be used for file
         loading.
-    :param Optional[bool] is_open: Optional flag to indicate whether the :class:`~pyLiveKML.KML.KMLObjects.NetworkLink`
+    :param bool|None is_open: Optional flag to indicate whether the :class:`~pyLiveKML.KML.KMLObjects.NetworkLink`
         will be displayed as 'open' in the GEP user List View.
     """
 
     def __init__(
         self,
-        name: Optional[str] = None,
-        href: Optional[str] = None,
-        refresh_mode: Optional[RefreshMode] = None,
-        refresh_interval: Optional[float] = None,
-        is_open: Optional[bool] = None,
+        name: str | None = None,
+        href: str | None = None,
+        refresh_mode: RefreshMode | None = None,
+        refresh_interval: float | None = None,
+        is_open: bool | None = None,
     ):
         Feature.__init__(self, name=name, visibility=None)
         self._is_open: bool = False if is_open is None else is_open

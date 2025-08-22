@@ -10,7 +10,6 @@ from fastapi.responses import (
     FileResponse,
     PlainTextResponse,
     RedirectResponse,
-    HTMLResponse,
     JSONResponse,
 )
 from fastapi.routing import Mount
@@ -19,11 +18,15 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from lxml import etree  # type: ignore
 
-from evals.apps.KMLApp import find_apps, KMLControlRequest, KMLControlResponse
-from src.pyLiveKML.KML.KML import RefreshMode, kml_tag, kml_header
-from src.pyLiveKML.KML.KMLObjects.Folder import Folder
-from src.pyLiveKML.KML.KMLObjects.NetworkLink import NetworkLink
-from src.pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
+from apps.KMLApp import find_apps, KMLControlRequest, KMLControlResponse
+from pyLiveKML import (
+    RefreshMode,
+    kml_tag,
+    kml_header,
+    Folder,
+    NetworkLink,
+    NetworkLinkControl,
+)
 
 # the host address needs to be set to your local IP address, not (generally) a public one
 # note that if you are running all the components (GEP, webserver, browser) from a single
@@ -109,7 +112,7 @@ async def _() -> RedirectResponse:
 
 
 @app.get("/{filename}")
-async def _(filename: str, request: Request) -> HTMLResponse | PlainTextResponse:
+async def _(filename: str, request: Request) -> Any:
     kml = kml_tag()
     if filename == "index.html":
         for c in gep_sync.container:

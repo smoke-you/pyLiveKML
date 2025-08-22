@@ -1,9 +1,7 @@
-from typing import Optional
-
 from lxml import etree  # type: ignore
 
-from ..KML import DisplayMode
-from .SubStyle import SubStyle
+from pyLiveKML.KML.KML import DisplayMode
+from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
 class BalloonStyle(SubStyle):
@@ -11,24 +9,24 @@ class BalloonStyle(SubStyle):
     A KML 'BalloonStyle', per https://developers.google.com/kml/documentation/kmlreference#balloonstyle.  Specifies
     how the description balloon of :class:`~pyLiveKML.KML.KMLObjects.Placemark` objects is drawn.
 
-    :param Optional[str] text: The (optional) text to be displayed in the balloon.
-    :param Optional[int] text_color: The (optional) color of the text to be displayed, in 32-bit ABGR format.
-    :param Optional[int] bg_color: The (optional) background color of the balloon, in 32-bit ABGR format.
-    :param Optional[DisplayMode] display_mode: The (optional) :class:`~pyLiveKML.KML.KML.DisplayMode` of the balloon.
+    :param str|None text: The (optional) text to be displayed in the balloon.
+    :param int|None text_color: The (optional) color of the text to be displayed, in 32-bit ABGR format.
+    :param int|None bg_color: The (optional) background color of the balloon, in 32-bit ABGR format.
+    :param DisplayMode|None display_mode: The (optional) :class:`~pyLiveKML.KML.KML.DisplayMode` of the balloon.
     """
 
     def __init__(
         self,
-        text: Optional[str] = None,
-        text_color: Optional[int] = None,
-        bg_color: Optional[int] = None,
-        display_mode: Optional[DisplayMode] = None,
+        text: str | None = None,
+        text_color: int | None = None,
+        bg_color: int | None = None,
+        display_mode: DisplayMode | None = None,
     ):
         SubStyle.__init__(self)
-        self._text: Optional[str] = text
-        self._bg_color: Optional[int] = bg_color
-        self._text_color: Optional[int] = text_color
-        self._display_mode: Optional[DisplayMode] = display_mode
+        self._text: str | None = text
+        self._bg_color: int | None = bg_color
+        self._text_color: int | None = text_color
+        self._display_mode: DisplayMode | None = display_mode
 
     @property
     def kml_type(self) -> str:
@@ -37,45 +35,45 @@ class BalloonStyle(SubStyle):
         return "BalloonStyle"
 
     @property
-    def bg_color(self) -> Optional[int]:
+    def bg_color(self) -> int | None:
         """The background color of the balloon, in 32-bit ABGR format."""
         return self._bg_color
 
     @bg_color.setter
-    def bg_color(self, value: Optional[int]) -> None:
+    def bg_color(self, value: int | None) -> None:
         if self._bg_color != value:
             self._bg_color = value
             self.field_changed()
 
     @property
-    def text_color(self) -> Optional[int]:
+    def text_color(self) -> int | None:
         """The color of the text in the balloon, in 32-bit ABGR format."""
         return self._text_color
 
     @text_color.setter
-    def text_color(self, value: Optional[int]) -> None:
+    def text_color(self, value: int | None) -> None:
         if self._text_color != value:
             self._text_color = value
             self.field_changed()
 
     @property
-    def text(self) -> Optional[str]:
+    def text(self) -> str | None:
         """The text displayed in the balloon.  Note that HTML markup, e.g. tables, is permissible."""
         return self._text
 
     @text.setter
-    def text(self, value: Optional[str]) -> None:
+    def text(self, value: str | None) -> None:
         if self._text != value:
             self._text = value
             self.field_changed()
 
     @property
-    def display_mode(self) -> Optional[DisplayMode]:
+    def display_mode(self) -> DisplayMode | None:
         """The balloon :class:`~pyLiveKML.KML.KML.DisplayMode`."""
         return self._display_mode
 
     @display_mode.setter
-    def display_mode(self, value: Optional[DisplayMode]) -> None:
+    def display_mode(self, value: DisplayMode | None) -> None:
         if self._display_mode != value:
             self._display_mode = value
             self.field_changed()

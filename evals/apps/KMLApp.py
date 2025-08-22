@@ -8,8 +8,7 @@ from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel, UUID4
 
-from src.pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
-from src.pyLiveKML.KML.KMLObjects.Feature import Feature
+from pyLiveKML import NetworkLinkControl, Feature
 
 
 class KMLSelect(BaseModel):
@@ -57,8 +56,11 @@ def find_apps(basedir: Path) -> list[KMLApp]:
     apps = list[KMLApp]()
     for file in Path(basedir).rglob("*.py"):
         modpath = ".".join(file.parent.parts[-2:]) + "." + file.stem
-        items = inspect.getmembers(importlib.import_module(modpath))
-        for _, item in items:
-            if isinstance(item, KMLApp):
-                apps.append(item)
+        try:
+            items = inspect.getmembers(importlib.import_module(modpath))
+            for _, item in items:
+                if isinstance(item, KMLApp):
+                    apps.append(item)
+        except ModuleNotFoundError:
+            pass
     return sorted(apps, key=attrgetter("name"))

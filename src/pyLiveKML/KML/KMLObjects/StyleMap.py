@@ -1,10 +1,10 @@
-from typing import Optional, Iterator
+from typing import Iterator
 
 from lxml import etree  # type: ignore
 
-from .Object import ObjectChild
-from .Style import Style
-from .StyleSelector import StyleSelector
+from pyLiveKML.KML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KML.KMLObjects.Style import Style
+from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
 
 class StyleMap(StyleSelector):
@@ -14,14 +14,14 @@ class StyleMap(StyleSelector):
     displayed in GEP. The child :class:`~pyLiveKML.KML.KMLObjects.Style` objects may be referenced by URI, or in-line
     in the :class:`~pyLiveKML.KML.KMLObjects.StyleMap`.
 
-    :param Optional[str] normal_style_url: An (optional) URI reference for a :class:`~pyLiveKML.KML.KMLObjects.Style`
+    :param str|None normal_style_url: An (optional) URI reference for a :class:`~pyLiveKML.KML.KMLObjects.Style`
         to be employed in :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` display mode.
-    :param Optional[Style] normal_style: An (optional) inline :class:`~pyLiveKML.KML.KMLObjects.Style` to be employed
+    :param Style|None normal_style: An (optional) inline :class:`~pyLiveKML.KML.KMLObjects.Style` to be employed
         in :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` display mode.
-    :param Optional[str] highlight_style_url: An (optional) URI reference for a
+    :param str|None highlight_style_url: An (optional) URI reference for a
         :class:`~pyLiveKML.KML.KMLObjects.Style` to be employed in :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT`
         display mode.
-    :param Optional[Style] highlight_style: An (optional) inline :class:`~pyLiveKML.KML.KMLObjects.Style` to be
+    :param Style|None highlight_style: An (optional) inline :class:`~pyLiveKML.KML.KMLObjects.Style` to be
         employed in :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT` display mode.
 
     :note: It is both possible and reasonable to assign both a :attr:`styleUrl` and a
@@ -34,16 +34,16 @@ class StyleMap(StyleSelector):
 
     def __init__(
         self,
-        normal_style_url: Optional[str] = None,
-        normal_style: Optional[Style] = None,
-        highlight_style_url: Optional[str] = None,
-        highlight_style: Optional[Style] = None,
+        normal_style_url: str | None = None,
+        normal_style: Style | None = None,
+        highlight_style_url: str | None = None,
+        highlight_style: Style | None = None,
     ):
         super().__init__()
-        self._normal_style_url: Optional[str] = normal_style_url
-        self._normal_style: Optional[Style] = normal_style
-        self._highlight_style_url: Optional[str] = highlight_style_url
-        self._highlight_style: Optional[Style] = highlight_style
+        self._normal_style_url: str | None = normal_style_url
+        self._normal_style: Style | None = normal_style
+        self._highlight_style_url: str | None = highlight_style_url
+        self._highlight_style: Style | None = highlight_style
 
     @property
     def kml_type(self) -> str:
@@ -62,53 +62,53 @@ class StyleMap(StyleSelector):
             yield ObjectChild(parent=self, child=self._highlight_style)
 
     @property
-    def normal_style_url(self) -> Optional[str]:
+    def normal_style_url(self) -> str | None:
         """A URI that references the :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when the target
         :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` mode.
         """
         return self._normal_style_url
 
     @normal_style_url.setter
-    def normal_style_url(self, value: Optional[str]) -> None:
+    def normal_style_url(self, value: str | None) -> None:
         if self._normal_style_url != value:
             self._normal_style_url = value
             self.field_changed()
 
     @property
-    def normal_style(self) -> Optional[Style]:
+    def normal_style(self) -> Style | None:
         """An inline :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when the target
         :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` mode.
         """
         return self._normal_style
 
     @normal_style.setter
-    def normal_style(self, value: Optional[Style]) -> None:
+    def normal_style(self, value: Style | None) -> None:
         if self._normal_style != value:
             self._normal_style = value
             self.field_changed()
 
     @property
-    def highlight_style_url(self) -> Optional[str]:
+    def highlight_style_url(self) -> str | None:
         """A URI that references the :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when the target
         :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT` mode.
         """
         return self._highlight_style_url
 
     @highlight_style_url.setter
-    def highlight_style_url(self, value: Optional[str]) -> None:
+    def highlight_style_url(self, value: str | None) -> None:
         if self._highlight_style_url != value:
             self._highlight_style_url = value
             self.field_changed()
 
     @property
-    def highlight_style(self) -> Optional[Style]:
+    def highlight_style(self) -> Style | None:
         """An inline :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when the target
         :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT` mode.
         """
         return self._highlight_style
 
     @highlight_style.setter
-    def highlight_style(self, value: Optional[Style]) -> None:
+    def highlight_style(self, value: Style | None) -> None:
         if self._highlight_style != value:
             self._highlight_style = value
             self.field_changed()

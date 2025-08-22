@@ -46,11 +46,12 @@ class ColorMode(enum.Enum):
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
-    NORMAL = ("normal",)
+    # NORMAL = ("normal",)
+    NORMAL = "normal"
     RANDOM = "random"
 
 
-class DisplayMode(enum.Enum):
+class DisplayMode(str, enum.Enum):
     """Enumeration of options for KML <displayMode> tags, specifically for
     :class:`~pyLiveKML.KML.KMLObjects.BalloonStyle` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
@@ -60,7 +61,7 @@ class DisplayMode(enum.Enum):
     HIDE = "hide"
 
 
-class ItemIconMode(enum.Flag):
+class ItemIconMode(str, enum.Enum):
     """Enumeration of options for KML <ItemIcon><state> tags, specifically for
     :class:`~pyLiveKML.KML.KMLObjects.ListStyle` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
@@ -79,7 +80,7 @@ class ItemIconMode(enum.Flag):
     CLOSED_FETCHING2 = "closed fetching2"
 
 
-class ListItemType(enum.Enum):
+class ListItemType(str, enum.Enum):
     """Enumeration of options for KML <listItemType> tags, specifically for
     :class:`~pyLiveKML.KML.KMLObjects.ListStyle` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
@@ -91,7 +92,7 @@ class ListItemType(enum.Enum):
     RADIO_FOLDER = "radioFolder"
 
 
-class RefreshMode(enum.Enum):
+class RefreshMode(str, enum.Enum):
     """Enumeration of options for KML <refreshMode> tags, specifically for
     :class:`~pyLiveKML.KML.KMLObjects.Link` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
@@ -102,7 +103,7 @@ class RefreshMode(enum.Enum):
     ON_EXPIRE = "onExpire"
 
 
-class StyleState(enum.Enum):
+class StyleState(str, enum.Enum):
     """Enumeration of options for KML <Pair><key> tags, specifically for
     :class:`~pyLiveKML.KML.KMLObjects.StyleMap` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
@@ -112,7 +113,7 @@ class StyleState(enum.Enum):
     HIGHLIGHT = "highlight"
 
 
-class UnitsEnum(enum.Enum):
+class UnitsEnum(str, enum.Enum):
     """Enumeration of options for KML <unitsEnum> tags, specifically for :class:`~pyLiveKML.KML.KMLObjects.Vec2`
     instances in e.g. :class:`~pyLiveKML.KML.KMLObjects.IconStyle` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
@@ -143,7 +144,7 @@ class Vec2Type(enum.Enum):
     HOTSPOT = "hotSpot"
 
 
-class State(enum.Enum):
+class ObjectState(enum.Enum):
     """Enumeration of possible states that objects derived from KML :class:`~pyLiveKML.KML.KMLObjects.Object` may hold.
     The 'State' enumeration is specific to the :mod:`pyLiveKML` package, i.e. it is *not* part of the KML specification.
     """

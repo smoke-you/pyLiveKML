@@ -1,8 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from src.pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from src.pyLiveKML.KML.KML import AltitudeMode
+from pyLiveKML import GeoCoordinates, AltitudeMode
 
 
 class AircraftData:

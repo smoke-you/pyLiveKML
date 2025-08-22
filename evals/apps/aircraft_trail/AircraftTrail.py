@@ -1,13 +1,9 @@
 from lxml import etree  # type: ignore
+from pyLiveKML import ObjectState, ListItemType, Object, Folder, ListStyle, Style
 
 from .AircraftData import AircraftData
 from .AircraftPosition import AircraftPosition
-from evals.apps.helpers import description_builder
-from src.pyLiveKML.KML.KML import State, ListItemType
-from src.pyLiveKML.KML.KMLObjects.Object import Object
-from src.pyLiveKML.KML.KMLObjects.Folder import Folder
-from src.pyLiveKML.KML.KMLObjects.ListStyle import ListStyle
-from src.pyLiveKML.KML.KMLObjects.Style import Style
+from ..helpers import description_builder
 
 
 class AircraftTrail(Folder):
@@ -39,7 +35,7 @@ class AircraftTrail(Folder):
         Folder.update_kml(self, parent, update)
 
     def trail(self) -> None:
-        if self.state != State.CREATED:
+        if self.state != ObjectState.CREATED:
             # If the Folder has not already been created, **do not** process the trail. Otherwise, a <Delete> tag will
             # be generated for a Placemark that does not exist, which will likely cause GEP to throw an error.
             return

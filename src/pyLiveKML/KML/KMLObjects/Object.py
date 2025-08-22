@@ -3,7 +3,7 @@ from typing import Optional, NamedTuple, Iterator
 from uuid import uuid4, UUID
 from lxml import etree  # type: ignore
 
-from ..KML import State
+from pyLiveKML.KML.KML import ObjectState
 
 
 class Object(ABC):
@@ -17,7 +17,7 @@ class Object(ABC):
         self._id: UUID = uuid4()
         self._selected: bool = False
         self._container: Optional[Object] = None
-        self._state = State.IDLE
+        self._state: ObjectState = ObjectState.IDLE
 
     @property
     @abstractmethod
@@ -33,7 +33,7 @@ class Object(ABC):
         return self._id
 
     @property
-    def state(self) -> State:
+    def state(self) -> ObjectState:
         """The current GEP synchronization state of this :class:`~pyLiveKML.KML.KMLObjects.Object`."""
         return self._state
 
@@ -42,7 +42,11 @@ class Object(ABC):
         """True if this :class:`~pyLiveKML.KML.KMLObjects.Object` has been created and is not scheduled for deletion,
         otherwise False.
         """
-        return (State.CREATING, State.CREATED, State.CHANGING).__contains__(self._state)
+        return (
+            ObjectState.CREATING,
+            ObjectState.CREATED,
+            ObjectState.CHANGING,
+        ).__contains__(self._state)
 
     @selected.setter
     def selected(self, value: bool) -> None:
@@ -88,11 +92,14 @@ class Object(ABC):
             :class:`~pyLiveKML.KML.KMLObjects.Object`. The parent is required only for <Create> tags.
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
-        if self._state == State.CREATING:
+        if self._state == ObjectState.CREATING:
             self.create_kml(parent, update)
-        elif self._state == State.CHANGING:
+        elif self._state == ObjectState.CHANGING:
             self.change_kml(update)
-        elif self._state == State.DELETE_CREATED or self._state == State.DELETE_CHANGED:
+        elif (
+            self._state == ObjectState.DELETE_CREATED
+            or self._state == ObjectState.DELETE_CHANGED
+        ):
             self.delete_kml(update)
         self.update_generated()
 
@@ -141,7 +148,7 @@ class Object(ABC):
         automatically deleted. There is no need to emit <Delete> tags for these deletions, and in fact doing so will
         likely cause GEP to have conniptions.
         """
-        self._state = State.IDLE
+        self._state = ObjectState.IDLE
         for c in self.children:
             c.child.force_idle()
 
@@ -149,27 +156,30 @@ class Object(ABC):
         """Flag that a field or property of this :class:`~pyLiveKML.KML.KMLObjects.Object` has changed, and
         re-synchronization with GEP may be required.
         """
-        if self._state == State.CREATED:  # or self._state == State.IDLE:
-            self._state = State.CHANGING
-        elif self._state == State.DELETE_CREATED:
-            self._state = State.DELETE_CHANGED
-        elif self._state == State.IDLE:
+        if self._state == ObjectState.CREATED:  # or self._state == State.IDLE:
+            self._state = ObjectState.CHANGING
+        elif self._state == ObjectState.DELETE_CREATED:
+            self._state = ObjectState.DELETE_CHANGED
+        elif self._state == ObjectState.IDLE:
             pass
 
     def update_generated(self) -> None:
         """Modify the state of the :class:`~pyLiveKML.KML.KMLObjects.Object` to reflect that a synchronization update
         has been emitted.
         """
-        if self._state == State.CREATING:
-            self._state = State.CREATED
+        if self._state == ObjectState.CREATING:
+            self._state = ObjectState.CREATED
             # if the object is being created, so are all of its descendants, in a single tag; set them created too
             for c in self.children:
                 c.child.update_generated()
-        elif self._state == State.CHANGING:
+        elif self._state == ObjectState.CHANGING:
             # if the object is changing, don't mess with its descendants - they are updated elsewhere if necessary
-            self._state = State.CREATED
-        elif self._state == State.DELETE_CREATED or self._state == State.DELETE_CHANGED:
-            self._state = State.IDLE
+            self._state = ObjectState.CREATED
+        elif (
+            self._state == ObjectState.DELETE_CREATED
+            or self._state == ObjectState.DELETE_CHANGED
+        ):
+            self._state = ObjectState.IDLE
 
     def select(self, value: bool, cascade: bool = False) -> None:
         """Select or deselect this :class:`~pyLiveKML.KML.KMLObjects.Object` for display in GEP.
@@ -177,18 +187,18 @@ class Object(ABC):
         :param bool value: True for selection, False for deselection
         :param bool cascade: True if the selection is to be cascaded to all child Objects.
         """
-        if self._state == State.CREATING:
-            self._state = State.IDLE if not value else self._state
-        elif self._state == State.CREATED:
-            self._state = State.DELETE_CREATED if not value else self._state
-        elif self._state == State.CHANGING:
-            self._state = State.DELETE_CHANGED if not value else self._state
-        elif self._state == State.DELETE_CREATED:
-            self._state = State.CREATING if value else self._state
-        elif self._state == State.DELETE_CHANGED:
-            self._state = State.CHANGING if value else self._state
+        if self._state == ObjectState.CREATING:
+            self._state = ObjectState.IDLE if not value else self._state
+        elif self._state == ObjectState.CREATED:
+            self._state = ObjectState.DELETE_CREATED if not value else self._state
+        elif self._state == ObjectState.CHANGING:
+            self._state = ObjectState.DELETE_CHANGED if not value else self._state
+        elif self._state == ObjectState.DELETE_CREATED:
+            self._state = ObjectState.CREATING if value else self._state
+        elif self._state == ObjectState.DELETE_CHANGED:
+            self._state = ObjectState.CHANGING if value else self._state
         else:  # implies default state is IDLE
-            self._state = State.CREATING if value else self._state
+            self._state = ObjectState.CREATING if value else self._state
         # cascade Select downwards for Children
         if value:
             for c in self.children:

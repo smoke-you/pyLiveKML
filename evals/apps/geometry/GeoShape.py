@@ -3,17 +3,19 @@ from typing import Optional, cast
 
 import numpy
 from pyproj import Geod
+from pyLiveKML import (
+    GeoCoordinates,
+    AltitudeMode,
+    LineStyle,
+    LinearRing,
+    Placemark,
+    PolyStyle,
+    Polygon,
+    Style,
+)
 from scipy.spatial.transform import Rotation
 
 from .geography import project_shape
-from src.pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from src.pyLiveKML.KML.KML import AltitudeMode
-from src.pyLiveKML.KML.KMLObjects.LineStyle import LineStyle
-from src.pyLiveKML.KML.KMLObjects.LinearRing import LinearRing
-from src.pyLiveKML.KML.KMLObjects.Placemark import Placemark
-from src.pyLiveKML.KML.KMLObjects.PolyStyle import PolyStyle
-from src.pyLiveKML.KML.KMLObjects.Polygon import Polygon
-from src.pyLiveKML.KML.KMLObjects.Style import Style
 
 
 class GeoShape(Placemark, ABC):

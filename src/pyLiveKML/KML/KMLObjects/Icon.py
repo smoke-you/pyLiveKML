@@ -1,9 +1,9 @@
-from typing import Optional, NamedTuple
+from typing import NamedTuple
 
 from lxml import etree  # type: ignore
 
-from ..KML import RefreshMode
-from .Link import Link
+from pyLiveKML.KML.KML import RefreshMode
+from pyLiveKML.KML.KMLObjects.Link import Link
 
 
 GxParams = NamedTuple("GxParams", [("x", int), ("y", int), ("w", int), ("h", int)])
@@ -15,22 +15,22 @@ class Icon(Link):
     overlay.  Note that only time-based refresh of :class:`~pyLiveKML.KML.KMLObjects.Icon` instances is currently
     supported by pyLiveKML.
 
-    :param Optional[str] href: An (optional) href for the file that is referenced by the
+    :param str|None href: An (optional) href for the file that is referenced by the
         :class:`~pyLiveKML.KML.KMLObjects.Icon`.
-    :param Optional[RefreshMode] refresh_mode: The (optional) :class:`~pyLiveKML.KML.KML.RefreshMode` that will be used
+    :param RefreshMode|None refresh_mode: The (optional) :class:`~pyLiveKML.KML.KML.RefreshMode` that will be used
         for file loading.
-    :param Optional[float] refresh_interval: The (optional) refresh interval, in seconds, that will be used for file
+    :param float|None refresh_interval: The (optional) refresh interval, in seconds, that will be used for file
         loading.
-    :param Optional[GxParams] gx_params: Optional :class:`GxParams` instance that defines how GEP will treat the icon
+    :param GxParams|None gx_params: Optional :class:`GxParams` instance that defines how GEP will treat the icon
         image.
     """
 
     def __init__(
         self,
-        href: Optional[str] = None,
-        refresh_mode: Optional[RefreshMode] = None,
-        refresh_interval: Optional[float] = None,  # 4.0
-        gx_params: Optional[GxParams] = None,  # GxParams(0, 0, -1, -1)
+        href: str | None = None,
+        refresh_mode: RefreshMode | None = None,
+        refresh_interval: float | None = None,  # 4.0
+        gx_params: GxParams | None = None,  # GxParams(0, 0, -1, -1)
     ):
         Link.__init__(
             self,
@@ -38,7 +38,7 @@ class Icon(Link):
             refresh_mode=refresh_mode,
             refresh_interval=refresh_interval,
         )
-        self._gx_params: Optional[GxParams] = gx_params
+        self._gx_params: GxParams | None = gx_params
 
     @property
     def kml_type(self) -> str:
@@ -47,12 +47,12 @@ class Icon(Link):
         return "Icon"
 
     @property
-    def gx_params(self) -> Optional[GxParams]:
+    def gx_params(self) -> GxParams | None:
         """A :class:`GxParams` named tuple that describes how the icon is treated by GEP."""
         return self._gx_params
 
     @gx_params.setter
-    def gx_params(self, value: Optional[GxParams]) -> None:
+    def gx_params(self, value: GxParams | None) -> None:
         self._gx_params = value
         self.field_changed()
 

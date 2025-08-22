@@ -1,9 +1,8 @@
-from typing import Optional
 from lxml import etree  # type: ignore
 
-from ..GeoCoordinates import GeoCoordinates
-from ..KML import AltitudeMode
-from .Geometry import Geometry
+from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
+from pyLiveKML.KML.KML import AltitudeMode
+from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 
 
 class Point(Geometry):
@@ -13,22 +12,22 @@ class Point(Geometry):
 
     :param GeoCoordinates coordinates: A :class:`~pyLiveKML.KML.GeoCoordinates` object that defines the longitude,
         latitude and optional altitude of the :class:`~pyLiveKML.KML.KMLObjects.Point`.
-    :param Optional[bool] extrude: An (optional) flag to indicate whether the :class:`~pyLiveKML.KML.KMLObjects.Point`
+    :param bool|None extrude: An (optional) flag to indicate whether the :class:`~pyLiveKML.KML.KMLObjects.Point`
         should be shown in GEP connected to the ground with a vertical line.
-    :param Optional[bool] altitude_mode: The (optional) :class:`~pyLiveKML.KML.KML.AltitudeMode` that will be applied
+    :param bool|None altitude_mode: The (optional) :class:`~pyLiveKML.KML.KML.AltitudeMode` that will be applied
         to the :class:`~pyLiveKML.KML.KMLObjects.Point` by GEP.
     """
 
     def __init__(
         self,
         coordinates: GeoCoordinates,
-        extrude: Optional[bool] = None,
-        altitude_mode: Optional[AltitudeMode] = None,
+        extrude: bool | None = None,
+        altitude_mode: AltitudeMode | None = None,
     ):
         Geometry.__init__(self)
         self._coordinates: GeoCoordinates = coordinates
-        self._extrude: Optional[bool] = extrude
-        self._altitude_mode: Optional[AltitudeMode] = altitude_mode
+        self._extrude: bool | None = extrude
+        self._altitude_mode: AltitudeMode | None = altitude_mode
 
     @property
     def kml_type(self) -> str:
@@ -38,27 +37,27 @@ class Point(Geometry):
         return "Point"
 
     @property
-    def extrude(self) -> Optional[bool]:
+    def extrude(self) -> bool | None:
         """True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects the
         :class:`~pyLiveKML.KML.KMLObjects.Point` to the ground in GEP, False otherwise.  None implies False.
         """
         return self._extrude
 
     @extrude.setter
-    def extrude(self, value: Optional[bool]) -> None:
+    def extrude(self, value: bool | None) -> None:
         if self._extrude != value:
             self._extrude = value
             self.field_changed()
 
     @property
-    def altitude_mode(self) -> Optional[AltitudeMode]:
+    def altitude_mode(self) -> AltitudeMode | None:
         """An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
         :class:`~pyLiveKML.KML.KMLObjects.Point` and treats its' altitude.
         """
         return self._altitude_mode
 
     @altitude_mode.setter
-    def altitude_mode(self, value: Optional[AltitudeMode]) -> None:
+    def altitude_mode(self, value: AltitudeMode | None) -> None:
         if self._altitude_mode != value:
             self._altitude_mode = value
             self.field_changed()

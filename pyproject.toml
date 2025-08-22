@@ -1,11 +1,33 @@
+[project]
+name = "pyLiveKML"
+version = "1.0.0"
+authors = [
+  { name="smoke-you", email="smoke-you@github.com" },
+]
+description = "Live-stream KML content to Google Earth Pro"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+#license = "GNU AFFERO GENERAL PUBLIC LICENSE 3"
+#license-files = ["LICEN[CS]E*"]
+dependencies = [
+    "lxml>=6.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/smoke-you/pyLiveKML"
+Issues = "https://github.com/smoke-you/pyLiveKML/issues"
+
+
 [tool.black]
 line-length = 88
 skip-string-normalization = false
 
 [tool.ruff]
-exclude = [
-    "src/manage.py",
-]
+exclude = []
 indent-width = 4
 
 [tool.ruff.format]
@@ -25,5 +47,7 @@ ignore_missing_imports = true
 check_untyped_defs = true
 disallow_untyped_defs = true
 strict_optional = true
-exclude = []
+exclude = [
+    "venv/"
+]
 

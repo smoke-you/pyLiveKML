@@ -1,11 +1,12 @@
 from abc import ABC
-from typing import Optional, Iterable, NamedTuple, Iterator, cast
+from typing import Iterable, NamedTuple, Iterator, cast
 
 from lxml import etree  # type: ignore
 
-from ..KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, State
-from .Object import Object, ObjectChild
-from .StyleSelector import StyleSelector
+from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, ObjectState
+from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
+from pyLiveKML.KML.errors.errors import FeatureInaccessibleError
 
 
 class Feature(Object, ABC):
@@ -14,30 +15,30 @@ class Feature(Object, ABC):
     class for KML :class:`~pyLiveKML.KML.KMLObjects.Object` instances that have an "existence" in GEP, i.e. that are
     (potentially) user-editable because they appear in the GEP user List View.
 
-    :param Optional[str] name: The (optional) name for this :class:`~pyLiveKML.KML.KMLObjects.Feature` that will be
+    :param str|None name: The (optional) name for this :class:`~pyLiveKML.KML.KMLObjects.Feature` that will be
         displayed in GEP.
-    :param Optional[str] description: The (optional) description for this :class:`~pyLiveKML.KML.KMLObjects.Feature`
+    :param str|None description: The (optional) description for this :class:`~pyLiveKML.KML.KMLObjects.Feature`
         that will be displayed in GEP as a text balloon if the :class:`~pyLiveKML.KML.KMLObjects.Feature` is clicked.
-    :param Optional[bool] visibility: The (optional) initial visibility for this
+    :param bool|None visibility: The (optional) initial visibility for this
         :class:`~pyLiveKML.KML.KMLObjects.Feature` in GEP.
-    :param Optional[Feature] container: The (optional) :class:`~pyLiveKML.KML.KMLObjects.Feature` (generally, a
+    :param Feature|None container: The (optional) :class:`~pyLiveKML.KML.KMLObjects.Feature` (generally, a
         :class:`~pyLiveKML.KML.KMLObjects.Container`) that encloses this
         :class:`~pyLiveKML.KML.KMLObjects.Feature`.
-    :param Optional[str] style_url: An (optional) style URL, typically a reference to a global
+    :param str|None style_url: An (optional) style URL, typically a reference to a global
         :class:`~pyLiveKML.KML.KMLObjects.StyleSelector` in a :class:`~pyLiveKML.KML.KMLObjects.Container` that
         encloses this :class:`~pyLiveKML.KML.KMLObjects.Feature`.
-    :param Optional[Iterable[StyleSelector]] styles: An iterable of :class:`~pyLiveKML.KML.KMLObjects.StyleSelector`
+    :param Iterable[StyleSelector]|None styles: An iterable of :class:`~pyLiveKML.KML.KMLObjects.StyleSelector`
         objects that are local to this :class:`~pyLiveKML.KML.KMLObjects.Feature`.
     """
 
     def __init__(
         self,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        visibility: Optional[bool] = None,
-        container: Optional["Feature"] = None,
-        style_url: Optional[str] = None,
-        styles: Optional[Iterable[StyleSelector]] = None,
+        name: str | None = None,
+        description: str | None = None,
+        visibility: bool | None = None,
+        container: "Feature|None" = None,
+        style_url: str | None = None,
+        styles: Iterable[StyleSelector] | None = None,
     ):
         Object.__init__(self)
         ABC.__init__(self)
@@ -51,51 +52,51 @@ class Feature(Object, ABC):
             self._styles.extend(styles)
 
     @property
-    def container(self) -> Optional["Container"]:
+    def container(self) -> "Container|None":
         """The :class:`~pyLiveKML.KML.KMLObjects.Container` that immediately encloses this
         :class:`~pyLiveKML.KML.KMLObjects.Feature` in an ownership tree.
 
         :warning: The :attr:`container` property cannot be altered if the :class:`~pyLiveKML.KML.KMLObjects.Feature` is
             visible in GEP. Doing so would break GEP synchronization. Failure to observe this constraint will cause a
-            :class:`ValueError` to be raised.
+            :class:`FeatureInaccessibleError` to be raised.
         """
         return cast(Container, self._container)
 
     @container.setter
     def container(self, value: "Container") -> None:
-        if self._state == State.IDLE or self._state == State.CREATING:
+        if self._state == ObjectState.IDLE or self._state == ObjectState.CREATING:
             self._container = value
         else:
-            raise ValueError(
+            raise FeatureInaccessibleError(
                 "If a Feature is visible in GEP, you cannot change its' 'container' property."
             )
 
     @property
-    def name(self) -> Optional[str]:
+    def name(self) -> str | None:
         """The text that will be displayed as the name of the :class:`~pyLiveKML.KML.KMLObjects.Feature` in GEP."""
         return self._name
 
     @name.setter
-    def name(self, value: Optional[str]) -> None:
+    def name(self, value: str | None) -> None:
         if self._name != value:
             self._name = value
             self.field_changed()
 
     @property
-    def visibility(self) -> Optional[bool]:
+    def visibility(self) -> bool | None:
         """True if the :class:`~pyLiveKML.KML.KMLObjects.Feature` will (initially) be checked (visible) in GEP, False
         otherwise.
         """
         return self._visibility
 
     @visibility.setter
-    def visibility(self, value: Optional[bool]) -> None:
+    def visibility(self, value: bool | None) -> None:
         if self._visibility != value:
             self._visibility = value
             self.field_changed()
 
     @property
-    def description(self) -> Optional[str]:
+    def description(self) -> str | None:
         """The text description for this :class:`~pyLiveKML.KML.KMLObjects.Feature`, that will be displayed in a
         balloon in GEP if the :class:`~pyLiveKML.KML.KMLObjects.Feature` is clicked.
 
@@ -105,7 +106,7 @@ class Feature(Object, ABC):
         return self._description
 
     @description.setter
-    def description(self, value: Optional[str]) -> None:
+    def description(self, value: str | None) -> None:
         if self._description != value:
             self._description = value
             self.field_changed()
@@ -149,34 +150,34 @@ class Container(list[Feature], Feature, ABC):
     'contain' other :class:`~pyLiveKML.KML.KMLObjects.Feature` objects, including other concrete
     :class:`~pyLiveKML.KML.KMLObjects.Container` objects.
 
-    :param Optional[str] name: The (optional) name for this :class:`~pyLiveKML.KML.KMLObjects.Container` that will
+    :param str|None name: The (optional) name for this :class:`~pyLiveKML.KML.KMLObjects.Container` that will
         be displayed in GEP.
-    :param Optional[bool] visibility: The (optional) initial visibility for this
+    :param bool|None visibility: The (optional) initial visibility for this
         :class:`~pyLiveKML.KML.KMLObjects.Container` in GEP.
-    :param Optional[bool] is_open: Optional boolean flag to indicate whether the
+    :param bool|None is_open: Optional boolean flag to indicate whether the
         :class:`~pyLiveKML.KML.KMLObjects.Container` will be displayed as 'open' in the GEP user List View.
-    :param Optional[int] update_limit: Only applies to the root of a :class:`~pyLiveKML.KML.KMLObjects.Feature` tree.
+    :param int|None update_limit: Only applies to the root of a :class:`~pyLiveKML.KML.KMLObjects.Feature` tree.
         The (approximate) maximum number of contained :class:`~pyLiveKML.KML.KMLObjects.Feature` instances that will be
         synchronized from this :class:`~pyLiveKML.KML.KMLObjects.Container` during any one synchronization update.
-    :param Optional[str] style_url: An (optional) style URL, generally a reference to a global
+    :param str|None style_url: An (optional) style URL, generally a reference to a global
         :class:`~pyLiveKML.KML.KMLObjects.StyleSelector` in a parent of this
         :class:`~pyLiveKML.KML.KMLObjects.Container`.
-    :param Optional[Iterable[StyleSelector]] styles: An (optional) Iterable of
+    :param Iterable[StyleSelector]|None styles: An (optional) Iterable of
         :class:`~pyLiveKML.KML.KMLObjects.StyleSelector` objects that will be local to this
         :class:`~pyLiveKML.KML.KMLObjects.Container`.
-    :param Optional[Iterable[Feature]] features: An (optional) Iterable of :class:`~pyLiveKML.KML.KMLObjects.Feature`
+    :param Iterable[Feature]|None features: An (optional) Iterable of :class:`~pyLiveKML.KML.KMLObjects.Feature`
         objects to be enclosed by this :class:`~pyLiveKML.KML.KMLObjects.Container`.
     """
 
     def __init__(
         self,
-        name: Optional[str] = None,
-        visibility: Optional[bool] = None,
-        is_open: Optional[bool] = None,
+        name: str | None = None,
+        visibility: bool | None = None,
+        is_open: bool | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
-        style_url: Optional[str] = None,
-        styles: Optional[Iterable[StyleSelector]] = None,
-        features: Optional[Iterable[Feature]] = None,
+        style_url: str | None = None,
+        styles: Iterable[StyleSelector] | None = None,
+        features: Iterable[Feature] | None = None,
     ):
         list[Feature].__init__(self)
         Feature.__init__(
@@ -185,7 +186,7 @@ class Container(list[Feature], Feature, ABC):
         ABC.__init__(self)
         if features:
             self.extend(features)
-        self._is_open: Optional[bool] = is_open
+        self._is_open: bool | None = is_open
         self._update_limit: int = 0
         self.update_limit = update_limit
         self.__deleted: list[Feature] = list[Feature]()
@@ -231,7 +232,7 @@ class Container(list[Feature], Feature, ABC):
             yield from s.children
 
     @property
-    def is_open(self) -> Optional[bool]:
+    def is_open(self) -> bool | None:
         """True if the :class:`~pyLiveKML.KML.KMLObjects.Container` will be initially displayed in an 'open' state in
         the GEP user List View, else False if it will be initially displayed in a 'closed' state.  None implies the
         default of False.
@@ -239,7 +240,7 @@ class Container(list[Feature], Feature, ABC):
         return self._is_open
 
     @is_open.setter
-    def is_open(self, value: Optional[bool]) -> None:
+    def is_open(self, value: bool | None) -> None:
         if self._is_open != value:
             self._is_open = value
             self.field_changed()
@@ -350,7 +351,10 @@ class Container(list[Feature], Feature, ABC):
         if cascade:
             for f in self:
                 f.select(value, True)
-        if self._state == State.DELETE_CREATED or self._state == State.DELETE_CHANGED:
+        if (
+            self._state == ObjectState.DELETE_CREATED
+            or self._state == ObjectState.DELETE_CHANGED
+        ):
             self.__deleted.clear()
             self.force_features_idle()
 

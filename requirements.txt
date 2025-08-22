@@ -1,7 +1,5 @@
 black
-fastapi
-uvicorn
-jinja2
+build
 lxml
-scipy
-pyproj
+mypy
+ruff

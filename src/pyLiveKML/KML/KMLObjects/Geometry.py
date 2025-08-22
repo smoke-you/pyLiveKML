@@ -1,6 +1,6 @@
 from abc import ABC
 
-from .Object import Object
+from pyLiveKML.KML.KMLObjects.Object import Object
 
 
 class Geometry(Object, ABC):

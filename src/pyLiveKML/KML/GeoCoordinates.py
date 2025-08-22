@@ -1,6 +1,3 @@
-from typing import Optional
-
-
 class GeoCoordinates:
     """
     The GeoCoordinates type describes a single instance of a Lon-Lat-Alt (LLA) position, as used in
@@ -13,18 +10,18 @@ class GeoCoordinates:
     :param Optional[float] alt: The (optional) altitude.
     :var float lon: The longitude, in decimal degrees.
     :var float lat: The latitude, in decimal degrees.
-    :var Optional[float] alt: The (optional) altitude, in metres.
+    :var float|None alt: The (optional) altitude, in metres.
     """
 
     def __init__(
         self,
         lon: float = 0,
         lat: float = 0,
-        alt: Optional[float] = None,
+        alt: float | None = None,
     ):
         self.lon: float = lon
         self.lat: float = lat
-        self.alt: Optional[float] = alt
+        self.alt: float | None = alt
 
     def __str__(self) -> str:
         if self.alt is None:

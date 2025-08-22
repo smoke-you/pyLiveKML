@@ -8,12 +8,10 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.requests import Request
 from fastapi.templating import Jinja2Templates
+from pyLiveKML import Folder, Feature, NetworkLinkControl
 
 from .AircraftPosition import AircraftPosition
-from evals.apps.KMLApp import KMLApp, KMLSelect
-from src.pyLiveKML.KML.KMLObjects.Folder import Folder
-from src.pyLiveKML.KML.KMLObjects.Feature import Feature
-from src.pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
+from ..KMLApp import KMLApp, KMLSelect
 
 
 def load_adsb_exchange_data(filename: Path) -> Folder:

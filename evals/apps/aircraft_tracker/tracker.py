@@ -11,9 +11,8 @@ from fastapi.templating import Jinja2Templates
 
 from .AircraftData import AircraftData
 from .AircraftLocation import AircraftLocation
-from evals.apps.KMLApp import KMLApp, KMLSelect
-from src.pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
-from src.pyLiveKML.KML.KMLObjects.Feature import Feature
+from ..KMLApp import KMLApp, KMLSelect
+from pyLiveKML import NetworkLinkControl, Feature
 
 
 def load_adsb_exchange_data(filename: Path) -> AircraftLocation:

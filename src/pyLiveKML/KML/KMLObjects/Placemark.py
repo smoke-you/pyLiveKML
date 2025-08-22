@@ -1,11 +1,11 @@
-from typing import Optional, Iterator, cast
+from typing import Iterator, cast
 
 from lxml import etree  # type: ignore
 
-from .Feature import Feature
-from .Geometry import Geometry
-from .StyleSelector import StyleSelector
-from .Object import ObjectChild
+from pyLiveKML.KML.KMLObjects.Feature import Feature
+from pyLiveKML.KML.KMLObjects.Geometry import Geometry
+from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
+from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 
 
 class Placemark(Feature):
@@ -14,13 +14,13 @@ class Placemark(Feature):
 
     :param Geometry geometry: A concrete :class:`~pyLiveKML.KML.KMLObjects.Geometry` instance that will be displayed
         in GEP for this :class:`~pyLiveKML.KML.KMLObjects.Placemark`.
-    :param Optional[str] name: The (optional) name that will be displayed in GEP for this
+    :param str|None name: The (optional) name that will be displayed in GEP for this
         :class:`~pyLiveKML.KML.KMLObjects.Placemark`.
-    :param Optional[bool] visibility: The (optional) initial visibility for this
+    :param bool|None visibility: The (optional) initial visibility for this
         :class:`~pyLiveKML.KML.KMLObjects.Placemark` in GEP.
-    :param Optional[StyleSelector] inline_style: An (optional) :class:`~pyLiveKML.KML.KMLObjects.StyleSelector` that
+    :param StyleSelector|None inline_style: An (optional) :class:`~pyLiveKML.KML.KMLObjects.StyleSelector` that
         will be applied to this :class:`~pyLiveKML.KML.KMLObjects.Placemark` (only).
-    :param Optional[str] style_url: An (optional) style URL, generally a reference to a global
+    :param str|None style_url: An (optional) style URL, generally a reference to a global
         :class:`~pyLiveKML.KML.KMLObjects.StyleSelector` in a parent of this
         :class:`~pyLiveKML.KML.KMLObjects.Placemark`.
     """
@@ -28,10 +28,10 @@ class Placemark(Feature):
     def __init__(
         self,
         geometry: Geometry,
-        name: Optional[str] = None,
-        visibility: Optional[bool] = None,
-        inline_style: Optional[StyleSelector] = None,
-        style_url: Optional[str] = None,
+        name: str | None = None,
+        visibility: bool | None = None,
+        inline_style: StyleSelector | None = None,
+        style_url: str | None = None,
     ):
         Feature.__init__(self, name=name, visibility=visibility, style_url=style_url)
         self._geometry = geometry

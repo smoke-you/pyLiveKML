@@ -1,9 +1,7 @@
-from typing import Optional
-
 from lxml import etree  # type: ignore
 
-from ..KML import ColorMode
-from .ColorStyle import ColorStyle
+from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
+from pyLiveKML.KML.KML import ColorMode
 
 
 class PolyStyle(ColorStyle):
@@ -11,24 +9,24 @@ class PolyStyle(ColorStyle):
     A KML 'PolyStyle', per https://developers.google.com/kml/documentation/kmlreference#polystyle.  Specifies
     various properties that define how a :class:`~pyLiveKML.KML.KMLObjects.Polygon` is drawn.
 
-    :param Optional[int] color: The (optional) color, as a 32-bit ABGR value, that will be used to :attr:`fill` the
+    :param int|None color: The (optional) color, as a 32-bit ABGR value, that will be used to :attr:`fill` the
         polygon's area in GEP.
-    :param Optional[ColorMode] color_mode: An (optional) :class:`~pyLiveKML.KML.KML.ColorMode` that determines how GEP
+    :param ColorMode|None color_mode: An (optional) :class:`~pyLiveKML.KML.KML.ColorMode` that determines how GEP
         chooses the polygon :attr:`fill` color.
-    :param Optional[bool] fill: Optional flag to indicate whether GEP should fill in the polygon with a color.
-    :param Optional[bool] outline: Optional flag to indicate whether GEP should draw the polygon's outline.
+    :param bool|None fill: Optional flag to indicate whether GEP should fill in the polygon with a color.
+    :param bool|None outline: Optional flag to indicate whether GEP should draw the polygon's outline.
     """
 
     def __init__(
         self,
-        color: Optional[int] = None,
-        color_mode: Optional[ColorMode] = None,
-        fill: Optional[bool] = None,
-        outline: Optional[bool] = None,
+        color: int | None = None,
+        color_mode: ColorMode | None = None,
+        fill: bool | None = None,
+        outline: bool | None = None,
     ):
         ColorStyle.__init__(self, color, color_mode)
-        self._fill: Optional[bool] = fill
-        self._outline: Optional[bool] = outline
+        self._fill: bool | None = fill
+        self._outline: bool | None = outline
 
     @property
     def kml_type(self) -> str:
@@ -37,20 +35,20 @@ class PolyStyle(ColorStyle):
         return "PolyStyle"
 
     @property
-    def fill(self) -> Optional[bool]:
+    def fill(self) -> bool | None:
         """True if the affected :class:`~pyLiveKML.KML.KMLObjects.Polygon` is to be filled in using the :attr:`color`
         property. False if it is not. None implies True.
         """
         return self._fill
 
     @fill.setter
-    def fill(self, value: Optional[bool]) -> None:
+    def fill(self, value: bool | None) -> None:
         if self._fill != value:
             self._fill = value
             self.field_changed()
 
     @property
-    def outline(self) -> Optional[bool]:
+    def outline(self) -> bool | None:
         """True if the outline of the :class:`~pyLiveKML.KML.KMLObjects.Polygon` is to be drawn using a separate
         :class:`~pyLiveKML.KML.KMLObjects.LineStyle`, specified in the :class:`~pyLiveKML.KML.KMLObjects.StyleSelector`
         that is the parent of this :class:`~pyLiveKML.KML.KMLObjects.PolyStyle` instance. False if it is not. None
@@ -59,7 +57,7 @@ class PolyStyle(ColorStyle):
         return True if self._outline is None else self._outline
 
     @outline.setter
-    def outline(self, value: Optional[bool]) -> None:
+    def outline(self, value: bool | None) -> None:
         if self._outline != value:
             self._outline = value
             self.field_changed()

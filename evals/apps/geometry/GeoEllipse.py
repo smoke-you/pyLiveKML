@@ -3,18 +3,20 @@ from typing import Optional, Iterator
 
 from numpy import ndarray, array
 from scipy.spatial.transform import Rotation
+from pyLiveKML import GeoCoordinates, AltitudeMode
 
 from .GeoShape import GeoShape
-from src.pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from src.pyLiveKML.KML.KML import AltitudeMode
 
 
 def ellipse_gen(
-    x_rad: float, y_rad: float, rotation: Rotation = None, num_v: int = 32
+    x_rad: float,
+    y_rad: float,
+    rotation: Optional[Rotation] = None,
+    num_vertices: int = 32,
 ) -> Iterator[ndarray]:
-    step = 2 * math.pi / num_v
+    step = 2 * math.pi / num_vertices
     angle = -step
-    for i in range(0, num_v):
+    for i in range(0, num_vertices):
         angle += step
         point = array([x_rad * math.cos(angle), y_rad * math.sin(angle), 0])
         if rotation is not None:
@@ -28,7 +30,7 @@ class GeoEllipse(GeoShape):
         origin: GeoCoordinates,
         x_radius: float,
         y_radius: float,
-        rotation: Rotation = None,
+        rotation: Optional[Rotation] = None,
         num_vertices: int = 32,
         border_width: float = 1.0,
         border_color: int = 0xFFFFFFFF,

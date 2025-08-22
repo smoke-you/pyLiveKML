@@ -1,10 +1,10 @@
-from typing import Optional, Iterable, Iterator
+from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from ..GeoCoordinates import GeoCoordinates
-from ..KML import AltitudeMode
-from .Geometry import Geometry
+from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
+from pyLiveKML.KML.KML import AltitudeMode
+from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 
 
 class LinearRing(Geometry):
@@ -15,31 +15,31 @@ class LinearRing(Geometry):
     :param Iterable[GeoCoordinates] coordinates: An iterable of :class:`~pyLiveKML.KML.GeoCoordinates` objects, or
         points, that define the boundary of the :class:`~pyLiveKML.KML.KMLObjects.LinearRing`. There should be at
         least three points.
-    :param Optional[AltitudeMode] altitude_mode: The (optional) :class:`~pyLiveKML.KML.KML.AltitudeMode` that will
+    :param AltitudeMode|None altitude_mode: The (optional) :class:`~pyLiveKML.KML.KML.AltitudeMode` that will
         be applied by GEP to all the points that make up the boundary of the
         :class:`~pyLiveKML.KML.KMLObjects.LinearRing`.
-    :param Optional[bool] extrude: An (optional) flag to indicate whether the points that make up the
+    :param bool|None extrude: An (optional) flag to indicate whether the points that make up the
         boundary of the :class:`~pyLiveKML.KML.KMLObjects.LinearRing` should be shown in GEP connected to the
         ground with vertical lines.
-    :param Optional[bool] tessellate: An (optional) flag to indicate whether the
+    :param bool|None tessellate: An (optional) flag to indicate whether the
         :class:`~pyLiveKML.KML.KMLObjects.LinearRing` should follow the terrain.
-    :param Optional[float] gx_altitude_offset: An (optional) altitude offset, in metres, to be applied to every
+    :param float|None gx_altitude_offset: An (optional) altitude offset, in metres, to be applied to every
         point that makes up the boundary of the :class:`~pyLiveKML.KML.KMLObjects.LinearRing`.
     """
 
     def __init__(
         self,
         coordinates: Iterable[GeoCoordinates],
-        altitude_mode: Optional[AltitudeMode] = None,
-        extrude: Optional[bool] = None,
-        tessellate: Optional[bool] = None,
-        gx_altitude_offset: Optional[float] = None,
+        altitude_mode: AltitudeMode | None = None,
+        extrude: bool | None = None,
+        tessellate: bool | None = None,
+        gx_altitude_offset: float | None = None,
     ):
         Geometry.__init__(self)
-        self._gx_altitude_offset: Optional[float] = gx_altitude_offset
-        self._extrude: Optional[bool] = extrude
-        self._tessellate: Optional[bool] = tessellate
-        self._altitude_mode: Optional[AltitudeMode] = altitude_mode
+        self._gx_altitude_offset: float | None = gx_altitude_offset
+        self._extrude: bool | None = extrude
+        self._tessellate: bool | None = tessellate
+        self._altitude_mode: AltitudeMode | None = altitude_mode
         self._coordinates: list[GeoCoordinates] = list[GeoCoordinates]()
         self._coordinates.extend(coordinates)
 
@@ -50,7 +50,7 @@ class LinearRing(Geometry):
         return "LinearRing"
 
     @property
-    def gx_altitude_offset(self) -> Optional[float]:
+    def gx_altitude_offset(self) -> float | None:
         """An offset, in metres, that is applied to the altitude of all the points
         (:class:`~pyLiveKML.KML.GeoCoordinates`) that define the boundary of this
         :class:`~pyLiveKML.KML.KMLObjects.LinearRing` instance.
@@ -58,13 +58,13 @@ class LinearRing(Geometry):
         return self._gx_altitude_offset
 
     @gx_altitude_offset.setter
-    def gx_altitude_offset(self, value: Optional[float]) -> None:
+    def gx_altitude_offset(self, value: float | None) -> None:
         if self._gx_altitude_offset != value:
             self._gx_altitude_offset = value
             self.field_changed()
 
     @property
-    def extrude(self) -> Optional[bool]:
+    def extrude(self) -> bool | None:
         """True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects each of
         the :class:`~pyLiveKML.KML.KMLObjects.LinearRing` objects' points to the ground in GEP, False otherwise.  None
         implies False.
@@ -72,13 +72,13 @@ class LinearRing(Geometry):
         return self._extrude
 
     @extrude.setter
-    def extrude(self, value: Optional[bool]) -> None:
+    def extrude(self, value: bool | None) -> None:
         if self._extrude != value:
             self._extrude = value
             self.field_changed()
 
     @property
-    def tessellate(self) -> Optional[bool]:
+    def tessellate(self) -> bool | None:
         """True if the boundary line of the :class:`~pyLiveKML.KML.KMLObjects.LinearRing` follows the terrain in GEP,
         otherwise False.
 
@@ -87,13 +87,13 @@ class LinearRing(Geometry):
         return self._tessellate
 
     @tessellate.setter
-    def tessellate(self, value: Optional[bool]) -> None:
+    def tessellate(self, value: bool | None) -> None:
         if self._tessellate != value:
             self._tessellate = value
             self.field_changed()
 
     @property
-    def altitude_mode(self) -> Optional[AltitudeMode]:
+    def altitude_mode(self) -> AltitudeMode | None:
         """An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
         :class:`~pyLiveKML.KML.GeoCoordinates` objects that make up the boundary of the
         :class:`~pyLiveKML.KML.KMLObjects.LinearRing` and treats their altitudes.
@@ -101,7 +101,7 @@ class LinearRing(Geometry):
         return self._altitude_mode
 
     @altitude_mode.setter
-    def altitude_mode(self, value: Optional[AltitudeMode]) -> None:
+    def altitude_mode(self, value: AltitudeMode | None) -> None:
         if self._altitude_mode != value:
             self._altitude_mode = value
             self.field_changed()

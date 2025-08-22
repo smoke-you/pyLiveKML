@@ -1,11 +1,10 @@
 from typing import Optional, Iterator
 
 from numpy import ndarray, array
+from pyLiveKML import GeoCoordinates, AltitudeMode
 from scipy.spatial.transform import Rotation
 
 from .GeoShape import GeoShape
-from src.pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from src.pyLiveKML.KML.KML import AltitudeMode
 
 
 def circle_gen(

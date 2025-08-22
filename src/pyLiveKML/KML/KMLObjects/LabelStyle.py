@@ -1,9 +1,7 @@
-from typing import Optional
-
 from lxml import etree  # type: ignore
 
-from ..KML import ColorMode
-from .ColorStyle import ColorStyle
+from pyLiveKML.KML.KML import ColorMode
+from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 
 
 class LabelStyle(ColorStyle):
@@ -11,17 +9,17 @@ class LabelStyle(ColorStyle):
     A KML 'LabelStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.  Specifies
     various properties that define how the name of a :class:`~pyLiveKML.KML.KMLObjects.Feature` is drawn in GEP.
 
-    :param Optional[float] scale: The (optional) relative scale of the text.
-    :param Optional[int] color: The (optional) color of the text, as a 32-bit ABGR value.
-    :param Optional[ColorMode] color_mode: The (optional) :class:`~pyLiveKML.KML.KML.ColorMode` used to color the text;
+    :param float|None scale: The (optional) relative scale of the text.
+    :param int|None color: The (optional) color of the text, as a 32-bit ABGR value.
+    :param ColorMode|None color_mode: The (optional) :class:`~pyLiveKML.KML.KML.ColorMode` used to color the text;
         either 'NORMAL' or 'RANDOM'.
     """
 
     def __init__(
         self,
-        scale: Optional[float] = None,
-        color: Optional[int] = None,
-        color_mode: Optional[ColorMode] = None,
+        scale: float | None = None,
+        color: int | None = None,
+        color_mode: ColorMode | None = None,
     ):
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
         self._scale = scale
@@ -33,12 +31,12 @@ class LabelStyle(ColorStyle):
         return "LabelStyle"
 
     @property
-    def scale(self) -> Optional[float]:
+    def scale(self) -> float | None:
         """Relative scale of the text."""
         return self._scale
 
     @scale.setter
-    def scale(self, value: Optional[float]) -> None:
+    def scale(self, value: float | None) -> None:
         if self._scale != value:
             self._scale = value
             self.field_changed()

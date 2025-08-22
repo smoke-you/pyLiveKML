@@ -1,11 +1,11 @@
-from typing import Optional, Iterable, Iterator
+from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from ..KML import AltitudeMode, State
-from .Geometry import Geometry
-from .LinearRing import LinearRing
-from .Object import Object, ObjectChild
+from pyLiveKML.KML.KML import AltitudeMode, ObjectState
+from pyLiveKML.KML.KMLObjects.Geometry import Geometry
+from pyLiveKML.KML.KMLObjects.LinearRing import LinearRing
+from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 
 
 class Polygon(Geometry):
@@ -16,33 +16,33 @@ class Polygon(Geometry):
 
     :param LinearRing outer_boundary: A :class:`~pyLiveKML.KML.KMLObjects.LinearRing` that defines the outer extents of
         the :class:`~pyLiveKML.KML.KMLObjects.Polygon`.
-    :param Optional[Iterable[LinearRing]] inner_boundaries: An (optional) iterable of
+    :param Iterable[LinearRing]|None inner_boundaries: An (optional) iterable of
         :class:`~pyLiveKML.KML.KMLObjects.LinearRing` objects that define any cutouts within the
         :class:`~pyLiveKML.KML.KMLObjects.Polygon`.
-    :param Optional[AltitudeMode] altitude_mode: The (optional) :class:`~pyLiveKML.KML.KML.AltitudeMode` that will be
+    :param AltitudeMode|None altitude_mode: The (optional) :class:`~pyLiveKML.KML.KML.AltitudeMode` that will be
         applied by GEP to all the points that make up the :class:`~pyLiveKML.KML.KMLObjects.Polygon`.
-    :param Optional[bool] extrude: An (optional) flag to indicate whether the points that make up the
+    :param bool|None extrude: An (optional) flag to indicate whether the points that make up the
         :class:`~pyLiveKML.KML.KMLObjects.Polygon` should be shown in GEP connected to the ground with vertical lines.
-    :param Optional[bool] tessellate: An (optional) flag to indicate whether the boundaries of the
+    :param bool|None tessellate: An (optional) flag to indicate whether the boundaries of the
         :class:`~pyLiveKML.KML.KMLObjects.Polygon` should follow the terrain.
     """
 
     def __init__(
         self,
         outer_boundary: LinearRing,
-        inner_boundaries: Optional[Iterable[LinearRing]] = None,
-        altitude_mode: Optional[AltitudeMode] = None,
-        extrude: Optional[bool] = None,
-        tessellate: Optional[bool] = None,
+        inner_boundaries: Iterable[LinearRing] | None = None,
+        altitude_mode: AltitudeMode | None = None,
+        extrude: bool | None = None,
+        tessellate: bool | None = None,
     ):
         Geometry.__init__(self)
         self._outer_boundary: LinearRing = outer_boundary
         self._inner_boundaries: list[LinearRing] = list[LinearRing]()
         if inner_boundaries:
             self._inner_boundaries.extend(inner_boundaries)
-        self._extrude: Optional[bool] = extrude
-        self._tessellate: Optional[bool] = tessellate
-        self._altitude_mode: Optional[AltitudeMode] = altitude_mode
+        self._extrude: bool | None = extrude
+        self._tessellate: bool | None = tessellate
+        self._altitude_mode: AltitudeMode | None = altitude_mode
 
     @property
     def kml_type(self) -> str:
@@ -83,7 +83,7 @@ class Polygon(Geometry):
         yield from self._inner_boundaries
 
     @property
-    def extrude(self) -> Optional[bool]:
+    def extrude(self) -> bool | None:
         """True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects each of
         the :attr:`outer_boundary` and :attr:`inner_boundaries` objects' points to the ground in GEP, False otherwise.
         None implies False.
@@ -91,13 +91,13 @@ class Polygon(Geometry):
         return self._extrude
 
     @extrude.setter
-    def extrude(self, value: Optional[bool]) -> None:
+    def extrude(self, value: bool | None) -> None:
         if self._extrude != value:
             self._extrude = value
             self.field_changed()
 
     @property
-    def tessellate(self) -> Optional[bool]:
+    def tessellate(self) -> bool | None:
         """True if the inner and outer boundary lines of the :class:`~pyLiveKML.KML.KMLObjects.Polygon` follows the
         terrain in GEP, otherwise False.
 
@@ -106,13 +106,13 @@ class Polygon(Geometry):
         return self._tessellate
 
     @tessellate.setter
-    def tessellate(self, value: Optional[bool]) -> None:
+    def tessellate(self, value: bool | None) -> None:
         if self._tessellate != value:
             self._tessellate = value
             self.field_changed()
 
     @property
-    def altitude_mode(self) -> Optional[AltitudeMode]:
+    def altitude_mode(self) -> AltitudeMode | None:
         """An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
         :class:`~pyLiveKML.KML.GeoCoordinates` objects that make up the inner and outer boundaries of the
         :class:`~pyLiveKML.KML.KMLObjects.Polygon` and treats their altitudes.
@@ -120,7 +120,7 @@ class Polygon(Geometry):
         return self._altitude_mode
 
     @altitude_mode.setter
-    def altitude_mode(self, value: Optional[AltitudeMode]) -> None:
+    def altitude_mode(self, value: AltitudeMode | None) -> None:
         if self._altitude_mode != value:
             self._altitude_mode = value
             self.field_changed()
@@ -129,11 +129,11 @@ class Polygon(Geometry):
         # overrides the Object.update_kml() method to correctly handle the boundaries
         # Polygon boundaries are a special case for children, because they *must* be wrapped in an additional tag
         Object.update_kml(self, parent, update)
-        if self._outer_boundary.state == State.CHANGING:
+        if self._outer_boundary.state == ObjectState.CHANGING:
             self._outer_boundary.change_kml(update)
         self._outer_boundary.update_generated()
         for b in self._inner_boundaries:
-            if b.state == State.CHANGING:
+            if b.state == ObjectState.CHANGING:
                 b.change_kml(update)
             b.update_generated()
 
@@ -149,9 +149,9 @@ class Polygon(Geometry):
                 etree.SubElement(root, "outerBoundaryIs").append(
                     self._outer_boundary.construct_kml()
                 )
-                if self._outer_boundary._state == State.IDLE:
-                    self._outer_boundary._state = State.CREATED
+                if self._outer_boundary._state == ObjectState.IDLE:
+                    self._outer_boundary._state = ObjectState.CREATED
             for b in self._inner_boundaries:
                 etree.SubElement(root, "innerBoundaryIs").append(b.construct_kml())
-                if b._state == State.IDLE:
-                    b._state = State.CREATED
+                if b._state == ObjectState.IDLE:
+                    b._state = ObjectState.CREATED

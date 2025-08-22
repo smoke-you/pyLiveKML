@@ -11,7 +11,9 @@
             "program": "${workspaceRoot}/evals/main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "env": {"PYTHONPATH": "${workspaceRoot}"}
+            "env": {
+                "PYTHONPATH": "${workspaceFolder/evals",
+            }
         }
     ]
 }

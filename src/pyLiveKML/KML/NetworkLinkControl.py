@@ -1,10 +1,8 @@
-from typing import Optional
-
 from lxml import etree  # type: ignore
 
-from .KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
-from .KMLObjects.Feature import Container
-from .KMLObjects.Folder import Folder
+from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML.KML.KMLObjects.Feature import Container
+from pyLiveKML.KML.KMLObjects.Folder import Folder
 
 
 class NetworkLinkControl:
@@ -14,7 +12,7 @@ class NetworkLinkControl:
     :param str target_href: The URI of the KML document that will be synchronized by this
         :class:`~pyLiveKML.KML.NetworkLinkControl`. Note that the specified document *must* already have been created
         in GEP in order to be synchronized.
-    :param Optional[Container] container: The KML :class:`~pyLiveKML.KML.KMLObjects.Container` that will be the
+    :param Container|None container: The KML :class:`~pyLiveKML.KML.KMLObjects.Container` that will be the
         root of the tree of KML :class:`~pyLiveKML.KML.KMLObjects.Feature` instances managed and synchronized by this
         :class:`~pyLiveKML.KML.NetworkLinkControl`.  Note that if no :class:`~pyLiveKML.KML.KMLObjects.Container`, or
         None, is specified then a :class:`~pyLiveKML.KML.KMLObjects.Folder` instance named 'Root' will be instantiated
@@ -59,18 +57,18 @@ class NetworkLinkControl:
     def __init__(
         self,
         target_href: str = "",
-        container: Optional[Container] = None,
+        container: Container | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
     ):
         # TODO: All of these should be included in the update_kml method, but they're not terribly important ATM.
-        # self.min_refresh_period: Optional[float] = None
-        # self.max_session_length: Optional[float] = None
-        # self.cookie: Optional[str] = None
-        # self.message: Optional[str] = None
-        # self.link_name: Optional[str] = None
-        # self.link_description: Optional[str] = None
-        # self.link_snippet: Optional[str] = None
-        # self.expires: Optional[datetime] = None
+        # self.min_refresh_period: float|None = None
+        # self.max_session_length: float|None = None
+        # self.cookie: str|None = None
+        # self.message: str|None = None
+        # self.link_name: str|None = None
+        # self.link_description: str|None = None
+        # self.link_snippet: str|None = None
+        # self.expires: datetime|None = None
         self.target_href: str = target_href
         self.container: Container = (
             Folder("Root", is_open=True) if container is None else container

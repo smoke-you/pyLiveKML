@@ -1,8 +1,6 @@
-from typing import Optional
-
 from lxml import etree  # type: ignore
 
-from .KML import UnitsEnum, Vec2Type
+from pyLiveKML.KML.KML import UnitsEnum, Vec2Type
 
 
 class Vec2:
@@ -32,7 +30,7 @@ class Vec2:
         y_units: UnitsEnum = UnitsEnum.FRACTION,
     ):
         super().__init__()
-        self.name: Optional[str] = None
+        self.name: str | None = None
         self.vec_type = vec_type
         self.x = x
         self.y = y

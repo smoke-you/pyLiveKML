@@ -9,12 +9,11 @@ from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
+from pyLiveKML import NetworkLinkControl, Feature
 
 from .AircraftData import AircraftData
 from .AircraftTrail import AircraftTrail
-from evals.apps.KMLApp import KMLApp, KMLControlRequest, KMLControlResponse, KMLSelect
-from src.pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
-from src.pyLiveKML.KML.KMLObjects.Feature import Feature
+from ..KMLApp import KMLApp, KMLControlRequest, KMLControlResponse, KMLSelect
 
 
 def load_adsb_exchange_data(filename: str, trailsz: int = 20) -> AircraftTrail:

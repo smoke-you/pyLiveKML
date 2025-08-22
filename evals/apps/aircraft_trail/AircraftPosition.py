@@ -1,12 +1,7 @@
-from typing import Optional, cast
+from typing import cast
+from pyLiveKML import GeoCoordinates, AltitudeMode, IconStyle, Placemark, Point, Style
 
 from .AircraftData import AircraftData
-from src.pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from src.pyLiveKML.KML.KML import AltitudeMode
-from src.pyLiveKML.KML.KMLObjects.IconStyle import IconStyle
-from src.pyLiveKML.KML.KMLObjects.Placemark import Placemark
-from src.pyLiveKML.KML.KMLObjects.Point import Point
-from src.pyLiveKML.KML.KMLObjects.Style import Style
 
 
 class AircraftPosition(Placemark):
@@ -29,7 +24,7 @@ class AircraftPosition(Placemark):
         self.speed = data.speed
 
     @property
-    def heading(self) -> Optional[float]:
+    def heading(self) -> float | None:
         return cast(IconStyle, cast(Style, self._styles[0]).icon_style).heading
 
     @property

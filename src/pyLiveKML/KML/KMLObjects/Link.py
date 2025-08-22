@@ -1,9 +1,7 @@
-from typing import Optional
-
 from lxml import etree  # type: ignore
 
-from ..KML import RefreshMode
-from .Object import Object
+from pyLiveKML.KML.KML import RefreshMode
+from pyLiveKML.KML.KMLObjects.Object import Object
 
 
 class Link(Object):
@@ -16,28 +14,28 @@ class Link(Object):
 
     :note: Only time-based refresh is currently supported by pyLiveKML.
 
-    :param Optional[str] href: An (optional) href for the file that is referenced by the
+    :param str|None href: An (optional) href for the file that is referenced by the
         :class:`~pyLiveKML.KML.KMLObjects.Link`.
-    :param Optional[RefreshMode] refresh_mode: The (optional) refresh mode that will be used for file loading.
-    :param Optional[float] refresh_interval: The (optional) refresh interval, in seconds, that will be used for file
+    :param RefreshMode|None refresh_mode: The (optional) refresh mode that will be used for file loading.
+    :param float|None refresh_interval: The (optional) refresh interval, in seconds, that will be used for file
         loading.
     """
 
     def __init__(
         self,
-        href: Optional[str] = None,
-        refresh_mode: Optional[RefreshMode] = None,
-        refresh_interval: Optional[float] = None,
+        href: str | None = None,
+        refresh_mode: RefreshMode | None = None,
+        refresh_interval: float | None = None,
     ):
         Object.__init__(self)
-        self._href: Optional[str] = href
-        self._refresh_mode: Optional[RefreshMode] = refresh_mode
-        self._refresh_interval: Optional[float] = refresh_interval
-        # self.view_refresh_mode: Optional[ViewRefreshMode] = None
-        # self.view_refresh_time: Optional[float] = None
-        # self.view_bound_scale: Optional[float] = None
-        # self.view_format: Optional[str] = None
-        # self.http_query: Optional[str] = None
+        self._href: str | None = href
+        self._refresh_mode: RefreshMode | None = refresh_mode
+        self._refresh_interval: float | None = refresh_interval
+        # self.view_refresh_mode: ViewRefreshMode|None = None
+        # self.view_refresh_time: float|None = None
+        # self.view_bound_scale: float|None = None
+        # self.view_format: str|None = None
+        # self.http_query: str|None = None
 
     @property
     def kml_type(self) -> str:
@@ -46,38 +44,38 @@ class Link(Object):
         return "Link"
 
     @property
-    def href(self) -> Optional[str]:
+    def href(self) -> str | None:
         """A URI that specifies the location of the resource that is linked to."""
         return self._href
 
     @href.setter
-    def href(self, value: Optional[str]) -> None:
+    def href(self, value: str | None) -> None:
         if self._href != value:
             self._href = value
             self.field_changed()
 
     @property
-    def refresh_mode(self) -> Optional[RefreshMode]:
+    def refresh_mode(self) -> RefreshMode | None:
         """The :class:`~pyLiveKML.KML.KML.RefreshMode` that controls when the file specified by the 'href' property is
         retrieved.
         """
         return self._refresh_mode
 
     @refresh_mode.setter
-    def refresh_mode(self, value: Optional[RefreshMode]) -> None:
+    def refresh_mode(self, value: RefreshMode | None) -> None:
         if self._refresh_mode != value:
             self._refresh_mode = value
             self.field_changed()
 
     @property
-    def refresh_interval(self) -> Optional[float]:
+    def refresh_interval(self) -> float | None:
         """The refresh interval, in seconds, that will be used if the :attr:`refresh_mode` property is set to
         :attr:`~pyLiveKML.KML.KML.RefreshMode.ON_INTERVAL`.
         """
         return self._refresh_interval
 
     @refresh_interval.setter
-    def refresh_interval(self, value: Optional[float]) -> None:
+    def refresh_interval(self, value: float | None) -> None:
         if self._refresh_interval != value:
             self._refresh_interval = value
             self.field_changed()

@@ -1,20 +1,16 @@
-from typing import Optional
+from typing import Optional, Sequence
 
 from lxml import etree  # type: ignore
+from pyLiveKML import ObjectState, IconStyle, Placemark, Point, Style
 
 from .AircraftData import AircraftData
-from evals.apps.helpers import description_builder
-from src.pyLiveKML.KML.KML import State
-from src.pyLiveKML.KML.KMLObjects.IconStyle import IconStyle
-from src.pyLiveKML.KML.KMLObjects.Placemark import Placemark
-from src.pyLiveKML.KML.KMLObjects.Point import Point
-from src.pyLiveKML.KML.KMLObjects.Style import Style
+from ..helpers import description_builder
 
 
 class AircraftLocation(Placemark):
 
     def __init__(
-        self, transponder: str, flight: str, positions: list[AircraftData]
+        self, transponder: str, flight: str, positions: Sequence[AircraftData]
     ) -> None:
         point = Point(
             coordinates=positions[0].coordinates,
@@ -34,6 +30,7 @@ class AircraftLocation(Placemark):
         self._transponder = transponder
         self._flight = flight
         self._pid = -1
+        self._state: ObjectState
 
     @property
     def kml_type(self) -> str:
@@ -64,12 +61,15 @@ class AircraftLocation(Placemark):
 
     # This method is overridden so that the instance is always ready to provide a Change tag
     def update_generated(self) -> None:
-        if self._state == State.CREATING or self._state == State.CHANGING:
+        if self._state == ObjectState.CREATING or self._state == ObjectState.CHANGING:
             # self._state = State.CREATED
             """Note transition to CHANGING rather than CREATED"""
-            self._state = State.CHANGING
-        elif self._state == State.DELETE_CREATED or self._state == State.DELETE_CHANGED:
-            self._state = State.IDLE
+            self._state = ObjectState.CHANGING
+        elif (
+            self._state == ObjectState.DELETE_CREATED
+            or self._state == ObjectState.DELETE_CHANGED
+        ):
+            self._state = ObjectState.IDLE
 
     # Loop through the positions from 0 to len-1 then restart
     def change_kml(self, update: etree.Element) -> None:

@@ -1,10 +1,8 @@
-from typing import Optional
-
 from lxml import etree  # type: ignore
 
-from ..KML import ColorMode
-from .ColorStyle import ColorStyle
-from ..Vec2 import Vec2
+from pyLiveKML.KML.KML import ColorMode
+from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
+from pyLiveKML.KML.Vec2 import Vec2
 
 
 class IconStyle(ColorStyle):
@@ -16,8 +14,8 @@ class IconStyle(ColorStyle):
     :param str icon: A URI for an image or icon file.
     :param float scale: The (optional) relative scale of the icon.
     :param float heading: The (optional) heading, in degrees, that the icon will be rotated to point towards.
-    :param Optional[int] color: The (optional) color of the icon, as a 32-bit ABGR value.
-    :param Optional[ColorMode] color_mode: The (optional) :class:`~pyLiveKML.KML.KML.ColorMode` used to color the icon;
+    :param int|None color: The (optional) color of the icon, as a 32-bit ABGR value.
+    :param ColorMode|None color_mode: The (optional) :class:`~pyLiveKML.KML.KML.ColorMode` used to color the icon;
         either 'NORMAL' or 'RANDOM'.
     """
 
@@ -25,15 +23,15 @@ class IconStyle(ColorStyle):
         self,
         icon: str,
         scale: float = 1.0,
-        heading: Optional[float] = None,
-        color: Optional[int] = None,
-        color_mode: Optional[ColorMode] = None,
+        heading: float | None = None,
+        color: int | None = None,
+        color_mode: ColorMode | None = None,
     ):
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
-        self._scale: Optional[float] = scale
-        self._heading: Optional[float] = heading
-        self._icon: Optional[str] = icon
-        self._hotspot: Optional[Vec2] = None
+        self._scale: float | None = scale
+        self._heading: float | None = heading
+        self._icon: str | None = icon
+        self._hotspot: Vec2 | None = None
 
     @property
     def kml_type(self) -> str:
@@ -42,45 +40,45 @@ class IconStyle(ColorStyle):
         return "IconStyle"
 
     @property
-    def icon(self) -> Optional[str]:
+    def icon(self) -> str | None:
         """URI for the image that will be displayed in GEP as the icon."""
         return self._icon
 
     @icon.setter
-    def icon(self, value: Optional[str]) -> None:
+    def icon(self, value: str | None) -> None:
         if self._icon != value:
             self._icon = value
             self.field_changed()
 
     @property
-    def scale(self) -> Optional[float]:
+    def scale(self) -> float | None:
         """Relative scale at which the icon will be displayed in GEP."""
         return self._scale
 
     @scale.setter
-    def scale(self, value: Optional[float]) -> None:
+    def scale(self, value: float | None) -> None:
         if self._scale != value:
             self._scale = value
             self.field_changed()
 
     @property
-    def heading(self) -> Optional[float]:
+    def heading(self) -> float | None:
         """Heading (in degrees) that the icon will be displayed pointing towards in GEP."""
         return self._heading
 
     @heading.setter
-    def heading(self, value: Optional[float]) -> None:
+    def heading(self, value: float | None) -> None:
         if self._heading != value:
             self._heading = value
             self.field_changed()
 
     @property
-    def hotspot(self) -> Optional[Vec2]:
+    def hotspot(self) -> Vec2 | None:
         """Relative position in the icon that is anchored to the associated :class:`~pyLiveKML.KML.KMLObjects.Point`"""
         return self._hotspot
 
     @hotspot.setter
-    def hotspot(self, value: Optional[Vec2]) -> None:
+    def hotspot(self, value: Vec2 | None) -> None:
         if value is not None:
             value.name = "hotSpot"
         if self._hotspot != value:

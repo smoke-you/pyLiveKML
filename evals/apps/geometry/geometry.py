@@ -7,16 +7,13 @@ from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, UUID4
+from pyLiveKML import NetworkLinkControl, GeoCoordinates, Feature, AltitudeMode
 from scipy.spatial.transform import Rotation
 
 from .GeoEllipse import GeoEllipse
 from .GeoRing import GeoRing
 from .GeoShape import GeoShape
-from evals.apps.KMLApp import KMLApp, KMLControlRequest, KMLControlResponse, KMLSelect
-from src.pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
-from src.pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from src.pyLiveKML.KML.KMLObjects.Feature import Feature
-from src.pyLiveKML.KML.KML import AltitudeMode
+from ..KMLApp import KMLApp, KMLControlRequest, KMLControlResponse, KMLSelect
 
 
 origin = GeoCoordinates(lon=-85.844, lat=40.019, alt=1000)
