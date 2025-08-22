@@ -5,8 +5,7 @@ from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
 class ListStyle(SubStyle):
-    """
-    A KML 'ListStyle', per https://developers.google.com/kml/documentation/kmlreference#liststyle.  Specifies
+    """A KML 'ListStyle', per https://developers.google.com/kml/documentation/kmlreference#liststyle.  Specifies
     how a :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in GEP's user List View.
 
     :param ListItemType|None list_item_type: The (optional) behaviour model for the list item.
@@ -31,7 +30,8 @@ class ListStyle(SubStyle):
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'ListStyle'"""
+        'ListStyle'
+        """
         return "ListStyle"
 
     @property

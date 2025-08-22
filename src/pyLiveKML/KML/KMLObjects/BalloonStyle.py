@@ -5,8 +5,7 @@ from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
 class BalloonStyle(SubStyle):
-    """
-    A KML 'BalloonStyle', per https://developers.google.com/kml/documentation/kmlreference#balloonstyle.  Specifies
+    """A KML 'BalloonStyle', per https://developers.google.com/kml/documentation/kmlreference#balloonstyle.  Specifies
     how the description balloon of :class:`~pyLiveKML.KML.KMLObjects.Placemark` objects is drawn.
 
     :param str|None text: The (optional) text to be displayed in the balloon.
@@ -31,7 +30,8 @@ class BalloonStyle(SubStyle):
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'BalloonStyle'"""
+        'BalloonStyle'
+        """
         return "BalloonStyle"
 
     @property

@@ -6,8 +6,7 @@ from pyLiveKML.KML.Vec2 import Vec2
 
 
 class IconStyle(ColorStyle):
-    """
-    A KML 'IconStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.  Specifies
+    """A KML 'IconStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.  Specifies
     various properties that define how a :class:`~pyLiveKML.KML.KMLObjects.Icon` is drawn.  Applies to
     :class:`~pyLiveKML.KML.KMLObjects.Point` geometries.
 
@@ -36,7 +35,8 @@ class IconStyle(ColorStyle):
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'IconStyle'"""
+        'IconStyle'
+        """
         return "IconStyle"
 
     @property

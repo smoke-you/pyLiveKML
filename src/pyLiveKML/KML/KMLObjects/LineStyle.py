@@ -4,8 +4,7 @@ from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 
 
 class LineStyle(ColorStyle):
-    """
-    A KML 'LineStyle', per https://developers.google.com/kml/documentation/kmlreference#linestyle.  Specifies
+    """A KML 'LineStyle', per https://developers.google.com/kml/documentation/kmlreference#linestyle.  Specifies
     various properties of a :class:`~pyLiveKML.KML.KMLObjects.Geometry`, typically either a
     :class:`~pyLiveKML.KML.KMLObjects.LineString` or :class:`~pyLiveKML.KML.KMLObjects.LinearRing`, including
     the inner and outer boundaries of :class:`~pyLiveKML.KML.KMLObjects.Polygon` objects.
@@ -29,7 +28,8 @@ class LineStyle(ColorStyle):
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'LineStyle'"""
+        'LineStyle'
+        """
         return "LineStyle"
 
     @property

@@ -1,18 +1,18 @@
 [project]
 name = "pyLiveKML"
 version = "1.0.0"
-authors = [
-  { name="smoke-you", email="smoke-you@github.com" },
-]
-description = "Live-stream KML content to Google Earth Pro"
+authors = [{ name="smoke-you", email="smoke-you@github.com" }]
+description = "A pure-Python library for live-streaming KML content to Google Earth Pro."
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
-#license = "GNU AFFERO GENERAL PUBLIC LICENSE 3"
-#license-files = ["LICEN[CS]E*"]
+license = "AGPL-3.0-or-later"
+license-files = [
+    "LICENCE"
+]
 dependencies = [
     "lxml>=6.0.0",
 ]
@@ -28,6 +28,9 @@ skip-string-normalization = false
 
 [tool.ruff]
 exclude = []
+select = [
+    "D"
+]
 indent-width = 4
 
 [tool.ruff.format]
@@ -36,9 +39,10 @@ indent-style = "space"
 skip-magic-trailing-comma = false
 
 [tool.ruff.lint]
-ignore = [
-    "E501",
-]
+ignore = ["E501"]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["D104"]
 
 [tool.mypy]
 mypy_path = '.'
@@ -50,4 +54,3 @@ strict_optional = true
 exclude = [
     "venv/"
 ]
-

@@ -1,6 +1,5 @@
 class GeoCoordinates:
-    """
-    The GeoCoordinates type describes a single instance of a Lon-Lat-Alt (LLA) position, as used in
+    """The GeoCoordinates type describes a single instance of a Lon-Lat-Alt (LLA) position, as used in
     :class:`~pyLiveKML.KML.KMLObjects.Point`, :class:`~pyLiveKML.KML.KMLObjects.LineString` and
     :class:`~pyLiveKML.KML.KMLObjects.LinearRing` objects. Note that the GeoCoordinates type is *not* explicitly
     referenced by the KML specification; rather, it is a construct of convenience for the pyLiveKML package.

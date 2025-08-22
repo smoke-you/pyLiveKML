@@ -30,7 +30,8 @@ class Document(Container):
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'Document'"""
+        'Document'
+        """
         return "Document"
 
     def __init__(

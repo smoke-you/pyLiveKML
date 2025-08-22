@@ -46,7 +46,8 @@ class LinearRing(Geometry):
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'LinearRing'"""
+        'LinearRing'
+        """
         return "LinearRing"
 
     @property

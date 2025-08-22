@@ -5,8 +5,7 @@ from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 
 
 class LabelStyle(ColorStyle):
-    """
-    A KML 'LabelStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.  Specifies
+    """A KML 'LabelStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.  Specifies
     various properties that define how the name of a :class:`~pyLiveKML.KML.KMLObjects.Feature` is drawn in GEP.
 
     :param float|None scale: The (optional) relative scale of the text.
@@ -27,7 +26,8 @@ class LabelStyle(ColorStyle):
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'LabelStyle'"""
+        'LabelStyle'
+        """
         return "LabelStyle"
 
     @property

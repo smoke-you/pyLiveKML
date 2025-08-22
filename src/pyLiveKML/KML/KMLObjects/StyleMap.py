@@ -1,3 +1,5 @@
+"""StyleMap module."""
+
 from typing import Iterator
 
 from lxml import etree  # type: ignore
@@ -8,11 +10,13 @@ from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
 
 class StyleMap(StyleSelector):
-    """A KML 'StyleMap', per https://developers.google.com/kml/documentation/kmlreference#stylemap. Maps between two
-    different :class:`~pyLiveKML.KML.KMLObjects.Style` objects for the :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` and
-    :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT` states of a :class:`~pyLiveKML.KML.KMLObjects.Feature` when it is
-    displayed in GEP. The child :class:`~pyLiveKML.KML.KMLObjects.Style` objects may be referenced by URI, or in-line
-    in the :class:`~pyLiveKML.KML.KMLObjects.StyleMap`.
+    """A KML 'StyleMap', per https://developers.google.com/kml/documentation/kmlreference#stylemap.
+    
+    Maps between two different :class:`~pyLiveKML.KML.KMLObjects.Style` objects for the 
+    :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` and :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT` 
+    states of a :class:`~pyLiveKML.KML.KMLObjects.Feature` when it is displayed in GEP. The child 
+    :class:`~pyLiveKML.KML.KMLObjects.Style` objects may be referenced by URI, or in-line in the 
+    :class:`~pyLiveKML.KML.KMLObjects.StyleMap`.
 
     :param str|None normal_style_url: An (optional) URI reference for a :class:`~pyLiveKML.KML.KMLObjects.Style`
         to be employed in :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` display mode.
@@ -39,6 +43,7 @@ class StyleMap(StyleSelector):
         highlight_style_url: str | None = None,
         highlight_style: Style | None = None,
     ):
+        """StyleMap instance constructor."""
         super().__init__()
         self._normal_style_url: str | None = normal_style_url
         self._normal_style: Style | None = normal_style
@@ -47,14 +52,20 @@ class StyleMap(StyleSelector):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'StyleMap'"""
+        """The class' KML type string.
+        
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type`. Sets 
+        the KML tag name to 'StyleMap'.
+        """
         return "StyleMap"
 
     @property
     def children(self) -> Iterator[ObjectChild]:
-        """Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield the children of a
-        :class:`~pyLiveKML.KML.KMLObjects.Style`, i.e. up to two :class:`~pyLiveKML.KML.KMLObjects.Style` instances.
+        """The children of the instance.
+        
+        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children`. Yields 
+        the children of a :class:`~pyLiveKML.KML.KMLObjects.Style`, i.e. up to two 
+        :class:`~pyLiveKML.KML.KMLObjects.Style` instances.
         """
         if self._normal_style:
             yield ObjectChild(parent=self, child=self._normal_style)
@@ -63,8 +74,11 @@ class StyleMap(StyleSelector):
 
     @property
     def normal_style_url(self) -> str | None:
-        """A URI that references the :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when the target
-        :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` mode.
+        """The URI of the normal style.
+        
+        A URI that references the :class:`~pyLiveKML.KML.KMLObjects.Style` that will 
+        be employed when the target :class:`~pyLiveKML.KML.KMLObjects.Feature` is 
+        displayed in :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` mode.
         """
         return self._normal_style_url
 
@@ -76,8 +90,11 @@ class StyleMap(StyleSelector):
 
     @property
     def normal_style(self) -> Style | None:
-        """An inline :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when the target
-        :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` mode.
+        """The normal style to be applied.
+
+        An inline :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when 
+        the target :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in 
+        :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` mode.
         """
         return self._normal_style
 
@@ -89,7 +106,9 @@ class StyleMap(StyleSelector):
 
     @property
     def highlight_style_url(self) -> str | None:
-        """A URI that references the :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when the target
+        """The URI of the highlight style.
+        
+        A URI that references the :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when the target
         :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT` mode.
         """
         return self._highlight_style_url
@@ -102,8 +121,11 @@ class StyleMap(StyleSelector):
 
     @property
     def highlight_style(self) -> Style | None:
-        """An inline :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when the target
-        :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT` mode.
+        """The highlight style to be applied.
+        
+        An inline :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when 
+        the target :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in 
+        :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT` mode.
         """
         return self._highlight_style
 
@@ -114,6 +136,7 @@ class StyleMap(StyleSelector):
             self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if with_children:
             if self._normal_style_url or self._normal_style:
                 normal = etree.SubElement(root, "Pair")

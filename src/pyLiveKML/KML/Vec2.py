@@ -1,19 +1,18 @@
+"""Vec2 module."""
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import UnitsEnum, Vec2Type
 
 
 class Vec2:
-    """
-    KML field, per the documentation at https://developers.google.com/kml/documentation/kmlreference#kml-fields, that
-    is used to define the reference point, handle, or *hotspot* for an icon in GEP.
+    """KML field, per the documentation at https://developers.google.com/kml/documentation/kmlreference#kml-fields, that is used to define the reference point, handle, or *hotspot* for an icon in GEP.
 
     :param Vec2Type vec_type: The sub-type of the Vec2 object. Defaults to 'hotSpot'.
     :param float x: The x value of the Vec2; defaults to 0.5.
     :param float y: The y value of the Vec2; defaults to 0.5.
     :param UnitsEnum x_units: The units type of the Vec2 object's x value. Defaults to 'fraction'.
     :param UnitsEnum y_units: The units type of the Vec2 object's y value. Defaults to 'fraction'.
-
     :var Vec2Type vec_type: The sub-type of the Vec2 object. Defaults to 'hotSpot'.
     :var float x: The x value of the Vec2; defaults to 0.5.
     :var float y: The y value of the Vec2; defaults to 0.5.
@@ -29,6 +28,7 @@ class Vec2:
         x_units: UnitsEnum = UnitsEnum.FRACTION,
         y_units: UnitsEnum = UnitsEnum.FRACTION,
     ):
+        """Vec2 instance constructor."""
         super().__init__()
         self.name: str | None = None
         self.vec_type = vec_type
@@ -48,6 +48,7 @@ class Vec2:
         return root
 
     def __eq__(self, other: object) -> bool:
+        """Check equality."""
         return (
             False
             if other is None
@@ -60,4 +61,5 @@ class Vec2:
         )
 
     def __ne__(self, other: object) -> bool:
+        """Check negative equality."""
         return not self.__eq__(other)

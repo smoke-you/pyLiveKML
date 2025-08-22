@@ -43,7 +43,8 @@ class Icon(Link):
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'Icon'"""
+        'Icon'
+        """
         return "Icon"
 
     @property

@@ -3,3 +3,4 @@ build
 lxml
 mypy
 ruff
+sphinx

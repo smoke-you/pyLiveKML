@@ -1,3 +1,5 @@
+"""pyLiveKML global imports wrapper."""
+
 from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
 from pyLiveKML.KML.errors import errors
 from pyLiveKML.KML.KML import (

@@ -1,3 +1,5 @@
+"""Polygon module."""
+
 from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
@@ -10,6 +12,7 @@ from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 
 class Polygon(Geometry):
     """A Polygon geometry, as per https://developers.google.com/kml/documentation/kmlreference#polygon.
+
     :class:`~pyLiveKML.KML.KMLObjects.Polygon` objects are made up of an outer boundary that is a
     :class:`~pyLiveKML.KML.KMLObjects.LinearRing` and zero or more inner boundaries, each of which is also a
     :class:`~pyLiveKML.KML.KMLObjects.LinearRing`.
@@ -35,6 +38,7 @@ class Polygon(Geometry):
         extrude: bool | None = None,
         tessellate: bool | None = None,
     ):
+        """Polygon instance constructor."""
         Geometry.__init__(self)
         self._outer_boundary: LinearRing = outer_boundary
         self._inner_boundaries: list[LinearRing] = list[LinearRing]()
@@ -46,13 +50,18 @@ class Polygon(Geometry):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'Polygon'"""
+        """The class' KML type string.
+        
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set 
+        the KML tag name to 'Polygon'
+        """
         return "Polygon"
 
     @property
     def children(self) -> Iterator[ObjectChild]:
-        """Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield the children of a
+        """The children of the instance.
+        
+        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield the children of a
         :class:`~pyLiveKML.KML.KMLObjects.Polygon`, i.e. one or more :class:`~pyLiveKML.KML.KMLObjects.LinearRing`
         instances, being the :attr:`outer_boundary` and zero or more :attr:`inner_boundaries`.
         """
@@ -62,7 +71,9 @@ class Polygon(Geometry):
 
     @property
     def outer_boundary(self) -> LinearRing:
-        """The :class:`~pyLiveKML.KML.KMLObjects.LinearRing` that defines the outer extents of the
+        """The outer boundary of the instance.
+        
+        The :class:`~pyLiveKML.KML.KMLObjects.LinearRing` that defines the outer extents of the
         :class:`~pyLiveKML.KML.KMLObjects.Polygon`.
         """
         return self._outer_boundary
@@ -75,7 +86,9 @@ class Polygon(Geometry):
 
     @property
     def inner_boundaries(self) -> Iterator[LinearRing]:
-        """A generator to retrieve the :class:`~pyLiveKML.KML.KMLObjects.LinearRing` objects that define cutouts within
+        """The inner boundaries of the instance.
+        
+        A generator to retrieve the :class:`~pyLiveKML.KML.KMLObjects.LinearRing` objects that define cutouts within
         the :attr:`outer_boundary`.
 
         :returns: A generator of :class:`~pyLiveKML.KML.KMLObjects.LinearRing` objects.
@@ -84,7 +97,9 @@ class Polygon(Geometry):
 
     @property
     def extrude(self) -> bool | None:
-        """True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects each of
+        """Flag to indicate whether the displayed polygon should be extruded to ground level.
+        
+        True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects each of
         the :attr:`outer_boundary` and :attr:`inner_boundaries` objects' points to the ground in GEP, False otherwise.
         None implies False.
         """
@@ -98,7 +113,9 @@ class Polygon(Geometry):
 
     @property
     def tessellate(self) -> bool | None:
-        """True if the inner and outer boundary lines of the :class:`~pyLiveKML.KML.KMLObjects.Polygon` follows the
+        """Flag to indicate whether the displayed polygon should be tessellated.
+        
+        True if the inner and outer boundary lines of the :class:`~pyLiveKML.KML.KMLObjects.Polygon` follows the
         terrain in GEP, otherwise False.
 
         :note: The :attr:`altitude_mode` property must be set to CLAMP_TO_GROUND to enable tessellation.
@@ -113,7 +130,9 @@ class Polygon(Geometry):
 
     @property
     def altitude_mode(self) -> AltitudeMode | None:
-        """An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
+        """The altitude mode that will be used to display the polygon.
+        
+        An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
         :class:`~pyLiveKML.KML.GeoCoordinates` objects that make up the inner and outer boundaries of the
         :class:`~pyLiveKML.KML.KMLObjects.Polygon` and treats their altitudes.
         """
@@ -126,8 +145,12 @@ class Polygon(Geometry):
             self.field_changed()
 
     def update_kml(self, parent: "Object", update: etree.Element) -> None:
-        # overrides the Object.update_kml() method to correctly handle the boundaries
-        # Polygon boundaries are a special case for children, because they *must* be wrapped in an additional tag
+        """Retrieve a complete child <Create>, <Change> or <Delete> KML tag as a child of an <Update> tag.
+
+        Overrides the Object.update_kml() method to correctly handle the boundaries.
+        Polygon boundaries are a special case for children, because they *must* be 
+        wrapped in an additional tag.
+        """
         Object.update_kml(self, parent, update)
         if self._outer_boundary.state == ObjectState.CHANGING:
             self._outer_boundary.change_kml(update)
@@ -138,6 +161,7 @@ class Polygon(Geometry):
             b.update_generated()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self._extrude is not None:
             etree.SubElement(root, "extrude").text = str(int(self._extrude))
         if self._tessellate is not None:
