@@ -1,4 +1,5 @@
 import math
+from typing import Optional, Iterator
 
 from numpy import ndarray, array
 from scipy.spatial.transform import Rotation
@@ -10,7 +11,7 @@ from src.pyLiveKML.KML.KML import AltitudeMode
 
 def ellipse_gen(
     x_rad: float, y_rad: float, rotation: Rotation = None, num_v: int = 32
-) -> ndarray:
+) -> Iterator[ndarray]:
     step = 2 * math.pi / num_v
     angle = -step
     for i in range(0, num_v):
@@ -32,7 +33,7 @@ class GeoEllipse(GeoShape):
         border_width: float = 1.0,
         border_color: int = 0xFFFFFFFF,
         fill_color: int = 0xFFFFFFFF,
-        name: str = None,
+        name: Optional[str] = None,
         selected: bool = False,
         altitude_mode: AltitudeMode = AltitudeMode.CLAMP_TO_GROUND,
     ):

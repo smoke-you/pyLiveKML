@@ -1,6 +1,6 @@
 from typing import Optional
 
-from lxml import etree
+from lxml import etree  # type: ignore
 
 from ..KML import ColorMode
 from .ColorStyle import ColorStyle
@@ -17,43 +17,42 @@ class LabelStyle(ColorStyle):
         either 'NORMAL' or 'RANDOM'.
     """
 
-    @property
-    def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'LabelStyle'"""
-        return 'LabelStyle'
-
-    @property
-    def scale(self) -> Optional[float]:
-        """Relative scale of the text.
-        """
-        return self._scale
-
-    @scale.setter
-    def scale(self, value: Optional[float]):
-        if self._scale != value:
-            self._scale = value
-            self.field_changed()
-
-    def build_kml(self, root: etree.Element, with_children=True):
-        if self.color is not None:
-            etree.SubElement(root, 'color').text = f'{self.color:08x}'
-        if self.color_mode is not None:
-            etree.SubElement(root, 'colorMode').text = self.color_mode.value
-        if self.scale is not None:
-            etree.SubElement(root, 'scale').text = f'{self.scale:0.3f}'
-
     def __init__(
-            self,
-            scale: Optional[float] = None,
-            color: Optional[int] = None,
-            color_mode: Optional[ColorMode] = None,
+        self,
+        scale: Optional[float] = None,
+        color: Optional[int] = None,
+        color_mode: Optional[ColorMode] = None,
     ):
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
         self._scale = scale
 
-    def __str__(self):
-        return f'{self.kml_type}'
+    @property
+    def kml_type(self) -> str:
+        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
+        'LabelStyle'"""
+        return "LabelStyle"
 
-    def __repr__(self):
+    @property
+    def scale(self) -> Optional[float]:
+        """Relative scale of the text."""
+        return self._scale
+
+    @scale.setter
+    def scale(self, value: Optional[float]) -> None:
+        if self._scale != value:
+            self._scale = value
+            self.field_changed()
+
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        if self.color is not None:
+            etree.SubElement(root, "color").text = f"{self.color:08x}"
+        if self.color_mode is not None:
+            etree.SubElement(root, "colorMode").text = self.color_mode.value
+        if self.scale is not None:
+            etree.SubElement(root, "scale").text = f"{self.scale:0.3f}"
+
+    def __str__(self) -> str:
+        return f"{self.kml_type}"
+
+    def __repr__(self) -> str:
         return self.__str__()

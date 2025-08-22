@@ -1,6 +1,6 @@
 from typing import Optional
 
-from lxml import etree
+from lxml import etree  # type: ignore
 
 from ..KML import ColorMode
 from .ColorStyle import ColorStyle
@@ -21,91 +21,88 @@ class IconStyle(ColorStyle):
         either 'NORMAL' or 'RANDOM'.
     """
 
+    def __init__(
+        self,
+        icon: str,
+        scale: float = 1.0,
+        heading: Optional[float] = None,
+        color: Optional[int] = None,
+        color_mode: Optional[ColorMode] = None,
+    ):
+        ColorStyle.__init__(self, color=color, color_mode=color_mode)
+        self._scale: Optional[float] = scale
+        self._heading: Optional[float] = heading
+        self._icon: Optional[str] = icon
+        self._hotspot: Optional[Vec2] = None
+
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
         'IconStyle'"""
-        return 'IconStyle'
+        return "IconStyle"
 
     @property
     def icon(self) -> Optional[str]:
-        """URI for the image that will be displayed in GEP as the icon.
-        """
+        """URI for the image that will be displayed in GEP as the icon."""
         return self._icon
 
     @icon.setter
-    def icon(self, value: Optional[str]):
+    def icon(self, value: Optional[str]) -> None:
         if self._icon != value:
             self._icon = value
             self.field_changed()
 
     @property
     def scale(self) -> Optional[float]:
-        """Relative scale at which the icon will be displayed in GEP.
-        """
+        """Relative scale at which the icon will be displayed in GEP."""
         return self._scale
 
     @scale.setter
-    def scale(self, value: Optional[float]):
+    def scale(self, value: Optional[float]) -> None:
         if self._scale != value:
             self._scale = value
             self.field_changed()
 
     @property
     def heading(self) -> Optional[float]:
-        """Heading (in degrees) that the icon will be displayed pointing towards in GEP.
-        """
+        """Heading (in degrees) that the icon will be displayed pointing towards in GEP."""
         return self._heading
 
     @heading.setter
-    def heading(self, value: Optional[float]):
+    def heading(self, value: Optional[float]) -> None:
         if self._heading != value:
             self._heading = value
             self.field_changed()
 
     @property
     def hotspot(self) -> Optional[Vec2]:
-        """Relative position in the icon that is anchored to the associated :class:`~pyLiveKML.KML.KMLObjects.Point`
-        """
+        """Relative position in the icon that is anchored to the associated :class:`~pyLiveKML.KML.KMLObjects.Point`"""
         return self._hotspot
 
     @hotspot.setter
-    def hotspot(self, value: Optional[Vec2]):
-        value.name = 'hotSpot'
+    def hotspot(self, value: Optional[Vec2]) -> None:
+        if value is not None:
+            value.name = "hotSpot"
         if self._hotspot != value:
             self._hotspot = value
             self.field_changed()
 
-    def build_kml(self, root: etree.Element, with_children=True):
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         if self.color is not None:
-            etree.SubElement(root, 'color').text = f'{self.color:08x}'
+            etree.SubElement(root, "color").text = f"{self.color:08x}"
         if self.color_mode is not None:
-            etree.SubElement(root, 'colorMode').text = self.color_mode.value
+            etree.SubElement(root, "colorMode").text = self.color_mode.value
         if self.scale is not None:
-            etree.SubElement(root, 'scale').text = f'{self.scale:0.3f}'
+            etree.SubElement(root, "scale").text = f"{self.scale:0.3f}"
         if self.heading is not None:
-            etree.SubElement(root, 'heading').text = f'{self.heading:0.1f}'
+            etree.SubElement(root, "heading").text = f"{self.heading:0.1f}"
         if self.icon is not None:
-            etree.SubElement(etree.SubElement(root, 'Icon'), 'href').text = self.icon
+            etree.SubElement(etree.SubElement(root, "Icon"), "href").text = self.icon
         if self.hotspot is not None:
             root.append(self.hotspot.xml)
 
-    def __init__(
-            self,
-            icon: str,
-            scale: float = 1.0,
-            heading: float = 0.0,
-            color: Optional[int] = None,
-            color_mode: Optional[ColorMode] = None,
-    ):
-        ColorStyle.__init__(self, color=color, color_mode=color_mode)
-        self._scale = scale
-        self._heading = heading
-        self._icon = icon
-        self._hotspot: Optional[Vec2] = None
+    def __str__(self) -> str:
+        return f"{self.kml_type}"
 
-    def __str__(self):
-        return f'{self.kml_type}'
-
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()

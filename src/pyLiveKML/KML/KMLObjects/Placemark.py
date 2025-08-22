@@ -1,6 +1,6 @@
-from typing import Optional, Iterator
+from typing import Optional, Iterator, cast
 
-from lxml import etree
+from lxml import etree  # type: ignore
 
 from .Feature import Feature
 from .Geometry import Geometry
@@ -25,12 +25,25 @@ class Placemark(Feature):
         :class:`~pyLiveKML.KML.KMLObjects.Placemark`.
     """
 
+    def __init__(
+        self,
+        geometry: Geometry,
+        name: Optional[str] = None,
+        visibility: Optional[bool] = None,
+        inline_style: Optional[StyleSelector] = None,
+        style_url: Optional[str] = None,
+    ):
+        Feature.__init__(self, name=name, visibility=visibility, style_url=style_url)
+        self._geometry = geometry
+        if inline_style:
+            self._styles.append(inline_style)
+
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
         'Placemark'
         """
-        return 'Placemark'
+        return "Placemark"
 
     @property
     def children(self) -> Iterator[ObjectChild]:
@@ -52,29 +65,18 @@ class Placemark(Feature):
         """
         return self._geometry
 
-    def build_kml(self, root: etree.Element, with_children=True):
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         if self._name is not None:
-            etree.SubElement(root, 'name').text = self.name
+            etree.SubElement(root, "name").text = self.name
         if self._visibility is not None:
-            etree.SubElement(root, 'visibility').text = str(int(self.visibility))
+            etree.SubElement(root, "visibility").text = str(
+                int(cast(bool, self.visibility))
+            )
         if self._description is not None:
-            etree.SubElement(root, 'description').text = self.description
+            etree.SubElement(root, "description").text = self.description
         if self._style_url is not None:
-            etree.SubElement(root, 'styleUrl').text = self._style_url
+            etree.SubElement(root, "styleUrl").text = self._style_url
         if with_children:
             for s in self._styles:
                 root.append(s.construct_kml())
             root.append(self.geometry.construct_kml())
-
-    def __init__(
-            self,
-            geometry: Geometry,
-            name: Optional[str] = None,
-            visibility: Optional[bool] = None,
-            inline_style: Optional[StyleSelector] = None,
-            style_url: Optional[str] = None
-    ):
-        Feature.__init__(self, name=name, visibility=visibility, style_url=style_url)
-        self._geometry = geometry
-        if inline_style:
-            self._styles.append(inline_style)

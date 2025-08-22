@@ -1,7 +1,6 @@
 from typing import Optional, Iterable
 
-from .Feature import Feature
-from .Container import Container
+from .Feature import Feature, Container
 from .StyleSelector import StyleSelector
 
 
@@ -32,16 +31,16 @@ class Folder(Container):
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
         'Folder'"""
-        return 'Folder'
+        return "Folder"
 
     def __init__(
-            self,
-            name: Optional[str] = None,
-            visibility: Optional[bool] = None,
-            is_open: Optional[bool] = None,
-            style_url: Optional[str] = None,
-            styles: Optional[Iterable[StyleSelector]] = None,
-            features: Optional[Iterable[Feature]] = None,
+        self,
+        name: Optional[str] = None,
+        visibility: Optional[bool] = None,
+        is_open: Optional[bool] = None,
+        style_url: Optional[str] = None,
+        styles: Optional[Iterable[StyleSelector]] = None,
+        features: Optional[Iterable[Feature]] = None,
     ):
         Container.__init__(
             self,

@@ -1,6 +1,6 @@
 from typing import Optional, Iterator
 
-from lxml import etree
+from lxml import etree  # type: ignore
 
 from .BalloonStyle import BalloonStyle
 from .IconStyle import IconStyle
@@ -35,7 +35,7 @@ class Style(StyleSelector):
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
         'Style'"""
-        return 'Style'
+        return "Style"
 
     @property
     def children(self) -> Iterator[ObjectChild]:
@@ -58,41 +58,35 @@ class Style(StyleSelector):
 
     @property
     def balloon_style(self) -> Optional[BalloonStyle]:
-        """A :class:`~pyLiveKML.KML.KMLObjects.BalloonStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`
-        """
+        """A :class:`~pyLiveKML.KML.KMLObjects.BalloonStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`"""
         return self._balloon_style
 
     @property
     def icon_style(self) -> Optional[IconStyle]:
-        """An :class:`~pyLiveKML.KML.KMLObjects.IconStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`
-        """
+        """An :class:`~pyLiveKML.KML.KMLObjects.IconStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`"""
         return self._icon_style
 
     @property
     def label_style(self) -> Optional[LabelStyle]:
-        """A :class:`~pyLiveKML.KML.KMLObjects.LabelStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`
-        """
+        """A :class:`~pyLiveKML.KML.KMLObjects.LabelStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`"""
         return self._label_style
 
     @property
     def line_style(self) -> Optional[LineStyle]:
-        """A :class:`~pyLiveKML.KML.KMLObjects.LineStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`
-        """
+        """A :class:`~pyLiveKML.KML.KMLObjects.LineStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`"""
         return self._line_style
 
     @property
     def list_style(self) -> Optional[ListStyle]:
-        """A :class:`~pyLiveKML.KML.KMLObjects.ListStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`
-        """
+        """A :class:`~pyLiveKML.KML.KMLObjects.ListStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`"""
         return self._list_style
 
     @property
     def poly_style(self) -> Optional[PolyStyle]:
-        """A :class:`~pyLiveKML.KML.KMLObjects.PolyStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`
-        """
+        """A :class:`~pyLiveKML.KML.KMLObjects.PolyStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`"""
         return self._poly_style
 
-    def build_kml(self, root: etree.Element, with_children=True):
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         if with_children:
             if self._balloon_style is not None:
                 root.append(self._balloon_style.construct_kml())
@@ -108,13 +102,13 @@ class Style(StyleSelector):
                 root.append(self._poly_style.construct_kml())
 
     def __init__(
-            self,
-            balloon_style: Optional[BalloonStyle] = None,
-            icon_style: Optional[IconStyle] = None,
-            label_style: Optional[LabelStyle] = None,
-            line_style: Optional[LineStyle] = None,
-            list_style: Optional[ListStyle] = None,
-            poly_style: Optional[PolyStyle] = None,
+        self,
+        balloon_style: Optional[BalloonStyle] = None,
+        icon_style: Optional[IconStyle] = None,
+        label_style: Optional[LabelStyle] = None,
+        line_style: Optional[LineStyle] = None,
+        list_style: Optional[ListStyle] = None,
+        poly_style: Optional[PolyStyle] = None,
     ):
         StyleSelector.__init__(self)
         self._balloon_style: Optional[BalloonStyle] = balloon_style
@@ -124,8 +118,8 @@ class Style(StyleSelector):
         self._list_style: Optional[ListStyle] = list_style
         self._poly_style: Optional[PolyStyle] = poly_style
 
-    def __str__(self):
-        return f'{self.kml_type}'
+    def __str__(self) -> str:
+        return f"{self.kml_type}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()

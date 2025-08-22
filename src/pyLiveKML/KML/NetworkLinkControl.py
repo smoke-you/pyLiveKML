@@ -1,9 +1,9 @@
 from typing import Optional
 
-from lxml import etree
+from lxml import etree  # type: ignore
 
 from .KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
-from .KMLObjects.Container import Container
+from .KMLObjects.Feature import Container
 from .KMLObjects.Folder import Folder
 
 
@@ -36,16 +36,17 @@ class NetworkLinkControl:
         :return: The synchronization update.
         :rtype: etree.Element
         """
-        root = etree.Element('NetworkLinkControl')
-        update = etree.SubElement(root, 'Update')
-        etree.SubElement(update, 'targetHref').text = self.target_href
+        root = etree.Element("NetworkLinkControl")
+        update = etree.SubElement(root, "Update")
+        etree.SubElement(update, "targetHref").text = self.target_href
 
         for f in self.container.containers:
             f.feature.update_kml(f.container, update)
             for c in f.feature.children:
                 c.child.update_kml(c.parent, update)
-            for d in f.feature.flush:
-                d.delete_kml(update)
+            if isinstance(f.feature, Container):
+                for d in f.feature.flush:
+                    d.delete_kml(update)
 
         for f in self.container.features:
             if len(update) >= self.container.update_limit:
@@ -56,10 +57,10 @@ class NetworkLinkControl:
         return root
 
     def __init__(
-            self,
-            target_href: str = '',
-            container: Optional[Container] = None,
-            update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
+        self,
+        target_href: str = "",
+        container: Optional[Container] = None,
+        update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
     ):
         # TODO: All of these should be included in the update_kml method, but they're not terribly important ATM.
         # self.min_refresh_period: Optional[float] = None
@@ -71,5 +72,7 @@ class NetworkLinkControl:
         # self.link_snippet: Optional[str] = None
         # self.expires: Optional[datetime] = None
         self.target_href: str = target_href
-        self.container: Container = Folder('Root', is_open=True) if container is None else container
+        self.container: Container = (
+            Folder("Root", is_open=True) if container is None else container
+        )
         self.update_limit = update_limit

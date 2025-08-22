@@ -26,20 +26,11 @@ class GeoCoordinates:
         self.lat: float = lat
         self.alt: Optional[float] = alt
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.alt is None:
-            return f'{self.lon:0.6f},{self.lat:0.6f}'
+            return f"{self.lon:0.6f},{self.lat:0.6f}"
         else:
-            return f'{self.lon:0.6f},{self.lat:0.6f},{self.alt:0.1f}'
+            return f"{self.lon:0.6f},{self.lat:0.6f},{self.alt:0.1f}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()
-
-
-
-
-
-
-
-
-

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from lxml import etree
+from lxml import etree  # type: ignore
 
 from ..KML import RefreshMode
 from .Object import Object
@@ -22,20 +22,36 @@ class Link(Object):
     :param Optional[float] refresh_interval: The (optional) refresh interval, in seconds, that will be used for file
         loading.
     """
+
+    def __init__(
+        self,
+        href: Optional[str] = None,
+        refresh_mode: Optional[RefreshMode] = None,
+        refresh_interval: Optional[float] = None,
+    ):
+        Object.__init__(self)
+        self._href: Optional[str] = href
+        self._refresh_mode: Optional[RefreshMode] = refresh_mode
+        self._refresh_interval: Optional[float] = refresh_interval
+        # self.view_refresh_mode: Optional[ViewRefreshMode] = None
+        # self.view_refresh_time: Optional[float] = None
+        # self.view_bound_scale: Optional[float] = None
+        # self.view_format: Optional[str] = None
+        # self.http_query: Optional[str] = None
+
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
         'Link'"""
-        return 'Link'
+        return "Link"
 
     @property
     def href(self) -> Optional[str]:
-        """A URI that specifies the location of the resource that is linked to.
-        """
+        """A URI that specifies the location of the resource that is linked to."""
         return self._href
 
     @href.setter
-    def href(self, value: Optional[str]):
+    def href(self, value: Optional[str]) -> None:
         if self._href != value:
             self._href = value
             self.field_changed()
@@ -48,7 +64,7 @@ class Link(Object):
         return self._refresh_mode
 
     @refresh_mode.setter
-    def refresh_mode(self, value: Optional[RefreshMode]):
+    def refresh_mode(self, value: Optional[RefreshMode]) -> None:
         if self._refresh_mode != value:
             self._refresh_mode = value
             self.field_changed()
@@ -61,18 +77,20 @@ class Link(Object):
         return self._refresh_interval
 
     @refresh_interval.setter
-    def refresh_interval(self, value: Optional[float]):
+    def refresh_interval(self, value: Optional[float]) -> None:
         if self._refresh_interval != value:
             self._refresh_interval = value
             self.field_changed()
 
-    def build_kml(self, root: etree.Element, with_children=True):
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         if self._href:
-            etree.SubElement(root, 'href').text = self._href
+            etree.SubElement(root, "href").text = self._href
         if self._refresh_mode is not None:
-            etree.SubElement(root, 'refreshMode').text = self._refresh_mode.value
+            etree.SubElement(root, "refreshMode").text = self._refresh_mode.value
         if self._refresh_interval is not None:
-            etree.SubElement(root, 'refreshInterval').text = f'{self._refresh_interval:0.3f}'
+            etree.SubElement(root, "refreshInterval").text = (
+                f"{self._refresh_interval:0.3f}"
+            )
         # if self.view_refresh_mode is not None:
         #     etree.SubElement(root, 'viewRefreshMode').text = self.view_refresh_mode.value
         # if self.view_refresh_time is not None:
@@ -84,19 +102,3 @@ class Link(Object):
         #     etree.SubElement(root, 'viewFormat').text = self.view_format
         # if self.http_query:
         #     etree.SubElement(root, 'httpQuery').text = self.http_query
-
-    def __init__(
-            self,
-            href: Optional[str] = None,
-            refresh_mode: Optional[RefreshMode] = None,
-            refresh_interval: Optional[float] = None,
-    ):
-        Object.__init__(self)
-        self._href = href
-        self._refresh_mode = refresh_mode
-        self._refresh_interval = refresh_interval
-        # self.view_refresh_mode: Optional[ViewRefreshMode] = None
-        # self.view_refresh_time: Optional[float] = None
-        # self.view_bound_scale: Optional[float] = None
-        # self.view_format: Optional[str] = None
-        # self.http_query: Optional[str] = None

@@ -9,6 +9,7 @@ class Geometry(Object, ABC):
     :class:`~pyLiveKML.KML.KMLObjects.Object` instances that have an existence as geospatial objects in GEP and that
     are children of :class:`~pyLiveKML.KML.KMLObjects.Placemark` instances.
     """
-    def __init__(self):
+
+    def __init__(self) -> None:
         Object.__init__(self)
         ABC.__init__(self)

@@ -21,38 +21,39 @@ class ColorStyle(SubStyle, ABC):
     :var Optional[ColorMode] color_mode: The (optional) :class:`~pyLiveKML.KML.KML.ColorMode` that will be used by GEP
         to determine the displayed color.
     """
+
+    def __init__(
+        self, color: Optional[int] = None, color_mode: Optional[ColorMode] = None
+    ):
+        SubStyle.__init__(self)
+        ABC.__init__(self)
+        self._color: Optional[int] = None
+        self.color = color
+        self._color_mode: Optional[ColorMode] = color_mode
+
     @property
     def color(self) -> Optional[int]:
-        """Color, in 32-bit ABGR format (yes, the order is correct).
-        """
+        """Color, in 32-bit ABGR format (yes, the order is correct)."""
         return self._color
 
     @color.setter
-    def color(self, value: Optional[int]):
-        val = None if value is None else 0 if value <= 0 else 0xffffffff if value >= 0xffffffff else value
+    def color(self, value: Optional[int]) -> None:
+        val = (
+            None
+            if value is None
+            else 0 if value <= 0 else 0xFFFFFFFF if value >= 0xFFFFFFFF else value
+        )
         if self._color != val:
             self._color = val
             self.field_changed()
 
     @property
     def color_mode(self) -> Optional[ColorMode]:
-        """The :class:`~pyLiveKML.KML.KML.ColorMode` that will be used by GEP to determine the displayed color.
-        """
+        """The :class:`~pyLiveKML.KML.KML.ColorMode` that will be used by GEP to determine the displayed color."""
         return self._color_mode
 
     @color_mode.setter
-    def color_mode(self, value: Optional[ColorMode]):
+    def color_mode(self, value: Optional[ColorMode]) -> None:
         if self._color_mode != value:
             self._color_mode = value
             self.field_changed()
-
-    def __init__(
-            self,
-            color: Optional[int] = None,
-            color_mode: Optional[ColorMode] = None
-    ):
-        SubStyle.__init__(self)
-        ABC.__init__(self)
-        self._color = None
-        self.color = color
-        self._color_mode = color_mode

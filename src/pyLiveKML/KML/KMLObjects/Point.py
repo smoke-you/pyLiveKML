@@ -1,5 +1,5 @@
 from typing import Optional
-from lxml import etree
+from lxml import etree  # type: ignore
 
 from ..GeoCoordinates import GeoCoordinates
 from ..KML import AltitudeMode
@@ -19,12 +19,23 @@ class Point(Geometry):
         to the :class:`~pyLiveKML.KML.KMLObjects.Point` by GEP.
     """
 
+    def __init__(
+        self,
+        coordinates: GeoCoordinates,
+        extrude: Optional[bool] = None,
+        altitude_mode: Optional[AltitudeMode] = None,
+    ):
+        Geometry.__init__(self)
+        self._coordinates: GeoCoordinates = coordinates
+        self._extrude: Optional[bool] = extrude
+        self._altitude_mode: Optional[AltitudeMode] = altitude_mode
+
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
         'Point'
         """
-        return 'Point'
+        return "Point"
 
     @property
     def extrude(self) -> Optional[bool]:
@@ -34,7 +45,7 @@ class Point(Geometry):
         return self._extrude
 
     @extrude.setter
-    def extrude(self, value: Optional[bool]):
+    def extrude(self, value: Optional[bool]) -> None:
         if self._extrude != value:
             self._extrude = value
             self.field_changed()
@@ -47,7 +58,7 @@ class Point(Geometry):
         return self._altitude_mode
 
     @altitude_mode.setter
-    def altitude_mode(self, value: Optional[AltitudeMode]):
+    def altitude_mode(self, value: Optional[AltitudeMode]) -> None:
         if self._altitude_mode != value:
             self._altitude_mode = value
             self.field_changed()
@@ -60,30 +71,19 @@ class Point(Geometry):
         return self._coordinates
 
     @coordinates.setter
-    def coordinates(self, value: GeoCoordinates):
+    def coordinates(self, value: GeoCoordinates) -> None:
         self._coordinates = value
         self.field_changed()
 
-    def build_kml(self, root: etree.Element, with_children=True):
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         if self.extrude is not None:
-            etree.SubElement(root, 'visibility').text = str(int(self.extrude))
+            etree.SubElement(root, "visibility").text = str(int(self.extrude))
         if self.altitude_mode is not None:
-            etree.SubElement(root, 'altitudeMode').text = self.altitude_mode.value
-        etree.SubElement(root, 'coordinates').text = self.coordinates.__str__()
+            etree.SubElement(root, "altitudeMode").text = self.altitude_mode.value
+        etree.SubElement(root, "coordinates").text = self.coordinates.__str__()
 
-    def __init__(
-        self,
-        coordinates: GeoCoordinates,
-        extrude: Optional[bool] = None,
-        altitude_mode: Optional[AltitudeMode] = None
-    ):
-        Geometry.__init__(self)
-        self._coordinates: GeoCoordinates = coordinates
-        self._extrude = extrude
-        self._altitude_mode = altitude_mode
+    def __str__(self) -> str:
+        return f"{self.kml_type}"
 
-    def __str__(self):
-        return f'{self.kml_type}'
-
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()

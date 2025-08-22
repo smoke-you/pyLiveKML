@@ -2,25 +2,29 @@ import json
 
 from datetime import datetime
 from pathlib import Path
+from typing import cast
 
 from fastapi import FastAPI
 from fastapi.requests import Request
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from .AircraftData import AircraftData
 from .AircraftLocation import AircraftLocation
 from evals.apps.KMLApp import KMLApp, KMLSelect
+from src.pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
+from src.pyLiveKML.KML.KMLObjects.Feature import Feature
 
 
 def load_adsb_exchange_data(filename: Path) -> AircraftLocation:
     with open(filename) as f:
         sample_data = json.loads(f.read())
+    transponder = sample_data["icao"]
+    flight = sample_data["r"]
+    base_ts = sample_data["timestamp"]
+    trace = sample_data["trace"]
+    positions = list[AircraftData]()
     try:
-        transponder = sample_data['icao']
-        flight = sample_data['r']
-        base_ts = sample_data['timestamp']
-        trace = sample_data['trace']
-        positions = list[AircraftData]()
         for t in trace:
             try:
                 p = AircraftData(
@@ -34,41 +38,43 @@ def load_adsb_exchange_data(filename: Path) -> AircraftLocation:
                 positions.append(p)
             except BaseException as x:
                 print(x)
-        return AircraftLocation(transponder, flight, positions)
     except BaseException as x:
         print(x)
+    return AircraftLocation(transponder, flight, positions)
 
 
 tracker_app = FastAPI()
 locdir = Path(__file__).parent
-with open(locdir.joinpath('description.txt'), 'r') as f:
+with open(locdir.joinpath("description.txt"), "r") as f:
     description = f.read()
-templates = Jinja2Templates(directory=locdir.joinpath('templates'))
+templates = Jinja2Templates(directory=locdir.joinpath("templates"))
 tracker_data = [
     load_adsb_exchange_data(file)
-    for file in locdir.parent.joinpath('aircraft_data').glob('*.json')
+    for file in locdir.parent.joinpath("aircraft_data").glob("*.json")
 ]
 for a in tracker_data:
     a.select(False, True)
-tracker = KMLApp('Tracker', description, '/tracker', tracker_app, tracker_data)
+tracker = KMLApp(
+    "Tracker", description, "/tracker", tracker_app, cast(list[Feature], tracker_data)
+)
 
 
-@tracker_app.get('/')
-async def _(request: Request):
+@tracker_app.get("/")
+async def _(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(
-        'tracker.html.j2',
-        {'request': request, 'aircraftlist': tracker_data},
+        "tracker.html.j2",
+        {"request": request, "aircraftlist": tracker_data},
     )
 
 
-@tracker_app.post('/select')
-async def _(select: KMLSelect | list[KMLSelect]):
+@tracker_app.post("/select")
+async def _(select: KMLSelect | list[KMLSelect]) -> None:
     if isinstance(select, KMLSelect):
         select_list = [select]
     else:
         select_list = select
     for s in select_list:
-        for f in tracker.sync.container:
+        for f in cast(NetworkLinkControl, tracker.sync).container:
             if s.id == f.id:
                 f.select(s.checked, True)
                 break

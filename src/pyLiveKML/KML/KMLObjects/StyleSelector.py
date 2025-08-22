@@ -9,6 +9,7 @@ class StyleSelector(Object, ABC):
     :class:`~pyLiveKML.KML.KMLObjects.Object` instances that represent display styles for
     :class:`~pyLiveKML.KML.KMLObjects.Feature` instances.
     """
-    def __init__(self):
+
+    def __init__(self) -> None:
         Object.__init__(self)
         ABC.__init__(self)

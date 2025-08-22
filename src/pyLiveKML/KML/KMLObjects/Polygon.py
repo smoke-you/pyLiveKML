@@ -1,6 +1,6 @@
 from typing import Optional, Iterable, Iterator
 
-from lxml import etree
+from lxml import etree  # type: ignore
 
 from ..KML import AltitudeMode, State
 from .Geometry import Geometry
@@ -27,11 +27,28 @@ class Polygon(Geometry):
         :class:`~pyLiveKML.KML.KMLObjects.Polygon` should follow the terrain.
     """
 
+    def __init__(
+        self,
+        outer_boundary: LinearRing,
+        inner_boundaries: Optional[Iterable[LinearRing]] = None,
+        altitude_mode: Optional[AltitudeMode] = None,
+        extrude: Optional[bool] = None,
+        tessellate: Optional[bool] = None,
+    ):
+        Geometry.__init__(self)
+        self._outer_boundary: LinearRing = outer_boundary
+        self._inner_boundaries: list[LinearRing] = list[LinearRing]()
+        if inner_boundaries:
+            self._inner_boundaries.extend(inner_boundaries)
+        self._extrude: Optional[bool] = extrude
+        self._tessellate: Optional[bool] = tessellate
+        self._altitude_mode: Optional[AltitudeMode] = altitude_mode
+
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
         'Polygon'"""
-        return 'Polygon'
+        return "Polygon"
 
     @property
     def children(self) -> Iterator[ObjectChild]:
@@ -51,7 +68,7 @@ class Polygon(Geometry):
         return self._outer_boundary
 
     @outer_boundary.setter
-    def outer_boundary(self, value: LinearRing):
+    def outer_boundary(self, value: LinearRing) -> None:
         if self._outer_boundary != value:
             self._outer_boundary = value
             self.field_changed()
@@ -74,7 +91,7 @@ class Polygon(Geometry):
         return self._extrude
 
     @extrude.setter
-    def extrude(self, value: Optional[bool]):
+    def extrude(self, value: Optional[bool]) -> None:
         if self._extrude != value:
             self._extrude = value
             self.field_changed()
@@ -89,7 +106,7 @@ class Polygon(Geometry):
         return self._tessellate
 
     @tessellate.setter
-    def tessellate(self, value: Optional[bool]):
+    def tessellate(self, value: Optional[bool]) -> None:
         if self._tessellate != value:
             self._tessellate = value
             self.field_changed()
@@ -103,12 +120,12 @@ class Polygon(Geometry):
         return self._altitude_mode
 
     @altitude_mode.setter
-    def altitude_mode(self, value: Optional[AltitudeMode]):
+    def altitude_mode(self, value: Optional[AltitudeMode]) -> None:
         if self._altitude_mode != value:
             self._altitude_mode = value
             self.field_changed()
 
-    def update_kml(self, parent: 'Object', update: etree.Element):
+    def update_kml(self, parent: "Object", update: etree.Element) -> None:
         # overrides the Object.update_kml() method to correctly handle the boundaries
         # Polygon boundaries are a special case for children, because they *must* be wrapped in an additional tag
         Object.update_kml(self, parent, update)
@@ -120,36 +137,21 @@ class Polygon(Geometry):
                 b.change_kml(update)
             b.update_generated()
 
-    def build_kml(self, root: etree.Element, with_children=True):
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         if self._extrude is not None:
-            etree.SubElement(root, 'extrude').text = str(int(self._extrude))
+            etree.SubElement(root, "extrude").text = str(int(self._extrude))
         if self._tessellate is not None:
-            etree.SubElement(root, 'tessellate').text = str(int(self._tessellate))
+            etree.SubElement(root, "tessellate").text = str(int(self._tessellate))
         if self._altitude_mode is not None:
-            etree.SubElement(root, 'altitudeMode').text = self._altitude_mode.value
+            etree.SubElement(root, "altitudeMode").text = self._altitude_mode.value
         if with_children:
             if self._outer_boundary:
-                etree.SubElement(root, 'outerBoundaryIs').append(self._outer_boundary.construct_kml())
+                etree.SubElement(root, "outerBoundaryIs").append(
+                    self._outer_boundary.construct_kml()
+                )
                 if self._outer_boundary._state == State.IDLE:
                     self._outer_boundary._state = State.CREATED
             for b in self._inner_boundaries:
-                etree.SubElement(root, 'innerBoundaryIs').append(b.construct_kml())
+                etree.SubElement(root, "innerBoundaryIs").append(b.construct_kml())
                 if b._state == State.IDLE:
                     b._state = State.CREATED
-
-    def __init__(
-            self,
-            outer_boundary: LinearRing,
-            inner_boundaries: Optional[Iterable[LinearRing]] = None,
-            altitude_mode: Optional[AltitudeMode] = None,
-            extrude: Optional[bool] = None,
-            tessellate: Optional[bool] = None,
-    ):
-        Geometry.__init__(self)
-        self._outer_boundary = outer_boundary
-        self._inner_boundaries = list[LinearRing]()
-        if inner_boundaries:
-            self._inner_boundaries.extend(inner_boundaries)
-        self._extrude = extrude
-        self._tessellate = tessellate
-        self._altitude_mode = altitude_mode

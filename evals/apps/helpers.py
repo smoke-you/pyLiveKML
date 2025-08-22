@@ -7,22 +7,22 @@ def description_builder(src: dict, title_color: int = 0xFF0000) -> str:
     :rtype: str
     """
     if not src:
-        return '<table />'
-    rows = ['<table>']
+        return "<table />"
+    rows = ["<table>"]
     title_color = title_color & 0xFFFFFF
     for k, v in src.items():
         if isinstance(v, (tuple, list)):
             row = [
-                f'<tr><td align=\"left\" style=\"color:#{title_color:06x}\"><b>{k}</b></td>'
+                f'<tr><td align="left" style="color:#{title_color:06x}"><b>{k}</b></td>'
             ]
             for i in v:
-                row.append(f'<td align=\"right\">{str(i)}</td>')
-            row.append('</tr>')
-            rows.append(''.join(row))
+                row.append(f'<td align="right">{str(i)}</td>')
+            row.append("</tr>")
+            rows.append("".join(row))
         else:
             rows.append(
-                f'<tr><td align=\"left\" style=\"color:#{title_color:06x}\"><b>{k}</b></td>'
-                f'<td align=\"right\">{str(v)}</td></tr>'
+                f'<tr><td align="left" style="color:#{title_color:06x}"><b>{k}</b></td>'
+                f'<td align="right">{str(v)}</td></tr>'
             )
-    rows.append('</table>')
-    return ''.join(rows)
+    rows.append("</table>")
+    return "".join(rows)

@@ -1,6 +1,6 @@
 from typing import Optional, Iterable, Iterator
 
-from lxml import etree
+from lxml import etree  # type: ignore
 
 from ..GeoCoordinates import GeoCoordinates
 from ..KML import AltitudeMode
@@ -27,11 +27,29 @@ class LineString(Geometry):
         :class:`~pyLiveKML.KML.KMLObjects.LineString` objects should be drawn.
     """
 
+    def __init__(
+        self,
+        coordinates: Iterable[GeoCoordinates],
+        altitude_mode: Optional[AltitudeMode] = None,
+        extrude: Optional[bool] = None,
+        tessellate: Optional[bool] = None,
+        gx_altitude_offset: Optional[float] = None,
+        gx_draw_order: Optional[int] = None,
+    ):
+        Geometry.__init__(self)
+        self._gx_altitude_offset: Optional[float] = gx_altitude_offset
+        self._extrude: Optional[bool] = extrude
+        self._tessellate: Optional[bool] = tessellate
+        self._altitude_mode: Optional[AltitudeMode] = altitude_mode
+        self._gx_draw_order: Optional[int] = gx_draw_order
+        self._coordinates: list[GeoCoordinates] = list[GeoCoordinates]()
+        self._coordinates.extend(coordinates)
+
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
         'LineString'"""
-        return 'LineString'
+        return "LineString"
 
     @property
     def gx_altitude_offset(self) -> Optional[float]:
@@ -42,7 +60,7 @@ class LineString(Geometry):
         return self._gx_altitude_offset
 
     @gx_altitude_offset.setter
-    def gx_altitude_offset(self, value: Optional[float]):
+    def gx_altitude_offset(self, value: Optional[float]) -> None:
         if self._gx_altitude_offset != value:
             self._gx_altitude_offset = value
             self.field_changed()
@@ -56,7 +74,7 @@ class LineString(Geometry):
         return self._extrude
 
     @extrude.setter
-    def extrude(self, value: Optional[bool]):
+    def extrude(self, value: Optional[bool]) -> None:
         if self._extrude != value:
             self._extrude = value
             self.field_changed()
@@ -71,7 +89,7 @@ class LineString(Geometry):
         return self._tessellate
 
     @tessellate.setter
-    def tessellate(self, value: Optional[bool]):
+    def tessellate(self, value: Optional[bool]) -> None:
         if self._tessellate != value:
             self._tessellate = value
             self.field_changed()
@@ -85,7 +103,7 @@ class LineString(Geometry):
         return self._altitude_mode
 
     @altitude_mode.setter
-    def altitude_mode(self, value: Optional[AltitudeMode]):
+    def altitude_mode(self, value: Optional[AltitudeMode]) -> None:
         if self._altitude_mode != value:
             self._altitude_mode = value
             self.field_changed()
@@ -98,7 +116,7 @@ class LineString(Geometry):
         return self._gx_draw_order
 
     @gx_draw_order.setter
-    def gx_draw_order(self, value: Optional[int]):
+    def gx_draw_order(self, value: Optional[int]) -> None:
         if self._gx_draw_order != value:
             self._gx_draw_order = value
             self.field_changed()
@@ -113,39 +131,25 @@ class LineString(Geometry):
         yield from self._coordinates
 
     @coordinates.setter
-    def coordinates(self, value: Iterable[GeoCoordinates]):
+    def coordinates(self, value: Iterable[GeoCoordinates]) -> None:
         self._coordinates.clear()
         self._coordinates.extend(value)
         self.field_changed()
 
-    def build_kml(self, root: etree.Element, with_children=True):
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         if self._gx_altitude_offset is not None:
-            etree.SubElement(root, 'gx:altitudeOffset').text = f'{self._gx_altitude_offset:0.1f}'
+            etree.SubElement(root, "gx:altitudeOffset").text = (
+                f"{self._gx_altitude_offset:0.1f}"
+            )
         if self._extrude is not None:
-            etree.SubElement(root, 'extrude').text = str(int(self._extrude))
+            etree.SubElement(root, "extrude").text = str(int(self._extrude))
         if self._tessellate is not None:
-            etree.SubElement(root, 'tessellate').text = str(int(self._tessellate))
+            etree.SubElement(root, "tessellate").text = str(int(self._tessellate))
         if self._altitude_mode is not None:
-            etree.SubElement(root, 'altitudeMode').text = self._altitude_mode.value
+            etree.SubElement(root, "altitudeMode").text = self._altitude_mode.value
         if self._gx_draw_order is not None:
-            etree.SubElement(root, 'gx:drawOrder').text = str(self._gx_draw_order)
+            etree.SubElement(root, "gx:drawOrder").text = str(self._gx_draw_order)
         if self._coordinates:
-            etree.SubElement(root, 'coordinates').text = ' '.join(c.__str__() for c in self._coordinates)
-
-    def __init__(
-            self,
-            coordinates: Iterable[GeoCoordinates],
-            altitude_mode: Optional[AltitudeMode] = None,
-            extrude: Optional[bool] = None,
-            tessellate: Optional[bool] = None,
-            gx_altitude_offset: Optional[float] = None,
-            gx_draw_order: Optional[int] = None
-    ):
-        Geometry.__init__(self)
-        self._gx_altitude_offset = gx_altitude_offset
-        self._extrude = extrude
-        self._tessellate = tessellate
-        self._altitude_mode = altitude_mode
-        self._gx_draw_order = gx_draw_order
-        self._coordinates = list[GeoCoordinates]()
-        self._coordinates.extend(coordinates)
+            etree.SubElement(root, "coordinates").text = " ".join(
+                c.__str__() for c in self._coordinates
+            )

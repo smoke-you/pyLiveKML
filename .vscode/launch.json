@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Python: pyLiveKML server",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceRoot}/evals/main.py",
             "console": "integratedTerminal",

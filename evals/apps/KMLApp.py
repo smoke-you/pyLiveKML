@@ -35,13 +35,13 @@ class KMLApp:
         data: Feature | list[Feature],
     ):
         self.name = name
-        self.description = description.strip().replace('\r', '').split('\n')
+        self.description = description.strip().replace("\r", "").split("\n")
         self.path = path
         self.app = app
         self.data = data
         self.sync: Optional[NetworkLinkControl] = None
 
-    def load_data(self):
+    def load_data(self) -> None:
         if not self.sync:
             return
         if isinstance(self.data, Feature):
@@ -55,10 +55,10 @@ class KMLApp:
 
 def find_apps(basedir: Path) -> list[KMLApp]:
     apps = list[KMLApp]()
-    for file in Path(basedir).rglob('*.py'):
-        modpath = '.'.join(file.parent.parts[-2:]) + '.' + file.stem
+    for file in Path(basedir).rglob("*.py"):
+        modpath = ".".join(file.parent.parts[-2:]) + "." + file.stem
         items = inspect.getmembers(importlib.import_module(modpath))
         for _, item in items:
             if isinstance(item, KMLApp):
                 apps.append(item)
-    return sorted(apps, key=attrgetter('name'))
+    return sorted(apps, key=attrgetter("name"))

@@ -1,6 +1,6 @@
 import enum
 
-from lxml import etree
+from lxml import etree  # type: ignore
 
 
 KML_UPDATE_CONTAINER_LIMIT_DEFAULT: int = 100
@@ -21,12 +21,12 @@ def kml_tag() -> etree.Element:
     :rtype: etree.Element
     """
     nsmap = {
-        'gx': 'http://www.google.com/kml/ext/2.2',
-        'kml': 'http://www.opengis.net/kml/2.2',
-        'atom': 'http://www.w3.org/2005/Atom',
+        "gx": "http://www.google.com/kml/ext/2.2",
+        "kml": "http://www.opengis.net/kml/2.2",
+        "atom": "http://www.w3.org/2005/Atom",
     }
-    attrib = {'xmlns': 'http://www.opengis.net/kml/2.2'}
-    return etree.Element('kml', nsmap=nsmap, attrib=attrib)
+    attrib = {"xmlns": "http://www.opengis.net/kml/2.2"}
+    return etree.Element("kml", nsmap=nsmap, attrib=attrib)
 
 
 class AltitudeMode(enum.Enum):
@@ -34,9 +34,10 @@ class AltitudeMode(enum.Enum):
     :class:`~pyLiveKML.KML.KMLObjects.Geometry`. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
-    CLAMP_TO_GROUND = 'clampToGround'
-    RELATIVE_TO_GROUND = 'relativeToGround'
-    ABSOLUTE = 'absolute'
+
+    CLAMP_TO_GROUND = "clampToGround"
+    RELATIVE_TO_GROUND = "relativeToGround"
+    ABSOLUTE = "absolute"
 
 
 class ColorMode(enum.Enum):
@@ -44,8 +45,9 @@ class ColorMode(enum.Enum):
     :class:`~pyLiveKML.KML.KMLObjects.ColorStyle`. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
-    NORMAL = 'normal',
-    RANDOM = 'random'
+
+    NORMAL = ("normal",)
+    RANDOM = "random"
 
 
 class DisplayMode(enum.Enum):
@@ -53,8 +55,9 @@ class DisplayMode(enum.Enum):
     :class:`~pyLiveKML.KML.KMLObjects.BalloonStyle` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
-    DEFAULT = 'default'
-    HIDE = 'hide'
+
+    DEFAULT = "default"
+    HIDE = "hide"
 
 
 class ItemIconMode(enum.Flag):
@@ -62,17 +65,18 @@ class ItemIconMode(enum.Flag):
     :class:`~pyLiveKML.KML.KMLObjects.ListStyle` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
-    OPEN = 'open'
-    CLOSED = 'closed'
-    ERROR = 'error'
-    OPEN_ERROR = 'open error'
-    CLOSED_ERROR = 'closed error'
-    OPEN_FETCHING0 = 'open fetching0'
-    OPEN_FETCHING1 = 'open fetching1'
-    OPEN_FETCHING2 = 'open fetching2'
-    CLOSED_FETCHING0 = 'closed fetching0'
-    CLOSED_FETCHING1 = 'closed fetching1'
-    CLOSED_FETCHING2 = 'closed fetching2'
+
+    OPEN = "open"
+    CLOSED = "closed"
+    ERROR = "error"
+    OPEN_ERROR = "open error"
+    CLOSED_ERROR = "closed error"
+    OPEN_FETCHING0 = "open fetching0"
+    OPEN_FETCHING1 = "open fetching1"
+    OPEN_FETCHING2 = "open fetching2"
+    CLOSED_FETCHING0 = "closed fetching0"
+    CLOSED_FETCHING1 = "closed fetching1"
+    CLOSED_FETCHING2 = "closed fetching2"
 
 
 class ListItemType(enum.Enum):
@@ -80,10 +84,11 @@ class ListItemType(enum.Enum):
     :class:`~pyLiveKML.KML.KMLObjects.ListStyle` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
-    CHECK = 'check'
-    CHECK_OFF_ONLY = 'checkOffOnly'
-    CHECK_HIDE_CHILDREN = 'checkHideChildren'
-    RADIO_FOLDER = 'radioFolder'
+
+    CHECK = "check"
+    CHECK_OFF_ONLY = "checkOffOnly"
+    CHECK_HIDE_CHILDREN = "checkHideChildren"
+    RADIO_FOLDER = "radioFolder"
 
 
 class RefreshMode(enum.Enum):
@@ -91,9 +96,10 @@ class RefreshMode(enum.Enum):
     :class:`~pyLiveKML.KML.KMLObjects.Link` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
-    ON_CHANGE = 'onChange'
-    ON_INTERVAL = 'onInterval'
-    ON_EXPIRE = 'onExpire'
+
+    ON_CHANGE = "onChange"
+    ON_INTERVAL = "onInterval"
+    ON_EXPIRE = "onExpire"
 
 
 class StyleState(enum.Enum):
@@ -101,8 +107,9 @@ class StyleState(enum.Enum):
     :class:`~pyLiveKML.KML.KMLObjects.StyleMap` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
-    NORMAL = 'normal'
-    HIGHLIGHT = 'highlight'
+
+    NORMAL = "normal"
+    HIGHLIGHT = "highlight"
 
 
 class UnitsEnum(enum.Enum):
@@ -110,9 +117,10 @@ class UnitsEnum(enum.Enum):
     instances in e.g. :class:`~pyLiveKML.KML.KMLObjects.IconStyle` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
-    FRACTION = 'fraction'
-    PIXELS = 'pixels'
-    INSET_PIXELS = 'insetPixels'
+
+    FRACTION = "fraction"
+    PIXELS = "pixels"
+    INSET_PIXELS = "insetPixels"
 
 
 class ViewRefreshMode(enum.Enum):
@@ -120,23 +128,26 @@ class ViewRefreshMode(enum.Enum):
     :class:`~pyLiveKML.KML.KMLObjects.Link` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
-    NEVER = 'never'
-    ON_STOP = 'onStop'
-    ON_REQUEST = 'onRequest'
-    ON_REGION = 'onRegion'
+
+    NEVER = "never"
+    ON_STOP = "onStop"
+    ON_REQUEST = "onRequest"
+    ON_REGION = "onRegion"
 
 
 class Vec2Type(enum.Enum):
     """Enumeration of possible sub-types for KML :class:`~pyLiveKML.KML.KMLObjects.Vec2` objects.  Refer to the KML
     documentation at https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
-    HOTSPOT = 'hotSpot'
+
+    HOTSPOT = "hotSpot"
 
 
 class State(enum.Enum):
     """Enumeration of possible states that objects derived from KML :class:`~pyLiveKML.KML.KMLObjects.Object` may hold.
     The 'State' enumeration is specific to the :mod:`pyLiveKML` package, i.e. it is *not* part of the KML specification.
     """
+
     IDLE = 0
     CREATING = 1
     CREATED = 2

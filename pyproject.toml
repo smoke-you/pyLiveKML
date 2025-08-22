@@ -1,0 +1,29 @@
+[tool.black]
+line-length = 88
+skip-string-normalization = false
+
+[tool.ruff]
+exclude = [
+    "src/manage.py",
+]
+indent-width = 4
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.ruff.lint]
+ignore = [
+    "E501",
+]
+
+[tool.mypy]
+mypy_path = '.'
+plugins = []
+ignore_missing_imports = true
+check_untyped_defs = true
+disallow_untyped_defs = true
+strict_optional = true
+exclude = []
+

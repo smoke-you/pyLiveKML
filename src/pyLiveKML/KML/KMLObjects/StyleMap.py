@@ -1,6 +1,6 @@
 from typing import Optional, Iterator
 
-from lxml import etree
+from lxml import etree  # type: ignore
 
 from .Object import ObjectChild
 from .Style import Style
@@ -32,11 +32,24 @@ class StyleMap(StyleSelector):
         :class:`~pyLiveKML.KML.KMLObjects.Style`.
     """
 
+    def __init__(
+        self,
+        normal_style_url: Optional[str] = None,
+        normal_style: Optional[Style] = None,
+        highlight_style_url: Optional[str] = None,
+        highlight_style: Optional[Style] = None,
+    ):
+        super().__init__()
+        self._normal_style_url: Optional[str] = normal_style_url
+        self._normal_style: Optional[Style] = normal_style
+        self._highlight_style_url: Optional[str] = highlight_style_url
+        self._highlight_style: Optional[Style] = highlight_style
+
     @property
     def kml_type(self) -> str:
         """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
         'StyleMap'"""
-        return 'StyleMap'
+        return "StyleMap"
 
     @property
     def children(self) -> Iterator[ObjectChild]:
@@ -54,9 +67,9 @@ class StyleMap(StyleSelector):
         :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` mode.
         """
         return self._normal_style_url
-    
+
     @normal_style_url.setter
-    def normal_style_url(self, value: Optional[str]):
+    def normal_style_url(self, value: Optional[str]) -> None:
         if self._normal_style_url != value:
             self._normal_style_url = value
             self.field_changed()
@@ -69,7 +82,7 @@ class StyleMap(StyleSelector):
         return self._normal_style
 
     @normal_style.setter
-    def normal_style(self, value: Optional[Style]):
+    def normal_style(self, value: Optional[Style]) -> None:
         if self._normal_style != value:
             self._normal_style = value
             self.field_changed()
@@ -82,7 +95,7 @@ class StyleMap(StyleSelector):
         return self._highlight_style_url
 
     @highlight_style_url.setter
-    def highlight_style_url(self, value: Optional[str]):
+    def highlight_style_url(self, value: Optional[str]) -> None:
         if self._highlight_style_url != value:
             self._highlight_style_url = value
             self.field_changed()
@@ -95,38 +108,26 @@ class StyleMap(StyleSelector):
         return self._highlight_style
 
     @highlight_style.setter
-    def highlight_style(self, value: Optional[Style]):
+    def highlight_style(self, value: Optional[Style]) -> None:
         if self._highlight_style != value:
             self._highlight_style = value
             self.field_changed()
 
-    def build_kml(self, root: etree.Element, with_children=True):
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         if with_children:
             if self._normal_style_url or self._normal_style:
-                normal = etree.SubElement(root, 'Pair')
-                etree.SubElement(normal, 'key').text = 'normal'
+                normal = etree.SubElement(root, "Pair")
+                etree.SubElement(normal, "key").text = "normal"
                 if self._normal_style:
                     normal.append(self._normal_style.construct_kml())
                 if self._normal_style_url:
-                    etree.SubElement(normal, 'styleUrl').text = self._normal_style_url
+                    etree.SubElement(normal, "styleUrl").text = self._normal_style_url
             if self._highlight_style_url or self._highlight_style:
-                highlight = etree.SubElement(root, 'Pair')
-                etree.SubElement(highlight, 'key').text = 'highlight'
+                highlight = etree.SubElement(root, "Pair")
+                etree.SubElement(highlight, "key").text = "highlight"
                 if self._highlight_style:
                     highlight.append(self._highlight_style.construct_kml())
                 if self._highlight_style_url:
-                    etree.SubElement(highlight, 'styleUrl').text = self._highlight_style_url
-
-    def __init__(
-            self,
-            normal_style_url: Optional[str] = None,
-            normal_style: Optional[Style] = None,
-            highlight_style_url: Optional[str] = None,
-            highlight_style: Optional[Style] = None,
-    ):
-        super().__init__()
-        self._normal_style_url = normal_style_url
-        self._normal_style = normal_style
-        self._highlight_style_url = highlight_style_url
-        self._highlight_style = highlight_style
-            
+                    etree.SubElement(highlight, "styleUrl").text = (
+                        self._highlight_style_url
+                    )

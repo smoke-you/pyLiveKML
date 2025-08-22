@@ -1,3 +1,5 @@
+from typing import Optional, Iterator
+
 from numpy import ndarray, array
 from scipy.spatial.transform import Rotation
 
@@ -6,9 +8,11 @@ from src.pyLiveKML.KML.GeoCoordinates import GeoCoordinates
 from src.pyLiveKML.KML.KML import AltitudeMode
 
 
-def circle_gen(radius: float, rotation: Rotation = None, num_v: int = 32) -> ndarray:
+def circle_gen(
+    radius: float, rotation: Rotation = None, num_v: int = 32
+) -> Iterator[ndarray]:
     point = array([radius, 0, 0])
-    r = Rotation.from_euler('z', 360.0 / num_v, degrees=True)
+    r = Rotation.from_euler("z", 360.0 / num_v, degrees=True)
     for i in range(0, num_v):
         yield rotation.apply(point) if rotation is not None else point
         point = r.apply(point)
@@ -24,7 +28,7 @@ class GeoRing(GeoShape):
         border_width: float = 1.0,
         border_color: int = 0xFFFFFFFF,
         fill_color: int = 0xFFFFFFFF,
-        name: str = None,
+        name: Optional[str] = None,
         selected: bool = False,
         altitude_mode: AltitudeMode = AltitudeMode.CLAMP_TO_GROUND,
     ):
