@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Mapping, Any
 
@@ -94,11 +95,12 @@ app = FastAPI(routes=routes)
 templates = Jinja2Templates(directory=local_dir.joinpath("templates"))
 
 
-@app.on_event("startup")
-async def _() -> None:
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     for x in applist:
         x.sync = gep_sync
         x.load_data()
+    yield
 
 
 @app.get("/favicon.ico")
