@@ -1,3 +1,7 @@
+# PyPi
+
+The current version on PyPi is 0.0.4, from August 2022.  I can't update it (yet) because I can't access my PyPi account (yet).  Hopefully soon, pretty please PyPi :)
+
 # What is pyLiveKML?
 
 pyLiveKML is an implementation of Google's 
