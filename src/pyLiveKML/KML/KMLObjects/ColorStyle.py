@@ -1,3 +1,5 @@
+"""ColorStyle module."""
+
 from abc import ABC
 
 from pyLiveKML.KML.KML import ColorMode
@@ -5,10 +7,12 @@ from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
 class ColorStyle(SubStyle, ABC):
-    """A KML 'ColorStyle', per https://developers.google.com/kml/documentation/kmlreference#colorstyle.  The
-    ColorStyle is the abstract base class for a subset of the specific sub-styles that are optionally included
-    in :class:`~pyLiveKML.KML.KMLObjects.Style` objects, and that act to apply a color, typically (but not exclusively)
-    to :class:`~pyLiveKML.KML.KMLObjects.Feature` objects.
+    """A KML 'ColorStyle', per https://developers.google.com/kml/documentation/kmlreference#colorstyle.
+
+    ColorStyle is the abstract base class for a subset of the specific sub-styles that
+    are optionally included in :class:`~pyLiveKML.KML.KMLObjects.Style` objects, and
+    that act to apply a color, typically (but not exclusively) to
+    :class:`~pyLiveKML.KML.KMLObjects.Feature` objects.
 
     :param int|None color: The (optional) color, in ABGR format, that will be applied by GEP if the
         :attr:`color_mode` is :attr:`~pyLiveKML.KML.KML.ColorMode.NORMAL`.
@@ -22,6 +26,7 @@ class ColorStyle(SubStyle, ABC):
     """
 
     def __init__(self, color: int | None = None, color_mode: ColorMode | None = None):
+        """ColorStyle instance constructor."""
         SubStyle.__init__(self)
         ABC.__init__(self)
         self._color: int | None = None

@@ -1,3 +1,5 @@
+"""ColorStyle module."""
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import ColorMode
@@ -5,8 +7,10 @@ from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 
 
 class LabelStyle(ColorStyle):
-    """A KML 'LabelStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.  Specifies
-    various properties that define how the name of a :class:`~pyLiveKML.KML.KMLObjects.Feature` is drawn in GEP.
+    """A KML 'LabelStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.
+
+    Specifies various properties that define how the name of a
+    :class:`~pyLiveKML.KML.KMLObjects.Feature` is drawn in GEP.
 
     :param float|None scale: The (optional) relative scale of the text.
     :param int|None color: The (optional) color of the text, as a 32-bit ABGR value.
@@ -20,13 +24,16 @@ class LabelStyle(ColorStyle):
         color: int | None = None,
         color_mode: ColorMode | None = None,
     ):
+        """ColorStyle instance constructor."""
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
         self._scale = scale
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'LabelStyle'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'LabelStyle'
         """
         return "LabelStyle"
 
@@ -42,6 +49,7 @@ class LabelStyle(ColorStyle):
             self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self.color is not None:
             etree.SubElement(root, "color").text = f"{self.color:08x}"
         if self.color_mode is not None:
@@ -50,7 +58,9 @@ class LabelStyle(ColorStyle):
             etree.SubElement(root, "scale").text = f"{self.scale:0.3f}"
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return f"{self.kml_type}"
 
     def __repr__(self) -> str:
+        """Return a debug representation."""
         return self.__str__()

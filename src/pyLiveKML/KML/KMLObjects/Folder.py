@@ -1,3 +1,5 @@
+"""Folder module."""
+
 from typing import Iterable
 
 from pyLiveKML.KML.KMLObjects.Feature import Feature, Container
@@ -6,6 +8,7 @@ from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
 class Folder(Container):
     """A KML 'Folder', per https://developers.google.com/kml/documentation/kmlreference#folder.
+
     :class:`~pyLiveKML.KML.KMLObjects.Folder` inherits from :class:`~pyLiveKML.KML.KMLObjects.Container` and hence
     :class:`~pyLiveKML.KML.KMLObjects.Folder` objects are containers for :class:`~pyLiveKML.KML.KMLObjects.Feature`
     objects, including other :class:`~pyLiveKML.KML.KMLObjects.Container` instances.
@@ -29,8 +32,10 @@ class Folder(Container):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'Folder'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'Folder'
         """
         return "Folder"
 
@@ -43,6 +48,7 @@ class Folder(Container):
         styles: Iterable[StyleSelector] | None = None,
         features: Iterable[Feature] | None = None,
     ):
+        """Folder instance constructor."""
         Container.__init__(
             self,
             name=name,

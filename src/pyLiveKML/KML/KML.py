@@ -1,10 +1,14 @@
+"""KML module."""
+
 import enum
 
 from lxml import etree  # type: ignore
 
 
 KML_UPDATE_CONTAINER_LIMIT_DEFAULT: int = 100
-"""The default maximum number of :class:`~pyLiveKML.KML.KMLObjects.Feature` objects that will be included in each 
+"""The default value for the container update limit.
+
+The default maximum number of :class:`~pyLiveKML.KML.KMLObjects.Feature` objects that will be included in each 
 synchronization update emitted by a :class:`~pyLiveKML.KML.NetworkLinkControl` object.
 """
 
@@ -30,7 +34,9 @@ def kml_tag() -> etree.Element:
 
 
 class AltitudeMode(enum.Enum):
-    """Enumeration of options for KML <altitudeMode> tags, generally used in e.g. objects that derive from
+    """Enumeration of options for KML <altitudeMode> tags.
+
+    Generally used in e.g. objects that derive from
     :class:`~pyLiveKML.KML.KMLObjects.Geometry`. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
@@ -41,7 +47,9 @@ class AltitudeMode(enum.Enum):
 
 
 class ColorMode(enum.Enum):
-    """Enumeration of options for KML <colorMode> tags, specifically for objects that derive from
+    """Enumeration of options for KML <colorMode> tags.
+
+    Specifically for objects that derive from
     :class:`~pyLiveKML.KML.KMLObjects.ColorStyle`. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
@@ -52,8 +60,10 @@ class ColorMode(enum.Enum):
 
 
 class DisplayMode(str, enum.Enum):
-    """Enumeration of options for KML <displayMode> tags, specifically for
-    :class:`~pyLiveKML.KML.KMLObjects.BalloonStyle` objects. Refer to the KML documentation at
+    """Enumeration of options for KML <displayMode> tags.
+
+    Specifically for :class:`~pyLiveKML.KML.KMLObjects.BalloonStyle` objects. Refer to
+    the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
@@ -62,8 +72,10 @@ class DisplayMode(str, enum.Enum):
 
 
 class ItemIconMode(str, enum.Enum):
-    """Enumeration of options for KML <ItemIcon><state> tags, specifically for
-    :class:`~pyLiveKML.KML.KMLObjects.ListStyle` objects. Refer to the KML documentation at
+    """Enumeration of options for KML <ItemIcon><state> tags.
+
+    Specifically for :class:`~pyLiveKML.KML.KMLObjects.ListStyle` objects. Refer to the
+    KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
@@ -81,8 +93,10 @@ class ItemIconMode(str, enum.Enum):
 
 
 class ListItemType(str, enum.Enum):
-    """Enumeration of options for KML <listItemType> tags, specifically for
-    :class:`~pyLiveKML.KML.KMLObjects.ListStyle` objects. Refer to the KML documentation at
+    """Enumeration of options for KML <listItemType> tags.
+
+    Specifically for :class:`~pyLiveKML.KML.KMLObjects.ListStyle` objects. Refer to the
+    KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
@@ -93,8 +107,10 @@ class ListItemType(str, enum.Enum):
 
 
 class RefreshMode(str, enum.Enum):
-    """Enumeration of options for KML <refreshMode> tags, specifically for
-    :class:`~pyLiveKML.KML.KMLObjects.Link` objects. Refer to the KML documentation at
+    """Enumeration of options for KML <refreshMode> tags.
+
+    Specifically for :class:`~pyLiveKML.KML.KMLObjects.Link` objects. Refer to the
+    KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
@@ -104,8 +120,10 @@ class RefreshMode(str, enum.Enum):
 
 
 class StyleState(str, enum.Enum):
-    """Enumeration of options for KML <Pair><key> tags, specifically for
-    :class:`~pyLiveKML.KML.KMLObjects.StyleMap` objects. Refer to the KML documentation at
+    """Enumeration of options for KML <Pair><key> tags.
+
+    Specifically for :class:`~pyLiveKML.KML.KMLObjects.StyleMap` objects. Refer to the
+    KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
@@ -114,8 +132,10 @@ class StyleState(str, enum.Enum):
 
 
 class UnitsEnum(str, enum.Enum):
-    """Enumeration of options for KML <unitsEnum> tags, specifically for :class:`~pyLiveKML.KML.KMLObjects.Vec2`
-    instances in e.g. :class:`~pyLiveKML.KML.KMLObjects.IconStyle` objects. Refer to the KML documentation at
+    """Enumeration of options for KML <unitsEnum> tags.
+
+    Specifically for :class:`~pyLiveKML.KML.KMLObjects.Vec2` instances in e.g.
+    :class:`~pyLiveKML.KML.KMLObjects.IconStyle` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
@@ -125,8 +145,10 @@ class UnitsEnum(str, enum.Enum):
 
 
 class ViewRefreshMode(enum.Enum):
-    """Enumeration of options for KML <viewRefreshMode> tags, specifically for
-    :class:`~pyLiveKML.KML.KMLObjects.Link` objects. Refer to the KML documentation at
+    """Enumeration of options for KML <viewRefreshMode> tags.
+
+    Specifically for :class:`~pyLiveKML.KML.KMLObjects.Link` objects. Refer to the
+    KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
@@ -137,8 +159,10 @@ class ViewRefreshMode(enum.Enum):
 
 
 class Vec2Type(enum.Enum):
-    """Enumeration of possible sub-types for KML :class:`~pyLiveKML.KML.KMLObjects.Vec2` objects.  Refer to the KML
-    documentation at https://developers.google.com/kml/documentation/kmlreference#kml-fields.
+    """Enumeration of possible sub-types for KML :class:`~pyLiveKML.KML.KMLObjects.Vec2` objects.
+
+    Refer to the KML documentation at
+    https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
     HOTSPOT = "hotSpot"
@@ -146,6 +170,7 @@ class Vec2Type(enum.Enum):
 
 class ObjectState(enum.Enum):
     """Enumeration of possible states that objects derived from KML :class:`~pyLiveKML.KML.KMLObjects.Object` may hold.
+
     The 'State' enumeration is specific to the :mod:`pyLiveKML` package, i.e. it is *not* part of the KML specification.
     """
 

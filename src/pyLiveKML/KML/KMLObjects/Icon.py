@@ -1,3 +1,5 @@
+"""Icon module."""
+
 from typing import NamedTuple
 
 from lxml import etree  # type: ignore
@@ -11,6 +13,7 @@ GxParams = NamedTuple("GxParams", [("x", int), ("y", int), ("w", int), ("h", int
 
 class Icon(Link):
     """A KML 'Icon', per https://developers.google.com/kml/documentation/kmlreference#icon.
+
     :class:`~pyLiveKML.KML.KMLObjects.Icon` instances are used to specify an image file that will be displayed in a GEP
     overlay.  Note that only time-based refresh of :class:`~pyLiveKML.KML.KMLObjects.Icon` instances is currently
     supported by pyLiveKML.
@@ -32,6 +35,7 @@ class Icon(Link):
         refresh_interval: float | None = None,  # 4.0
         gx_params: GxParams | None = None,  # GxParams(0, 0, -1, -1)
     ):
+        """Icon instance constructor."""
         Link.__init__(
             self,
             href=href,
@@ -42,8 +46,10 @@ class Icon(Link):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'Icon'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'Icon'
         """
         return "Icon"
 
@@ -58,6 +64,7 @@ class Icon(Link):
         self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self._href:
             etree.SubElement(root, "href").text = self._href
         if self._gx_params:

@@ -27,10 +27,6 @@ line-length = 88
 skip-string-normalization = false
 
 [tool.ruff]
-exclude = []
-select = [
-    "D"
-]
 indent-width = 4
 
 [tool.ruff.format]
@@ -39,10 +35,13 @@ indent-style = "space"
 skip-magic-trailing-comma = false
 
 [tool.ruff.lint]
-ignore = ["E501"]
+ignore = ["E501", "D203", "D213"]
+exclude = []
+select = [
+    "D"
+]
+per-file-ignores = {"__init__.py"=["D104"]}
 
-[tool.ruff.per-file-ignores]
-"__init__.py" = ["D104"]
 
 [tool.mypy]
 mypy_path = '.'

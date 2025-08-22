@@ -1,3 +1,5 @@
+"""LinearRing module."""
+
 from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
@@ -9,6 +11,7 @@ from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 
 class LinearRing(Geometry):
     """A LinearRing geometry, as per https://developers.google.com/kml/documentation/kmlreference#linearring.
+
     :class:`~pyLiveKML.KML.KMLObjects.LinearRing` objects describe a geospatial boundary that is defined by a closed
     sequence of points, where points map to :class:`~pyLiveKML.KML.GeoCoordinates` instances.
 
@@ -35,6 +38,7 @@ class LinearRing(Geometry):
         tessellate: bool | None = None,
         gx_altitude_offset: float | None = None,
     ):
+        """LinearRing instance constructor."""
         Geometry.__init__(self)
         self._gx_altitude_offset: float | None = gx_altitude_offset
         self._extrude: bool | None = extrude
@@ -45,14 +49,18 @@ class LinearRing(Geometry):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'LinearRing'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'LinearRing'
         """
         return "LinearRing"
 
     @property
     def gx_altitude_offset(self) -> float | None:
-        """An offset, in metres, that is applied to the altitude of all the points
+        """The altitude offset of the instance in the UI.
+
+        An offset, in metres, that is applied to the altitude of all the points
         (:class:`~pyLiveKML.KML.GeoCoordinates`) that define the boundary of this
         :class:`~pyLiveKML.KML.KMLObjects.LinearRing` instance.
         """
@@ -66,7 +74,9 @@ class LinearRing(Geometry):
 
     @property
     def extrude(self) -> bool | None:
-        """True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects each of
+        """Flag indicating whether the vertices of the instance should be drawn connected to ground in the UI.
+
+        True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects each of
         the :class:`~pyLiveKML.KML.KMLObjects.LinearRing` objects' points to the ground in GEP, False otherwise.  None
         implies False.
         """
@@ -80,7 +90,9 @@ class LinearRing(Geometry):
 
     @property
     def tessellate(self) -> bool | None:
-        """True if the boundary line of the :class:`~pyLiveKML.KML.KMLObjects.LinearRing` follows the terrain in GEP,
+        """Flag indicating whether the vertices of the instance should be displayed tessellated in the UI.
+
+        True if the boundary line of the :class:`~pyLiveKML.KML.KMLObjects.LinearRing` follows the terrain in GEP,
         otherwise False.
 
         :note: The :attr:`altitude_mode` property must be set to CLAMP_TO_GROUND to enable tessellation.
@@ -95,7 +107,9 @@ class LinearRing(Geometry):
 
     @property
     def altitude_mode(self) -> AltitudeMode | None:
-        """An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
+        """The altitude mode of the instance in the UI.
+
+        An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
         :class:`~pyLiveKML.KML.GeoCoordinates` objects that make up the boundary of the
         :class:`~pyLiveKML.KML.KMLObjects.LinearRing` and treats their altitudes.
         """
@@ -109,7 +123,9 @@ class LinearRing(Geometry):
 
     @property
     def coordinates(self) -> Iterator[GeoCoordinates]:
-        """A generator to retrieve the :class:`~pyLiveKML.KML.GeoCoordinates` objects that define the boundary of the
+        """The LLA coordinates of the vertices of the instance.
+
+        A generator to retrieve the :class:`~pyLiveKML.KML.GeoCoordinates` objects that define the boundary of the
         :class:`~pyLiveKML.KML.KMLObjects.LinearRing` object.
 
         :returns: A generator of :class:`~pyLiveKML.KML.GeoCoordinates` objects.
@@ -125,6 +141,7 @@ class LinearRing(Geometry):
         self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self._gx_altitude_offset is not None:
             etree.SubElement(root, "gx:altitudeOffset").text = (
                 f"{self._gx_altitude_offset:0.1f}"

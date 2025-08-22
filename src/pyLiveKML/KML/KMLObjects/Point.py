@@ -36,8 +36,8 @@ class Point(Geometry):
     @property
     def kml_type(self) -> str:
         """The class' KML type string.
-        
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set 
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
         the KML tag name to 'Point'
         """
         return "Point"
@@ -45,7 +45,7 @@ class Point(Geometry):
     @property
     def extrude(self) -> bool | None:
         """Flag to indicate whether there should be a Point should be displayed with a line joining it to the ground.
-        
+
         True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects the
         :class:`~pyLiveKML.KML.KMLObjects.Point` to the ground in GEP, False otherwise.  None implies False.
         """
@@ -60,7 +60,7 @@ class Point(Geometry):
     @property
     def altitude_mode(self) -> AltitudeMode | None:
         """The altitude mode of the Point instance.
-        
+
         An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
         :class:`~pyLiveKML.KML.KMLObjects.Point` and treats its' altitude.
         """
@@ -75,7 +75,7 @@ class Point(Geometry):
     @property
     def coordinates(self) -> GeoCoordinates:
         """The latitude, longitude and (optionally) altitude of the Point instance.
-        
+
         A :class:`~pyLiveKML.KML.GeoCoordinates` object that defines the longitude, latitude and optional altitude
         of the :class:`~pyLiveKML.KML.KMLObjects.Point`.
         """

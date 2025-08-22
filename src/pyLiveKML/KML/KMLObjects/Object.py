@@ -1,3 +1,5 @@
+"""Object module."""
+
 from abc import ABC, abstractmethod
 from typing import Optional, NamedTuple, Iterator
 from uuid import uuid4, UUID
@@ -7,12 +9,15 @@ from pyLiveKML.KML.KML import ObjectState
 
 
 class Object(ABC):
-    """A KML 'Object', per https://developers.google.com/kml/documentation/kmlreference#object. Note that the
-    :class:`~pyLiveKML.KML.KMLObjects.Object` class is explicitly abstract, and is the base class from which most other
-    KML elements (anything with an :attr:`id` property) derive.
+    """A KML 'Object', per https://developers.google.com/kml/documentation/kmlreference#object.
+
+    Note that the :class:`~pyLiveKML.KML.KMLObjects.Object` class is explicitly abstract,
+    and is the base class from which most other KML elements (anything with an :attr:`id`
+    property) derive.
     """
 
     def __init__(self) -> None:
+        """Object instance constructor."""
         ABC.__init__(self)
         self._id: UUID = uuid4()
         self._selected: bool = False
@@ -22,8 +27,10 @@ class Object(ABC):
     @property
     @abstractmethod
     def kml_type(self) -> str:
-        """Abstract property that specifies the name of the XML tag that forms the root of the KML representation of
-        this :class:`~pyLiveKML.KML.KMLObjects.Object`.
+        """The class' KML type string.
+
+        Abstract property that specifies the name of the XML tag that forms the root of
+        the KML representation of this :class:`~pyLiveKML.KML.KMLObjects.Object`.
         """
         pass
 
@@ -39,8 +46,10 @@ class Object(ABC):
 
     @property
     def selected(self) -> bool:
-        """True if this :class:`~pyLiveKML.KML.KMLObjects.Object` has been created and is not scheduled for deletion,
-        otherwise False.
+        """Flag to indicate whether the instance has been selected for display.
+
+        True if this :class:`~pyLiveKML.KML.KMLObjects.Object` has been created in the
+        UI and is not scheduled for deletion, otherwise False.
         """
         return (
             ObjectState.CREATING,
@@ -54,28 +63,34 @@ class Object(ABC):
 
     @property
     def children(self) -> Iterator["ObjectChild"]:
-        """A generator to retrieve the children of this :class:`~pyLiveKML.KML.KMLObjects.Object` as
+        """The children of the instance.
+
+        A generator to retrieve the children of this :class:`~pyLiveKML.KML.KMLObjects.Object` as
         :class:`~pyLiveKML.KML.KMLObjects.Object.ObjectChild` instances.
 
         :returns: A generator of :class:`~pyLiveKML.KML.KMLObjects.Object.ObjectChild` named tuples that describes
             each child :class:`~pyLiveKML.KML.KMLObjects.Object` as a (parent, child)
         """
-        # The return; yield pattern is used to trick PyCharm into accepting that this is a generator that yields
+        # The return; yield pattern is used to trick linters into accepting that this is a generator that yields
         # nothing, as opposed to yielding None
         return
         yield
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Generate the KML representation of the internal fields of this :class:`~pyLiveKML.KML.KMLObjects.Object`,
-        and append it to the provided root etree.Element.
+        """Construct the KML content and append it to the provided etree.Element.
+
+        Generate the KML representation of the internal fields of this
+        :class:`~pyLiveKML.KML.KMLObjects.Object`, and append it to the provided root
+        etree.Element.
 
         :param etree.Element root: The root XML element that will be appended to.
-        :param bool with_children: True if the children of this instance should be included in the build.
+        :param bool with_children: True if the children of this instance should be
+            included in the build.
         """
         pass
 
     def construct_kml(self) -> etree.Element:
-        """Constructs this :class:`~pyLiveKML.KML.KMLObjects.Object`'s KML representation.
+        """Construct this :class:`~pyLiveKML.KML.KMLObjects.Object`'s KML representation.
 
         :returns: The KML representation of the object as an etree.Element.
         """
@@ -84,7 +99,9 @@ class Object(ABC):
         return root
 
     def update_kml(self, parent: "Object", update: etree.Element) -> None:
-        """Retrieve a complete child <Create>, <Change> or <Delete> KML tag as a child of an <Update> tag.
+        """Update this :class:`~pyLiveKML.KML.KMLObjects.Object`'s KML representation.
+
+        Retrieve a complete child <Create>, <Change> or <Delete> KML tag as a child of an <Update> tag.
         The type of child tag retrieved is dependent on the current state of this
         :class:`~pyLiveKML.KML.KMLObjects.Object`.
 
@@ -142,19 +159,23 @@ class Object(ABC):
 
     def force_idle(self) -> None:
         """Force this :class:`~pyLiveKML.KML.KMLObjects.Object` and **all of its children** to the IDLE state.
-        This is typically done after the object has been deselected, which will cause it to be deleted from GEP at the
-        next synchronization update. When the :class:`~pyLiveKML.KML.KMLObjects.Object` is deleted by GEP, all of its
-        children, and any :class:`~pyLiveKML.KML.KMLObjects.Feature` objects that it encloses, will also be
-        automatically deleted. There is no need to emit <Delete> tags for these deletions, and in fact doing so will
-        likely cause GEP to have conniptions.
+
+        This is typically done after the object has been deselected, which will cause
+        it to be deleted from GEP at the next synchronization update. When the
+        :class:`~pyLiveKML.KML.KMLObjects.Object` is deleted by GEP, all of its
+        children, and any :class:`~pyLiveKML.KML.KMLObjects.Feature` objects that it
+        encloses, will also be automatically deleted. There is no need to emit <Delete>
+        tags for these deletions, and in fact doing so will likely cause GEP to have
+        conniptions.
         """
         self._state = ObjectState.IDLE
         for c in self.children:
             c.child.force_idle()
 
     def field_changed(self) -> None:
-        """Flag that a field or property of this :class:`~pyLiveKML.KML.KMLObjects.Object` has changed, and
-        re-synchronization with GEP may be required.
+        """Flag that a field or property of this :class:`~pyLiveKML.KML.KMLObjects.Object` has changed.
+
+        If this flag is set, it indicates that re-synchronization with GEP may be required.
         """
         if self._state == ObjectState.CREATED:  # or self._state == State.IDLE:
             self._state = ObjectState.CHANGING
@@ -164,9 +185,7 @@ class Object(ABC):
             pass
 
     def update_generated(self) -> None:
-        """Modify the state of the :class:`~pyLiveKML.KML.KMLObjects.Object` to reflect that a synchronization update
-        has been emitted.
-        """
+        """Modify the state of the :class:`~pyLiveKML.KML.KMLObjects.Object` to reflect that a synchronization update has been emitted."""
         if self._state == ObjectState.CREATING:
             self._state = ObjectState.CREATED
             # if the object is being created, so are all of its descendants, in a single tag; set them created too
@@ -208,13 +227,14 @@ class Object(ABC):
                 c.child.force_idle()
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return f"{self.kml_type}"
 
     def __repr__(self) -> str:
+        """Return a debug representation."""
         return self.__str__()
 
 
 ObjectChild = NamedTuple("ObjectChild", [("parent", Object), ("child", Object)])
-"""Named tuple that describes a parent:child relationship between two :class:`~pyLiveKML.KML.KMLObjects.Object` 
-instances.
+"""Named tuple that describes a parent:child relationship between two :class:`~pyLiveKML.KML.KMLObjects.Object` instances.
 """

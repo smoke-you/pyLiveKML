@@ -16,8 +16,8 @@ from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 
 class Style(StyleSelector):
     """A KML 'Style', per https://developers.google.com/kml/documentation/kmlreference#style.
-    
-    A group of :class:`~pyLiveKML.KML.KMLObjects.SubStyle` objects that can be referenced 
+
+    A group of :class:`~pyLiveKML.KML.KMLObjects.SubStyle` objects that can be referenced
     by its :attr:`id` or inserted in-line into a :class:`~pyLiveKML.KML.KMLObjects.Feature`.
 
     :param BalloonStyle|None balloon_style: An (optional) :class:`~pyLiveKML.KML.KMLObjects.BalloonStyle` to be
@@ -55,8 +55,8 @@ class Style(StyleSelector):
     @property
     def kml_type(self) -> str:
         """The class' KML type string.
-        
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set 
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
         the KML tag name to 'Style'.
         """
         return "Style"
@@ -64,9 +64,9 @@ class Style(StyleSelector):
     @property
     def children(self) -> Iterator[ObjectChild]:
         """The children of the instance.
-        
-        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield 
-        the children of a :class:`~pyLiveKML.KML.KMLObjects.Style`, i.e. one or more 
+
+        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield
+        the children of a :class:`~pyLiveKML.KML.KMLObjects.Style`, i.e. one or more
         :class:`~pyLiveKML.KML.KMLObjects.SubStyle` instances.
         """
         if self._balloon_style:

@@ -1,3 +1,5 @@
+"""Document module."""
+
 from typing import Iterable
 
 from pyLiveKML.KML.KMLObjects.Feature import Feature, Container
@@ -6,6 +8,7 @@ from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
 class Document(Container):
     """A KML 'Document', per https://developers.google.com/kml/documentation/kmlreference#document.
+
     :class:`~pyLiveKML.KML.KMLObjects.Document` inherits from :class:`~pyLiveKML.KML.KMLObjects.Container` and hence
     :class:`~pyLiveKML.KML.KMLObjects.Document` objects are containers for :class:`~pyLiveKML.KML.KMLObjects.Feature`
     objects, including other :class:`~pyLiveKML.KML.KMLObjects.Container` instances.
@@ -27,13 +30,6 @@ class Document(Container):
         :class:`~pyLiveKML.KML.KMLObjects.Document`.
     """
 
-    @property
-    def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'Document'
-        """
-        return "Document"
-
     def __init__(
         self,
         name: str | None = None,
@@ -43,6 +39,7 @@ class Document(Container):
         styles: Iterable[StyleSelector] | None = None,
         features: Iterable[Feature] | None = None,
     ):
+        """Document instance constructor."""
         Container.__init__(
             self,
             name=name,
@@ -52,3 +49,12 @@ class Document(Container):
             styles=styles,
             features=features,
         )
+
+    @property
+    def kml_type(self) -> str:
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'Document'
+        """
+        return "Document"

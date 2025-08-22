@@ -1,3 +1,5 @@
+"""LineString module."""
+
 from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
@@ -9,6 +11,7 @@ from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 
 class LineString(Geometry):
     """A LineString geometry, as per https://developers.google.com/kml/documentation/kmlreference#linestring.
+
     :class:`~pyLiveKML.KML.KMLObjects.LineString` objects define an open sequence of points, or
     :class:`~pyLiveKML.KML.GeoCoordinates` such as might make up a track.
 
@@ -36,6 +39,7 @@ class LineString(Geometry):
         gx_altitude_offset: float | None = None,
         gx_draw_order: int | None = None,
     ):
+        """LineString instance constructor."""
         Geometry.__init__(self)
         self._gx_altitude_offset: float | None = gx_altitude_offset
         self._extrude: bool | None = extrude
@@ -47,16 +51,20 @@ class LineString(Geometry):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'LineString'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'LineString'
         """
         return "LineString"
 
     @property
     def gx_altitude_offset(self) -> float | None:
-        """An offset, in metres, that is applied to the altitude of all the points
-        (:class:`~pyLiveKML.KML.GeoCoordinates`) that define this :class:`~pyLiveKML.KML.KMLObjects.LineString`
-        instance.
+        """The altitude offset of the instance in the UI.
+
+        An offset, in metres, that is applied to the altitude of all the points
+        (:class:`~pyLiveKML.KML.GeoCoordinates`) that define this
+        :class:`~pyLiveKML.KML.KMLObjects.LineString` instance.
         """
         return self._gx_altitude_offset
 
@@ -68,7 +76,9 @@ class LineString(Geometry):
 
     @property
     def extrude(self) -> bool | None:
-        """True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects each of
+        """Flag indicating whether the vertices of the instance should be drawn connected to ground in the UI.
+
+        True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects each of
         the :class:`~pyLiveKML.KML.KMLObjects.LineString` objects' points to the ground in GEP, False otherwise.  None
         implies False.
         """
@@ -82,7 +92,9 @@ class LineString(Geometry):
 
     @property
     def tessellate(self) -> bool | None:
-        """True if the boundary line of the :class:`~pyLiveKML.KML.KMLObjects.LineString` follows the terrain in GEP,
+        """Flag indicating whether the vertices of the instance should be displayed tessellated in the UI.
+
+        True if the boundary line of the :class:`~pyLiveKML.KML.KMLObjects.LineString` follows the terrain in GEP,
         otherwise False.
 
         :note: The :attr:`altitude_mode` property must be set to CLAMP_TO_GROUND to enable tessellation.
@@ -97,7 +109,9 @@ class LineString(Geometry):
 
     @property
     def altitude_mode(self) -> AltitudeMode | None:
-        """An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
+        """The altitude mode of the instance in the UI.
+
+        An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
         :class:`~pyLiveKML.KML.GeoCoordinates` objects that make up the  :class:`~pyLiveKML.KML.KMLObjects.LineString`
         and treats their altitudes.
         """
@@ -111,7 +125,9 @@ class LineString(Geometry):
 
     @property
     def gx_draw_order(self) -> int | None:
-        """An integer that specifies the draw order when multiple :class:`~pyLiveKML.KML.KMLObjects.LineString` objects
+        """The order in which to draw overlapping LineString instances.
+
+        An integer that specifies the draw order when multiple :class:`~pyLiveKML.KML.KMLObjects.LineString` objects
         are drawn over the top of one another in GEP. Lower values are drawn first.
         """
         return self._gx_draw_order
@@ -124,7 +140,9 @@ class LineString(Geometry):
 
     @property
     def coordinates(self) -> Iterator[GeoCoordinates]:
-        """A generator to retrieve the :class:`~pyLiveKML.KML.GeoCoordinates` objects that define this
+        """The LLA coordinates of the vertices of the instance.
+
+        A generator to retrieve the :class:`~pyLiveKML.KML.GeoCoordinates` objects that define this
         :class:`~pyLiveKML.KML.KMLObjects.LineString` object.
 
         :returns: A generator of :class:`~pyLiveKML.KML.GeoCoordinates` objects.
@@ -138,6 +156,7 @@ class LineString(Geometry):
         self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self._gx_altitude_offset is not None:
             etree.SubElement(root, "gx:altitudeOffset").text = (
                 f"{self._gx_altitude_offset:0.1f}"

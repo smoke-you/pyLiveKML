@@ -1,11 +1,14 @@
+"""LineStyle module."""
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 
 
 class LineStyle(ColorStyle):
-    """A KML 'LineStyle', per https://developers.google.com/kml/documentation/kmlreference#linestyle.  Specifies
-    various properties of a :class:`~pyLiveKML.KML.KMLObjects.Geometry`, typically either a
+    """A KML 'LineStyle', per https://developers.google.com/kml/documentation/kmlreference#linestyle.
+
+    Specifies various properties of a :class:`~pyLiveKML.KML.KMLObjects.Geometry`, typically either a
     :class:`~pyLiveKML.KML.KMLObjects.LineString` or :class:`~pyLiveKML.KML.KMLObjects.LinearRing`, including
     the inner and outer boundaries of :class:`~pyLiveKML.KML.KMLObjects.Polygon` objects.
 
@@ -18,6 +21,7 @@ class LineStyle(ColorStyle):
         width: float | None = None,
         color: int | None = None,
     ):
+        """LineStyle instance constructor."""
         ColorStyle.__init__(self, color)
         self._width = width
         self._gx_outer_color: int | None = None
@@ -27,8 +31,10 @@ class LineStyle(ColorStyle):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'LineStyle'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'LineStyle'
         """
         return "LineStyle"
 
@@ -45,9 +51,10 @@ class LineStyle(ColorStyle):
 
     @property
     def gx_outer_color(self) -> int | None:
-        """Color of the portion of the line defined by the :attr:`gx_outer_width` property. Note that both
-        :attr:`gx_outer_color` and :attr:`gx_outer_width` apply only to :class:`~pyLiveKML.KML.KMLObjects.LineString`
-        objects.
+        """Color of the portion of the line defined by the :attr:`gx_outer_width` property.
+
+        :note: Both :attr:`gx_outer_color` and :attr:`gx_outer_width` apply only to
+            :class:`~pyLiveKML.KML.KMLObjects.LineString` objects.
         """
         return self._gx_outer_color
 
@@ -61,8 +68,10 @@ class LineStyle(ColorStyle):
 
     @property
     def gx_outer_width(self) -> float | None:
-        """Width of an outer border around the line. Note that both :attr:`gx_outer_color` and :attr:`gx_outer_width`
-        apply only to :class:`~pyLiveKML.KML.KMLObjects.LineString` objects.
+        """The width of an outer border around the line.
+
+        :note: Both :attr:`gx_outer_color` and :attr:`gx_outer_width` apply only to
+            :class:`~pyLiveKML.KML.KMLObjects.LineString` objects.
         """
         return self._gx_outer_width
 
@@ -85,7 +94,9 @@ class LineStyle(ColorStyle):
 
     @property
     def gx_label_visibility(self) -> bool | None:
-        """Selector to display a text label on a :class:`~pyLiveKML.KML.KMLObjects.LineString`. True if the label is to
+        """Flag indicating whether a text label should be displayed for the instance in the UI.
+
+        Selector to display a text label on a :class:`~pyLiveKML.KML.KMLObjects.LineString`. True if the label is to
         be displayed, False if it is not. None implies False.
         """
         return self._gx_label_visibility
@@ -97,6 +108,7 @@ class LineStyle(ColorStyle):
             self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self._color is not None:
             etree.SubElement(root, "color").text = f"{self._color:08x}"
         if self._color_mode is not None:
@@ -119,7 +131,9 @@ class LineStyle(ColorStyle):
             )
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return f"{self.kml_type}"
 
     def __repr__(self) -> str:
+        """Return a debug representation."""
         return self.__str__()

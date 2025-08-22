@@ -1,3 +1,5 @@
+"""BalloonStyle module."""
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import DisplayMode
@@ -5,8 +7,10 @@ from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
 class BalloonStyle(SubStyle):
-    """A KML 'BalloonStyle', per https://developers.google.com/kml/documentation/kmlreference#balloonstyle.  Specifies
-    how the description balloon of :class:`~pyLiveKML.KML.KMLObjects.Placemark` objects is drawn.
+    """A KML 'BalloonStyle', per https://developers.google.com/kml/documentation/kmlreference#balloonstyle.
+
+    Specifies how the description balloon of
+    :class:`~pyLiveKML.KML.KMLObjects.Placemark` objects is drawn.
 
     :param str|None text: The (optional) text to be displayed in the balloon.
     :param int|None text_color: The (optional) color of the text to be displayed, in 32-bit ABGR format.
@@ -21,6 +25,7 @@ class BalloonStyle(SubStyle):
         bg_color: int | None = None,
         display_mode: DisplayMode | None = None,
     ):
+        """BalloonStyle instance constructor."""
         SubStyle.__init__(self)
         self._text: str | None = text
         self._bg_color: int | None = bg_color
@@ -29,8 +34,10 @@ class BalloonStyle(SubStyle):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'BalloonStyle'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'BalloonStyle'
         """
         return "BalloonStyle"
 
@@ -58,7 +65,10 @@ class BalloonStyle(SubStyle):
 
     @property
     def text(self) -> str | None:
-        """The text displayed in the balloon.  Note that HTML markup, e.g. tables, is permissible."""
+        """The text displayed in the balloon.
+
+        :note: HTML markup, e.g. tables, is permissible.
+        """
         return self._text
 
     @text.setter
@@ -79,6 +89,7 @@ class BalloonStyle(SubStyle):
             self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self._bg_color is not None:
             etree.SubElement(root, "bgColor").text = f"{self.bg_color:08x}"
         if self._text_color is not None:
@@ -89,7 +100,9 @@ class BalloonStyle(SubStyle):
             etree.SubElement(root, "displayMode").text = self._display_mode.value
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return f"{self.kml_type}"
 
     def __repr__(self) -> str:
+        """Return a debug representation."""
         return self.__str__()

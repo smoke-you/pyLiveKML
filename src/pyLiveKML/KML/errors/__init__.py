@@ -1,4 +1,5 @@
 """pyLiveKML.errors global imports wrapper."""
+
 from .errors import FeatureError, FeatureInaccessibleError
 
 

@@ -1,3 +1,8 @@
+"""Feature module.
+
+:note: Includes the `Container` class definition as well, to avoid a circular import.
+"""
+
 from abc import ABC
 from typing import Iterable, NamedTuple, Iterator, cast
 
@@ -10,10 +15,13 @@ from pyLiveKML.KML.errors.errors import FeatureInaccessibleError
 
 
 class Feature(Object, ABC):
-    """A KML 'Feature', per https://developers.google.com/kml/documentation/kmlreference#feature. Note that while
-    Features are explicitly abstract in the KML specification, :class:`~pyLiveKML.KML.KMLObjects.Feature` is the base
-    class for KML :class:`~pyLiveKML.KML.KMLObjects.Object` instances that have an "existence" in GEP, i.e. that are
-    (potentially) user-editable because they appear in the GEP user List View.
+    """A KML 'Feature', per https://developers.google.com/kml/documentation/kmlreference#feature.
+
+    :note: While Features are explicitly abstract in the KML specification,
+    :class:`~pyLiveKML.KML.KMLObjects.Feature` is the base class for KML
+    :class:`~pyLiveKML.KML.KMLObjects.Object` instances that have an "existence" in
+    GEP, i.e. that are (potentially) user-editable because they appear in the GEP user
+    List View.
 
     :param str|None name: The (optional) name for this :class:`~pyLiveKML.KML.KMLObjects.Feature` that will be
         displayed in GEP.
@@ -40,6 +48,7 @@ class Feature(Object, ABC):
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
     ):
+        """Feature instance constructor."""
         Object.__init__(self)
         ABC.__init__(self)
         self._container = container
@@ -53,11 +62,14 @@ class Feature(Object, ABC):
 
     @property
     def container(self) -> "Container|None":
-        """The :class:`~pyLiveKML.KML.KMLObjects.Container` that immediately encloses this
+        """The parent of this instance.
+
+        The :class:`~pyLiveKML.KML.KMLObjects.Container` that immediately encloses this
         :class:`~pyLiveKML.KML.KMLObjects.Feature` in an ownership tree.
 
-        :warning: The :attr:`container` property cannot be altered if the :class:`~pyLiveKML.KML.KMLObjects.Feature` is
-            visible in GEP. Doing so would break GEP synchronization. Failure to observe this constraint will cause a
+        :warning: The :attr:`container` property cannot be altered if the
+            :class:`~pyLiveKML.KML.KMLObjects.Feature` is visible in GEP. Doing so would
+            break GEP synchronization. Failure to observe this constraint will cause a
             :class:`FeatureInaccessibleError` to be raised.
         """
         return cast(Container, self._container)
@@ -84,8 +96,10 @@ class Feature(Object, ABC):
 
     @property
     def visibility(self) -> bool | None:
-        """True if the :class:`~pyLiveKML.KML.KMLObjects.Feature` will (initially) be checked (visible) in GEP, False
-        otherwise.
+        """Flag indicating whether the instance will initially be "checked" in the UI, and hence visible.
+
+        True if the :class:`~pyLiveKML.KML.KMLObjects.Feature` will (initially) be
+        checked (visible) in GEP, False otherwise.
         """
         return self._visibility
 
@@ -97,11 +111,14 @@ class Feature(Object, ABC):
 
     @property
     def description(self) -> str | None:
-        """The text description for this :class:`~pyLiveKML.KML.KMLObjects.Feature`, that will be displayed in a
-        balloon in GEP if the :class:`~pyLiveKML.KML.KMLObjects.Feature` is clicked.
+        """The text description for this :class:`~pyLiveKML.KML.KMLObjects.Feature`.
 
-        :note: HTML and (some) JavaScript are permissible (in GEP > 5.0) for the :attr:`description` property. Refer to
-            the KML specification at https://developers.google.com/kml/documentation/kmlreference for details.
+        This text be displayed in a balloon in GEP if the
+        :class:`~pyLiveKML.KML.KMLObjects.Feature` is clicked.
+
+        :note: HTML and (some) JavaScript are permissible (in GEP > 5.0) for the
+            :attr:`description` property. Refer to the KML specification at
+            https://developers.google.com/kml/documentation/kmlreference for details.
         """
         return self._description
 
@@ -113,7 +130,9 @@ class Feature(Object, ABC):
 
     @property
     def styles(self) -> Iterator[StyleSelector]:
-        """A generator to retrieve references to any :class:`~pyLiveKML.KML.KMLObjects.Style` or
+        """The Style objects that are direct children of this instance.
+
+        A generator to retrieve references to any :class:`~pyLiveKML.KML.KMLObjects.Style` or
         :class:`~pyLiveKML.KML.KMLObjects.StyleMap` objects that are children of this
         :class:`~pyLiveKML.KML.KMLObjects.Feature`.
 
@@ -122,10 +141,13 @@ class Feature(Object, ABC):
         for s in self._styles:
             yield s
 
-    # override Object.select() to enable upwards cascade, i.e. if a Feature contained in an unselected parent Feature
-    # is selected, the parent Feature must also be selected in order for GEP synchronization to work correctly.
+    # override Object.select() to enable upwards cascade, i.e. if a Feature contained
+    # in an unselected parent Feature is selected, the parent Feature must also be
+    # selected in order for GEP synchronization to work correctly.
     def select(self, value: bool, cascade: bool = False) -> None:
-        """Overrides :func:`~pyLiveKML.KML.KMLObjects.Object.Object.select` to implement upwards cascade of selection.
+        """Cascade select upwards, but do not cascade deselect upwards.
+
+        Overrides :func:`~pyLiveKML.KML.KMLObjects.Object.Object.select` to implement upwards cascade of selection.
         That is, if a :class:`~pyLiveKML.KML.KMLObjects.Feature` enclosed in the object tree depending from an
         unselected  parent :class:`~pyLiveKML.KML.KMLObjects.Feature` is selected, the reverse tree's parents must also
         be selected in order for GEP synchronization to work correctly.
@@ -136,19 +158,24 @@ class Feature(Object, ABC):
             self._container.select(True, False)
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return f"{self.kml_type}:{self.name}"
 
     def __repr__(self) -> str:
+        """Return a debug representation."""
         return self.__str__()
 
 
 class Container(list[Feature], Feature, ABC):
-    """A KML 'Container', per https://developers.google.com/kml/documentation/kmlreference#container. Note that while
-    Containers are explicitly abstract, :class:`~pyLiveKML.KML.KMLObjects.Container` is the base class for KML
-    :class:`~pyLiveKML.KML.KMLObjects.Folder` and :class:`~pyLiveKML.KML.KMLObjects.Document` that have an "existence"
-    in GEP, i.e. that are (potentially) user-editable because they appear in the GEP user List View, and that may
-    'contain' other :class:`~pyLiveKML.KML.KMLObjects.Feature` objects, including other concrete
-    :class:`~pyLiveKML.KML.KMLObjects.Container` objects.
+    """A KML 'Container', per https://developers.google.com/kml/documentation/kmlreference#container.
+
+    :note: While Containers are explicitly abstract,
+    :class:`~pyLiveKML.KML.KMLObjects.Container` is the base class for KML
+    :class:`~pyLiveKML.KML.KMLObjects.Folder` and
+    :class:`~pyLiveKML.KML.KMLObjects.Document` that have an "existence" in GEP, i.e.
+    that are (potentially) user-editable because they appear in the GEP user List View,
+    and that may 'contain' other :class:`~pyLiveKML.KML.KMLObjects.Feature` objects,
+    including other concrete :class:`~pyLiveKML.KML.KMLObjects.Container` objects.
 
     :param str|None name: The (optional) name for this :class:`~pyLiveKML.KML.KMLObjects.Container` that will
         be displayed in GEP.
@@ -179,6 +206,7 @@ class Container(list[Feature], Feature, ABC):
         styles: Iterable[StyleSelector] | None = None,
         features: Iterable[Feature] | None = None,
     ):
+        """Feature instance constructor."""
         list[Feature].__init__(self)
         Feature.__init__(
             self, name=name, visibility=visibility, style_url=style_url, styles=styles
@@ -193,7 +221,9 @@ class Container(list[Feature], Feature, ABC):
 
     @property
     def containers(self) -> Iterator["ContainedFeature"]:
-        """A generator to retrieve references to any :class:`~pyLiveKML.KML.KMLObjects.Container` objects that are
+        """The children of the instance that are themselves Container instances.
+
+        A generator to retrieve references to any :class:`~pyLiveKML.KML.KMLObjects.Container` objects that are
         enclosed by this :class:`~pyLiveKML.KML.KMLObjects.Container` object, and the tree that is rooted at it.
 
         :returns: A generator of :class:`~pyLiveKML.KML.KMLObjects.Container.ContainedFeature` named tuples that
@@ -206,7 +236,9 @@ class Container(list[Feature], Feature, ABC):
 
     @property
     def features(self) -> Iterator["ContainedFeature"]:
-        """A generator to retrieve references to the :class:`~pyLiveKML.KML.KMLObjects.Feature` objects that are
+        """The children of the instance that are Features, but are not Containers.
+
+        A generator to retrieve references to the :class:`~pyLiveKML.KML.KMLObjects.Feature` objects that are
         enclosed by this :class:`~pyLiveKML.KML.KMLObjects.Container` object, and the tree that is rooted at it. Note
         that :class:`~pyLiveKML.KML.KMLObjects.Container` objects are *not* yielded by this generator, despite being
         specializations of :class:`~pyLiveKML.KML.KMLObjects.Feature`; use the :attr:`containers` property to retrieve
@@ -223,7 +255,9 @@ class Container(list[Feature], Feature, ABC):
 
     @property
     def children(self) -> Iterator[ObjectChild]:
-        """Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield the children of a
+        """The children of this instance.
+
+        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield the children of a
         :class:`~pyLiveKML.KML.KMLObjects.Container`, i.e. one or more :class:`~pyLiveKML.KML.KMLObjects.StyleSelector`
         instances, and their children.
         """
@@ -233,7 +267,9 @@ class Container(list[Feature], Feature, ABC):
 
     @property
     def is_open(self) -> bool | None:
-        """True if the :class:`~pyLiveKML.KML.KMLObjects.Container` will be initially displayed in an 'open' state in
+        """Flag to indicate whether the instance will initially be displayed in an 'open' state in the UI.
+
+        True if the :class:`~pyLiveKML.KML.KMLObjects.Container` will be initially displayed in an 'open' state in
         the GEP user List View, else False if it will be initially displayed in a 'closed' state.  None implies the
         default of False.
         """
@@ -247,21 +283,25 @@ class Container(list[Feature], Feature, ABC):
 
     @property
     def update_limit(self) -> int:
-        """The (approximate) maximum number of KML objects that will be synchronized by any single
+        """The maximum size of a synchronization update.
+
+        The (approximate) maximum number of KML objects that will be synchronized by any single
         synchronization update that is rooted in this :class:`~pyLiveKML.KML.KMLObjects.Container`.
         """
         return self._update_limit
 
     @update_limit.setter
     def update_limit(self, value: int) -> None:
-        # note that because this is not a KML field, i.e. that is displayed by GEP, there is no need to call
-        # self.field_changed() if the value is updated
+        # note that because this is not a KML field, i.e. that is displayed by GEP,
+        # there is no need to call self.field_changed() if the value is updated
         if value != self._update_limit and value > 0:
             self._update_limit = value
 
     @property
     def flush(self) -> Iterator[Feature]:
-        """A generator to retrieve instances of :class:`~pyLiveKML.KML.KMLObjects.Feature` objects that have been
+        """Flush objects flagged as deleted out of the UI.
+
+        A generator to retrieve instances of :class:`~pyLiveKML.KML.KMLObjects.Feature` objects that have been
         deleted from this :class:`~pyLiveKML.KML.KMLObjects.Container` but for which those deletions **have not** yet
         been synchronized with GEP. As the generator retrieves a deleted :class:`~pyLiveKML.KML.KMLObjects.Feature`, it
         also completes the deletion process.
@@ -274,8 +314,11 @@ class Container(list[Feature], Feature, ABC):
             yield f
 
     def construct_kml(self, with_features: bool = False) -> etree.Element:
-        """Overridden from :func:`~pyLiveKML.KML.KMLObjects.Object.construct_kml` to allow for the creation of
-        contained or enclosed :class:`~pyLiveKML.KML.KMLObjects.Feature` instances, including other
+        """Construct the KML content for the instance.
+
+        Overridden from :func:`~pyLiveKML.KML.KMLObjects.Object.construct_kml` to allow
+        for the creation of contained or enclosed
+        :class:`~pyLiveKML.KML.KMLObjects.Feature` instances, including other
         :class:`~pyLiveKML.KML.KMLObjects.Container` instances.
         """
         root = Object.construct_kml(self)
@@ -288,6 +331,7 @@ class Container(list[Feature], Feature, ABC):
         return root
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self.name is not None:
             etree.SubElement(root, "name").text = self.name
         if self.visibility is not None:
@@ -310,6 +354,7 @@ class Container(list[Feature], Feature, ABC):
 
     def remove(self, __value: Feature) -> None:
         """Remove a :class:`~pyLiveKML.KML.KMLObjects.Feature` from this :class:`~pyLiveKML.KML.KMLObjects.Container`.
+
         Of course, the :class:`~pyLiveKML.KML.KMLObjects.Feature` must be enclosed in this
         :class:`~pyLiveKML.KML.KMLObjects.Container` to be able to be removed.
 
@@ -320,7 +365,9 @@ class Container(list[Feature], Feature, ABC):
         list[Feature].remove(self, __value)
 
     def force_idle(self, cascade: bool = False) -> None:
-        """Overridden from :func:`~pyLiveKML.KML.KMLObjects.Object.Object.force_idle` to enable the entire tree of
+        """Force this instance, and _optionally_ its children, to the IDLE state.
+
+        Overridden from :func:`~pyLiveKML.KML.KMLObjects.Object.Object.force_idle` to enable the entire tree of
         enclosed :class:`~pyLiveKML.KML.KMLObjects.Feature` (and :class:`~pyLiveKML.KML.KMLObjects.Container`)
         instances, and child :class:`~pyLiveKML.KML.KMLObjects.Object` instances, that is rooted in this
         :class:`~pyLiveKML.KML.KMLObjects.Container` to be forced to the IDLE state.
@@ -330,7 +377,9 @@ class Container(list[Feature], Feature, ABC):
             self.force_features_idle()
 
     def force_features_idle(self) -> None:
-        """Force the entire tree of enclosed :class:`~pyLiveKML.KML.KMLObjects.Feature` (and
+        """Force this instance, and _all_ of its children, to the IDLE state.
+
+        Force the entire tree of enclosed :class:`~pyLiveKML.KML.KMLObjects.Feature` (and
         :class:`~pyLiveKML.KML.KMLObjects.Container`) instances to be forced to the IDLE state. Typically called as a
         result of the target :class:`~pyLiveKML.KML.KMLObjects.Container` being deleted from GEP.
         """
@@ -342,7 +391,9 @@ class Container(list[Feature], Feature, ABC):
                 f.force_idle()
 
     def select(self, value: bool, cascade: bool = False) -> None:
-        """Overrides :func:`~pyLiveKML.KML.KMLObjects.Feature.Feature.select` to implement select/deselect cascade to
+        """Cascade select upwards, but do not cascade deselect upwards.
+
+        Overrides :func:`~pyLiveKML.KML.KMLObjects.Feature.Feature.select` to implement select/deselect cascade to
         enclosed :class:`~pyLiveKML.KML.KMLObjects.Feature` objects, and to ensure that if a
         :class:`~pyLiveKML.KML.KMLObjects.Container` is deleted from GEP, its' enclosed
         :class:`~pyLiveKML.KML.KMLObjects.Feature` objects are forced IDLE to maintain synchronization.
@@ -359,15 +410,20 @@ class Container(list[Feature], Feature, ABC):
             self.force_features_idle()
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return Feature.__str__(self)
 
     def __repr__(self) -> str:
+        """Return a debug representation."""
         return Feature.__repr__(self)
 
 
 ContainedFeature = NamedTuple(
     "ContainedFeature", [("container", Container), ("feature", Feature)]
 )
-"""Named tuple that describes a container:contained relationship between a :class:`~pyLiveKML.KML.KMLObjects.Container` 
-instance and a :class:`~pyLiveKML.KML.KMLObjects.Feature` instance.
+"""Named tuple that describes a container:contained relationship.
+
+The container is a :class:`~pyLiveKML.KML.KMLObjects.Container` 
+instance and the contained is a :class:`~pyLiveKML.KML.KMLObjects.Feature` 
+instance.
 """

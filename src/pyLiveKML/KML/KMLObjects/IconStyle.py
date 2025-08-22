@@ -1,3 +1,5 @@
+"""IconStyle module."""
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import ColorMode
@@ -6,8 +8,10 @@ from pyLiveKML.KML.Vec2 import Vec2
 
 
 class IconStyle(ColorStyle):
-    """A KML 'IconStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.  Specifies
-    various properties that define how a :class:`~pyLiveKML.KML.KMLObjects.Icon` is drawn.  Applies to
+    """A KML 'IconStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.
+
+    Specifies various properties that define how a
+    :class:`~pyLiveKML.KML.KMLObjects.Icon` is drawn.  Applies to
     :class:`~pyLiveKML.KML.KMLObjects.Point` geometries.
 
     :param str icon: A URI for an image or icon file.
@@ -26,6 +30,7 @@ class IconStyle(ColorStyle):
         color: int | None = None,
         color_mode: ColorMode | None = None,
     ):
+        """IconStyle instance constructor."""
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
         self._scale: float | None = scale
         self._heading: float | None = heading
@@ -34,8 +39,10 @@ class IconStyle(ColorStyle):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'IconStyle'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'IconStyle'.
         """
         return "IconStyle"
 
@@ -74,7 +81,7 @@ class IconStyle(ColorStyle):
 
     @property
     def hotspot(self) -> Vec2 | None:
-        """Relative position in the icon that is anchored to the associated :class:`~pyLiveKML.KML.KMLObjects.Point`"""
+        """Relative position in the icon that is anchored to the associated :class:`~pyLiveKML.KML.KMLObjects.Point`."""
         return self._hotspot
 
     @hotspot.setter
@@ -86,6 +93,7 @@ class IconStyle(ColorStyle):
             self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self.color is not None:
             etree.SubElement(root, "color").text = f"{self.color:08x}"
         if self.color_mode is not None:
@@ -100,7 +108,9 @@ class IconStyle(ColorStyle):
             root.append(self.hotspot.xml)
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return f"{self.kml_type}"
 
     def __repr__(self) -> str:
+        """Return a debug representation."""
         return self.__str__()

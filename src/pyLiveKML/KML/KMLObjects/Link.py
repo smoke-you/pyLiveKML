@@ -1,3 +1,5 @@
+"""Link module."""
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import RefreshMode
@@ -6,6 +8,7 @@ from pyLiveKML.KML.KMLObjects.Object import Object
 
 class Link(Object):
     """A KML 'Link', per https://developers.google.com/kml/documentation/kmlreference#link.
+
     :class:`~pyLiveKML.KML.KMLObjects.Link` objects are used to specify a KML file to be fetched with a
     :class:`~pyLiveKML.KML.KMLObjects.NetworkLink`; or an image file to be used in a GEP overlay, using the
     :class:`~pyLiveKML.KML.KMLObjects.Icon` class that inherits from :class:`~pyLiveKML.KML.KMLObjects.Link`.  The KML
@@ -27,6 +30,7 @@ class Link(Object):
         refresh_mode: RefreshMode | None = None,
         refresh_interval: float | None = None,
     ):
+        """Link instance constructor."""
         Object.__init__(self)
         self._href: str | None = href
         self._refresh_mode: RefreshMode | None = refresh_mode
@@ -39,8 +43,10 @@ class Link(Object):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'Link'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'Link'
         """
         return "Link"
 
@@ -57,7 +63,9 @@ class Link(Object):
 
     @property
     def refresh_mode(self) -> RefreshMode | None:
-        """The :class:`~pyLiveKML.KML.KML.RefreshMode` that controls when the file specified by the 'href' property is
+        """The refresh mode of the instance.
+
+        The :class:`~pyLiveKML.KML.KML.RefreshMode` that controls when the file specified by the 'href' property is
         retrieved.
         """
         return self._refresh_mode
@@ -70,8 +78,10 @@ class Link(Object):
 
     @property
     def refresh_interval(self) -> float | None:
-        """The refresh interval, in seconds, that will be used if the :attr:`refresh_mode` property is set to
-        :attr:`~pyLiveKML.KML.KML.RefreshMode.ON_INTERVAL`.
+        """The refresh interval of the instance.
+
+        The refresh interval, in seconds, that will be used if the :attr:`refresh_mode`
+        property is set to :attr:`~pyLiveKML.KML.KML.RefreshMode.ON_INTERVAL`.
         """
         return self._refresh_interval
 
@@ -82,6 +92,7 @@ class Link(Object):
             self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self._href:
             etree.SubElement(root, "href").text = self._href
         if self._refresh_mode is not None:

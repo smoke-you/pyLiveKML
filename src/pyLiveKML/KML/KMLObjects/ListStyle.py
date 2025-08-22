@@ -1,3 +1,5 @@
+"""ListStyle module."""
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import ListItemType, ItemIconMode
@@ -5,8 +7,9 @@ from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
 class ListStyle(SubStyle):
-    """A KML 'ListStyle', per https://developers.google.com/kml/documentation/kmlreference#liststyle.  Specifies
-    how a :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in GEP's user List View.
+    """A KML 'ListStyle', per https://developers.google.com/kml/documentation/kmlreference#liststyle.
+
+    Specifies how a :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in GEP's user List View.
 
     :param ListItemType|None list_item_type: The (optional) behaviour model for the list item.
     :param int|None bg_color: The (optional) background color for the list item.
@@ -21,6 +24,7 @@ class ListStyle(SubStyle):
         item_icon_state: ItemIconMode | None = None,
         item_icon_href: str | None = None,
     ):
+        """ListStyle instance constructor."""
         SubStyle.__init__(self)
         self._list_item_type: ListItemType | None = list_item_type
         self._bg_color: int | None = bg_color
@@ -29,8 +33,10 @@ class ListStyle(SubStyle):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'ListStyle'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'ListStyle'
         """
         return "ListStyle"
 
@@ -47,7 +53,10 @@ class ListStyle(SubStyle):
 
     @property
     def bg_color(self) -> int | None:
-        """The background color of the list item, as a 32-bit ABGR color."""
+        """The background color of the list item, as a 32-bit ABGR color.
+
+        Note the unusual order of the fields that make up the integer.
+        """
         return self._bg_color
 
     @bg_color.setter
@@ -79,6 +88,7 @@ class ListStyle(SubStyle):
             self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self._list_item_type is not None:
             etree.SubElement(root, "listItemType").text = self._list_item_type.value
         if self._bg_color is not None:
@@ -91,7 +101,9 @@ class ListStyle(SubStyle):
                 etree.SubElement(item_icon, "href").text = self._item_icon_href
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return f"{self.kml_type}"
 
     def __repr__(self) -> str:
+        """Return a debug representation."""
         return self.__str__()

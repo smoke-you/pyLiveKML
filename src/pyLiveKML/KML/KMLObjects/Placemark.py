@@ -1,3 +1,5 @@
+"""Placemark module."""
+
 from typing import Iterator, cast
 
 from lxml import etree  # type: ignore
@@ -10,6 +12,7 @@ from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 
 class Placemark(Feature):
     """A KML 'Placemark', per https://developers.google.com/kml/documentation/kmlreference#placemark.
+
     :class:`~pyLiveKML.KML.KMLObjects.Placemark` objects are containers for a geospatial element to be displayed in GEP.
 
     :param Geometry geometry: A concrete :class:`~pyLiveKML.KML.KMLObjects.Geometry` instance that will be displayed
@@ -33,6 +36,7 @@ class Placemark(Feature):
         inline_style: StyleSelector | None = None,
         style_url: str | None = None,
     ):
+        """Placemark instance constructor."""
         Feature.__init__(self, name=name, visibility=visibility, style_url=style_url)
         self._geometry = geometry
         if inline_style:
@@ -40,16 +44,21 @@ class Placemark(Feature):
 
     @property
     def kml_type(self) -> str:
-        """Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set the KML tag name to
-        'Placemark'
+        """The class' KML type string.
+
+        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
+        the KML tag name to 'Placemark'
         """
         return "Placemark"
 
     @property
     def children(self) -> Iterator[ObjectChild]:
-        """Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield the children of a
-        :class:`~pyLiveKML.KML.KMLObjects.Placemark`, i.e. a :class:`~pyLiveKML.KML.KMLObjects.Geometry` instance, zero
-        or more :class:`~pyLiveKML.KML.KMLObjects.StyleSelector` instances, and any dependent
+        """The children of the instance.
+
+        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield
+        the children of a :class:`~pyLiveKML.KML.KMLObjects.Placemark`, i.e. a single
+        :class:`~pyLiveKML.KML.KMLObjects.Geometry` instance, zero or more
+        :class:`~pyLiveKML.KML.KMLObjects.StyleSelector` instances, and any dependent
         :class:`~pyLiveKML.KML.KMLObjects.SubStyle` instances.
         """
         yield ObjectChild(parent=self, child=self.geometry)
@@ -60,12 +69,15 @@ class Placemark(Feature):
 
     @property
     def geometry(self) -> Geometry:
-        """The geospatial object, or :class:`~pyLiveKML.KML.KMLObjects.Geometry`, that will be displayed in GEP as
-        this :class:`~pyLiveKML.KML.KMLObjects.Placemark`.
+        """The child :class:`~pyLiveKML.KML.KMLObjects.Geometry` instance.
+
+        The geospatial object, or :class:`~pyLiveKML.KML.KMLObjects.Geometry`, that will
+        be displayed in GEP as this :class:`~pyLiveKML.KML.KMLObjects.Placemark`.
         """
         return self._geometry
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         if self._name is not None:
             etree.SubElement(root, "name").text = self.name
         if self._visibility is not None:
