@@ -82,6 +82,18 @@ gep_loader = Folder(
 # The master synchronization controller, a NetworkLinkControl object
 gep_sync = NetworkLinkControl(target_href=ELEMENTS_HREF)
 
+from uuid import UUID
+gep_sync.container._id = UUID("8c2cda8e-7d56-4a29-99e7-e05e6dbaf193")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global applist
+    for x in applist:
+        x.sync = gep_sync
+        x.load_data()
+    yield
+
 
 local_dir = Path(__file__).parent
 routes: list[BaseRoute | Mount] = [
@@ -91,16 +103,8 @@ routes: list[BaseRoute | Mount] = [
 ]
 applist = find_apps(local_dir.joinpath("apps"))
 routes.extend(map(lambda x: Mount(path=x.path, app=x.app, name=x.name), applist))
-app = FastAPI(routes=routes)
+app = FastAPI(routes=routes, lifespan=lifespan)
 templates = Jinja2Templates(directory=local_dir.joinpath("templates"))
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    for x in applist:
-        x.sync = gep_sync
-        x.load_data()
-    yield
 
 
 @app.get("/favicon.ico")
