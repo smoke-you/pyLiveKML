@@ -42,6 +42,7 @@ from pyLiveKML.KML.KMLObjects.Placemark import Placemark
 from pyLiveKML.KML.KMLObjects.Point import Point
 from pyLiveKML.KML.KMLObjects.Polygon import Polygon
 from pyLiveKML.KML.KMLObjects.PolyStyle import PolyStyle
+from pyLiveKML.KML.KMLObjects.Region import Region
 from pyLiveKML.KML.KMLObjects.Style import Style
 from pyLiveKML.KML.KMLObjects.StyleMap import StyleMap
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
@@ -83,6 +84,7 @@ __all__ = [
     "PolyStyle",
     "Polygon",
     "RefreshMode",
+    "Region",
     "Style",
     "StyleMap",
     "StyleSelector",

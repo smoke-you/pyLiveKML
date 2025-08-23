@@ -10,6 +10,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, ObjectState
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KML.KMLObjects.Region import Region
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.errors.errors import FeatureInaccessibleError
 
@@ -54,6 +55,7 @@ class Feature(Object, ABC):
         description: str | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
+        region: Region | None = None,
     ):
         """Feature instance constructor."""
         Object.__init__(self)
@@ -73,6 +75,7 @@ class Feature(Object, ABC):
         self._styles = list[StyleSelector]()
         if styles:
             self._styles.extend(styles)
+        self._region = region
 
     @property
     def container(self) -> "Container|None":
@@ -136,7 +139,7 @@ class Feature(Object, ABC):
 
     @property
     def author_name(self) -> str | None:
-        """"""
+        """The name of the author of the website containing this KML or KMZ file."""
         return self._author_name
 
     @author_name.setter
@@ -147,7 +150,7 @@ class Feature(Object, ABC):
 
     @property
     def author_link(self) -> str | None:
-        """"""
+        """Specifies the URL of the website containing this KML or KMZ file."""
         return self._author_link
 
     @author_link.setter
@@ -158,7 +161,11 @@ class Feature(Object, ABC):
 
     @property
     def address(self) -> str | None:
-        """"""
+        """A string value representing an unstructured address.
+
+        Expected to be written as a standard street, city, state address, and/or as a
+        postal code.
+        """
         return self._address
 
     @address.setter
@@ -169,7 +176,7 @@ class Feature(Object, ABC):
 
     @property
     def phone_number(self) -> str | None:
-        """"""
+        """A string value representing a telephone number."""
         return self._phone_number
 
     @phone_number.setter
@@ -180,7 +187,7 @@ class Feature(Object, ABC):
 
     @property
     def snippet(self) -> str | None:
-        """"""
+        """A short description of the feature."""
         return self._snippet
 
     @snippet.setter
@@ -191,7 +198,7 @@ class Feature(Object, ABC):
 
     @property
     def snippet_max_lines(self) -> int | None:
-        """"""
+        """An integer that specifies the maximum number of Snippet lines to display."""
         return self._snippet_max_lines
 
     @snippet_max_lines.setter
@@ -218,6 +225,17 @@ class Feature(Object, ABC):
     def description(self, value: str | None) -> None:
         if self._description != value:
             self._description = value
+            self.field_changed()
+
+    @property
+    def region(self) -> Region | None:
+        """The active region for viewing this Feature."""
+        return self._region
+
+    @region.setter
+    def region(self, value: Region | None) -> None:
+        if self._region != value:
+            self._region = value
             self.field_changed()
 
     @property
@@ -269,6 +287,8 @@ class Feature(Object, ABC):
             if self.snippet_max_lines is not None:
                 attribs["maxLines"] = str(self.snippet_max_lines)
             etree.SubElement(root, "Snippet", attribs).text = self.snippet
+        if self.region is not None:
+            self.region.build_kml(root, with_children)
 
         if with_children:
             for s in self.styles:
@@ -349,10 +369,19 @@ class Container(list[Feature], Feature, ABC):
         """Feature instance constructor."""
         list[Feature].__init__(self)
         Feature.__init__(
-            self, name=name, visibility=visibility, is_open=is_open, author_name=author_name, 
-            author_link=author_link, address=address, phone_number=phone_number, snippet=snippet,
-            snippet_max_lines=snippet_max_lines, description=description, style_url=style_url, 
-            styles=styles
+            self,
+            name=name,
+            visibility=visibility,
+            is_open=is_open,
+            author_name=author_name,
+            author_link=author_link,
+            address=address,
+            phone_number=phone_number,
+            snippet=snippet,
+            snippet_max_lines=snippet_max_lines,
+            description=description,
+            style_url=style_url,
+            styles=styles,
         )
         ABC.__init__(self)
         if features:

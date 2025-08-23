@@ -1,6 +1,5 @@
 """Link module."""
 
-from typing import Any
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import RefreshMode, ViewRefreshMode

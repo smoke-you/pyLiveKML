@@ -6,6 +6,7 @@ from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML.KMLObjects.Feature import Feature, Container
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
+
 class Document(Container):
     """A KML 'Document', per https://developers.google.com/kml/documentation/kmlreference#document.
 
@@ -51,8 +52,18 @@ class Document(Container):
     ):
         """Document instance constructor."""
         super().__init__(
-            name=name, visibility=visibility, is_open=is_open, author_name=author_name, 
-            author_link=author_link, address=address, phone_number=phone_number, snippet=snippet,
-            snippet_max_lines=snippet_max_lines, description=description, style_url=style_url, 
-            styles=styles, update_limit=update_limit, features=features
+            name=name,
+            visibility=visibility,
+            is_open=is_open,
+            author_name=author_name,
+            author_link=author_link,
+            address=address,
+            phone_number=phone_number,
+            snippet=snippet,
+            snippet_max_lines=snippet_max_lines,
+            description=description,
+            style_url=style_url,
+            styles=styles,
+            update_limit=update_limit,
+            features=features,
         )
