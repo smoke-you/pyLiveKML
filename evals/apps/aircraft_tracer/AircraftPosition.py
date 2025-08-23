@@ -1,3 +1,5 @@
+"""AircraftPosition module."""
+
 from datetime import datetime
 from typing import Optional, cast
 
@@ -6,6 +8,7 @@ from pyLiveKML import GeoCoordinates, AltitudeMode, IconStyle, Placemark, Point,
 
 
 class AircraftPosition(Placemark):
+    """Records a single position of an aircraft."""
 
     def __init__(
         self,
@@ -18,6 +21,7 @@ class AircraftPosition(Placemark):
         speed: float,
         heading: float,
     ) -> None:
+        """AircraftPosition instance constructor."""
         Placemark.__init__(
             self,
             geometry=Point(
@@ -54,4 +58,5 @@ class AircraftPosition(Placemark):
         )
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return f"{self.transponder},{self.flight},{self.timestamp}"

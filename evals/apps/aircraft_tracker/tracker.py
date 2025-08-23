@@ -1,3 +1,5 @@
+"""tracker module."""
+
 import json
 
 from datetime import datetime
@@ -16,6 +18,7 @@ from pyLiveKML import NetworkLinkControl, Feature
 
 
 def load_adsb_exchange_data(filename: Path) -> AircraftLocation:
+    """Load an ADSB exchange dataset and transform it into a useful form."""
     with open(filename) as f:
         sample_data = json.loads(f.read())
     transponder = sample_data["icao"]

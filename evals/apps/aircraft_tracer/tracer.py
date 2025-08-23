@@ -1,3 +1,5 @@
+"""tracer module."""
+
 import json
 
 from datetime import datetime
@@ -15,6 +17,7 @@ from ..KMLApp import KMLApp, KMLSelect
 
 
 def load_adsb_exchange_data(filename: Path) -> Folder:
+    """Load an ADSB exchange dataset and transform it into a useful form."""
     with open(filename) as f:
         sample_data = json.loads(f.read())
     kmldata = Folder(sample_data["r"])

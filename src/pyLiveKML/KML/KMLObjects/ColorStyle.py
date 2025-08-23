@@ -2,6 +2,7 @@
 
 from abc import ABC
 
+from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KML import ColorMode
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
@@ -27,28 +28,27 @@ class ColorStyle(SubStyle, ABC):
 
     _kml_type = "ColorStyle"
 
-    def __init__(self, color: int | None = None, color_mode: ColorMode | None = None):
+    def __init__(
+        self, color: GeoColor | int | None = None, color_mode: ColorMode | None = None
+    ):
         """ColorStyle instance constructor."""
         SubStyle.__init__(self)
         ABC.__init__(self)
-        self._color: int | None = None
-        self.color = color
         self._color_mode: ColorMode | None = color_mode
+        self._color: GeoColor | None = None
+        self.color = color
 
     @property
-    def color(self) -> int | None:
+    def color(self) -> GeoColor | None:
         """Color, in 32-bit ABGR format (yes, the order is correct)."""
         return self._color
 
     @color.setter
-    def color(self, value: int | None) -> None:
-        val = (
-            None
-            if value is None
-            else 0 if value <= 0 else 0xFFFFFFFF if value >= 0xFFFFFFFF else value
-        )
-        if self._color != val:
-            self._color = val
+    def color(self, value: GeoColor | int | None) -> None:
+        if isinstance(value, int):
+            value = GeoColor(value)
+        if self._color != value:
+            self._color = value
             self.field_changed()
 
     @property

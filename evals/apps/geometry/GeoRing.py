@@ -1,3 +1,5 @@
+"""GeoRing module."""
+
 from typing import Optional, Iterator
 
 from numpy import ndarray, array
@@ -10,6 +12,7 @@ from .GeoShape import GeoShape
 def circle_gen(
     radius: float, rotation: Rotation = None, num_v: int = 32
 ) -> Iterator[ndarray]:
+    """Construct a circle as a set of points."""
     point = array([radius, 0, 0])
     r = Rotation.from_euler("z", 360.0 / num_v, degrees=True)
     for i in range(0, num_v):
@@ -18,6 +21,8 @@ def circle_gen(
 
 
 class GeoRing(GeoShape):
+    """The GeoRing class represents a circular shape with a coaxial internal circular cutout."""
+
     def __init__(
         self,
         origin: GeoCoordinates,
@@ -31,6 +36,7 @@ class GeoRing(GeoShape):
         selected: bool = False,
         altitude_mode: AltitudeMode = AltitudeMode.CLAMP_TO_GROUND,
     ):
+        """GeoRing instance constructor."""
         GeoShape.__init__(
             self,
             origin=origin,

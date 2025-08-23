@@ -1,7 +1,8 @@
 """pyLiveKML global imports wrapper."""
 
-from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
 from pyLiveKML.KML.errors import errors
+from pyLiveKML.KML.GeoColor import GeoColor
+from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
 from pyLiveKML.KML.KML import (
     KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
     kml_tag,
@@ -56,6 +57,7 @@ __all__ = [
     "Document",
     "Feature",
     "Folder",
+    "GeoColor",
     "GeoCoordinates",
     "Geometry",
     "Icon",

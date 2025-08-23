@@ -1,3 +1,5 @@
+"""AircraftPosition module."""
+
 from typing import cast
 from pyLiveKML import GeoCoordinates, AltitudeMode, IconStyle, Placemark, Point, Style
 
@@ -5,8 +7,10 @@ from .AircraftData import AircraftData
 
 
 class AircraftPosition(Placemark):
+    """Record a single position for an AircraftTrail."""
 
     def __init__(self, data: AircraftData):
+        """AircraftPosition instance constructor."""
         altitude_mode = (
             AltitudeMode.CLAMP_TO_GROUND
             if data.coordinates.alt is None
@@ -25,8 +29,10 @@ class AircraftPosition(Placemark):
 
     @property
     def heading(self) -> float | None:
+        """The heading of the aircraft."""
         return cast(IconStyle, cast(Style, self._styles[0]).icon_style).heading
 
     @property
     def coordinates(self) -> GeoCoordinates:
+        """The position of the aircraft."""
         return cast(Point, self.geometry).coordinates

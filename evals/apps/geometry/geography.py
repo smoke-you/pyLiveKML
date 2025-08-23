@@ -1,3 +1,5 @@
+"""geography module."""
+
 from typing import Iterator
 
 import numpy
@@ -16,6 +18,7 @@ ecef2lla = Transformer.from_proj(ecef, lla)
 def project_shape(
     shape_3d: list[ndarray], origin: GeoCoordinates
 ) -> Iterator[GeoCoordinates]:
+    """Project a Cartesian shape in the geoid."""
     p_org = lla2ecef.transform(origin.lon, origin.lat, origin.alt)
     r_geo = Rotation.from_euler("zyz", (90, 90 - origin.lat, origin.lon), degrees=True)
     for s in shape_3d:

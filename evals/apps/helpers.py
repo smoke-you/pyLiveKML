@@ -1,3 +1,6 @@
+"""Helpers module for the eval server."""
+
+
 def description_builder(src: dict, title_color: int = 0xFF0000) -> str:
     """Transform a dict that describes a KML object into a formatted HTML table.
 

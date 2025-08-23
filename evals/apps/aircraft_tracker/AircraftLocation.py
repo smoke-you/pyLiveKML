@@ -1,3 +1,5 @@
+"""AircraftLocation module."""
+
 from typing import Optional, Sequence
 
 from lxml import etree  # type: ignore
@@ -8,10 +10,12 @@ from ..helpers import description_builder
 
 
 class AircraftLocation(Placemark):
+    """Records a single position of an aircraft."""
 
     def __init__(
         self, transponder: str, flight: str, positions: Sequence[AircraftData]
     ) -> None:
+        """AircraftLocation instance constructor."""
         point = Point(
             coordinates=positions[0].coordinates,
             altitude_mode=positions[0].altitude_mode,
@@ -32,9 +36,9 @@ class AircraftLocation(Placemark):
         self._pid = -1
         self._state: ObjectState
 
-    @property
-    def kml_type(self) -> str:
-        return "Placemark"
+    # @property
+    # def kml_type(self) -> str:
+    #     return "Placemark"
 
     def _build_description(self) -> Optional[str]:
         try:
@@ -61,6 +65,7 @@ class AircraftLocation(Placemark):
 
     # This method is overridden so that the instance is always ready to provide a Change tag
     def update_generated(self) -> None:
+        """Record that a KML update has been emitted."""
         if self._state == ObjectState.CREATING or self._state == ObjectState.CHANGING:
             # self._state = State.CREATED
             """Note transition to CHANGING rather than CREATED"""
@@ -73,6 +78,7 @@ class AircraftLocation(Placemark):
 
     # Loop through the positions from 0 to len-1 then restart
     def change_kml(self, update: etree.Element) -> None:
+        """Construct a complete <Change> KML tag."""
         self._pid += 1
         if self._pid >= len(self._positions):
             self._pid = 0
@@ -101,7 +107,9 @@ class AircraftLocation(Placemark):
         update.append(change)
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return f"{self.kml_type}:{self.name}"
 
     def __repr__(self) -> str:
+        """Return a debug representation."""
         return self.__str__()

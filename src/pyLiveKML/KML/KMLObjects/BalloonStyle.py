@@ -2,6 +2,7 @@
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KML import DisplayMode
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
@@ -23,35 +24,41 @@ class BalloonStyle(SubStyle):
     def __init__(
         self,
         text: str | None = None,
-        text_color: int | None = None,
-        bg_color: int | None = None,
+        text_color: GeoColor | int | None = None,
+        bg_color: GeoColor | int | None = None,
         display_mode: DisplayMode | None = None,
     ):
         """BalloonStyle instance constructor."""
         SubStyle.__init__(self)
         self._text: str | None = text
-        self._bg_color: int | None = bg_color
-        self._text_color: int | None = text_color
         self._display_mode: DisplayMode | None = display_mode
+        self._bg_color: GeoColor | None = None
+        self.bg_color = bg_color
+        self._text_color: GeoColor | None = None
+        self.text_color = text_color
 
     @property
-    def bg_color(self) -> int | None:
+    def bg_color(self) -> GeoColor | None:
         """The background color of the balloon, in 32-bit ABGR format."""
         return self._bg_color
 
     @bg_color.setter
-    def bg_color(self, value: int | None) -> None:
+    def bg_color(self, value: GeoColor | int | None) -> None:
+        if isinstance(value, int):
+            value = GeoColor(value)
         if self._bg_color != value:
             self._bg_color = value
             self.field_changed()
 
     @property
-    def text_color(self) -> int | None:
+    def text_color(self) -> GeoColor | None:
         """The color of the text in the balloon, in 32-bit ABGR format."""
         return self._text_color
 
     @text_color.setter
-    def text_color(self, value: int | None) -> None:
+    def text_color(self, value: GeoColor | int | None) -> None:
+        if isinstance(value, int):
+            value = GeoColor(value)
         if self._text_color != value:
             self._text_color = value
             self.field_changed()
@@ -84,9 +91,9 @@ class BalloonStyle(SubStyle):
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         if self._bg_color is not None:
-            etree.SubElement(root, "bgColor").text = f"{self.bg_color:08x}"
+            etree.SubElement(root, "bgColor").text = str(self._bg_color)
         if self._text_color is not None:
-            etree.SubElement(root, "textColor").text = f"{self.text_color:08x}"
+            etree.SubElement(root, "textColor").text = str(self._text_color)
         if self._text is not None:
             etree.SubElement(root, "text").text = self._text
         if self._display_mode is not None:

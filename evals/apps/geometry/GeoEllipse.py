@@ -1,3 +1,5 @@
+"""GeoEllipse module."""
+
 import math
 from typing import Optional, Iterator
 
@@ -14,6 +16,7 @@ def ellipse_gen(
     rotation: Optional[Rotation] = None,
     num_vertices: int = 32,
 ) -> Iterator[ndarray]:
+    """Construct an ellipse as a set of points."""
     step = 2 * math.pi / num_vertices
     angle = -step
     for i in range(0, num_vertices):
@@ -25,6 +28,8 @@ def ellipse_gen(
 
 
 class GeoEllipse(GeoShape):
+    """The GeoEllipse class represents a simple ellipse."""
+
     def __init__(
         self,
         origin: GeoCoordinates,
@@ -39,6 +44,7 @@ class GeoEllipse(GeoShape):
         selected: bool = False,
         altitude_mode: AltitudeMode = AltitudeMode.CLAMP_TO_GROUND,
     ):
+        """GeoEllipse instance constructor."""
         GeoShape.__init__(
             self,
             origin=origin,

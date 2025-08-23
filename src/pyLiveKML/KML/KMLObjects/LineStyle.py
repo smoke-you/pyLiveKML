@@ -2,6 +2,7 @@
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 
 
@@ -21,7 +22,7 @@ class LineStyle(ColorStyle):
     def __init__(
         self,
         width: float | None = None,
-        color: int | None = None,
+        color: GeoColor | int | None = None,
     ):
         """LineStyle instance constructor."""
         ColorStyle.__init__(self, color)
@@ -103,7 +104,7 @@ class LineStyle(ColorStyle):
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         if self._color is not None:
-            etree.SubElement(root, "color").text = f"{self._color:08x}"
+            etree.SubElement(root, "color").text = str(self.color)
         if self._color_mode is not None:
             etree.SubElement(root, "colorMode").text = self._color_mode.value
         if self._width is not None:

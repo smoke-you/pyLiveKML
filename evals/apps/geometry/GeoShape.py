@@ -1,9 +1,12 @@
+"""GeoShape module."""
+
 from abc import ABC
 from typing import Optional, cast
 
 import numpy
 from pyproj import Geod
 from pyLiveKML import (
+    GeoColor,
     GeoCoordinates,
     AltitudeMode,
     LineStyle,
@@ -19,6 +22,7 @@ from .geography import project_shape
 
 
 class GeoShape(Placemark, ABC):
+    """Abstract class from which more specific geographical shapes may inherit."""
 
     def __init__(
         self,
@@ -32,6 +36,7 @@ class GeoShape(Placemark, ABC):
         selected: bool = False,
         altitude_mode: AltitudeMode = AltitudeMode.CLAMP_TO_GROUND,
     ) -> None:
+        """GeoShape instance constructor."""
         self._origin = origin
         self._outer_bound_3d = outer_bound
         self._inner_bounds_3d = inner_bounds
@@ -54,9 +59,11 @@ class GeoShape(Placemark, ABC):
 
     @property
     def polygon(self) -> Polygon:
+        """The polygon for the GeoShape instance."""
         return cast(Polygon, self.geometry)
 
     def rotate_shape(self, r: Rotation) -> None:
+        """Roate the GeoShape instance about its origin on the surface of the geoid."""
         self._outer_bound_3d = r.apply(self._outer_bound_3d)
         if self._inner_bounds_3d:
             for b in self._inner_bounds_3d:
@@ -64,6 +71,7 @@ class GeoShape(Placemark, ABC):
         self._rebuild()
 
     def translate_on_surface(self, bearing: float, distance: float) -> None:
+        """Translate the GeoShape instance across the surface of the geoid."""
         self._origin.lon, self._origin.lat, _ = Geod(ellps="WGS84").fwd(
             self._origin.lon, self._origin.lat, bearing, distance
         )
@@ -71,6 +79,7 @@ class GeoShape(Placemark, ABC):
 
     @property
     def origin(self) -> GeoCoordinates:
+        """The origin of the GeoShape instance in the geoid."""
         return self._origin
 
     @origin.setter
@@ -90,6 +99,7 @@ class GeoShape(Placemark, ABC):
             # b.field_changed()
 
     def build(self) -> tuple[list[GeoCoordinates], list[list[GeoCoordinates]]]:
+        """Construct the GeoShape instance."""
         g_outer = list(project_shape(self._outer_bound_3d, self._origin))
         g_inner = list[list[GeoCoordinates]]()
         if self._inner_bounds_3d:
@@ -99,13 +109,12 @@ class GeoShape(Placemark, ABC):
 
     @property
     def fill_rgb(self) -> str:
+        """RGB-value of the fill of a polygon."""
         try:
             styles = [s for s in self.styles if isinstance(s, Style)]
-            c = cast(int, cast(PolyStyle, styles[0].poly_style).color)
-            r = c & 0xFF
-            g = (c & 0xFF00) >> 8
-            b = (c & 0xFF0000) >> 16
-            return f"{r:02x}{g:02x}{b:02x}"
+            if styles[0].poly_style and styles[0].poly_style.color:
+                psc = styles[0].poly_style.color
+                return f"{psc.rgb:06x}"
         except Exception:
             pass
         return "000000"
@@ -114,23 +123,21 @@ class GeoShape(Placemark, ABC):
     def fill_rgb(self, val: str) -> None:
         try:
             c = int(val, 16)
-            new_c = ((c & 0xFF0000) >> 16) + (c & 0xFF00) + ((c & 0xFF) << 16)
             styles = [s for s in self.styles if isinstance(s, Style)]
             for s in styles:
-                cast(PolyStyle, s.poly_style).color = (
-                    cast(int, cast(PolyStyle, s.poly_style).color) & 0xFF000000
-                ) + new_c
+                if s.poly_style and s.poly_style.color:
+                    s.poly_style.color.rgb = c
+                    s.poly_style.field_changed()
         except Exception:
             pass
 
     @property
     def fill_alpha(self) -> int:
+        """A-value of the fill of a polygon."""
         try:
             styles = [s for s in self.styles if isinstance(s, Style)]
-            if styles:
-                return (
-                    cast(int, cast(PolyStyle, styles[0].poly_style).color) & 0xFF000000
-                ) >> 24
+            if styles and styles[0].poly_style and styles[0].poly_style.color:
+                return styles[0].poly_style.color.a
         except Exception:
             pass
         return 0
@@ -142,21 +149,20 @@ class GeoShape(Placemark, ABC):
             a = 0 if val < 0 else 255 if val > 255 else val
             styles = [s for s in self.styles if isinstance(s, Style)]
             for s in styles:
-                cast(PolyStyle, s.poly_style).color = (
-                    cast(int, cast(PolyStyle, s.poly_style).color) & 0xFFFFFF
-                ) + ((a & 0xFF) << 24)
+                if s.poly_style and s.poly_style.color:
+                    s.poly_style.color.a = a
+                    s.poly_style.field_changed()
         except Exception:
             pass
 
     @property
     def border_rgb(self) -> str:
+        """RGB-value of the border of a polygon."""
         try:
             styles = [s for s in self.styles if isinstance(s, Style)]
-            c = cast(int, cast(PolyStyle, styles[0].line_style).color)
-            r = c & 0xFF
-            g = (c & 0xFF00) >> 8
-            b = (c & 0xFF0000) >> 16
-            return f"{r:02x}{g:02x}{b:02x}"
+            if styles and styles[0].line_style and styles[0].line_style.color:
+                psc = styles[0].line_style.color
+                return f"{psc.rgb:06x}"
         except Exception:
             pass
         return "000000"
@@ -165,24 +171,24 @@ class GeoShape(Placemark, ABC):
     def border_rgb(self, val: str) -> None:
         try:
             c = int(val, 16)
-            new_c = ((c & 0xFF0000) >> 16) + (c & 0xFF00) + ((c & 0xFF) << 16)
             styles = [s for s in self.styles if isinstance(s, Style)]
             for s in styles:
-                cast(PolyStyle, s.line_style).color = (
-                    cast(int, cast(PolyStyle, s.line_style).color) & 0xFF000000
-                ) + new_c
+                if s.line_style and s.line_style.color:
+                    s.line_style.color.rgb = c
+                    s.line_style.field_changed()
         except Exception:
             pass
 
     @property
     def border_alpha(self) -> int:
+        """A-value of the border of a polygon."""
         try:
             styles = [s for s in self.styles if isinstance(s, Style)]
-            return (
-                cast(int, cast(PolyStyle, styles[0].line_style).color) & 0xFF000000
-            ) >> 24
+            if styles and styles[0].line_style and styles[0].line_style.color:
+                return styles[0].line_style.color.a
         except Exception:
-            return 0
+            pass
+        return 0
 
     @border_alpha.setter
     def border_alpha(self, val: int) -> None:
@@ -191,8 +197,8 @@ class GeoShape(Placemark, ABC):
             a = 0 if val < 0 else 255 if val > 255 else val
             styles = [s for s in self.styles if isinstance(s, Style)]
             for s in styles:
-                cast(PolyStyle, s.line_style).color = (
-                    cast(int, cast(PolyStyle, s.line_style).color) & 0xFFFFFF
-                ) + ((a & 0xFF) << 24)
+                if s.line_style and s.line_style.color:
+                    s.line_style.color.a = a
+                    s.line_style.field_changed()
         except Exception:
             pass

@@ -2,6 +2,7 @@
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KML import ColorMode
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 from pyLiveKML.KML.Vec2 import Vec2
@@ -29,7 +30,7 @@ class IconStyle(ColorStyle):
         icon: str,
         scale: float = 1.0,
         heading: float | None = None,
-        color: int | None = None,
+        color: GeoColor | int | None = None,
         color_mode: ColorMode | None = None,
     ):
         """IconStyle instance constructor."""
@@ -88,7 +89,7 @@ class IconStyle(ColorStyle):
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         if self.color is not None:
-            etree.SubElement(root, "color").text = f"{self.color:08x}"
+            etree.SubElement(root, "color").text = str(self.color)
         if self.color_mode is not None:
             etree.SubElement(root, "colorMode").text = self.color_mode.value
         if self.scale is not None:

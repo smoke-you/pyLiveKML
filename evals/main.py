@@ -1,3 +1,5 @@
+"""Main module for the evals server."""
+
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Mapping, Any, AsyncGenerator
@@ -82,7 +84,7 @@ gep_loader = Folder(
 
 # The master synchronization controller, a NetworkLinkControl object
 gep_sync = NetworkLinkControl(target_href=ELEMENTS_HREF)
-# assign a constant UUID to the container, so that it can be refreshed in GEP 
+# assign a constant UUID to the container, so that it can be refreshed in GEP
 # without having to reload the pyLiveKML link after restarting the server
 gep_sync.container._id = UUID("8c2cda8e-7d56-4a29-99e7-e05e6dbaf193")
 

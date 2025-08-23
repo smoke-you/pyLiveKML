@@ -2,6 +2,7 @@
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KML import ListItemType, ItemIconMode
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
@@ -22,16 +23,17 @@ class ListStyle(SubStyle):
     def __init__(
         self,
         list_item_type: ListItemType | None = None,
-        bg_color: int | None = None,
+        bg_color: GeoColor | int | None = None,
         item_icon_state: ItemIconMode | None = None,
         item_icon_href: str | None = None,
     ):
         """ListStyle instance constructor."""
         SubStyle.__init__(self)
         self._list_item_type: ListItemType | None = list_item_type
-        self._bg_color: int | None = bg_color
         self._item_icon_state: ItemIconMode | None = item_icon_state
         self._item_icon_href: str | None = item_icon_href
+        self._bg_color: GeoColor | None = None
+        self.bg_color = bg_color
 
     @property
     def list_item_type(self) -> ListItemType | None:
@@ -45,7 +47,7 @@ class ListStyle(SubStyle):
             self.field_changed()
 
     @property
-    def bg_color(self) -> int | None:
+    def bg_color(self) -> GeoColor | None:
         """The background color of the list item, as a 32-bit ABGR color.
 
         Note the unusual order of the fields that make up the integer.
@@ -53,7 +55,9 @@ class ListStyle(SubStyle):
         return self._bg_color
 
     @bg_color.setter
-    def bg_color(self, value: int | None) -> None:
+    def bg_color(self, value: GeoColor | int | None) -> None:
+        if isinstance(value, int):
+            value = GeoColor(value)
         if self._bg_color != value:
             self._bg_color = value
             self.field_changed()
@@ -85,7 +89,7 @@ class ListStyle(SubStyle):
         if self._list_item_type is not None:
             etree.SubElement(root, "listItemType").text = self._list_item_type.value
         if self._bg_color is not None:
-            etree.SubElement(root, "bg_color").text = f"{self.bg_color:08x}"
+            etree.SubElement(root, "bg_color").text = str(self.bg_color)
         if self._item_icon_state is not None or self._item_icon_href is not None:
             item_icon = etree.SubElement(root, "ItemIcon")
             if self._item_icon_state is not None:

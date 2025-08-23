@@ -1,3 +1,5 @@
+"""AircraftData module."""
+
 from datetime import datetime
 from typing import Optional
 
@@ -5,6 +7,8 @@ from pyLiveKML import GeoCoordinates, AltitudeMode
 
 
 class AircraftData:
+    """Transform raw ADSB exchange data into a Python object."""
+
     def __init__(
         self,
         timestamp: datetime,
@@ -14,6 +18,7 @@ class AircraftData:
         speed: float,
         heading: float,
     ):
+        """AircraftData instance constructor."""
         self.coordinates = GeoCoordinates(lon, lat, alt)
         self.altitude_mode = (
             AltitudeMode.CLAMP_TO_GROUND if alt is None else AltitudeMode.ABSOLUTE

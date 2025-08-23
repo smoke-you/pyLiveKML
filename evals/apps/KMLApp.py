@@ -1,3 +1,5 @@
+"""KMLApp module."""
+
 import importlib
 import inspect
 
@@ -12,19 +14,30 @@ from pyLiveKML import NetworkLinkControl, Feature
 
 
 class KMLSelect(BaseModel):
+    """KML select message."""
+
     id: UUID4
     checked: bool
 
 
 class KMLControlRequest(BaseModel):
+    """KML control request."""
+
     req: dict
 
 
 class KMLControlResponse(BaseModel):
+    """KML control response."""
+
     rsp: dict
 
 
 class KMLApp:
+    """KML application.
+
+    KML applications will appear in the list of available apps in the server's home page.
+    """
+
     def __init__(
         self,
         name: str,
@@ -33,6 +46,7 @@ class KMLApp:
         app: FastAPI,
         data: Feature | list[Feature],
     ):
+        """KMLApp instance constructor."""
         self.name = name
         self.description = description.strip().replace("\r", "").split("\n")
         self.path = path
@@ -41,6 +55,7 @@ class KMLApp:
         self.sync: Optional[NetworkLinkControl] = None
 
     def load_data(self) -> None:
+        """Associate the app's data with the KML synchronization controller."""
         if not self.sync:
             return
         if isinstance(self.data, Feature):
@@ -53,6 +68,7 @@ class KMLApp:
 
 
 def find_apps(basedir: Path) -> list[KMLApp]:
+    """Find all KMLApp instances located under the given path."""
     apps = list[KMLApp]()
     for file in Path(basedir).rglob("*.py"):
         modpath = ".".join(file.parent.parts[-2:]) + "." + file.stem

@@ -1,3 +1,5 @@
+"""geometry module."""
+
 from pathlib import Path
 from typing import cast
 
@@ -79,6 +81,8 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
 
 
 class OriginControlRequest(BaseModel):
+    """Origin control request."""
+
     id: UUID4
     lat: float
     lon: float
@@ -86,12 +90,16 @@ class OriginControlRequest(BaseModel):
 
 
 class RGBControlRequest(BaseModel):
+    """RGB control request."""
+
     id: UUID4
     rgb: str
     alpha: int
 
 
 class RotationControlRequest(BaseModel):
+    """Rotation control request."""
+
     id: UUID4
     value: float
 
