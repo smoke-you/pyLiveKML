@@ -1,5 +1,7 @@
 """NetworkLinkControl module."""
 
+from datetime import datetime
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
@@ -33,22 +35,29 @@ class NetworkLinkControl:
         target_href: str = "",
         container: Container | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
+        min_refresh_period: float | None = None,
+        max_session_length: float | None = None,
+        cookie: str | None = None,
+        message: str | None = None,
+        link_name: str | None = None,
+        link_description: str | None = None,
+        link_snippet: str | None = None,
+        link_expires: datetime | None = None,
     ):
         """NetworkLinkControl instance constructor."""
-        # TODO: All of these should be included in the update_kml method, but they're not terribly important ATM.
-        # self.min_refresh_period: float|None = None
-        # self.max_session_length: float|None = None
-        # self.cookie: str|None = None
-        # self.message: str|None = None
-        # self.link_name: str|None = None
-        # self.link_description: str|None = None
-        # self.link_snippet: str|None = None
-        # self.expires: datetime|None = None
         self.target_href: str = target_href
         self.container: Container = (
             Folder("Root", is_open=True) if container is None else container
         )
         self.update_limit = update_limit
+        self.min_refresh_period = min_refresh_period
+        self.max_session_length = max_session_length
+        self.cookie = cookie
+        self.message = message
+        self.link_name = link_name
+        self.link_description = link_description
+        self.link_snippet = link_snippet
+        self.link_expires = link_expires
 
     def update_kml(self) -> etree.Element:
         """Generate a synchronization update by parsing the :attr:`container`.
@@ -57,6 +66,28 @@ class NetworkLinkControl:
         :rtype: etree.Element
         """
         root = etree.Element("NetworkLinkControl")
+
+        if self.min_refresh_period is not None:
+            etree.SubElement(root, "minRefreshPeriod").text = (
+                f"{self.min_refresh_period:0.3f}"
+            )
+        if self.max_session_length is not None:
+            etree.SubElement(root, "maxSessionLength").text = str(
+                self.max_session_length
+            )
+        if self.cookie is not None:
+            etree.SubElement(root, "cookie").text = self.cookie
+        if self.message is not None:
+            etree.SubElement(root, "message").text = self.message
+        if self.link_name is not None:
+            etree.SubElement(root, "linkName").text = self.link_name
+        if self.link_description is not None:
+            etree.SubElement(root, "linkDescription").text = self.link_description
+        if self.link_snippet is not None:
+            etree.SubElement(root, "linkSnippet").text = self.link_snippet
+        if self.link_expires is not None:
+            etree.SubElement(root, "linkExpires").text = self.link_expires.isoformat()
+
         update = etree.SubElement(root, "Update")
         etree.SubElement(update, "targetHref").text = self.target_href
 

@@ -2,6 +2,8 @@
 
 import enum
 
+from typing import NamedTuple
+
 from lxml import etree  # type: ignore
 
 
@@ -31,6 +33,9 @@ def kml_tag() -> etree.Element:
     }
     attrib = {"xmlns": "http://www.opengis.net/kml/2.2"}
     return etree.Element("kml", nsmap=nsmap, attrib=attrib)
+
+
+GxParams = NamedTuple("GxParams", [("x", int), ("y", int), ("w", int), ("h", int)])
 
 
 class AltitudeMode(enum.Enum):

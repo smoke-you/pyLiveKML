@@ -41,10 +41,11 @@ class Feature(Object, ABC):
 
     def __init__(
         self,
-        name: str | None = None,
-        description: str | None = None,
-        visibility: bool | None = None,
         container: "Feature|None" = None,
+        name: str | None = None,
+        visibility: bool | None = None,
+        is_open: bool | None = None,
+        description: str | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
     ):
@@ -54,6 +55,7 @@ class Feature(Object, ABC):
         self._container = container
         self._name = name
         self._visibility = visibility
+        self._is_open = is_open
         self._description = description
         self._style_url = style_url
         self._styles = list[StyleSelector]()
@@ -96,7 +98,7 @@ class Feature(Object, ABC):
 
     @property
     def visibility(self) -> bool | None:
-        """Flag indicating whether the instance will initially be "checked" in the UI, and hence visible.
+        """Flag indicating whether the instance will be "checked" in the UI, and hence visible.
 
         True if the :class:`~pyLiveKML.KML.KMLObjects.Feature` will (initially) be
         checked (visible) in GEP, False otherwise.
@@ -107,6 +109,17 @@ class Feature(Object, ABC):
     def visibility(self, value: bool | None) -> None:
         if self._visibility != value:
             self._visibility = value
+            self.field_changed()
+
+    @property
+    def is_open(self) -> bool | None:
+        """Flag indicating whether the instance will be "open" in the UI."""
+        return self._is_open
+
+    @is_open.setter
+    def is_open(self, value: bool | None) -> None:
+        if self._is_open != value:
+            self._is_open = value
             self.field_changed()
 
     @property
@@ -140,6 +153,32 @@ class Feature(Object, ABC):
         """
         for s in self._styles:
             yield s
+
+    @property
+    def children(self) -> Iterator[ObjectChild]:
+        """The children of this instance.
+
+        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield the children of a
+        :class:`~pyLiveKML.KML.KMLObjects.Feature`, i.e. one or more :class:`~pyLiveKML.KML.KMLObjects.StyleSelector`
+        instances, and their children.
+        """
+        for s in self._styles:
+            yield ObjectChild(parent=self, child=s)
+            yield from s.children
+
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
+        if self.name is not None:
+            etree.SubElement(root, "name").text = self.name
+        if self.visibility is not None:
+            etree.SubElement(root, "visibility").text = str(int(self.visibility))
+        if self.is_open is not None:
+            etree.SubElement(root, "open").text = str(int(self.is_open))
+        if self.description is not None:
+            etree.SubElement(root, "description").text = self.description
+        if with_children:
+            for s in self.styles:
+                root.append(s.construct_kml())
 
     # override Object.select() to enable upwards cascade, i.e. if a Feature contained
     # in an unselected parent Feature is selected, the parent Feature must also be
@@ -254,18 +293,6 @@ class Container(list[Feature], Feature, ABC):
                 yield ContainedFeature(container=self, feature=f)
 
     @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of this instance.
-
-        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield the children of a
-        :class:`~pyLiveKML.KML.KMLObjects.Container`, i.e. one or more :class:`~pyLiveKML.KML.KMLObjects.StyleSelector`
-        instances, and their children.
-        """
-        for s in self._styles:
-            yield ObjectChild(parent=self, child=s)
-            yield from s.children
-
-    @property
     def is_open(self) -> bool | None:
         """Flag to indicate whether the instance will initially be displayed in an 'open' state in the UI.
 
@@ -329,20 +356,6 @@ class Container(list[Feature], Feature, ABC):
                 elif isinstance(f, Feature):
                     root.append(f.construct_kml())
         return root
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        if self.name is not None:
-            etree.SubElement(root, "name").text = self.name
-        if self.visibility is not None:
-            etree.SubElement(root, "visibility").text = str(int(self.visibility))
-        if self.is_open is not None:
-            etree.SubElement(root, "open").text = str(int(self.is_open))
-        if self.description is not None:
-            etree.SubElement(root, "description").text = self.description
-        if with_children:
-            for s in self._styles:
-                root.append(s.construct_kml())
 
     def append(self, item: Feature) -> None:
         """Append a :class:`~pyLiveKML.KML.KMLObjects.Feature` to this :class:`~pyLiveKML.KML.KMLObjects.Container`.

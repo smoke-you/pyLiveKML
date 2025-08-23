@@ -1,6 +1,6 @@
 """NetworkLink module."""
 
-from typing import Iterator
+from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
@@ -8,7 +8,7 @@ from pyLiveKML.KML.KML import RefreshMode
 from pyLiveKML.KML.KMLObjects.Feature import Feature
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild
-
+from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
 class NetworkLink(Feature):
     """A KML 'NetworkLink', per https://developers.google.com/kml/documentation/kmlreference#networklink.
@@ -32,17 +32,22 @@ class NetworkLink(Feature):
     def __init__(
         self,
         name: str | None = None,
+        visibility: bool | None = None,
+        is_open: bool | None = None,
+        description: str | None = None,
+        style_url: str | None = None,
+        styles: Iterable[StyleSelector] | None = None,
         href: str | None = None,
         refresh_mode: RefreshMode | None = None,
         refresh_interval: float | None = None,
-        is_open: bool | None = None,
+
     ):
         """NetworkLink instance constructor."""
-        Feature.__init__(self, name=name, visibility=None)
-        self._is_open: bool = False if is_open is None else is_open
-        self._link: Link = Link(href, refresh_mode, refresh_interval)
-        self._fly_to_view: bool = False
-        self._refresh_visibility: bool = False
+        Feature.__init__(self, name=name, visibility=visibility, is_open=is_open, description=description, style_url=style_url, styles=styles)
+        self._is_open = is_open
+        self._link = Link(href, refresh_mode, refresh_interval)
+        self._fly_to_view = False
+        self._refresh_visibility = False
 
     @property
     def children(self) -> Iterator[ObjectChild]:
@@ -51,22 +56,6 @@ class NetworkLink(Feature):
             yield ObjectChild(self, self._link)
         for s in self.styles:
             yield ObjectChild(self, s)
-
-    @property
-    def is_open(self) -> bool:
-        """Flag to indicate whether the instance will initially be displayed in an 'open' state in the UI.
-
-        True if the :class:`~pyLiveKML.KML.KMLObjects.NetworkLink` will be initially
-        displayed in an 'open' state in the GEP user List View, else False if it will
-        be initially displayed in a 'closed' state.  None implies the default of False.
-        """
-        return self._is_open
-
-    @is_open.setter
-    def is_open(self, value: bool) -> None:
-        if self._is_open != value:
-            self._is_open = value
-            self.field_changed()
 
     @property
     def link(self) -> Link:
@@ -110,22 +99,13 @@ class NetworkLink(Feature):
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        if self._name:
-            etree.SubElement(root, "name").text = self._name
-        if self._visibility is not None:
-            etree.SubElement(root, "visibility").text = str(int(self._visibility))
-        if self._is_open is not None:
-            etree.SubElement(root, "open").text = str(int(self._is_open))
-        if self._description:
-            etree.SubElement(root, "description").text = self._description
+        super().build_kml(root, with_children)
+        if self._style_url:
+            etree.SubElement(root, "styleUrl").text = self._style_url
         if self._refresh_visibility is not None:
             etree.SubElement(root, "refreshVisibility").text = str(
                 int(self._refresh_visibility)
             )
-        if self._style_url:
-            etree.SubElement(root, "styleUrl").text = self._style_url
         if with_children:
-            for s in self._styles:
-                root.append(s.construct_kml())
             if self._link:
                 root.append(self._link.construct_kml())

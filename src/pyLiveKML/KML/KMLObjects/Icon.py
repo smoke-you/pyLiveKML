@@ -1,14 +1,9 @@
 """Icon module."""
 
-from typing import NamedTuple
-
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import RefreshMode
+from pyLiveKML.KML.KML import RefreshMode, ViewRefreshMode, GxParams
 from pyLiveKML.KML.KMLObjects.Link import Link
-
-
-GxParams = NamedTuple("GxParams", [("x", int), ("y", int), ("w", int), ("h", int)])
 
 
 class Icon(Link):
@@ -24,6 +19,11 @@ class Icon(Link):
         for file loading.
     :param float|None refresh_interval: The (optional) refresh interval, in seconds, that will be used for file
         loading.
+    :param ViewRefreshMode|Node view_refresh_mode: The (optional) view refresh mode.
+    :param float|None view_refresh_time: The (optional) view refresh time in seconds.
+    :param float|None view_bound_scale: The (optional) scaling of the view bounds.
+    :param str|None view_format: An (optional) string to describe how the view should be formatted.
+    :param str|None http_query: An (optional) set of parameters for the href.
     :param GxParams|None gx_params: Optional :class:`GxParams` instance that defines how GEP will treat the icon
         image.
     """
@@ -35,6 +35,11 @@ class Icon(Link):
         href: str | None = None,
         refresh_mode: RefreshMode | None = None,
         refresh_interval: float | None = None,  # 4.0
+        view_refresh_mode: ViewRefreshMode | None = None,
+        view_refresh_time: float | None = None,
+        view_bound_scale: float | None = None,
+        view_format: str | None = None,
+        http_query: str | None = None,
         gx_params: GxParams | None = None,  # GxParams(0, 0, -1, -1)
     ):
         """Icon instance constructor."""
@@ -43,6 +48,11 @@ class Icon(Link):
             href=href,
             refresh_mode=refresh_mode,
             refresh_interval=refresh_interval,
+            view_refresh_mode=view_refresh_mode,
+            view_refresh_time=view_refresh_time,
+            view_bound_scale=view_bound_scale,
+            view_format=view_format,
+            http_query=http_query,
         )
         self._gx_params: GxParams | None = gx_params
 
@@ -58,8 +68,7 @@ class Icon(Link):
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        if self._href:
-            etree.SubElement(root, "href").text = self._href
+        super().build_kml(root, with_children)
         if self._gx_params:
             if self._gx_params.x != 0:
                 etree.SubElement(root, "gx:x").text = str(self._gx_params.x)
@@ -69,20 +78,3 @@ class Icon(Link):
                 etree.SubElement(root, "gx:w").text = str(self._gx_params.w)
             if self._gx_params.h != -1:
                 etree.SubElement(root, "gx:h").text = str(self._gx_params.h)
-        if self._refresh_mode is not None:
-            etree.SubElement(root, "refreshMode").text = self._refresh_mode.value
-        if self._refresh_interval is not None:
-            etree.SubElement(root, "refreshInterval").text = (
-                f"{self._refresh_interval:0.1f}"
-            )
-        # if self.view_refresh_mode is not None:
-        #     etree.SubElement(root, 'viewRefreshMode').text = self.view_refresh_mode.value
-        # if self.view_refresh_time is not None:
-        #     etree.SubElement(root, 'viewRefreshTime').text = f'{self.view_refresh_time:0.1f}'
-        # if self.view_bound_scale is not None:
-        #     etree.SubElement(root, 'viewBoundScale').text = f'{self.view_bound_scale:0.1f}'
-        # # TODO: view format is not being handled at all, may need to be corrected
-        # if self.view_format is not None:
-        #     etree.SubElement(root, 'viewFormat').text = self.view_format
-        # if self.http_query:
-        #     etree.SubElement(root, 'httpQuery').text = self.http_query
