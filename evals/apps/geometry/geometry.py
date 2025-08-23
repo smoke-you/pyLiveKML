@@ -31,6 +31,7 @@ gpr = GeoRing(
     fill_color=0x4000FF00,
     altitude_mode=AltitudeMode.CLAMP_TO_GROUND,
 )
+gpr.snippet = "This is a polygon with an internal cutout.\nYou can change the border and fill colours via the web UI."
 gpe = GeoEllipse(
     name="ellipse",
     origin=GeoCoordinates(lon=origin.lon, lat=origin.lat, alt=origin.alt),
@@ -42,6 +43,8 @@ gpe = GeoEllipse(
     fill_color=0x4000FF00,
     altitude_mode=AltitudeMode.ABSOLUTE,
 )
+gpe.snippet = "This is a simple polygon.\nIt has no internal cutouts.\nYou can change the border and fill colours via the web UI."
+gpe.snippet_max_lines = 3
 
 geo_app = FastAPI()
 locdir = Path(__file__).parent

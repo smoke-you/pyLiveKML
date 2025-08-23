@@ -2,6 +2,7 @@
 
 from typing import Iterable
 
+from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML.KMLObjects.Feature import Feature, Container
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
@@ -37,17 +38,22 @@ class Folder(Container):
         name: str | None = None,
         visibility: bool | None = None,
         is_open: bool | None = None,
+        author_name: str | None = None,
+        author_link: str | None = None,
+        address: str | None = None,
+        phone_number: str | None = None,
+        snippet: str | None = None,
+        snippet_max_lines: int | None = None,
+        description: str | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
+        update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
         features: Iterable[Feature] | None = None,
     ):
         """Folder instance constructor."""
-        Container.__init__(
-            self,
-            name=name,
-            visibility=visibility,
-            is_open=is_open,
-            style_url=style_url,
-            styles=styles,
-            features=features,
+        super().__init__(
+            name=name, visibility=visibility, is_open=is_open, author_name=author_name, 
+            author_link=author_link, address=address, phone_number=phone_number, snippet=snippet,
+            snippet_max_lines=snippet_max_lines, description=description, style_url=style_url, 
+            styles=styles, update_limit=update_limit, features=features
         )

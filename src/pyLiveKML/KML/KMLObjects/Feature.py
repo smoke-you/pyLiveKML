@@ -45,6 +45,12 @@ class Feature(Object, ABC):
         name: str | None = None,
         visibility: bool | None = None,
         is_open: bool | None = None,
+        author_name: str | None = None,
+        author_link: str | None = None,
+        address: str | None = None,
+        phone_number: str | None = None,
+        snippet: str | None = None,
+        snippet_max_lines: int | None = None,
         description: str | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
@@ -56,6 +62,12 @@ class Feature(Object, ABC):
         self._name = name
         self._visibility = visibility
         self._is_open = is_open
+        self._author_name = author_name
+        self._author_link = author_link
+        self._address = address
+        self._phone_number = phone_number
+        self._snippet = snippet
+        self._snippet_max_lines = snippet_max_lines
         self._description = description
         self._style_url = style_url
         self._styles = list[StyleSelector]()
@@ -123,6 +135,73 @@ class Feature(Object, ABC):
             self.field_changed()
 
     @property
+    def author_name(self) -> str | None:
+        """"""
+        return self._author_name
+
+    @author_name.setter
+    def author_name(self, value: str | None) -> None:
+        if self._author_name != value:
+            self._author_name = value
+            self.field_changed()
+
+    @property
+    def author_link(self) -> str | None:
+        """"""
+        return self._author_link
+
+    @author_link.setter
+    def author_link(self, value: str | None) -> None:
+        if self._author_link != value:
+            self._author_link = value
+            self.field_changed()
+
+    @property
+    def address(self) -> str | None:
+        """"""
+        return self._address
+
+    @address.setter
+    def address(self, value: str | None) -> None:
+        if self._address != value:
+            self._address = value
+            self.field_changed()
+
+    @property
+    def phone_number(self) -> str | None:
+        """"""
+        return self._phone_number
+
+    @phone_number.setter
+    def phone_number(self, value: str | None) -> None:
+        if self._phone_number != value:
+            self._phone_number = value
+            self.field_changed()
+
+    @property
+    def snippet(self) -> str | None:
+        """"""
+        return self._snippet
+
+    @snippet.setter
+    def snippet(self, value: str | None) -> None:
+        if self._snippet != value:
+            self._snippet = value
+            self.field_changed()
+
+    @property
+    def snippet_max_lines(self) -> int | None:
+        """"""
+        return self._snippet_max_lines
+
+    @snippet_max_lines.setter
+    def snippet_max_lines(self, value: int | None) -> None:
+        value = 2 if value and value < 2 else value
+        if self._snippet_max_lines != value:
+            self._snippet_max_lines = value
+            self.field_changed()
+
+    @property
     def description(self) -> str | None:
         """The text description for this :class:`~pyLiveKML.KML.KMLObjects.Feature`.
 
@@ -176,6 +255,21 @@ class Feature(Object, ABC):
             etree.SubElement(root, "open").text = str(int(self.is_open))
         if self.description is not None:
             etree.SubElement(root, "description").text = self.description
+        if self.author_name is not None:
+            author = etree.SubElement(root, "atom:author")
+            etree.SubElement(author, "atom:name").text = self.author_name
+        if self.author_link is not None:
+            etree.SubElement(root, "atom:link").text = self.author_link
+        if self.address is not None:
+            etree.SubElement(root, "address").text = self.address
+        if self.phone_number is not None:
+            etree.SubElement(root, "phoneNumber").text = self.phone_number
+        if self.snippet is not None:
+            attribs = {}
+            if self.snippet_max_lines is not None:
+                attribs["maxLines"] = str(self.snippet_max_lines)
+            etree.SubElement(root, "Snippet", attribs).text = self.snippet
+
         if with_children:
             for s in self.styles:
                 root.append(s.construct_kml())
@@ -240,15 +334,25 @@ class Container(list[Feature], Feature, ABC):
         name: str | None = None,
         visibility: bool | None = None,
         is_open: bool | None = None,
-        update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
+        author_name: str | None = None,
+        author_link: str | None = None,
+        address: str | None = None,
+        phone_number: str | None = None,
+        snippet: str | None = None,
+        snippet_max_lines: int | None = None,
+        description: str | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
+        update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
         features: Iterable[Feature] | None = None,
     ):
         """Feature instance constructor."""
         list[Feature].__init__(self)
         Feature.__init__(
-            self, name=name, visibility=visibility, style_url=style_url, styles=styles
+            self, name=name, visibility=visibility, is_open=is_open, author_name=author_name, 
+            author_link=author_link, address=address, phone_number=phone_number, snippet=snippet,
+            snippet_max_lines=snippet_max_lines, description=description, style_url=style_url, 
+            styles=styles
         )
         ABC.__init__(self)
         if features:
@@ -291,22 +395,6 @@ class Container(list[Feature], Feature, ABC):
                 yield from f.features
             elif isinstance(f, Feature):
                 yield ContainedFeature(container=self, feature=f)
-
-    @property
-    def is_open(self) -> bool | None:
-        """Flag to indicate whether the instance will initially be displayed in an 'open' state in the UI.
-
-        True if the :class:`~pyLiveKML.KML.KMLObjects.Container` will be initially displayed in an 'open' state in
-        the GEP user List View, else False if it will be initially displayed in a 'closed' state.  None implies the
-        default of False.
-        """
-        return self._is_open
-
-    @is_open.setter
-    def is_open(self, value: bool | None) -> None:
-        if self._is_open != value:
-            self._is_open = value
-            self.field_changed()
 
     @property
     def update_limit(self) -> int:

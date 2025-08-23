@@ -10,6 +10,7 @@ from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
+
 class NetworkLink(Feature):
     """A KML 'NetworkLink', per https://developers.google.com/kml/documentation/kmlreference#networklink.
 
@@ -40,10 +41,17 @@ class NetworkLink(Feature):
         href: str | None = None,
         refresh_mode: RefreshMode | None = None,
         refresh_interval: float | None = None,
-
     ):
         """NetworkLink instance constructor."""
-        Feature.__init__(self, name=name, visibility=visibility, is_open=is_open, description=description, style_url=style_url, styles=styles)
+        Feature.__init__(
+            self,
+            name=name,
+            visibility=visibility,
+            is_open=is_open,
+            description=description,
+            style_url=style_url,
+            styles=styles,
+        )
         self._is_open = is_open
         self._link = Link(href, refresh_mode, refresh_interval)
         self._fly_to_view = False

@@ -71,17 +71,21 @@ class Placemark(Feature):
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        if self._name is not None:
-            etree.SubElement(root, "name").text = self.name
-        if self._visibility is not None:
-            etree.SubElement(root, "visibility").text = str(
-                int(cast(bool, self.visibility))
-            )
-        if self._description is not None:
-            etree.SubElement(root, "description").text = self.description
-        if self._style_url is not None:
-            etree.SubElement(root, "styleUrl").text = self._style_url
+        super().build_kml(root, with_children)
         if with_children:
-            for s in self._styles:
-                root.append(s.construct_kml())
             root.append(self.geometry.construct_kml())
+
+        # if self._name is not None:
+        #     etree.SubElement(root, "name").text = self.name
+        # if self._visibility is not None:
+        #     etree.SubElement(root, "visibility").text = str(
+        #         int(cast(bool, self.visibility))
+        #     )
+        # if self._description is not None:
+        #     etree.SubElement(root, "description").text = self.description
+        # if self._style_url is not None:
+        #     etree.SubElement(root, "styleUrl").text = self._style_url
+        # if with_children:
+        #     for s in self._styles:
+        #         root.append(s.construct_kml())
+        #     root.append(self.geometry.construct_kml())
