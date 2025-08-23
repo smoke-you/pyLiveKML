@@ -30,6 +30,8 @@ class LinearRing(Geometry):
         point that makes up the boundary of the :class:`~pyLiveKML.KML.KMLObjects.LinearRing`.
     """
 
+    _kml_type = "LinearRing"
+
     def __init__(
         self,
         coordinates: Iterable[GeoCoordinates],
@@ -46,15 +48,6 @@ class LinearRing(Geometry):
         self._altitude_mode: AltitudeMode | None = altitude_mode
         self._coordinates: list[GeoCoordinates] = list[GeoCoordinates]()
         self._coordinates.extend(coordinates)
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'LinearRing'
-        """
-        return "LinearRing"
 
     @property
     def gx_altitude_offset(self) -> float | None:

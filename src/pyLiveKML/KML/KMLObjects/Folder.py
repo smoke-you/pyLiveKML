@@ -30,14 +30,7 @@ class Folder(Container):
         :class:`~pyLiveKML.KML.KMLObjects.Folder`.
     """
 
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'Folder'
-        """
-        return "Folder"
+    _kml_type = "Folder"
 
     def __init__(
         self,

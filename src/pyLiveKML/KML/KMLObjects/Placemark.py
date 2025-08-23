@@ -28,6 +28,8 @@ class Placemark(Feature):
         :class:`~pyLiveKML.KML.KMLObjects.Placemark`.
     """
 
+    _kml_type = "Placemark"
+
     def __init__(
         self,
         geometry: Geometry,
@@ -41,15 +43,6 @@ class Placemark(Feature):
         self._geometry = geometry
         if inline_style:
             self._styles.append(inline_style)
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'Placemark'
-        """
-        return "Placemark"
 
     @property
     def children(self) -> Iterator[ObjectChild]:

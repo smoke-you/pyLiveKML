@@ -22,6 +22,8 @@ class IconStyle(ColorStyle):
         either 'NORMAL' or 'RANDOM'.
     """
 
+    _kml_type = "IconStyle"
+
     def __init__(
         self,
         icon: str,
@@ -36,15 +38,6 @@ class IconStyle(ColorStyle):
         self._heading: float | None = heading
         self._icon: str | None = icon
         self._hotspot: Vec2 | None = None
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'IconStyle'.
-        """
-        return "IconStyle"
 
     @property
     def icon(self) -> str | None:

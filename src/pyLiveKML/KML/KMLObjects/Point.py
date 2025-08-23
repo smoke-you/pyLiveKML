@@ -21,6 +21,8 @@ class Point(Geometry):
         to the :class:`~pyLiveKML.KML.KMLObjects.Point` by GEP.
     """
 
+    _kml_type = "Point"
+
     def __init__(
         self,
         coordinates: GeoCoordinates,
@@ -32,15 +34,6 @@ class Point(Geometry):
         self._coordinates: GeoCoordinates = coordinates
         self._extrude: bool | None = extrude
         self._altitude_mode: AltitudeMode | None = altitude_mode
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'Point'
-        """
-        return "Point"
 
     @property
     def extrude(self) -> bool | None:

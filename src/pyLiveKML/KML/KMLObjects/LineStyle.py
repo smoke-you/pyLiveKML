@@ -16,6 +16,8 @@ class LineStyle(ColorStyle):
     :param int|None color: The (optional) color of the line, as a 32-bit ABGR value.
     """
 
+    _kml_type = "LineStyle"
+
     def __init__(
         self,
         width: float | None = None,
@@ -28,15 +30,6 @@ class LineStyle(ColorStyle):
         self._gx_outer_width: float | None = None
         self._gx_physical_width: float | None = None
         self._gx_label_visibility: bool | None = None
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'LineStyle'
-        """
-        return "LineStyle"
 
     @property
     def width(self) -> float | None:

@@ -97,7 +97,7 @@ class RotationControlRequest(BaseModel):
 
 
 @geo_app.post("/control", response_model=KMLControlResponse)
-async def _(ctrl: KMLControlRequest) -> JSONResponse:
+async def _(ctrl: KMLControlRequest) -> KMLControlResponse:
     try:
         origin = ctrl.req.get("origin", None)
         if origin:
@@ -133,4 +133,4 @@ async def _(ctrl: KMLControlRequest) -> JSONResponse:
         raise HTTPException(404, "origin is not formatted correctly")
     except Exception as ex:
         raise HTTPException(404, ex.args)
-    return JSONResponse(content=KMLControlResponse(rsp={}))
+    return KMLControlResponse(rsp={})

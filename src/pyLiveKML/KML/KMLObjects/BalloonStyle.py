@@ -18,6 +18,8 @@ class BalloonStyle(SubStyle):
     :param DisplayMode|None display_mode: The (optional) :class:`~pyLiveKML.KML.KML.DisplayMode` of the balloon.
     """
 
+    _kml_type = "BalloonStyle"
+
     def __init__(
         self,
         text: str | None = None,
@@ -31,15 +33,6 @@ class BalloonStyle(SubStyle):
         self._bg_color: int | None = bg_color
         self._text_color: int | None = text_color
         self._display_mode: DisplayMode | None = display_mode
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'BalloonStyle'
-        """
-        return "BalloonStyle"
 
     @property
     def bg_color(self) -> int | None:

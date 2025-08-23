@@ -17,6 +17,8 @@ class ListStyle(SubStyle):
     :param str|None item_icon_href: The (optional) URI for the image will be displayed for the list item.
     """
 
+    _kml_type = "ListStyle"
+
     def __init__(
         self,
         list_item_type: ListItemType | None = None,
@@ -30,15 +32,6 @@ class ListStyle(SubStyle):
         self._bg_color: int | None = bg_color
         self._item_icon_state: ItemIconMode | None = item_icon_state
         self._item_icon_href: str | None = item_icon_href
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'ListStyle'
-        """
-        return "ListStyle"
 
     @property
     def list_item_type(self) -> ListItemType | None:

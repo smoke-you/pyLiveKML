@@ -24,6 +24,8 @@ class Link(Object):
         loading.
     """
 
+    _kml_type = "Link"
+
     def __init__(
         self,
         href: str | None = None,
@@ -40,15 +42,6 @@ class Link(Object):
         # self.view_bound_scale: float|None = None
         # self.view_format: str|None = None
         # self.http_query: str|None = None
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'Link'
-        """
-        return "Link"
 
     @property
     def href(self) -> str | None:

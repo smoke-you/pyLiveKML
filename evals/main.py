@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Mapping, Any
+from typing import Mapping, Any, AsyncGenerator
+from uuid import UUID
 
 import uvicorn
 
@@ -81,18 +82,22 @@ gep_loader = Folder(
 
 # The master synchronization controller, a NetworkLinkControl object
 gep_sync = NetworkLinkControl(target_href=ELEMENTS_HREF)
-
-from uuid import UUID
+# assign a constant UUID to the container, so that it can be refreshed in GEP 
+# without having to reload the pyLiveKML link after restarting the server
 gep_sync.container._id = UUID("8c2cda8e-7d56-4a29-99e7-e05e6dbaf193")
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator:
+    """FastAPI lifespan context manager."""
+    # pre-yield: server startup
     global applist
+    # set the gep_sync NetworkLinkControl for all of the apps, and fire it up
     for x in applist:
         x.sync = gep_sync
         x.load_data()
     yield
+    # post-yield: server shutdown
 
 
 local_dir = Path(__file__).parent
@@ -154,21 +159,19 @@ async def _() -> None:
 
 
 @app.post("/control", response_model=KMLControlResponse)
-async def _(ctrl: KMLControlRequest) -> JSONResponse:
+async def _(ctrl: KMLControlRequest) -> KMLControlResponse:
     try:
         updatesz = int(ctrl.req.get("updateSz", 0))
         if updatesz:
             if updatesz < 1 or updatesz > 200:
                 raise Exception("updateSz is out of range")
             gep_sync.container.update_limit = updatesz
-            return JSONResponse(
-                content=KMLControlResponse(rsp={"updateSz": gep_sync.update_limit})
-            )
+            return KMLControlResponse(rsp={"updateSz": gep_sync.update_limit})
     except ValueError:
         raise HTTPException(404, "updateSz is not an integer")
     except Exception as ex:
         raise HTTPException(404, ex.args)
-    return JSONResponse(content=KMLControlResponse(rsp={}))
+    return KMLControlResponse(rsp={})
 
 
 if __name__ == "__main__":

@@ -27,6 +27,8 @@ class NetworkLink(Feature):
         will be displayed as 'open' in the GEP user List View.
     """
 
+    _kml_type = "NetworkLink"
+
     def __init__(
         self,
         name: str | None = None,
@@ -41,15 +43,6 @@ class NetworkLink(Feature):
         self._link: Link = Link(href, refresh_mode, refresh_interval)
         self._fly_to_view: bool = False
         self._refresh_visibility: bool = False
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'NetworkLink'
-        """
-        return "NetworkLink"
 
     @property
     def children(self) -> Iterator[ObjectChild]:

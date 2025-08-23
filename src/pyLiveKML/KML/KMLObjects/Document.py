@@ -30,6 +30,8 @@ class Document(Container):
         :class:`~pyLiveKML.KML.KMLObjects.Document`.
     """
 
+    _kml_type = "Document"
+
     def __init__(
         self,
         name: str | None = None,
@@ -49,12 +51,3 @@ class Document(Container):
             styles=styles,
             features=features,
         )
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'Document'
-        """
-        return "Document"

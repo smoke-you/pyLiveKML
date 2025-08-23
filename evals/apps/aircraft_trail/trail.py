@@ -96,7 +96,7 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
 
 
 @trail_app.post("/control", response_model=KMLControlResponse)
-async def _(ctrl: KMLControlRequest) -> JSONResponse:
+async def _(ctrl: KMLControlRequest) -> KMLControlResponse:
     global trail_sz
     try:
         trailsz = int(ctrl.req.get("trailSz", 0))
@@ -106,9 +106,9 @@ async def _(ctrl: KMLControlRequest) -> JSONResponse:
             trail_sz = trailsz
             for a in trail_data:
                 a.trail_sz = trailsz
-            return JSONResponse(content=KMLControlResponse(rsp={"trailSz": trail_sz}))
+            return KMLControlResponse(rsp={"trailSz": trail_sz})
     except ValueError:
         raise HTTPException(404, "trailSz is not an integer")
     except Exception as ex:
         raise HTTPException(404, ex.args)
-    return JSONResponse(content=KMLControlResponse(rsp={}))
+    return KMLControlResponse(rsp={})

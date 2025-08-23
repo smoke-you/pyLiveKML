@@ -28,6 +28,8 @@ class Icon(Link):
         image.
     """
 
+    _kml_type = "Icon"
+
     def __init__(
         self,
         href: str | None = None,
@@ -43,15 +45,6 @@ class Icon(Link):
             refresh_interval=refresh_interval,
         )
         self._gx_params: GxParams | None = gx_params
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'Icon'
-        """
-        return "Icon"
 
     @property
     def gx_params(self) -> GxParams | None:

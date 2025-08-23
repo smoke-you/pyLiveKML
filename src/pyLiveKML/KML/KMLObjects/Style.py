@@ -34,6 +34,8 @@ class Style(StyleSelector):
         embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`.
     """
 
+    _kml_type = "Style"
+
     def __init__(
         self,
         balloon_style: BalloonStyle | None = None,
@@ -51,15 +53,6 @@ class Style(StyleSelector):
         self._line_style: LineStyle | None = line_style
         self._list_style: ListStyle | None = list_style
         self._poly_style: PolyStyle | None = poly_style
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'Style'.
-        """
-        return "Style"
 
     @property
     def children(self) -> Iterator[ObjectChild]:

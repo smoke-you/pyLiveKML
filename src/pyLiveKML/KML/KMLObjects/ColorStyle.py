@@ -25,6 +25,8 @@ class ColorStyle(SubStyle, ABC):
         to determine the displayed color.
     """
 
+    _kml_type = "ColorStyle"
+
     def __init__(self, color: int | None = None, color_mode: ColorMode | None = None):
         """ColorStyle instance constructor."""
         SubStyle.__init__(self)

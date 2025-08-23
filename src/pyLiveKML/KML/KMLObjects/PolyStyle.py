@@ -19,6 +19,8 @@ class PolyStyle(ColorStyle):
     :param bool|None outline: Optional flag to indicate whether GEP should draw the polygon's outline.
     """
 
+    _kml_type = "PolyStyle"
+
     def __init__(
         self,
         color: int | None = None,
@@ -30,15 +32,6 @@ class PolyStyle(ColorStyle):
         ColorStyle.__init__(self, color, color_mode)
         self._fill: bool | None = fill
         self._outline: bool | None = outline
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'PolyStyle'
-        """
-        return "PolyStyle"
 
     @property
     def fill(self) -> bool | None:

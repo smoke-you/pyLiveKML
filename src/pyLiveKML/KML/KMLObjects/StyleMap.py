@@ -36,6 +36,8 @@ class StyleMap(StyleSelector):
         :class:`~pyLiveKML.KML.KMLObjects.Style`.
     """
 
+    _kml_type = "StyleMap"
+
     def __init__(
         self,
         normal_style_url: str | None = None,
@@ -49,15 +51,6 @@ class StyleMap(StyleSelector):
         self._normal_style: Style | None = normal_style
         self._highlight_style_url: str | None = highlight_style_url
         self._highlight_style: Style | None = highlight_style
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type`. Sets
-        the KML tag name to 'StyleMap'.
-        """
-        return "StyleMap"
 
     @property
     def children(self) -> Iterator[ObjectChild]:

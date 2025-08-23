@@ -18,6 +18,8 @@ class LabelStyle(ColorStyle):
         either 'NORMAL' or 'RANDOM'.
     """
 
+    _kml_type = "LabelStyle"
+
     def __init__(
         self,
         scale: float | None = None,
@@ -27,15 +29,6 @@ class LabelStyle(ColorStyle):
         """ColorStyle instance constructor."""
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
         self._scale = scale
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'LabelStyle'
-        """
-        return "LabelStyle"
 
     @property
     def scale(self) -> float | None:

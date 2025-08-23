@@ -16,23 +16,24 @@ class Object(ABC):
     property) derive.
     """
 
+    _kml_type: str = ""
+
     def __init__(self) -> None:
         """Object instance constructor."""
-        ABC.__init__(self)
+        super().__init__()
         self._id: UUID = uuid4()
         self._selected: bool = False
         self._container: Optional[Object] = None
         self._state: ObjectState = ObjectState.IDLE
 
     @property
-    @abstractmethod
     def kml_type(self) -> str:
         """The class' KML type string.
 
-        Abstract property that specifies the name of the XML tag that forms the root of
+        Property that specifies the name of the XML tag that forms the root of
         the KML representation of this :class:`~pyLiveKML.KML.KMLObjects.Object`.
         """
-        pass
+        return self._kml_type
 
     @property
     def id(self) -> UUID:

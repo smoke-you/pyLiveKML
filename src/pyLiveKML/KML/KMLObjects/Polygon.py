@@ -30,6 +30,8 @@ class Polygon(Geometry):
         :class:`~pyLiveKML.KML.KMLObjects.Polygon` should follow the terrain.
     """
 
+    _kml_type = "Polygon"
+
     def __init__(
         self,
         outer_boundary: LinearRing,
@@ -47,15 +49,6 @@ class Polygon(Geometry):
         self._extrude: bool | None = extrude
         self._tessellate: bool | None = tessellate
         self._altitude_mode: AltitudeMode | None = altitude_mode
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'Polygon'
-        """
-        return "Polygon"
 
     @property
     def children(self) -> Iterator[ObjectChild]:

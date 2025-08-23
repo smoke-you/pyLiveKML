@@ -30,6 +30,8 @@ class LineString(Geometry):
         :class:`~pyLiveKML.KML.KMLObjects.LineString` objects should be drawn.
     """
 
+    _kml_type = "LineString"
+
     def __init__(
         self,
         coordinates: Iterable[GeoCoordinates],
@@ -48,15 +50,6 @@ class LineString(Geometry):
         self._gx_draw_order: int | None = gx_draw_order
         self._coordinates: list[GeoCoordinates] = list[GeoCoordinates]()
         self._coordinates.extend(coordinates)
-
-    @property
-    def kml_type(self) -> str:
-        """The class' KML type string.
-
-        Overridden from :attr:`~pyLiveKML.KML.KMLObjects.Object.Object.kml_type` to set
-        the KML tag name to 'LineString'
-        """
-        return "LineString"
 
     @property
     def gx_altitude_offset(self) -> float | None:
