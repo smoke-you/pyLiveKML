@@ -5,8 +5,10 @@ from datetime import datetime
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Feature import Container
 from pyLiveKML.KML.KMLObjects.Folder import Folder
+from pyLiveKML.KML.KMLObjects.Object import ObjectState
 
 
 class NetworkLinkControl:
@@ -43,6 +45,7 @@ class NetworkLinkControl:
         link_description: str | None = None,
         link_snippet: str | None = None,
         link_expires: datetime | None = None,
+        abstract_view: AbstractView | None = None,
     ):
         """NetworkLinkControl instance constructor."""
         self.target_href: str = target_href
@@ -58,6 +61,7 @@ class NetworkLinkControl:
         self.link_description = link_description
         self.link_snippet = link_snippet
         self.link_expires = link_expires
+        self.abstract_view = abstract_view
 
     def update_kml(self) -> etree.Element:
         """Generate a synchronization update by parsing the :attr:`container`.
@@ -87,6 +91,8 @@ class NetworkLinkControl:
             etree.SubElement(root, "linkSnippet").text = self.link_snippet
         if self.link_expires is not None:
             etree.SubElement(root, "linkExpires").text = self.link_expires.isoformat()
+        if self.abstract_view is not None:
+            root.append(self.abstract_view.construct_kml())
 
         update = etree.SubElement(root, "Update")
         etree.SubElement(update, "targetHref").text = self.target_href
@@ -102,7 +108,10 @@ class NetworkLinkControl:
         for f in self.container.features:
             if len(update) >= self.container.update_limit:
                 break
-            f.feature.update_kml(f.container, update)
-            for c in f.feature.children:
-                c.child.update_kml(c.parent, update)
+            if f.feature._state == ObjectState.CREATING:
+                f.feature.update_kml(f.container, update)
+            else:
+                f.feature.update_kml(f.container, update)
+                for c in f.feature.children:
+                    c.child.update_kml(c.parent, update)
         return root

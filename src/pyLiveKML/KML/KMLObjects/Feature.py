@@ -10,6 +10,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, ObjectState
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Region import Region
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
@@ -54,6 +55,7 @@ class Feature(Object, ABC):
         snippet: str | None = None,
         snippet_max_lines: int | None = None,
         description: str | None = None,
+        abstract_view: AbstractView | None = None,
         time_primitive: TimePrimitive | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
@@ -73,6 +75,7 @@ class Feature(Object, ABC):
         self._snippet = snippet
         self._snippet_max_lines = snippet_max_lines
         self._description = description
+        self._abstract_view = abstract_view
         self._time_primitive = time_primitive
         self._style_url = style_url
         self._styles = list[StyleSelector]()
@@ -231,6 +234,17 @@ class Feature(Object, ABC):
             self.field_changed()
 
     @property
+    def abstract_view(self) -> AbstractView | None:
+        """The AbstractView associated with this Feature."""
+        return self._abstract_view
+
+    @abstract_view.setter
+    def abstract_view(self, value: AbstractView | None) -> None:
+        if self._abstract_view != value:
+            self._abstract_view = value
+            self.field_changed()
+
+    @property
     def time_primitive(self) -> TimePrimitive | None:
         """The TimePrimitive associated with this Feature."""
         return self._time_primitive
@@ -273,6 +287,8 @@ class Feature(Object, ABC):
         :class:`~pyLiveKML.KML.KMLObjects.Feature`, i.e. one or more :class:`~pyLiveKML.KML.KMLObjects.StyleSelector`
         instances, and their children.
         """
+        if self.abstract_view is not None:
+            yield ObjectChild(parent=self, child=self.abstract_view)
         if self.time_primitive is not None:
             yield ObjectChild(parent=self, child=self.time_primitive)
         if self.region is not None:
@@ -307,6 +323,8 @@ class Feature(Object, ABC):
             etree.SubElement(root, "Snippet", attribs).text = self.snippet
 
         if with_children:
+            if self.abstract_view is not None:
+                root.append(self.abstract_view.construct_kml())
             if self.time_primitive is not None:
                 root.append(self.time_primitive.construct_kml())
             if self.region is not None:
@@ -381,6 +399,7 @@ class Container(list[Feature], Feature, ABC):
         snippet: str | None = None,
         snippet_max_lines: int | None = None,
         description: str | None = None,
+        abstract_view: AbstractView | None = None,
         time_primitive: TimePrimitive | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
@@ -402,6 +421,7 @@ class Container(list[Feature], Feature, ABC):
             snippet=snippet,
             snippet_max_lines=snippet_max_lines,
             description=description,
+            abstract_view=abstract_view,
             time_primitive=time_primitive,
             style_url=style_url,
             styles=styles,

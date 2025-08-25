@@ -1,9 +1,9 @@
 """AircraftLocation module."""
 
-from typing import Optional, Sequence
+from typing import Optional, Sequence, cast
 
 from lxml import etree  # type: ignore
-from pyLiveKML import ObjectState, IconStyle, Placemark, Point, Style
+from pyLiveKML import ObjectState, IconStyle, Placemark, Point, Style, LookAt, AltitudeMode
 
 from .AircraftData import AircraftData
 from ..helpers import description_builder
@@ -35,10 +35,6 @@ class AircraftLocation(Placemark):
         self._flight = flight
         self._pid = -1
         self._state: ObjectState
-
-    # @property
-    # def kml_type(self) -> str:
-    #     return "Placemark"
 
     def _build_description(self) -> Optional[str]:
         try:
@@ -85,8 +81,12 @@ class AircraftLocation(Placemark):
         pos = self._positions[self._pid]
         self._point.coordinates = pos.coordinates
         self._point.altitude_mode = pos.altitude_mode
+        self._point._state = ObjectState.IDLE
+        self._style._state = ObjectState.IDLE
         if self._style.icon_style:
             self._style.icon_style.heading = pos.heading
+            self._style.icon_style._state = ObjectState.IDLE
+
         change = etree.Element("Change")
         pm = etree.SubElement(
             change, _tag=self.kml_type, attrib={"targetId": str(self.id)}

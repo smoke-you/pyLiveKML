@@ -37,6 +37,10 @@ def kml_tag() -> etree.Element:
 
 GxParams = NamedTuple("GxParams", [("x", int), ("y", int), ("w", int), ("h", int)])
 
+GxViewerOption = NamedTuple(
+    "GxViewerOption", [("name", "GxViewerOptions"), ("enabled", bool)]
+)
+
 
 class AltitudeMode(enum.Enum):
     """Enumeration of options for KML <altitudeMode> tags.
@@ -74,6 +78,19 @@ class DisplayMode(str, enum.Enum):
 
     DEFAULT = "default"
     HIDE = "hide"
+
+
+class GxViewerOptions(enum.Enum):
+    """Enumeration of options for KML <gx:option> tags.
+
+    Used only by `AbstractView` subclasses. Refer to the KML documentation at
+    https://developers.google.com/kml/documentation/kmlreference#abstractview.
+    """
+
+    STREETVIEW = "streetview"
+    HISTORICAL_IMAGERY = "historicalimagery"
+    SUNLIGHT = "sunlight"
+    GROUND_NAVIGATION = "groundnavigation"
 
 
 class ItemIconMode(str, enum.Enum):
@@ -185,3 +202,74 @@ class ObjectState(enum.Enum):
     CHANGING = 3
     DELETE_CREATED = 4
     DELETE_CHANGED = 5
+
+
+class Angle90(float):
+    """A value ≥−90 and ≤90.
+
+    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    """
+
+    def __new__(cls, value: float) -> "Angle90":
+        """Angle90 instance new constructor."""
+        value = 90 if value > 90 else -90 if value < -90 else value
+        instance = super().__new__(cls, value)
+        return instance
+
+
+class AnglePos90(float):
+    """A value ≥0 and ≤90.
+
+    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    """
+
+    def __new__(cls, value: float) -> "AnglePos90":
+        """AnglePos90 instance new constructor."""
+        value = 90 if value > 90 else 0 if value < 0 else value
+        instance = super().__new__(cls, value)
+        return instance
+
+
+class Angle180(float):
+    """A value ≥−180 and ≤180.
+
+    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    """
+
+    def __new__(cls, value: float) -> "Angle180":
+        """Angle180 instance new constructor."""
+        while value > 180:
+            value = value - 360
+        while value < -180:
+            value = value + 360
+        instance = super().__new__(cls, value)
+        return instance
+
+
+class AnglePos180(float):
+    """A value ≥0 and ≤180.
+
+    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    """
+
+    def __new__(cls, value: float) -> "AnglePos180":
+        """AnglePos90 instance new constructor."""
+        value = 180 if value > 180 else 0 if value < 0 else value
+        instance = super().__new__(cls, value)
+        return instance
+
+
+class Angle360(float):
+    """A value ≥−360 and ≤360.
+
+    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    """
+
+    def __new__(cls, value: float) -> "Angle360":
+        """Angle360 instance new constructor."""
+        if value > 360:
+            value = value % 360
+        elif value < 360:
+            value = -(-value % 360)
+        instance = super().__new__(cls, value)
+        return instance

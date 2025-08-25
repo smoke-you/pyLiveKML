@@ -8,6 +8,8 @@ from pyLiveKML.KML.KML import (
     kml_tag,
     kml_header,
     GxParams,
+    GxViewerOption,
+    GxViewerOptions,
     AltitudeMode,
     DisplayMode,
     ColorMode,
@@ -19,6 +21,11 @@ from pyLiveKML.KML.KML import (
     ViewRefreshMode,
     Vec2Type,
     ObjectState,
+    Angle90,
+    AnglePos90,
+    Angle180,
+    AnglePos180,
+    Angle360,
 )
 from pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
 from pyLiveKML.KML.Vec2 import Vec2
@@ -36,6 +43,7 @@ from pyLiveKML.KML.KMLObjects.LineString import LineString
 from pyLiveKML.KML.KMLObjects.LineStyle import LineStyle
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.ListStyle import ListStyle
+from pyLiveKML.KML.KMLObjects.LookAt import LookAt
 from pyLiveKML.KML.KMLObjects.NetworkLink import NetworkLink
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.Placemark import Placemark
@@ -53,6 +61,11 @@ from pyLiveKML.KML.KMLObjects.TimeSpan import TimeSpan
 
 __all__ = [
     "AltitudeMode",
+    "Angle90",
+    "AnglePos90",
+    "Angle180",
+    "AnglePos180",
+    "Angle360",
     "BalloonStyle",
     "ColorMode",
     "ColorStyle",
@@ -66,6 +79,8 @@ __all__ = [
     "GeoCoordinates",
     "Geometry",
     "GxParams",
+    "GxViewerOption",
+    "GxViewerOptions",
     "Icon",
     "IconStyle",
     "ItemIconMode",

@@ -110,10 +110,10 @@ class NetworkLink(Feature):
         super().build_kml(root, with_children)
         if self._style_url:
             etree.SubElement(root, "styleUrl").text = self._style_url
-        if self._refresh_visibility is not None:
-            etree.SubElement(root, "refreshVisibility").text = str(
-                int(self._refresh_visibility)
-            )
+        etree.SubElement(root, "refreshVisibility").text = str(
+            int(self._refresh_visibility)
+        )
+        etree.SubElement(root, "flyToView").text = str(int(self._fly_to_view))
         if with_children:
             if self._link:
                 root.append(self._link.construct_kml())

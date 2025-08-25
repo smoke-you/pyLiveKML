@@ -1,5 +1,8 @@
 """GeoCoordinates module."""
 
+from typing import Any
+from pyLiveKML.KML.KML import Angle90, Angle180
+
 
 class GeoCoordinates:
     """The GeoCoordinates type describes a single instance of a Lon-Lat-Alt (LLA) position.
@@ -24,9 +27,18 @@ class GeoCoordinates:
         alt: float | None = None,
     ):
         """GeoCoordinates instance constructor."""
-        self.lon: float = lon
-        self.lat: float = lat
+        self.lon = Angle180(lon)
+        self.lat = Angle90(lat)
         self.alt: float | None = alt
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        """GeoCoordinates __setattr__ implementation."""
+        if name == "lon" and isinstance(value, float):
+            super().__setattr__(name, Angle180(value))
+        elif name == "lat" and isinstance(value, float):
+            super().__setattr__(name, Angle90(value))
+        else:
+            super().__setattr__(name, value)
 
     def __str__(self) -> str:
         """Return a string representation."""

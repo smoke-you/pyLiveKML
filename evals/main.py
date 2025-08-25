@@ -2,7 +2,7 @@
 
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Mapping, Any, AsyncGenerator
+from typing import Mapping, Any, AsyncGenerator, cast
 from uuid import UUID
 
 import uvicorn
@@ -14,7 +14,6 @@ from fastapi.responses import (
     FileResponse,
     PlainTextResponse,
     RedirectResponse,
-    JSONResponse,
 )
 from fastapi.routing import Mount
 from starlette.routing import BaseRoute
@@ -157,7 +156,7 @@ async def _(filename: str, request: Request) -> Any:
     else:
         raise HTTPException(status_code=404, detail="Item not found")
     return PlainTextResponse(
-        content=etree.tostring(kml, doctype=kml_header, encoding="utf-8"),
+        content=etree.tostring(kml, doctype=kml_header, encoding="utf-8", pretty_print=True),
         headers={"Content-Type": "application/vnd.google-earth.kml+xml"},
     )
 

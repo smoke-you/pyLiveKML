@@ -2,7 +2,7 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import AltitudeMode
+from pyLiveKML.KML.KML import AltitudeMode, Angle90, Angle180
 from pyLiveKML.KML.KMLObjects.Object import Object
 
 
@@ -44,9 +44,8 @@ class LatLonAltBox(Object):
 
     @north.setter
     def north(self, value: float) -> None:
-        # value = value % 90.0
         if value != self._north:
-            self._north = value
+            self._north = Angle90(value)
             self.region.field_changed()
 
     @property
@@ -56,9 +55,8 @@ class LatLonAltBox(Object):
 
     @south.setter
     def south(self, value: float) -> None:
-        # value = value % 90.0
         if value != self._south:
-            self._south = value
+            self._south = Angle90(value)
             self.region.field_changed()
 
     @property
@@ -68,9 +66,8 @@ class LatLonAltBox(Object):
 
     @east.setter
     def east(self, value: float) -> None:
-        # value = value % 180.0
         if value != self._east:
-            self._east = value
+            self._east = Angle180(value)
             self.region.field_changed()
 
     @property
@@ -80,9 +77,8 @@ class LatLonAltBox(Object):
 
     @west.setter
     def west(self, value: float) -> None:
-        # value = value % 180.0
         if value != self._west:
-            self._west = value
+            self._west = Angle180(value)
             self.region.field_changed()
 
     @property

@@ -42,7 +42,6 @@ class TimeSpan(TimePrimitive):
             self._end = value
             self.field_changed()
 
-
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         etree.SubElement(root, "begin").text = self.begin.isoformat()
@@ -58,7 +57,11 @@ class TimeSpan(TimePrimitive):
 
     def __eq__(self, other: object) -> bool:
         """Check equality."""
-        return isinstance(other, TimeSpan) and self.begin == other.begin and self.end == other.end
+        return (
+            isinstance(other, TimeSpan)
+            and self.begin == other.begin
+            and self.end == other.end
+        )
 
     def __ne__(self, other: object) -> bool:
         """Check negative equality."""
