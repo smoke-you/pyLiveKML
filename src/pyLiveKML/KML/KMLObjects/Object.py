@@ -1,11 +1,11 @@
 """Object module."""
 
 from abc import ABC, abstractmethod
-from typing import Optional, NamedTuple, Iterator
+from typing import Any, Iterator, NamedTuple, Optional
 from uuid import uuid4, UUID
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import ObjectState
+from pyLiveKML.KML.KML import ObjectState, ArgParser
 
 
 class Object(ABC):
@@ -17,6 +17,7 @@ class Object(ABC):
     """
 
     _kml_type: str = ""
+    _kml_fields: tuple[ArgParser, ...] = tuple()
 
     def __init__(self) -> None:
         """Object instance constructor."""
@@ -25,6 +26,21 @@ class Object(ABC):
         self._selected: bool = False
         self._container: Optional[Object] = None
         self._state: ObjectState = ObjectState.IDLE
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        """Object setattr method."""
+        match = next(filter(lambda x: x.name, self._kml_fields), None)
+        value = match.parser(value) if match is not None else value
+        return super().__setattr__(name, value)
+
+    def __eq__(self, value: object) -> bool:
+        """Object eq method."""
+        return isinstance(value, type(self)) and all(
+            map(
+                lambda x: getattr(self, x.name) == getattr(value, x.name),
+                self._kml_fields,
+            )
+        )
 
     @property
     def kml_type(self) -> str:

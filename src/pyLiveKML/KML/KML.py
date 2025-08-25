@@ -1,8 +1,9 @@
 """KML module."""
 
 import enum
+from abc import ABC, abstractmethod
 
-from typing import NamedTuple
+from typing import Any, Callable, NamedTuple
 
 from lxml import etree  # type: ignore
 
@@ -40,6 +41,8 @@ GxParams = NamedTuple("GxParams", [("x", int), ("y", int), ("w", int), ("h", int
 GxViewerOption = NamedTuple(
     "GxViewerOption", [("name", "GxViewerOptions"), ("enabled", bool)]
 )
+
+ArgParser = NamedTuple("ArgParser", [("name", str), ("parser", Callable[[Any], Any])])
 
 
 class AltitudeMode(enum.Enum):
@@ -204,72 +207,87 @@ class ObjectState(enum.Enum):
     DELETE_CHANGED = 5
 
 
-class Angle90(float):
+class _KMLParser(ABC):
+
+    @classmethod
+    @abstractmethod
+    def parse(cls, value: Any) -> Any:
+        raise NotImplementedError
+
+
+class Direct(_KMLParser):
+    """A value that will not be changed."""
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        return value
+
+
+class Angle90(_KMLParser):
     """A value ≥−90 and ≤90.
 
     See https://developers.google.com/kml/documentation/kmlreference#kml-fields
     """
 
-    def __new__(cls, value: float) -> "Angle90":
-        """Angle90 instance new constructor."""
-        value = 90 if value > 90 else -90 if value < -90 else value
-        instance = super().__new__(cls, value)
-        return instance
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        value = float(value)
+        return 90 if value > 90 else -90 if value < -90 else value
 
 
-class AnglePos90(float):
+class AnglePos90(_KMLParser):
     """A value ≥0 and ≤90.
 
     See https://developers.google.com/kml/documentation/kmlreference#kml-fields
     """
 
-    def __new__(cls, value: float) -> "AnglePos90":
-        """AnglePos90 instance new constructor."""
-        value = 90 if value > 90 else 0 if value < 0 else value
-        instance = super().__new__(cls, value)
-        return instance
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        value = float(value)
+        return 90 if value > 90 else 0 if value < 0 else value
 
 
-class Angle180(float):
+class Angle180(_KMLParser):
     """A value ≥−180 and ≤180.
 
     See https://developers.google.com/kml/documentation/kmlreference#kml-fields
     """
 
-    def __new__(cls, value: float) -> "Angle180":
-        """Angle180 instance new constructor."""
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        value = float(value)
         while value > 180:
             value = value - 360
         while value < -180:
             value = value + 360
-        instance = super().__new__(cls, value)
-        return instance
+        return value
 
 
-class AnglePos180(float):
+class AnglePos180(_KMLParser):
     """A value ≥0 and ≤180.
 
     See https://developers.google.com/kml/documentation/kmlreference#kml-fields
     """
 
-    def __new__(cls, value: float) -> "AnglePos180":
-        """AnglePos90 instance new constructor."""
-        value = 180 if value > 180 else 0 if value < 0 else value
-        instance = super().__new__(cls, value)
-        return instance
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        value = float(value)
+        return 180 if value > 180 else 0 if value < 0 else value
 
 
-class Angle360(float):
+class Angle360(_KMLParser):
     """A value ≥−360 and ≤360.
 
     See https://developers.google.com/kml/documentation/kmlreference#kml-fields
     """
 
-    def __new__(cls, value: float) -> "Angle360":
-        """Angle360 instance new constructor."""
-        if value > 360:
-            value = value % 360
-        elif value < 360:
-            value = -(-value % 360)
-        instance = super().__new__(cls, value)
-        return instance
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        value = float(value)
+        return value % 360 if value > 360 else -(-value % 360) if value < 360 else value

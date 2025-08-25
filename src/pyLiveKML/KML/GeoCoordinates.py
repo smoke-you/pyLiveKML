@@ -27,18 +27,17 @@ class GeoCoordinates:
         alt: float | None = None,
     ):
         """GeoCoordinates instance constructor."""
-        self.lon = Angle180(lon)
-        self.lat = Angle90(lat)
-        self.alt: float | None = alt
+        self.lon = lon
+        self.lat = lat
+        self.alt = alt
 
     def __setattr__(self, name: str, value: Any) -> None:
         """GeoCoordinates __setattr__ implementation."""
-        if name == "lon" and isinstance(value, float):
-            super().__setattr__(name, Angle180(value))
-        elif name == "lat" and isinstance(value, float):
-            super().__setattr__(name, Angle90(value))
-        else:
-            super().__setattr__(name, value)
+        if name == "lon":
+            value = Angle180.parse(value)
+        elif name == "lat":
+            value = Angle90.parse(value)
+        super().__setattr__(name, value)
 
     def __str__(self) -> str:
         """Return a string representation."""
