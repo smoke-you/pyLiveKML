@@ -44,6 +44,7 @@ from pyLiveKML.KML.KMLObjects.LineStyle import LineStyle
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.ListStyle import ListStyle
 from pyLiveKML.KML.KMLObjects.LookAt import LookAt
+from pyLiveKML.KML.KMLObjects.MultiGeometry import MultiGeometry
 from pyLiveKML.KML.KMLObjects.NetworkLink import NetworkLink
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.Placemark import Placemark
@@ -92,6 +93,7 @@ __all__ = [
     "Link",
     "ListItemType",
     "ListStyle",
+    "MultiGeometry",
     "NetworkLink",
     "NetworkLinkControl",
     "Object",
