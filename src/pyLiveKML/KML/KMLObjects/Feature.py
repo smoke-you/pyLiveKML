@@ -8,7 +8,7 @@ from typing import Iterable, NamedTuple, Iterator, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, ObjectState
+from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, ObjectState, ArgParser, DumpDirect, NoParse, NoDump
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Region import Region
@@ -42,6 +42,20 @@ class Feature(Object, ABC):
         objects that are local to this :class:`~pyLiveKML.KML.KMLObjects.Feature`.
     """
 
+    _kml_fields = (
+        ArgParser("name", NoParse, "name", DumpDirect,),
+        ArgParser("visibility", NoParse, "visibility", DumpDirect,),
+        ArgParser("is_open", NoParse, "open", DumpDirect,),
+        ArgParser("author_name", NoParse, "", NoDump,),
+        ArgParser("author_link", NoParse, "", NoDump,),
+        ArgParser("address", NoParse, "address", DumpDirect,),
+        ArgParser("snippet", NoParse, "", NoDump,),
+        ArgParser("snippet_max_line", NoParse, "", NoDump,),
+        ArgParser("phone_number", NoParse, "phoneNumber", DumpDirect,),
+        ArgParser("description", NoParse, "description", DumpDirect,),
+        ArgParser("style_url", NoParse, "styleUrl", DumpDirect,),
+    )
+
     def __init__(
         self,
         container: "Feature|None" = None,
@@ -65,19 +79,19 @@ class Feature(Object, ABC):
         Object.__init__(self)
         ABC.__init__(self)
         self._container = container
-        self._name = name
-        self._visibility = visibility
-        self._is_open = is_open
-        self._author_name = author_name
-        self._author_link = author_link
-        self._address = address
-        self._phone_number = phone_number
-        self._snippet = snippet
-        self._snippet_max_lines = snippet_max_lines
-        self._description = description
+        self.name = name
+        self.visibility = visibility
+        self.is_open = is_open
+        self.author_name = author_name
+        self.author_link = author_link
+        self.address = address
+        self.phone_number = phone_number
+        self.snippet = snippet
+        self.snippet_max_lines = snippet_max_lines
+        self.description = description
         self._abstract_view = abstract_view
         self._time_primitive = time_primitive
-        self._style_url = style_url
+        self.style_url = style_url
         self._styles = list[StyleSelector]()
         if styles:
             self._styles.extend(styles)
@@ -105,133 +119,6 @@ class Feature(Object, ABC):
             raise FeatureInaccessibleError(
                 "If a Feature is visible in GEP, you cannot change its' 'container' property."
             )
-
-    @property
-    def name(self) -> str | None:
-        """The text that will be displayed as the name of the :class:`~pyLiveKML.KML.KMLObjects.Feature` in GEP."""
-        return self._name
-
-    @name.setter
-    def name(self, value: str | None) -> None:
-        if self._name != value:
-            self._name = value
-            self.field_changed()
-
-    @property
-    def visibility(self) -> bool | None:
-        """Flag indicating whether the instance will be "checked" in the UI, and hence visible.
-
-        True if the :class:`~pyLiveKML.KML.KMLObjects.Feature` will (initially) be
-        checked (visible) in GEP, False otherwise.
-        """
-        return self._visibility
-
-    @visibility.setter
-    def visibility(self, value: bool | None) -> None:
-        if self._visibility != value:
-            self._visibility = value
-            self.field_changed()
-
-    @property
-    def is_open(self) -> bool | None:
-        """Flag indicating whether the instance will be "open" in the UI."""
-        return self._is_open
-
-    @is_open.setter
-    def is_open(self, value: bool | None) -> None:
-        if self._is_open != value:
-            self._is_open = value
-            self.field_changed()
-
-    @property
-    def author_name(self) -> str | None:
-        """The name of the author of the website containing this KML or KMZ file."""
-        return self._author_name
-
-    @author_name.setter
-    def author_name(self, value: str | None) -> None:
-        if self._author_name != value:
-            self._author_name = value
-            self.field_changed()
-
-    @property
-    def author_link(self) -> str | None:
-        """Specifies the URL of the website containing this KML or KMZ file."""
-        return self._author_link
-
-    @author_link.setter
-    def author_link(self, value: str | None) -> None:
-        if self._author_link != value:
-            self._author_link = value
-            self.field_changed()
-
-    @property
-    def address(self) -> str | None:
-        """A string value representing an unstructured address.
-
-        Expected to be written as a standard street, city, state address, and/or as a
-        postal code.
-        """
-        return self._address
-
-    @address.setter
-    def address(self, value: str | None) -> None:
-        if self._address != value:
-            self._address = value
-            self.field_changed()
-
-    @property
-    def phone_number(self) -> str | None:
-        """A string value representing a telephone number."""
-        return self._phone_number
-
-    @phone_number.setter
-    def phone_number(self, value: str | None) -> None:
-        if self._phone_number != value:
-            self._phone_number = value
-            self.field_changed()
-
-    @property
-    def snippet(self) -> str | None:
-        """A short description of the feature."""
-        return self._snippet
-
-    @snippet.setter
-    def snippet(self, value: str | None) -> None:
-        if self._snippet != value:
-            self._snippet = value
-            self.field_changed()
-
-    @property
-    def snippet_max_lines(self) -> int | None:
-        """An integer that specifies the maximum number of Snippet lines to display."""
-        return self._snippet_max_lines
-
-    @snippet_max_lines.setter
-    def snippet_max_lines(self, value: int | None) -> None:
-        value = 2 if value and value < 2 else value
-        if self._snippet_max_lines != value:
-            self._snippet_max_lines = value
-            self.field_changed()
-
-    @property
-    def description(self) -> str | None:
-        """The text description for this :class:`~pyLiveKML.KML.KMLObjects.Feature`.
-
-        This text be displayed in a balloon in GEP if the
-        :class:`~pyLiveKML.KML.KMLObjects.Feature` is clicked.
-
-        :note: HTML and (some) JavaScript are permissible (in GEP > 5.0) for the
-            :attr:`description` property. Refer to the KML specification at
-            https://developers.google.com/kml/documentation/kmlreference for details.
-        """
-        return self._description
-
-    @description.setter
-    def description(self, value: str | None) -> None:
-        if self._description != value:
-            self._description = value
-            self.field_changed()
 
     @property
     def abstract_view(self) -> AbstractView | None:
@@ -299,23 +186,12 @@ class Feature(Object, ABC):
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        if self.name is not None:
-            etree.SubElement(root, "name").text = self.name
-        if self.visibility is not None:
-            etree.SubElement(root, "visibility").text = str(int(self.visibility))
-        if self.is_open is not None:
-            etree.SubElement(root, "open").text = str(int(self.is_open))
-        if self.description is not None:
-            etree.SubElement(root, "description").text = self.description
+        super().build_kml(root, with_children)
         if self.author_name is not None:
             author = etree.SubElement(root, "atom:author")
             etree.SubElement(author, "atom:name").text = self.author_name
         if self.author_link is not None:
-            etree.SubElement(root, "atom:link").text = self.author_link
-        if self.address is not None:
-            etree.SubElement(root, "address").text = self.address
-        if self.phone_number is not None:
-            etree.SubElement(root, "phoneNumber").text = self.phone_number
+            etree.SubElement(root, "atom:link", attribs={"href": self.author_link})
         if self.snippet is not None:
             attribs = {}
             if self.snippet_max_lines is not None:
@@ -509,7 +385,7 @@ class Container(list[Feature], Feature, ABC):
         :class:`~pyLiveKML.KML.KMLObjects.Feature` instances, including other
         :class:`~pyLiveKML.KML.KMLObjects.Container` instances.
         """
-        root = Object.construct_kml(self)
+        root = super().construct_kml()
         if with_features:
             for f in self:
                 if isinstance(f, Container):

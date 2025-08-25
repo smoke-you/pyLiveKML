@@ -5,7 +5,7 @@ from typing import Any, Iterator, NamedTuple, Optional
 from uuid import uuid4, UUID
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import ObjectState, ArgParser
+from pyLiveKML.KML.KML import ObjectState, ArgParser, NoDump
 
 
 class Object(ABC):
@@ -30,7 +30,7 @@ class Object(ABC):
     def __setattr__(self, name: str, value: Any) -> None:
         """Object setattr method."""
         match = next(filter(lambda x: x.name, self._kml_fields), None)
-        value = match.parser(value) if match is not None else value
+        value = match.parser.parse(value) if match is not None else value
         return super().__setattr__(name, value)
 
     def __eq__(self, value: object) -> bool:
@@ -104,7 +104,10 @@ class Object(ABC):
         :param bool with_children: True if the children of this instance should be
             included in the build.
         """
-        pass
+        for f in (f for f in self._kml_fields if f.dumper != NoDump):
+            value = f.dumper.dump(getattr(self, f.name))
+            if value is not None:
+                etree.SubElement(root, f.typename).text = value
 
     def construct_kml(self) -> etree.Element:
         """Construct this :class:`~pyLiveKML.KML.KMLObjects.Object`'s KML representation.

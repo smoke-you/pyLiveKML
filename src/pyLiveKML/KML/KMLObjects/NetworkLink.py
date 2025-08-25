@@ -52,7 +52,6 @@ class NetworkLink(Feature):
             style_url=style_url,
             styles=styles,
         )
-        self._is_open = is_open
         self._link = Link(href, refresh_mode, refresh_interval)
         self._fly_to_view = False
         self._refresh_visibility = False
@@ -108,8 +107,6 @@ class NetworkLink(Feature):
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
-        if self._style_url:
-            etree.SubElement(root, "styleUrl").text = self._style_url
         etree.SubElement(root, "refreshVisibility").text = str(
             int(self._refresh_visibility)
         )

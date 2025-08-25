@@ -2,7 +2,7 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import AltitudeMode, Angle90, Angle180, ArgParser, Direct
+from pyLiveKML.KML.KML import AltitudeMode, Angle90, Angle180, ArgParser, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Object import Object
 
 
@@ -11,13 +11,13 @@ class LatLonAltBox(Object):
 
     _kml_type = "LatLonAltBox"
     _kml_fields = (
-        ArgParser("north", Direct.parse),
-        ArgParser("south", Direct.parse),
-        ArgParser("east", Direct.parse),
-        ArgParser("west", Direct.parse),
-        ArgParser("min_altitude", Direct.parse),
-        ArgParser("max_altitude", Direct.parse),
-        ArgParser("altitude_mode", Direct.parse),
+        ArgParser("north", NoParse, "north", DumpDirect,),
+        ArgParser("south", NoParse, "south", DumpDirect,),
+        ArgParser("east", NoParse, "east", DumpDirect,),
+        ArgParser("west", NoParse, "west", DumpDirect,),
+        ArgParser("min_altitude", NoParse, "minAltitude", DumpDirect,),
+        ArgParser("max_altitude", NoParse, "maxAltitude", DumpDirect,),
+        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect,),
     )
 
     def __init__(
@@ -65,10 +65,10 @@ class Lod(Object):
 
     _kml_type = "Lod"
     _kml_fields = (
-        ArgParser("min_lod_pixels", Direct.parse),
-        ArgParser("max_lod_pixels", Direct.parse),
-        ArgParser("min_fade_extent", Direct.parse),
-        ArgParser("max_fade_extent", Direct.parse),
+        ArgParser("min_lod_pixels", NoParse, "minLodPixels", DumpDirect,),
+        ArgParser("max_lod_pixels", NoParse, "maxLodPixels", DumpDirect,),
+        ArgParser("min_fade_extent", NoParse, "minFadeExtent", DumpDirect,),
+        ArgParser("max_fade_extent", NoParse, "maxFadeExtent", DumpDirect,),
     )
 
     def __init__(

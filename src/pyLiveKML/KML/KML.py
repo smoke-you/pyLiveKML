@@ -3,7 +3,7 @@
 import enum
 from abc import ABC, abstractmethod
 
-from typing import Any, Callable, NamedTuple
+from typing import Any, NamedTuple, Type
 
 from lxml import etree  # type: ignore
 
@@ -42,7 +42,14 @@ GxViewerOption = NamedTuple(
     "GxViewerOption", [("name", "GxViewerOptions"), ("enabled", bool)]
 )
 
-ArgParser = NamedTuple("ArgParser", [("name", str), ("parser", Callable[[Any], Any])])
+ArgParser = NamedTuple(
+    "ArgParser", [
+        ("name", str), 
+        ("parser", Type["_KMLParser"]),
+        ("typename", str),
+        ("dumper", Type["_KMLDump"]),
+    ]
+)
 
 
 class AltitudeMode(enum.Enum):
@@ -207,6 +214,35 @@ class ObjectState(enum.Enum):
     DELETE_CHANGED = 5
 
 
+class _KMLDump(ABC):
+
+    @classmethod
+    @abstractmethod
+    def dump(cls, value: Any) -> Any:
+        raise NotImplementedError
+
+
+class NoDump(_KMLDump):
+    """Dump nothing."""
+
+    @classmethod
+    def dump(cls, value: Any) -> Any:
+        return ""
+
+class DumpDirect(_KMLDump):
+    """Dump to string."""
+
+    @classmethod
+    def dump(cls, value: Any) -> Any:
+        if value is None:
+            return None
+        if isinstance(value, enum.Enum):
+            return str(value.value)
+        if isinstance(value, bool):
+            return str(int(value))
+        return str(value)
+
+
 class _KMLParser(ABC):
 
     @classmethod
@@ -215,7 +251,7 @@ class _KMLParser(ABC):
         raise NotImplementedError
 
 
-class Direct(_KMLParser):
+class NoParse(_KMLParser):
     """A value that will not be changed."""
 
     @classmethod

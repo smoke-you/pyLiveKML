@@ -10,7 +10,8 @@ from pyLiveKML.KML.KML import (
     AnglePos180,
     Angle360,
     ArgParser,
-    Direct,
+    NoParse,
+    DumpDirect,
 )
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
@@ -21,9 +22,9 @@ class Location(Object):
 
     _kml_type = "Location"
     _kml_fields = (
-        ArgParser("longitude", Angle180.parse),
-        ArgParser("latitude", Angle90.parse),
-        ArgParser("altitude", Direct.parse),
+        ArgParser("longitude", Angle180, "longitude", DumpDirect,),
+        ArgParser("latitude", Angle90, "latitude", DumpDirect,),
+        ArgParser("altitude", NoParse, "altitude", DumpDirect,),
     )
 
     def __init__(
@@ -49,9 +50,9 @@ class Orientation(Object):
 
     _kml_type = "Location"
     _kml_fields = (
-        ArgParser("heading", Angle360.parse),
-        ArgParser("tilt", AnglePos180.parse),
-        ArgParser("roll", Angle180.parse),
+        ArgParser("heading", Angle360, "heading", DumpDirect,),
+        ArgParser("tilt", AnglePos180, "tilt", DumpDirect,),
+        ArgParser("roll", Angle180, "roll", DumpDirect,),
     )
 
     def __init__(
@@ -77,9 +78,9 @@ class Scale(Object):
 
     _kml_type = "Scale"
     _kml_fields = (
-        ArgParser("x", Direct.parse),
-        ArgParser("y", Direct.parse),
-        ArgParser("z", Direct.parse),
+        ArgParser("x", NoParse, "x", DumpDirect,),
+        ArgParser("y", NoParse, "y", DumpDirect,),
+        ArgParser("z", NoParse, "z", DumpDirect,),
     )
 
     def __init__(
@@ -105,8 +106,8 @@ class Alias(Object):
 
     _kml_type = "Alias"
     _kml_fields = (
-        ArgParser("target_href", Direct.parse),
-        ArgParser("source_href", Direct.parse),
+        ArgParser("target_href", NoParse, "targetHref", DumpDirect,),
+        ArgParser("source_href", NoParse, "sourceHref", DumpDirect,),
     )
 
     def __init__(

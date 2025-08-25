@@ -46,7 +46,7 @@ class AircraftPosition(Placemark):
         self.heading = heading
         self.timestamp = timestamp
         self.time_primitive = TimeStamp(timestamp)
-        self._description = description_builder(
+        self.description = description_builder(
             src={
                 "Transponder": self.transponder,
                 "Flight": self.flight,
