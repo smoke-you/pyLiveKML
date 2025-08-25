@@ -12,6 +12,7 @@ from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, ObjectState
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.Region import Region
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
+from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
 from pyLiveKML.KML.errors.errors import FeatureInaccessibleError
 
 
@@ -53,6 +54,7 @@ class Feature(Object, ABC):
         snippet: str | None = None,
         snippet_max_lines: int | None = None,
         description: str | None = None,
+        time_primitive: TimePrimitive | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
         region: Region | None = None,
@@ -71,6 +73,7 @@ class Feature(Object, ABC):
         self._snippet = snippet
         self._snippet_max_lines = snippet_max_lines
         self._description = description
+        self._time_primitive = time_primitive
         self._style_url = style_url
         self._styles = list[StyleSelector]()
         if styles:
@@ -228,6 +231,17 @@ class Feature(Object, ABC):
             self.field_changed()
 
     @property
+    def time_primitive(self) -> TimePrimitive | None:
+        """The TimePrimitive associated with this Feature."""
+        return self._time_primitive
+
+    @time_primitive.setter
+    def time_primitive(self, value: TimePrimitive | None) -> None:
+        if self._time_primitive != value:
+            self._time_primitive = value
+            self.field_changed()
+
+    @property
     def region(self) -> Region | None:
         """The active region for viewing this Feature."""
         return self._region
@@ -259,6 +273,10 @@ class Feature(Object, ABC):
         :class:`~pyLiveKML.KML.KMLObjects.Feature`, i.e. one or more :class:`~pyLiveKML.KML.KMLObjects.StyleSelector`
         instances, and their children.
         """
+        if self.time_primitive is not None:
+            yield ObjectChild(parent=self, child=self.time_primitive)
+        if self.region is not None:
+            yield ObjectChild(parent=self, child=self.region)
         for s in self._styles:
             yield ObjectChild(parent=self, child=s)
             yield from s.children
@@ -287,10 +305,12 @@ class Feature(Object, ABC):
             if self.snippet_max_lines is not None:
                 attribs["maxLines"] = str(self.snippet_max_lines)
             etree.SubElement(root, "Snippet", attribs).text = self.snippet
-        if self.region is not None:
-            self.region.build_kml(root, with_children)
 
         if with_children:
+            if self.time_primitive is not None:
+                root.append(self.time_primitive.construct_kml())
+            if self.region is not None:
+                root.append(self.region.construct_kml())
             for s in self.styles:
                 root.append(s.construct_kml())
 
@@ -361,8 +381,10 @@ class Container(list[Feature], Feature, ABC):
         snippet: str | None = None,
         snippet_max_lines: int | None = None,
         description: str | None = None,
+        time_primitive: TimePrimitive | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
+        region: Region | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
         features: Iterable[Feature] | None = None,
     ):
@@ -380,8 +402,10 @@ class Container(list[Feature], Feature, ABC):
             snippet=snippet,
             snippet_max_lines=snippet_max_lines,
             description=description,
+            time_primitive=time_primitive,
             style_url=style_url,
             styles=styles,
+            region=region,
         )
         ABC.__init__(self)
         if features:

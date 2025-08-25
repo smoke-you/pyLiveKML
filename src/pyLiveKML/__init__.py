@@ -47,6 +47,9 @@ from pyLiveKML.KML.KMLObjects.Style import Style
 from pyLiveKML.KML.KMLObjects.StyleMap import StyleMap
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
+from pyLiveKML.KML.KMLObjects.TimeStamp import TimeStamp
+from pyLiveKML.KML.KMLObjects.TimeSpan import TimeSpan
+
 
 __all__ = [
     "AltitudeMode",
@@ -90,6 +93,8 @@ __all__ = [
     "StyleSelector",
     "StyleState",
     "SubStyle",
+    "TimeStamp",
+    "TimeSpan",
     "UnitsEnum",
     "Vec2",
     "Vec2Type",

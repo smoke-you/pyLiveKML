@@ -251,6 +251,5 @@ class Region(Object):
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        reg = etree.SubElement(root, self._kml_type)
-        self.box.build_kml(reg, with_children)
-        self.lod.build_kml(reg, with_children)
+        self.box.build_kml(root, with_children)
+        self.lod.build_kml(root, with_children)

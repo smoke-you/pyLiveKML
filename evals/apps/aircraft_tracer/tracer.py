@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.requests import Request
 from fastapi.templating import Jinja2Templates
-from pyLiveKML import Folder, Feature, NetworkLinkControl
+from pyLiveKML import Folder, Feature, NetworkLinkControl, TimeSpan
 
 from .AircraftPosition import AircraftPosition
 from ..KMLApp import KMLApp, KMLSelect
@@ -41,6 +41,10 @@ def load_adsb_exchange_data(filename: Path) -> Folder:
                 kmldata.append(p)
             except BaseException as x:
                 print(x)
+        kmldata.time_primitive = TimeSpan(
+            cast(AircraftPosition, kmldata[0]).timestamp, 
+            cast(AircraftPosition, kmldata[-1]).timestamp
+        )
     except BaseException as x:
         print(x)
     return kmldata

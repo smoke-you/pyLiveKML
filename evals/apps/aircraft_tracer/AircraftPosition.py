@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Optional, cast
 
 from apps.helpers import description_builder
-from pyLiveKML import GeoCoordinates, AltitudeMode, IconStyle, Placemark, Point, Style
+from pyLiveKML import GeoCoordinates, AltitudeMode, IconStyle, Placemark, Point, Style, TimeStamp
 
 
 class AircraftPosition(Placemark):
@@ -45,6 +45,7 @@ class AircraftPosition(Placemark):
         self.speed = speed
         self.heading = heading
         self.timestamp = timestamp
+        self.time_primitive = TimeStamp(timestamp)
         self._description = description_builder(
             src={
                 "Transponder": self.transponder,
