@@ -4,6 +4,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
+from pyLiveKML.KML.KML import ArgParser, NoParse, ColorParse, DumpDirect
 
 
 class LineStyle(ColorStyle):
@@ -18,6 +19,13 @@ class LineStyle(ColorStyle):
     """
 
     _kml_type = "LineStyle"
+    _kml_fields = ColorStyle._kml_fields + (
+        ArgParser("width", NoParse, "width", DumpDirect),
+        ArgParser("gx_outer_color", ColorParse, "gx:outerColor", DumpDirect),
+        ArgParser("gx_outer_width", NoParse, "gx:outerWidth", DumpDirect),
+        ArgParser("gx_physical_width", NoParse, "gx:physicalWidth", DumpDirect),
+        ArgParser("gx_label_visibility", NoParse, "gx:labelVisibility", DumpDirect),
+    )
 
     def __init__(
         self,
@@ -26,108 +34,8 @@ class LineStyle(ColorStyle):
     ):
         """LineStyle instance constructor."""
         ColorStyle.__init__(self, color)
-        self._width = width
-        self._gx_outer_color: int | None = None
-        self._gx_outer_width: float | None = None
-        self._gx_physical_width: float | None = None
-        self._gx_label_visibility: bool | None = None
-
-    @property
-    def width(self) -> float | None:
-        """The width of the line, in pixels."""
-        return self._width
-
-    @width.setter
-    def width(self, value: float | None) -> None:
-        if self._width != value:
-            self._width = value
-            self.field_changed()
-
-    @property
-    def gx_outer_color(self) -> int | None:
-        """Color of the portion of the line defined by the :attr:`gx_outer_width` property.
-
-        :note: Both :attr:`gx_outer_color` and :attr:`gx_outer_width` apply only to
-            :class:`~pyLiveKML.KML.KMLObjects.LineString` objects.
-        """
-        return self._gx_outer_color
-
-    @gx_outer_color.setter
-    def gx_outer_color(self, value: int | None) -> None:
-        val: int = 0 if value is None else value
-        val = 0 if val <= 0 else 0xFFFFFFFF if val >= 0xFFFFFFFF else val
-        if self._gx_outer_color != val:
-            self._gx_outer_color = val
-            self.field_changed()
-
-    @property
-    def gx_outer_width(self) -> float | None:
-        """The width of an outer border around the line.
-
-        :note: Both :attr:`gx_outer_color` and :attr:`gx_outer_width` apply only to
-            :class:`~pyLiveKML.KML.KMLObjects.LineString` objects.
-        """
-        return self._gx_outer_width
-
-    @gx_outer_width.setter
-    def gx_outer_width(self, value: float | None) -> None:
-        if self._gx_outer_width != value:
-            self._gx_outer_width = value
-            self.field_changed()
-
-    @property
-    def gx_physical_width(self) -> float | None:
-        """The physical width of the line, in metres."""
-        return self._gx_physical_width
-
-    @gx_physical_width.setter
-    def gx_physical_width(self, value: float | None) -> None:
-        if self._gx_physical_width != value:
-            self._gx_physical_width = value
-            self.field_changed()
-
-    @property
-    def gx_label_visibility(self) -> bool | None:
-        """Flag indicating whether a text label should be displayed for the instance in the UI.
-
-        Selector to display a text label on a :class:`~pyLiveKML.KML.KMLObjects.LineString`. True if the label is to
-        be displayed, False if it is not. None implies False.
-        """
-        return self._gx_label_visibility
-
-    @gx_label_visibility.setter
-    def gx_label_visibility(self, value: bool | None) -> None:
-        if self._gx_label_visibility != value:
-            self._gx_label_visibility = value
-            self.field_changed()
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        if self._color is not None:
-            etree.SubElement(root, "color").text = str(self.color)
-        if self._color_mode is not None:
-            etree.SubElement(root, "colorMode").text = self._color_mode.value
-        if self._width is not None:
-            etree.SubElement(root, "width").text = f"{self._width:0.1f}"
-        if self._gx_outer_color is not None:
-            etree.SubElement(root, "gx:outerColor").text = f"{self._gx_outer_color:08x}"
-        if self._gx_outer_width is not None:
-            etree.SubElement(root, "gx:outerWidth").text = (
-                f"{self._gx_outer_width:0.1f}"
-            )
-        if self._gx_physical_width is not None:
-            etree.SubElement(root, "gx:physicalWidth").text = (
-                f"{self._gx_physical_width:0.1f}"
-            )
-        if self._gx_label_visibility is not None:
-            etree.SubElement(root, "gx:labelVisibility").text = str(
-                int(self._gx_label_visibility)
-            )
-
-    def __str__(self) -> str:
-        """Return a string representation."""
-        return f"{self.kml_type}"
-
-    def __repr__(self) -> str:
-        """Return a debug representation."""
-        return self.__str__()
+        self.width = width
+        self.gx_outer_color: int | None = None
+        self.gx_outer_width: float | None = None
+        self.gx_physical_width: float | None = None
+        self.gx_label_visibility: bool | None = None

@@ -30,6 +30,7 @@ from pyLiveKML.KML.KML import (
 from pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
 from pyLiveKML.KML.Vec2 import Vec2
 from pyLiveKML.KML.KMLObjects.BalloonStyle import BalloonStyle
+from pyLiveKML.KML.KMLObjects.Camera import Camera
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 from pyLiveKML.KML.KMLObjects.Document import Document
 from pyLiveKML.KML.KMLObjects.Feature import Feature, ContainedFeature, Container
@@ -42,7 +43,7 @@ from pyLiveKML.KML.KMLObjects.LinearRing import LinearRing
 from pyLiveKML.KML.KMLObjects.LineString import LineString
 from pyLiveKML.KML.KMLObjects.LineStyle import LineStyle
 from pyLiveKML.KML.KMLObjects.Link import Link
-from pyLiveKML.KML.KMLObjects.ListStyle import ListStyle
+from pyLiveKML.KML.KMLObjects.ListStyle import ItemIcon, ListStyle
 from pyLiveKML.KML.KMLObjects.LookAt import LookAt
 from pyLiveKML.KML.KMLObjects.MultiGeometry import MultiGeometry
 from pyLiveKML.KML.KMLObjects.NetworkLink import NetworkLink
@@ -68,6 +69,7 @@ __all__ = [
     "AnglePos180",
     "Angle360",
     "BalloonStyle",
+    "Camera",
     "ColorMode",
     "ColorStyle",
     "ContainedFeature",
@@ -84,6 +86,7 @@ __all__ = [
     "GxViewerOptions",
     "Icon",
     "IconStyle",
+    "ItemIcon",
     "ItemIconMode",
     "KML_UPDATE_CONTAINER_LIMIT_DEFAULT",
     "LabelStyle",
@@ -93,6 +96,7 @@ __all__ = [
     "Link",
     "ListItemType",
     "ListStyle",
+    "LookAt",
     "MultiGeometry",
     "NetworkLink",
     "NetworkLinkControl",

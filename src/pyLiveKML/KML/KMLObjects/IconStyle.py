@@ -3,7 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import ColorMode
+from pyLiveKML.KML.KML import ColorMode, ArgParser, NoDump, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 from pyLiveKML.KML.Vec2 import Vec2
 
@@ -24,6 +24,13 @@ class IconStyle(ColorStyle):
     """
 
     _kml_type = "IconStyle"
+    _kml_fields = (
+        ArgParser("icon", NoParse, "", NoDump),
+        ArgParser("scale", NoParse, "scale", DumpDirect),
+        ArgParser("heading", NoParse, "heading", DumpDirect),
+        ArgParser("color", NoParse, "color", DumpDirect),
+        ArgParser("color_mode", NoParse, "colorMode", DumpDirect),
+    )
 
     def __init__(
         self,
@@ -35,43 +42,10 @@ class IconStyle(ColorStyle):
     ):
         """IconStyle instance constructor."""
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
-        self._scale: float | None = scale
-        self._heading: float | None = heading
-        self._icon: str | None = icon
+        self.scale = scale
+        self.heading = heading
+        self.icon = icon
         self._hotspot: Vec2 | None = None
-
-    @property
-    def icon(self) -> str | None:
-        """URI for the image that will be displayed in GEP as the icon."""
-        return self._icon
-
-    @icon.setter
-    def icon(self, value: str | None) -> None:
-        if self._icon != value:
-            self._icon = value
-            self.field_changed()
-
-    @property
-    def scale(self) -> float | None:
-        """Relative scale at which the icon will be displayed in GEP."""
-        return self._scale
-
-    @scale.setter
-    def scale(self, value: float | None) -> None:
-        if self._scale != value:
-            self._scale = value
-            self.field_changed()
-
-    @property
-    def heading(self) -> float | None:
-        """Heading (in degrees) that the icon will be displayed pointing towards in GEP."""
-        return self._heading
-
-    @heading.setter
-    def heading(self, value: float | None) -> None:
-        if self._heading != value:
-            self._heading = value
-            self.field_changed()
 
     @property
     def hotspot(self) -> Vec2 | None:
@@ -88,23 +62,8 @@ class IconStyle(ColorStyle):
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        if self.color is not None:
-            etree.SubElement(root, "color").text = str(self.color)
-        if self.color_mode is not None:
-            etree.SubElement(root, "colorMode").text = self.color_mode.value
-        if self.scale is not None:
-            etree.SubElement(root, "scale").text = f"{self.scale:0.3f}"
-        if self.heading is not None:
-            etree.SubElement(root, "heading").text = f"{self.heading:0.1f}"
+        super().build_kml(root, with_children)
         if self.icon is not None:
             etree.SubElement(etree.SubElement(root, "Icon"), "href").text = self.icon
         if self.hotspot is not None:
             root.append(self.hotspot.xml)
-
-    def __str__(self) -> str:
-        """Return a string representation."""
-        return f"{self.kml_type}"
-
-    def __repr__(self) -> str:
-        """Return a debug representation."""
-        return self.__str__()

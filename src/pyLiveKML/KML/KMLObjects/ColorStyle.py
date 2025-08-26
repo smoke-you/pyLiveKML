@@ -1,9 +1,10 @@
 """ColorStyle module."""
 
 from abc import ABC
+from typing import cast
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import ColorMode
+from pyLiveKML.KML.KML import ColorMode, ArgParser, NoParse, ColorParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
@@ -26,7 +27,10 @@ class ColorStyle(SubStyle, ABC):
         to determine the displayed color.
     """
 
-    _kml_type = "ColorStyle"
+    _kml_fields = (
+        ArgParser("color", ColorParse, "color", DumpDirect),
+        ArgParser("color_mode", NoParse, "colorMode", DumpDirect),
+    )
 
     def __init__(
         self, color: GeoColor | int | None = None, color_mode: ColorMode | None = None
@@ -34,30 +38,5 @@ class ColorStyle(SubStyle, ABC):
         """ColorStyle instance constructor."""
         SubStyle.__init__(self)
         ABC.__init__(self)
-        self._color_mode: ColorMode | None = color_mode
-        self._color: GeoColor | None = None
-        self.color = color
-
-    @property
-    def color(self) -> GeoColor | None:
-        """Color, in 32-bit ABGR format (yes, the order is correct)."""
-        return self._color
-
-    @color.setter
-    def color(self, value: GeoColor | int | None) -> None:
-        if isinstance(value, int):
-            value = GeoColor(value)
-        if self._color != value:
-            self._color = value
-            self.field_changed()
-
-    @property
-    def color_mode(self) -> ColorMode | None:
-        """The :class:`~pyLiveKML.KML.KML.ColorMode` that will be used by GEP to determine the displayed color."""
-        return self._color_mode
-
-    @color_mode.setter
-    def color_mode(self, value: ColorMode | None) -> None:
-        if self._color_mode != value:
-            self._color_mode = value
-            self.field_changed()
+        self.color_mode = color_mode
+        self.color = cast(GeoColor | None, color)

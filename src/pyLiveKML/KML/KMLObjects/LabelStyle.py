@@ -3,7 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import ColorMode
+from pyLiveKML.KML.KML import ColorMode, ArgParser, NoParse, ColorParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 
 
@@ -20,6 +20,9 @@ class LabelStyle(ColorStyle):
     """
 
     _kml_type = "LabelStyle"
+    _kml_fields = ColorStyle._kml_fields + (
+        ArgParser("scale", NoParse, "scale", DumpDirect),
+    )
 
     def __init__(
         self,
@@ -29,32 +32,4 @@ class LabelStyle(ColorStyle):
     ):
         """ColorStyle instance constructor."""
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
-        self._scale = scale
-
-    @property
-    def scale(self) -> float | None:
-        """Relative scale of the text."""
-        return self._scale
-
-    @scale.setter
-    def scale(self, value: float | None) -> None:
-        if self._scale != value:
-            self._scale = value
-            self.field_changed()
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        if self.color is not None:
-            etree.SubElement(root, "color").text = str(self.color)
-        if self.color_mode is not None:
-            etree.SubElement(root, "colorMode").text = self.color_mode.value
-        if self.scale is not None:
-            etree.SubElement(root, "scale").text = f"{self.scale:0.3f}"
-
-    def __str__(self) -> str:
-        """Return a string representation."""
-        return f"{self.kml_type}"
-
-    def __repr__(self) -> str:
-        """Return a debug representation."""
-        return self.__str__()
+        self.scale = scale

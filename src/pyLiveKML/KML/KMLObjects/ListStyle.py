@@ -1,10 +1,31 @@
 """ListStyle module."""
+from typing import Sequence, Iterator
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import ListItemType, ItemIconMode
+from pyLiveKML.KML.KML import ListItemType, ItemIconMode, ArgParser, NoParse, ColorParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
+from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+
+
+class ItemIcon(Object):
+    """ItemIcon class definition."""
+
+    _kml_type = "ItemIcon"
+    _kml_fields = (
+        ArgParser("icon_state", NoParse, "state", DumpDirect),
+        ArgParser("href", NoParse, "href", DumpDirect),
+    )
+
+    def __init__(
+        self, 
+        icon_state: ItemIconMode | None = None,
+        href: str | None = None,
+    ):
+        """ItemIcon instance constructor."""
+        self.icon_state = icon_state
+        self.href = href
 
 
 class ListStyle(SubStyle):
@@ -19,88 +40,42 @@ class ListStyle(SubStyle):
     """
 
     _kml_type = "ListStyle"
+    _kml_fields = (
+        ArgParser("list_item_type", NoParse, "listItemType", DumpDirect),
+        ArgParser("bg_color", ColorParse, "bgColor", DumpDirect),
+    )
 
     def __init__(
         self,
         list_item_type: ListItemType | None = None,
         bg_color: GeoColor | int | None = None,
-        item_icon_state: ItemIconMode | None = None,
-        item_icon_href: str | None = None,
+        icons: ItemIcon | Sequence[ItemIcon] | None = None
     ):
         """ListStyle instance constructor."""
         SubStyle.__init__(self)
-        self._list_item_type: ListItemType | None = list_item_type
-        self._item_icon_state: ItemIconMode | None = item_icon_state
-        self._item_icon_href: str | None = item_icon_href
-        self._bg_color: GeoColor | None = None
+        self.list_item_type = list_item_type
         self.bg_color = bg_color
+        self.icons = list[ItemIcon]()
+        if icons is not None:
+            if isinstance(icons, ItemIcon):
+                self.icons.append(icons)
+            else:
+                self.icons.extend(icons)
 
     @property
-    def list_item_type(self) -> ListItemType | None:
-        """The behaviour model for the list item."""
-        return self._list_item_type
+    def children(self) -> Iterator[ObjectChild]:
+        """The children of this instance.
 
-    @list_item_type.setter
-    def list_item_type(self, value: ListItemType | None) -> None:
-        if self._list_item_type != value:
-            self._list_item_type = value
-            self.field_changed()
-
-    @property
-    def bg_color(self) -> GeoColor | None:
-        """The background color of the list item, as a 32-bit ABGR color.
-
-        Note the unusual order of the fields that make up the integer.
+        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield the children of a
+        :class:`~pyLiveKML.KML.KMLObjects.Feature`, i.e. one or more :class:`~pyLiveKML.KML.KMLObjects.StyleSelector`
+        instances, and their children.
         """
-        return self._bg_color
-
-    @bg_color.setter
-    def bg_color(self, value: GeoColor | int | None) -> None:
-        if isinstance(value, int):
-            value = GeoColor(value)
-        if self._bg_color != value:
-            self._bg_color = value
-            self.field_changed()
-
-    @property
-    def item_icon_state(self) -> ItemIconMode | None:
-        """The icon state that will be displayed in the GEP user List View for the item."""
-        return self._item_icon_state
-
-    @item_icon_state.setter
-    def item_icon_state(self, value: ItemIconMode | None) -> None:
-        if self._item_icon_state != value:
-            self._item_icon_state = value
-            self.field_changed()
-
-    @property
-    def item_icon_href(self) -> str | None:
-        """The URI for the image that will be displayed in the GEP user List View for the item."""
-        return self._item_icon_href
-
-    @item_icon_href.setter
-    def item_icon_href(self, value: str | None) -> None:
-        if self._item_icon_href != value:
-            self._item_icon_href = value
-            self.field_changed()
+        for i in self.icons:
+            yield ObjectChild(parent=self, child=i)
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        if self._list_item_type is not None:
-            etree.SubElement(root, "listItemType").text = self._list_item_type.value
-        if self._bg_color is not None:
-            etree.SubElement(root, "bg_color").text = str(self.bg_color)
-        if self._item_icon_state is not None or self._item_icon_href is not None:
-            item_icon = etree.SubElement(root, "ItemIcon")
-            if self._item_icon_state is not None:
-                etree.SubElement(item_icon, "state").text = self._item_icon_state.value
-            if self._item_icon_href is not None:
-                etree.SubElement(item_icon, "href").text = self._item_icon_href
-
-    def __str__(self) -> str:
-        """Return a string representation."""
-        return f"{self.kml_type}"
-
-    def __repr__(self) -> str:
-        """Return a debug representation."""
-        return self.__str__()
+        super().build_kml(root, with_children)
+        if with_children:
+            for i in self.icons:
+                root.append(i.construct_kml())

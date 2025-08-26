@@ -7,6 +7,7 @@ from typing import Any, NamedTuple, Type
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML.GeoColor import GeoColor
 
 KML_UPDATE_CONTAINER_LIMIT_DEFAULT: int = 100
 """The default value for the container update limit.
@@ -327,3 +328,14 @@ class Angle360(_KMLParser):
         """Transform the argument."""
         value = float(value)
         return value % 360 if value > 360 else -(-value % 360) if value < 360 else value
+
+
+class ColorParse(_KMLParser):
+    """A color, typically as a 32-bit ABGR value."""
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        if isinstance(value, int):
+            return GeoColor(value)
+        return value

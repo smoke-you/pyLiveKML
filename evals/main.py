@@ -88,8 +88,8 @@ gep_loader = Folder(
 # The master synchronization controller, a NetworkLinkControl object
 gep_sync = NetworkLinkControl(
     target_href=ELEMENTS_HREF,
-    link_name="pyLiveKML synchronizer",
-    link_description="Synchronizes the webserver UI state with Google Earth Pro.",
+    # link_name="pyLiveKML synchronizer",
+    # link_description="Synchronizes the webserver UI state with Google Earth Pro.",
 )
 # assign a constant UUID to the container, so that it can be refreshed in GEP
 # without having to reload the pyLiveKML link after restarting the server

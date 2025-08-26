@@ -24,13 +24,15 @@ class AircraftTrail(Folder):
             styles=[
                 Style(
                     list_style=ListStyle(
-                        list_item_type=ListItemType.CHECK_HIDE_CHILDREN
+                        list_item_type=ListItemType.CHECK_HIDE_CHILDREN,
+                        bg_color=0xFF404000,
                     )
                 )
             ],
         )
         self.data = data
         self.trail_sz = trail_sz
+        self.snippet = "Aircraft Trail"
         self.__idx: int = -1
 
     def update_kml(self, parent: Object, update: etree.Element) -> None:

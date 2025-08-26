@@ -31,13 +31,13 @@ gpr = GeoRing(
     fill_color=0x4000FF00,
     altitude_mode=AltitudeMode.CLAMP_TO_GROUND,
 )
-gpr.snippet = "This is a polygon with an internal cutout.\nYou can change the border and fill colours via the web UI."
-gpr.region = Region(
-    north=origin.lat + 0.05,
-    south=origin.lat - 0.05,
-    east=origin.lon + 0.05,
-    west=origin.lon - 0.05,
-)
+# gpr.snippet = "This is a polygon with an internal cutout.\nYou can change the border and fill colours via the web UI."
+# gpr.region = Region(
+#     north=origin.lat + 0.05,
+#     south=origin.lat - 0.05,
+#     east=origin.lon + 0.05,
+#     west=origin.lon - 0.05,
+# )
 gpe = GeoEllipse(
     name="ellipse",
     origin=GeoCoordinates(lon=origin.lon, lat=origin.lat, alt=origin.alt),
@@ -49,14 +49,14 @@ gpe = GeoEllipse(
     fill_color=0x4000FF00,
     altitude_mode=AltitudeMode.ABSOLUTE,
 )
-gpe.snippet = "This is a simple polygon.\nIt has no internal cutouts.\nYou can change the border and fill colours via the web UI."
-gpe.snippet_max_lines = 3
-gpe.region = Region(
-    north=origin.lat + 0.01,
-    south=origin.lat - 0.01,
-    east=origin.lon + 0.01,
-    west=origin.lon - 0.01,
-)
+# gpe.snippet = "This is a simple polygon.\nIt has no internal cutouts.\nYou can change the border and fill colours via the web UI."
+# gpe.snippet_max_lines = 3
+# gpe.region = Region(
+#     north=origin.lat + 0.01,
+#     south=origin.lat - 0.01,
+#     east=origin.lon + 0.01,
+#     west=origin.lon - 0.01,
+# )
 
 geo_app = FastAPI()
 locdir = Path(__file__).parent
