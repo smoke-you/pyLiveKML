@@ -31,5 +31,5 @@ class LabelStyle(ColorStyle):
         color_mode: ColorMode | None = None,
     ):
         """ColorStyle instance constructor."""
-        ColorStyle.__init__(self, color=color, color_mode=color_mode)
+        super().__init__(color=color, color_mode=color_mode)
         self.scale = scale

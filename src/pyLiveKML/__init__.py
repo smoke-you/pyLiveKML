@@ -19,7 +19,6 @@ from pyLiveKML.KML.KML import (
     StyleState,
     UnitsEnum,
     ViewRefreshMode,
-    Vec2Type,
     ObjectState,
     Angle90,
     AnglePos90,
@@ -28,7 +27,7 @@ from pyLiveKML.KML.KML import (
     Angle360,
 )
 from pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
-from pyLiveKML.KML.Vec2 import Vec2
+from pyLiveKML.KML.Vec2 import HotSpot, OverlayXY, ScreenXY, RotationXY, Size
 from pyLiveKML.KML.KMLObjects.BalloonStyle import BalloonStyle
 from pyLiveKML.KML.KMLObjects.Camera import Camera
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
@@ -45,6 +44,7 @@ from pyLiveKML.KML.KMLObjects.LineStyle import LineStyle
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.ListStyle import ItemIcon, ListStyle
 from pyLiveKML.KML.KMLObjects.LookAt import LookAt
+from pyLiveKML.KML.KMLObjects.Model import Alias, Model
 from pyLiveKML.KML.KMLObjects.MultiGeometry import MultiGeometry
 from pyLiveKML.KML.KMLObjects.NetworkLink import NetworkLink
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
@@ -62,12 +62,13 @@ from pyLiveKML.KML.KMLObjects.TimeSpan import TimeSpan
 
 
 __all__ = [
+    "Alias", 
     "AltitudeMode",
-    "Angle90",
-    "AnglePos90",
     "Angle180",
-    "AnglePos180",
     "Angle360",
+    "Angle90",
+    "AnglePos180",
+    "AnglePos90",
     "BalloonStyle",
     "Camera",
     "ColorMode",
@@ -83,10 +84,13 @@ __all__ = [
     "Geometry",
     "GxViewerOption",
     "GxViewerOptions",
+    "HotSpot",
     "Icon",
     "IconStyle",
     "ItemIcon",
     "ItemIconMode",
+    "KML_DOCTYPE",
+    "KML_HEADERS",
     "KML_UPDATE_CONTAINER_LIMIT_DEFAULT",
     "LabelStyle",
     "LineString",
@@ -96,31 +100,32 @@ __all__ = [
     "ListItemType",
     "ListStyle",
     "LookAt",
+    "Model",
     "MultiGeometry",
     "NetworkLink",
     "NetworkLinkControl",
     "Object",
     "ObjectChild",
     "ObjectState",
+    "OverlayXY",
     "Placemark",
     "Point",
     "PolyStyle",
     "Polygon",
     "RefreshMode",
     "Region",
+    "RotationXY",
+    "ScreenXY",
+    "Size",
     "Style",
     "StyleMap",
     "StyleSelector",
     "StyleState",
     "SubStyle",
-    "TimeStamp",
     "TimeSpan",
+    "TimeStamp",
     "UnitsEnum",
-    "Vec2",
-    "Vec2Type",
     "ViewRefreshMode",
-    "KML_DOCTYPE",
-    "KML_HEADERS",
-    "kml_root_tag",
     "errors",
+    "kml_root_tag",
 ]

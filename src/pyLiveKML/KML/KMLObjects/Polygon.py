@@ -4,7 +4,7 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import AltitudeMode, ObjectState
+from pyLiveKML.KML.KML import AltitudeMode, ObjectState, ArgParser, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KML.KMLObjects.LinearRing import LinearRing
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
@@ -31,7 +31,11 @@ class Polygon(Geometry):
     """
 
     _kml_type = "Polygon"
-
+    _kml_fields = Geometry._kml_fields + (
+        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),
+        ArgParser("extrude", NoParse, "extrude", DumpDirect),
+        ArgParser("tessellate", NoParse, "tessellate", DumpDirect),
+    )
     def __init__(
         self,
         outer_boundary: LinearRing,
@@ -42,13 +46,13 @@ class Polygon(Geometry):
     ):
         """Polygon instance constructor."""
         Geometry.__init__(self)
-        self._outer_boundary: LinearRing = outer_boundary
-        self._inner_boundaries: list[LinearRing] = list[LinearRing]()
+        self._outer_boundary = outer_boundary
+        self._inner_boundaries = list[LinearRing]()
         if inner_boundaries:
             self._inner_boundaries.extend(inner_boundaries)
-        self._extrude: bool | None = extrude
-        self._tessellate: bool | None = tessellate
-        self._altitude_mode: AltitudeMode | None = altitude_mode
+        self.extrude = extrude
+        self.tessellate = tessellate
+        self.altitude_mode = altitude_mode
 
     @property
     def children(self) -> Iterator[ObjectChild]:
@@ -59,7 +63,7 @@ class Polygon(Geometry):
         instances, being the :attr:`outer_boundary` and zero or more :attr:`inner_boundaries`.
         """
         yield ObjectChild(parent=self, child=self.outer_boundary)
-        for b in self._inner_boundaries:
+        for b in self.inner_boundaries:
             yield ObjectChild(parent=self, child=b)
 
     @property
@@ -88,55 +92,6 @@ class Polygon(Geometry):
         """
         yield from self._inner_boundaries
 
-    @property
-    def extrude(self) -> bool | None:
-        """Flag to indicate whether the displayed polygon should be extruded to ground level.
-
-        True if a vertical line (using the current :class:`~pyLiveKML.KML.KMLObjects.LineStyle`) connects each of
-        the :attr:`outer_boundary` and :attr:`inner_boundaries` objects' points to the ground in GEP, False otherwise.
-        None implies False.
-        """
-        return self._extrude
-
-    @extrude.setter
-    def extrude(self, value: bool | None) -> None:
-        if self._extrude != value:
-            self._extrude = value
-            self.field_changed()
-
-    @property
-    def tessellate(self) -> bool | None:
-        """Flag to indicate whether the displayed polygon should be tessellated.
-
-        True if the inner and outer boundary lines of the :class:`~pyLiveKML.KML.KMLObjects.Polygon` follows the
-        terrain in GEP, otherwise False.
-
-        :note: The :attr:`altitude_mode` property must be set to CLAMP_TO_GROUND to enable tessellation.
-        """
-        return self._tessellate
-
-    @tessellate.setter
-    def tessellate(self, value: bool | None) -> None:
-        if self._tessellate != value:
-            self._tessellate = value
-            self.field_changed()
-
-    @property
-    def altitude_mode(self) -> AltitudeMode | None:
-        """The altitude mode that will be used to display the polygon.
-
-        An :class:`~pyLiveKML.KML.KML.AltitudeMode` instance that defines how GEP displays the
-        :class:`~pyLiveKML.KML.GeoCoordinates` objects that make up the inner and outer boundaries of the
-        :class:`~pyLiveKML.KML.KMLObjects.Polygon` and treats their altitudes.
-        """
-        return self._altitude_mode
-
-    @altitude_mode.setter
-    def altitude_mode(self, value: AltitudeMode | None) -> None:
-        if self._altitude_mode != value:
-            self._altitude_mode = value
-            self.field_changed()
-
     def update_kml(self, parent: "Object", update: etree.Element) -> None:
         """Retrieve a complete child <Create>, <Change> or <Delete> KML tag as a child of an <Update> tag.
 
@@ -155,12 +110,7 @@ class Polygon(Geometry):
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        if self._extrude is not None:
-            etree.SubElement(root, "extrude").text = str(int(self._extrude))
-        if self._tessellate is not None:
-            etree.SubElement(root, "tessellate").text = str(int(self._tessellate))
-        if self._altitude_mode is not None:
-            etree.SubElement(root, "altitudeMode").text = self._altitude_mode.value
+        super().build_kml(root, with_children)
         if with_children:
             if self._outer_boundary:
                 etree.SubElement(root, "outerBoundaryIs").append(

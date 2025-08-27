@@ -15,9 +15,10 @@ from pyLiveKML.KML.KML import (
 )
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KML._BaseObject import _BaseObject
 
 
-class ItemIcon(Object):
+class ItemIcon(_BaseObject):
     """ItemIcon class definition."""
 
     _kml_type = "ItemIcon"
@@ -71,20 +72,8 @@ class ListStyle(SubStyle):
             else:
                 self.icons.extend(icons)
 
-    @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of this instance.
-
-        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children` to yield the children of a
-        :class:`~pyLiveKML.KML.KMLObjects.Feature`, i.e. one or more :class:`~pyLiveKML.KML.KMLObjects.StyleSelector`
-        instances, and their children.
-        """
-        for i in self.icons:
-            yield ObjectChild(parent=self, child=i)
-
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
-        if with_children:
-            for i in self.icons:
-                root.append(i.construct_kml())
+        for i in self.icons:
+            i.build_kml(etree.SubElement(root, i._kml_type), False)

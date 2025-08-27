@@ -1,15 +1,12 @@
 """StyleMap module."""
 
 import enum
-from typing import Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
-from pyLiveKML.KML.KMLObjects.Style import Style
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.KML import ArgParser, NoParse, DumpDirect
-
+from pyLiveKML.KML._BaseObject import _BaseObject
 
 class _StyleMap_Pair_Key(enum.Enum):
     """Enumeration of possible pair keys for `StyleMap`."""
@@ -18,7 +15,7 @@ class _StyleMap_Pair_Key(enum.Enum):
     HIGHLIGHT = "highlight"
 
 
-class _StyleMap_Pair(Object):
+class _StyleMap_Pair(_BaseObject):
     """Hidden class for use by `StyleMap`."""
 
     _kml_type = "Pair"
@@ -26,7 +23,6 @@ class _StyleMap_Pair(Object):
         ArgParser("key", NoParse, "key", DumpDirect),
         ArgParser("style_url", NoParse, "styleUrl", DumpDirect),
     )
-    _suppress_id = True
 
     def __init__(self, key: _StyleMap_Pair_Key, style_url: str):
         """_StyleMap_Pair instance constructor."""
@@ -76,9 +72,3 @@ class StyleMap(StyleSelector):
         self.highlight = _StyleMap_Pair(
             _StyleMap_Pair_Key.HIGHLIGHT, highlight_style_url
         )
-
-    @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance."""
-        yield ObjectChild(parent=self, child=self.normal)
-        yield ObjectChild(parent=self, child=self.highlight)

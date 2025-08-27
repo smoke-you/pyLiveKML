@@ -13,9 +13,10 @@ from pyLiveKML.KML.KML import (
     DumpDirect,
 )
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KML._BaseObject import _BaseObject
 
 
-class LatLonAltBox(Object):
+class LatLonAltBox(_BaseObject):
     """A bounding box that describes an area of interest defined by geographic coordinates and altitudes."""
 
     _kml_type = "LatLonAltBox"
@@ -28,7 +29,6 @@ class LatLonAltBox(Object):
         ArgParser("max_altitude", NoParse, "maxAltitude", DumpDirect),
         ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),
     )
-    _suppress_id = True
 
     def __init__(
         self,
@@ -42,7 +42,7 @@ class LatLonAltBox(Object):
         altitude_mode: AltitudeMode = AltitudeMode.CLAMP_TO_GROUND,
     ):
         """LatLonAltBox instance constructor."""
-        Object.__init__(self)
+        super().__init__()
         self.region = region
         self.north = north
         self.south = south
@@ -53,7 +53,7 @@ class LatLonAltBox(Object):
         self.altitude_mode = altitude_mode
 
 
-class Lod(Object):
+class Lod(_BaseObject):
     """Lod is an abbreviation for Level of Detail.
 
     <Lod> describes the size of the projected region on the screen that is required in
@@ -69,7 +69,6 @@ class Lod(Object):
         ArgParser("min_fade_extent", NoParse, "minFadeExtent", DumpDirect),
         ArgParser("max_fade_extent", NoParse, "maxFadeExtent", DumpDirect),
     )
-    _suppress_id = True
 
     def __init__(
         self,
@@ -80,6 +79,7 @@ class Lod(Object):
         max_fade_extent: float = 0,
     ):
         """Lod instance constructor."""
+        super().__init__()
         self.region = region
         self.min_lod_pixels = min_lod_pixels
         self.max_lod_pixels = max_lod_pixels
@@ -118,9 +118,3 @@ class Region(Object):
         self.lod = Lod(
             self, min_lod_pixels, max_lod_pixels, min_fade_extent, max_fade_extent
         )
-
-    @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance."""
-        yield ObjectChild(self, self.box)
-        yield ObjectChild(self, self.lod)

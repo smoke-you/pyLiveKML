@@ -8,15 +8,15 @@ from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KML import ColorMode, ArgParser, NoDump, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
-from pyLiveKML.KML.Vec2 import Vec2
+from pyLiveKML.KML._BaseObject import _BaseObject
+from pyLiveKML.KML.Vec2 import HotSpot
 
 
-class _IconStyle_Icon(Object):
+class _IconStyle_Icon(_BaseObject):
     """A minimalist Icon class, used only within `IconStyle`."""
 
     _kml_type = "Icon"
     _kml_fields = (ArgParser("href", NoParse, "href", DumpDirect),)
-    _suppress_id = True
 
     def __init__(self, href: str):
         """_IconStyle_Icon instance constructor."""
@@ -44,7 +44,6 @@ class IconStyle(ColorStyle):
         ArgParser("icon", NoParse, "", NoDump),
         ArgParser("scale", NoParse, "scale", DumpDirect),
         ArgParser("heading", NoParse, "heading", DumpDirect),
-        ArgParser("hot_spot", NoParse, "", NoDump),
     )
     _direct_children = ("icon",)
 
@@ -55,7 +54,7 @@ class IconStyle(ColorStyle):
         heading: float | None = None,
         color: GeoColor | int | None = None,
         color_mode: ColorMode | None = None,
-        hot_spot: Vec2 | None = None,
+        hot_spot: HotSpot | None = None,
     ):
         """IconStyle instance constructor."""
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
@@ -64,13 +63,8 @@ class IconStyle(ColorStyle):
         self.icon = _IconStyle_Icon(icon)
         self.hot_spot = hot_spot
 
-    @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance."""
-        yield ObjectChild(self, self.icon)
-
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
-        if self.hot_spot is not None:
-            root.append(self.hot_spot.xml)
+        if self.hot_spot:
+            self.hot_spot.build_kml(root, False)
