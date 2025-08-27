@@ -2,7 +2,13 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import RefreshMode, ViewRefreshMode, ArgParser, NoParse, DumpDirect
+from pyLiveKML.KML.KML import (
+    RefreshMode,
+    ViewRefreshMode,
+    ArgParser,
+    NoParse,
+    DumpDirect,
+)
 from pyLiveKML.KML.KMLObjects.Link import Link
 
 
