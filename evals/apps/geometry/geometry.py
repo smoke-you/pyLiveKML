@@ -9,7 +9,16 @@ from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, UUID4
-from pyLiveKML import NetworkLinkControl, GeoCoordinates, Feature, AltitudeMode, Region, Style, BalloonStyle, DisplayMode
+from pyLiveKML import (
+    NetworkLinkControl,
+    GeoCoordinates,
+    Feature,
+    AltitudeMode,
+    Region,
+    Style,
+    BalloonStyle,
+    DisplayMode,
+)
 from scipy.spatial.transform import Rotation
 
 from .GeoEllipse import GeoEllipse
@@ -38,7 +47,9 @@ gpr.description = "This is a polygon with an internal cutout.\nYou can change th
 #     east=origin.lon + 0.05,
 #     west=origin.lon - 0.05,
 # )
-cast(Style, gpr._styles[0])._balloon_style = BalloonStyle(None, 0xff0000ff, 0xff400000, DisplayMode.DEFAULT)
+cast(Style, gpr._styles[0])._balloon_style = BalloonStyle(
+    None, 0xFF0000FF, 0xFF400000, DisplayMode.DEFAULT
+)
 gpe = GeoEllipse(
     name="ellipse",
     origin=GeoCoordinates(lon=origin.lon, lat=origin.lat, alt=origin.alt),

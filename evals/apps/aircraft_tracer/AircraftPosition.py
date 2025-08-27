@@ -4,7 +4,15 @@ from datetime import datetime
 from typing import Optional, cast
 
 from apps.helpers import description_builder
-from pyLiveKML import GeoCoordinates, AltitudeMode, IconStyle, Placemark, Point, Style, TimeStamp
+from pyLiveKML import (
+    GeoCoordinates,
+    AltitudeMode,
+    IconStyle,
+    Placemark,
+    Point,
+    Style,
+    TimeStamp,
+)
 
 
 class AircraftPosition(Placemark):

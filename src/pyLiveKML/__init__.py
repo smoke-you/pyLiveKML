@@ -62,7 +62,7 @@ from pyLiveKML.KML.KMLObjects.TimeSpan import TimeSpan
 
 
 __all__ = [
-    "Alias", 
+    "Alias",
     "AltitudeMode",
     "Angle180",
     "Angle360",

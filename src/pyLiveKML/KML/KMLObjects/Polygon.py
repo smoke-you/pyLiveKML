@@ -4,10 +4,30 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import AltitudeMode, ObjectState, ArgParser, NoParse, DumpDirect
+from pyLiveKML.KML.KML import AltitudeMode, ArgParser, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KML.KMLObjects.LinearRing import LinearRing
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+
+
+class _OuterBoundary(Object):
+    _kml_type = "outerBoundaryIs"
+    _direct_children = ("boundary",)
+    _suppress_id = True
+
+    def __init__(self, boundary: LinearRing) -> None:
+        super().__init__()
+        self.boundary = boundary
+
+
+class _InnerBoundary(Object):
+    _kml_type = "innerBoundaryIs"
+    _direct_children = ("boundary",)
+    _suppress_id = True
+
+    def __init__(self, boundary: LinearRing) -> None:
+        super().__init__()
+        self.boundary = boundary
 
 
 class Polygon(Geometry):
@@ -36,20 +56,25 @@ class Polygon(Geometry):
         ArgParser("extrude", NoParse, "extrude", DumpDirect),
         ArgParser("tessellate", NoParse, "tessellate", DumpDirect),
     )
+    _direct_children = ("outer_boundary", "inner_boundaries")
+
     def __init__(
         self,
         outer_boundary: LinearRing,
-        inner_boundaries: Iterable[LinearRing] | None = None,
+        inner_boundaries: LinearRing | Iterable[LinearRing] | None = None,
         altitude_mode: AltitudeMode | None = None,
         extrude: bool | None = None,
         tessellate: bool | None = None,
     ):
         """Polygon instance constructor."""
         Geometry.__init__(self)
-        self._outer_boundary = outer_boundary
-        self._inner_boundaries = list[LinearRing]()
-        if inner_boundaries:
-            self._inner_boundaries.extend(inner_boundaries)
+        self.outer_boundary = _OuterBoundary(outer_boundary)
+        self.inner_boundaries = list[_InnerBoundary]()
+        if inner_boundaries is not None:
+            if isinstance(inner_boundaries, LinearRing):
+                self.inner_boundaries.append(_InnerBoundary(inner_boundaries))
+            else:
+                self.inner_boundaries.extend(map(_InnerBoundary, inner_boundaries))
         self.extrude = extrude
         self.tessellate = tessellate
         self.altitude_mode = altitude_mode
@@ -62,63 +87,6 @@ class Polygon(Geometry):
         :class:`~pyLiveKML.KML.KMLObjects.Polygon`, i.e. one or more :class:`~pyLiveKML.KML.KMLObjects.LinearRing`
         instances, being the :attr:`outer_boundary` and zero or more :attr:`inner_boundaries`.
         """
-        yield ObjectChild(parent=self, child=self.outer_boundary)
+        yield ObjectChild(parent=self, child=self.outer_boundary.boundary)
         for b in self.inner_boundaries:
-            yield ObjectChild(parent=self, child=b)
-
-    @property
-    def outer_boundary(self) -> LinearRing:
-        """The outer boundary of the instance.
-
-        The :class:`~pyLiveKML.KML.KMLObjects.LinearRing` that defines the outer extents of the
-        :class:`~pyLiveKML.KML.KMLObjects.Polygon`.
-        """
-        return self._outer_boundary
-
-    @outer_boundary.setter
-    def outer_boundary(self, value: LinearRing) -> None:
-        if self._outer_boundary != value:
-            self._outer_boundary = value
-            self.field_changed()
-
-    @property
-    def inner_boundaries(self) -> Iterator[LinearRing]:
-        """The inner boundaries of the instance.
-
-        A generator to retrieve the :class:`~pyLiveKML.KML.KMLObjects.LinearRing` objects that define cutouts within
-        the :attr:`outer_boundary`.
-
-        :returns: A generator of :class:`~pyLiveKML.KML.KMLObjects.LinearRing` objects.
-        """
-        yield from self._inner_boundaries
-
-    def update_kml(self, parent: "Object", update: etree.Element) -> None:
-        """Retrieve a complete child <Create>, <Change> or <Delete> KML tag as a child of an <Update> tag.
-
-        Overrides the Object.update_kml() method to correctly handle the boundaries.
-        Polygon boundaries are a special case for children, because they *must* be
-        wrapped in an additional tag.
-        """
-        Object.update_kml(self, parent, update)
-        if self._outer_boundary.state == ObjectState.CHANGING:
-            self._outer_boundary.change_kml(update)
-        self._outer_boundary.update_generated()
-        for b in self._inner_boundaries:
-            if b.state == ObjectState.CHANGING:
-                b.change_kml(update)
-            b.update_generated()
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
-        if with_children:
-            if self._outer_boundary:
-                etree.SubElement(root, "outerBoundaryIs").append(
-                    self._outer_boundary.construct_kml()
-                )
-                if self._outer_boundary._state == ObjectState.IDLE:
-                    self._outer_boundary._state = ObjectState.CREATED
-            for b in self._inner_boundaries:
-                etree.SubElement(root, "innerBoundaryIs").append(b.construct_kml())
-                if b._state == ObjectState.IDLE:
-                    b._state = ObjectState.CREATED
+            yield ObjectChild(parent=self, child=b.boundary)

@@ -158,7 +158,9 @@ async def _(filename: str, request: Request) -> Any:
     else:
         raise HTTPException(status_code=404, detail="Item not found")
     return PlainTextResponse(
-        content=etree.tostring(root, doctype=KML_DOCTYPE, encoding="utf-8", pretty_print=True),
+        content=etree.tostring(
+            root, doctype=KML_DOCTYPE, encoding="utf-8", pretty_print=True
+        ),
         headers=KML_HEADERS,
     )
 

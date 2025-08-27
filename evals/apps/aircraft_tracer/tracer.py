@@ -42,8 +42,8 @@ def load_adsb_exchange_data(filename: Path) -> Folder:
             except BaseException as x:
                 print(x)
         kmldata.time_primitive = TimeSpan(
-            cast(AircraftPosition, kmldata[0]).timestamp, 
-            cast(AircraftPosition, kmldata[-1]).timestamp
+            cast(AircraftPosition, kmldata[0]).timestamp,
+            cast(AircraftPosition, kmldata[-1]).timestamp,
         )
     except BaseException as x:
         print(x)

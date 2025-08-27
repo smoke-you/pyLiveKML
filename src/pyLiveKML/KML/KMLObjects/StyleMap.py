@@ -8,6 +8,7 @@ from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.KML import ArgParser, NoParse, DumpDirect
 from pyLiveKML.KML._BaseObject import _BaseObject
 
+
 class _StyleMap_Pair_Key(enum.Enum):
     """Enumeration of possible pair keys for `StyleMap`."""
 

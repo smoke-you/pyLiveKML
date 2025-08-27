@@ -3,7 +3,15 @@
 from typing import Optional, Sequence, cast
 
 from lxml import etree  # type: ignore
-from pyLiveKML import ObjectState, IconStyle, Placemark, Point, Style, LookAt, AltitudeMode
+from pyLiveKML import (
+    ObjectState,
+    IconStyle,
+    Placemark,
+    Point,
+    Style,
+    LookAt,
+    AltitudeMode,
+)
 
 from .AircraftData import AircraftData
 from ..helpers import description_builder

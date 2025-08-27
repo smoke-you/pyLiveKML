@@ -133,9 +133,7 @@ class Model(Object):
     """A KML 'Model', per https://developers.google.com/kml/documentation/kmlreference#model."""
 
     _kml_type = "Model"
-    _fields = (
-        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),
-    )
+    _fields = (ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),)
     _direct_children = ("link", "location", "orientation", "scale", "resources")
 
     def __init__(
