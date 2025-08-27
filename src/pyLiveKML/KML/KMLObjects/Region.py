@@ -91,6 +91,10 @@ class Region(Object):
     """A KML 'Region', per https://developers.google.com/kml/documentation/kmlreference."""
 
     _kml_type = "Region"
+    _direct_children = (
+        "box",
+        "lod",
+    )
 
     def __init__(
         self,
@@ -120,8 +124,3 @@ class Region(Object):
         """The children of the instance."""
         yield ObjectChild(self, self.box)
         yield ObjectChild(self, self.lod)
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        root.append(self.box.construct_kml())
-        root.append(self.lod.construct_kml())

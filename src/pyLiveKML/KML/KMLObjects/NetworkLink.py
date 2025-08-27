@@ -1,10 +1,10 @@
 """NetworkLink module."""
 
-from typing import Iterator, Iterable
+from typing import Iterator, Iterable, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import RefreshMode
+from pyLiveKML.KML.KML import RefreshMode, ArgParser, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Feature import Feature
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild
@@ -29,6 +29,11 @@ class NetworkLink(Feature):
     """
 
     _kml_type = "NetworkLink"
+    _kml_fields = Feature._kml_fields + (
+        ArgParser("fly_to_view", NoParse, "flyToView", DumpDirect),
+        ArgParser("refresh_visibility", NoParse, "refreshVisibility", DumpDirect),
+    )
+    _direct_children = Feature._direct_children + ("link",)
 
     def __init__(
         self,
@@ -41,6 +46,8 @@ class NetworkLink(Feature):
         href: str | None = None,
         refresh_mode: RefreshMode | None = None,
         refresh_interval: float | None = None,
+        fly_to_view: bool | None = None,
+        refresh_visibility: bool | None = None,
     ):
         """NetworkLink instance constructor."""
         Feature.__init__(
@@ -52,65 +59,13 @@ class NetworkLink(Feature):
             style_url=style_url,
             styles=styles,
         )
-        self._link = Link(href, refresh_mode, refresh_interval)
-        self._fly_to_view = False
-        self._refresh_visibility = False
+        self.link = Link(href, refresh_mode, refresh_interval)
+        self.fly_to_view = fly_to_view
+        self.refresh_visibility = refresh_visibility
 
     @property
     def children(self) -> Iterator[ObjectChild]:
         """The children of the instance."""
-        if self._link:
-            yield ObjectChild(self, self._link)
-        for s in self.styles:
-            yield ObjectChild(self, s)
-
-    @property
-    def link(self) -> Link:
-        """The child :class:`~pyLiveKML.KML.KMLObjects.Link` instance.
-
-        The child :class:`~pyLiveKML.KML.KMLObjects.Link` object that identifies how and from where this
-        :class:`~pyLiveKML.KML.KMLObjects.NetworkLink` will load its dependent file.
-        """
-        return self._link
-
-    @property
-    def fly_to_view(self) -> bool:
-        """Flag to indicate whether GEP should fly to the instance's view location when it is loaded.
-
-        True if this :class:`~pyLiveKML.KML.KMLObjects.NetworkLink` instructs GEP to
-        fly to its view location when loaded, else False if it does not. None implies
-        the default of False.
-        """
-        return self._fly_to_view
-
-    @fly_to_view.setter
-    def fly_to_view(self, value: bool) -> None:
-        if self._fly_to_view != value:
-            self._fly_to_view = value
-
-    @property
-    def refresh_visibility(self) -> bool:
-        """Flag to indicate whether the visibility of the instance or its children can be changed in the UI.
-
-        True if the GEP user is not permitted to control the visibility of the
-        :class:`~pyLiveKML.KML.KMLObjects.NetworkLink` or its children, else False if
-        the GEP user has full control over that visibility.  None implies the default
-        of False.
-        """
-        return self._refresh_visibility
-
-    @refresh_visibility.setter
-    def refresh_visibility(self, value: bool) -> None:
-        if self._refresh_visibility != value:
-            self._refresh_visibility = value
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
-        etree.SubElement(root, "refreshVisibility").text = str(
-            int(self._refresh_visibility)
-        )
-        etree.SubElement(root, "flyToView").text = str(int(self._fly_to_view))
-        if with_children:
-            if self._link:
-                root.append(self._link.construct_kml())
+        if self.link:
+            yield ObjectChild(self, self.link)
+        yield from super().children

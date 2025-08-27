@@ -62,6 +62,12 @@ class Feature(Object, ABC):
         ArgParser("description", NoParse, "description", DumpDirect),
         ArgParser("style_url", NoParse, "styleUrl", DumpDirect),
     )
+    _direct_children = Object._direct_children + (
+        "abstract_view",
+        "time_primitive",
+        "region",
+        "_styles",
+    )
 
     def __init__(
         self,
@@ -205,15 +211,15 @@ class Feature(Object, ABC):
                 attribs["maxLines"] = str(self.snippet_max_lines)
             etree.SubElement(root, "Snippet", attribs).text = self.snippet
 
-        if with_children:
-            if self.abstract_view is not None:
-                root.append(self.abstract_view.construct_kml())
-            if self.time_primitive is not None:
-                root.append(self.time_primitive.construct_kml())
-            if self.region is not None:
-                root.append(self.region.construct_kml())
-            for s in self.styles:
-                root.append(s.construct_kml())
+        # if with_children:
+        #     if self.abstract_view is not None:
+        #         root.append(self.abstract_view.construct_kml())
+        #     if self.time_primitive is not None:
+        #         root.append(self.time_primitive.construct_kml())
+        #     if self.region is not None:
+        #         root.append(self.region.construct_kml())
+        #     for s in self.styles:
+        #         root.append(s.construct_kml())
 
     # override Object.select() to enable upwards cascade, i.e. if a Feature contained
     # in an unselected parent Feature is selected, the parent Feature must also be

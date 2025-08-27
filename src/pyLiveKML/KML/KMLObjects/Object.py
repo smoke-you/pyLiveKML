@@ -1,6 +1,7 @@
 """Object module."""
 
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 from typing import Any, Iterator, NamedTuple, Optional
 from uuid import uuid4, UUID
 from lxml import etree  # type: ignore
@@ -19,6 +20,7 @@ class Object(ABC):
     _kml_type: str = ""
     _kml_fields: tuple[ArgParser, ...] = tuple()
     _suppress_id: bool = False
+    _direct_children: tuple[str, ...] = tuple()
 
     def __init__(self) -> None:
         """Object instance constructor."""
@@ -94,6 +96,20 @@ class Object(ABC):
         return
         yield
 
+    @property
+    def direct_children(self) -> Iterator["Object"]:
+        """Retrieve a generator over the direct children of the object.
+
+        That is, retrieve any `Object` instances that are embedded in this `Object`.
+        """
+        for dc in self._direct_children:
+            dcobj = getattr(self, dc, None)
+            if dcobj:
+                if isinstance(dcobj, Iterable):
+                    yield from dcobj
+                else:
+                    yield dcobj
+
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element.
 
@@ -107,17 +123,25 @@ class Object(ABC):
         """
         for f in (f for f in self._kml_fields if f.dumper != NoDump):
             value = f.dumper.dump(getattr(self, f.name))
-            if value is not None:
+            if value:
                 etree.SubElement(root, f.typename).text = value
+        if with_children:
+            for dc in self.direct_children:
+                if dc._suppress_id:
+                    attribs = None
+                else:
+                    attribs = {"id": str(dc.id)}
+                dc.build_kml(etree.SubElement(root, dc._kml_type, attrib=attribs), True)
 
     def construct_kml(self) -> etree.Element:
         """Construct this :class:`~pyLiveKML.KML.KMLObjects.Object`'s KML representation.
 
         :returns: The KML representation of the object as an etree.Element.
         """
-        attribs = {}
-        if not self._suppress_id:
-            attribs["id"] = str(self.id)
+        if self._suppress_id:
+            attribs = None
+        else:
+            attribs = {"id": str(self.id)}
         root = etree.Element(_tag=self.kml_type, attrib=attribs)
         self.build_kml(root)
         return root

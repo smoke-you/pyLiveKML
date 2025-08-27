@@ -35,6 +35,14 @@ class Style(StyleSelector):
     """
 
     _kml_type = "Style"
+    _direct_children = (
+        "balloon_style",
+        "icon_style",
+        "label_style",
+        "line_style",
+        "list_style",
+        "poly_style",
+    )
 
     def __init__(
         self,
@@ -47,12 +55,12 @@ class Style(StyleSelector):
     ):
         """Style instance constructor."""
         StyleSelector.__init__(self)
-        self._balloon_style: BalloonStyle | None = balloon_style
-        self._icon_style: IconStyle | None = icon_style
-        self._label_style: LabelStyle | None = label_style
-        self._line_style: LineStyle | None = line_style
-        self._list_style: ListStyle | None = list_style
-        self._poly_style: PolyStyle | None = poly_style
+        self.balloon_style = balloon_style
+        self.icon_style = icon_style
+        self.label_style = label_style
+        self.line_style = line_style
+        self.list_style = list_style
+        self.poly_style = poly_style
 
     @property
     def children(self) -> Iterator[ObjectChild]:
@@ -62,69 +70,15 @@ class Style(StyleSelector):
         the children of a :class:`~pyLiveKML.KML.KMLObjects.Style`, i.e. one or more
         :class:`~pyLiveKML.KML.KMLObjects.SubStyle` instances.
         """
-        if self._balloon_style:
-            yield ObjectChild(parent=self, child=self._balloon_style)
-        if self._icon_style:
-            yield ObjectChild(parent=self, child=self._icon_style)
-        if self._label_style:
-            yield ObjectChild(parent=self, child=self._label_style)
-        if self._line_style:
-            yield ObjectChild(parent=self, child=self._line_style)
-        if self._list_style:
-            yield ObjectChild(parent=self, child=self._list_style)
-        if self._poly_style:
-            yield ObjectChild(parent=self, child=self._poly_style)
-
-    @property
-    def balloon_style(self) -> BalloonStyle | None:
-        """A :class:`~pyLiveKML.KML.KMLObjects.BalloonStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`."""
-        return self._balloon_style
-
-    @property
-    def icon_style(self) -> IconStyle | None:
-        """An :class:`~pyLiveKML.KML.KMLObjects.IconStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`."""
-        return self._icon_style
-
-    @property
-    def label_style(self) -> LabelStyle | None:
-        """A :class:`~pyLiveKML.KML.KMLObjects.LabelStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`."""
-        return self._label_style
-
-    @property
-    def line_style(self) -> LineStyle | None:
-        """A :class:`~pyLiveKML.KML.KMLObjects.LineStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`."""
-        return self._line_style
-
-    @property
-    def list_style(self) -> ListStyle | None:
-        """A :class:`~pyLiveKML.KML.KMLObjects.ListStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`."""
-        return self._list_style
-
-    @property
-    def poly_style(self) -> PolyStyle | None:
-        """A :class:`~pyLiveKML.KML.KMLObjects.PolyStyle` embedded in this :class:`~pyLiveKML.KML.KMLObjects.Style`."""
-        return self._poly_style
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        if with_children:
-            if self._balloon_style is not None:
-                root.append(self._balloon_style.construct_kml())
-            if self._icon_style is not None:
-                root.append(self._icon_style.construct_kml())
-            if self._label_style is not None:
-                root.append(self._label_style.construct_kml())
-            if self._line_style is not None:
-                root.append(self._line_style.construct_kml())
-            if self._list_style is not None:
-                root.append(self._list_style.construct_kml())
-            if self._poly_style is not None:
-                root.append(self._poly_style.construct_kml())
-
-    def __str__(self) -> str:
-        """Return a string representation."""
-        return f"{self.kml_type}"
-
-    def __repr__(self) -> str:
-        """Return a debug representation."""
-        return self.__str__()
+        if self.balloon_style:
+            yield ObjectChild(parent=self, child=self.balloon_style)
+        if self.icon_style:
+            yield ObjectChild(parent=self, child=self.icon_style)
+        if self.label_style:
+            yield ObjectChild(parent=self, child=self.label_style)
+        if self.line_style:
+            yield ObjectChild(parent=self, child=self.line_style)
+        if self.list_style:
+            yield ObjectChild(parent=self, child=self.list_style)
+        if self.poly_style:
+            yield ObjectChild(parent=self, child=self.poly_style)

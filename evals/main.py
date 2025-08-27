@@ -153,6 +153,7 @@ async def _(filename: str, request: Request) -> Any:
     elif filename == UPDATE_FILE:
         root.append(gep_sync.update_kml())
     elif filename == LOADER_FILE:
+        # root.append(gep_loader.construct_kml())
         root.append(gep_loader.construct_kml(with_features=True))
     else:
         raise HTTPException(status_code=404, detail="Item not found")

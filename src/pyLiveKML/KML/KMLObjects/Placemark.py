@@ -29,6 +29,7 @@ class Placemark(Feature):
     """
 
     _kml_type = "Placemark"
+    _direct_children = Feature._direct_children + ("_geometry",)
 
     def __init__(
         self,
@@ -68,9 +69,3 @@ class Placemark(Feature):
         be displayed in GEP as this :class:`~pyLiveKML.KML.KMLObjects.Placemark`.
         """
         return self._geometry
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
-        if with_children:
-            root.append(self.geometry.construct_kml())

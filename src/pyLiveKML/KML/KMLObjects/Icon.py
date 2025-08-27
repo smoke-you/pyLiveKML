@@ -35,7 +35,7 @@ class Icon(Link):
     """
 
     _kml_type = "Icon"
-    _kml_fields = (
+    _kml_fields = Link._kml_fields + (
         ArgParser("x", NoParse, "gx:x", DumpDirect),
         ArgParser("y", NoParse, "gx:y", DumpDirect),
         ArgParser("w", NoParse, "gx:w", DumpDirect),

@@ -63,6 +63,7 @@ class StyleMap(StyleSelector):
     """
 
     _kml_type = "StyleMap"
+    _direct_children = ("normal", "highlight")
 
     def __init__(
         self,
@@ -81,9 +82,3 @@ class StyleMap(StyleSelector):
         """The children of the instance."""
         yield ObjectChild(parent=self, child=self.normal)
         yield ObjectChild(parent=self, child=self.highlight)
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        if with_children:
-            root.append(self.normal.construct_kml())
-            root.append(self.highlight.construct_kml())

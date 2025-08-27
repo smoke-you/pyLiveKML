@@ -46,6 +46,7 @@ class IconStyle(ColorStyle):
         ArgParser("heading", NoParse, "heading", DumpDirect),
         ArgParser("hot_spot", NoParse, "", NoDump),
     )
+    _direct_children = ("icon",)
 
     def __init__(
         self,
@@ -71,6 +72,5 @@ class IconStyle(ColorStyle):
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
-        root.append(self.icon.construct_kml())
         if self.hot_spot is not None:
             root.append(self.hot_spot.xml)
