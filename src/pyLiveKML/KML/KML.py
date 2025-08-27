@@ -44,12 +44,13 @@ GxViewerOption = NamedTuple(
 )
 
 ArgParser = NamedTuple(
-    "ArgParser", [
-        ("name", str), 
+    "ArgParser",
+    [
+        ("name", str),
         ("parser", Type["_KMLParser"]),
         ("typename", str),
         ("dumper", Type["_KMLDump"]),
-    ]
+    ],
 )
 
 
@@ -228,13 +229,16 @@ class NoDump(_KMLDump):
 
     @classmethod
     def dump(cls, value: Any) -> Any:
+        """Dump and format a KML object field."""
         return ""
+
 
 class DumpDirect(_KMLDump):
     """Dump to string."""
 
     @classmethod
     def dump(cls, value: Any) -> Any:
+        """Dump and format a KML object field."""
         if value is None:
             return None
         if isinstance(value, enum.Enum):

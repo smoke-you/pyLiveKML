@@ -27,7 +27,7 @@ class ColorStyle(SubStyle, ABC):
         to determine the displayed color.
     """
 
-    _kml_fields = (
+    _kml_fields: tuple[ArgParser, ...] = (
         ArgParser("color", ColorParse, "color", DumpDirect),
         ArgParser("color_mode", NoParse, "colorMode", DumpDirect),
     )

@@ -10,13 +10,13 @@ from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.Vec2 import Vec2
 
+
 class _IconStyle_Icon(Object):
     """A minimalist Icon class, used only within `IconStyle`."""
 
     _kml_type = "Icon"
-    _kml_fields = (
-        ArgParser("href", NoParse, "href", DumpDirect),
-    )
+    _kml_fields = (ArgParser("href", NoParse, "href", DumpDirect),)
+    _suppress_id = True
 
     def __init__(self, href: str):
         """_IconStyle_Icon instance constructor."""
@@ -40,12 +40,10 @@ class IconStyle(ColorStyle):
     """
 
     _kml_type = "IconStyle"
-    _kml_fields = (
+    _kml_fields = ColorStyle._kml_fields + (
         ArgParser("icon", NoParse, "", NoDump),
         ArgParser("scale", NoParse, "scale", DumpDirect),
         ArgParser("heading", NoParse, "heading", DumpDirect),
-        ArgParser("color", NoParse, "color", DumpDirect),
-        ArgParser("color_mode", NoParse, "colorMode", DumpDirect),
         ArgParser("hot_spot", NoParse, "", NoDump),
     )
 
@@ -67,6 +65,7 @@ class IconStyle(ColorStyle):
 
     @property
     def children(self) -> Iterator[ObjectChild]:
+        """The children of the instance."""
         yield ObjectChild(self, self.icon)
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
@@ -75,4 +74,3 @@ class IconStyle(ColorStyle):
         root.append(self.icon.construct_kml())
         if self.hot_spot is not None:
             root.append(self.hot_spot.xml)
-

@@ -7,7 +7,6 @@ from pyLiveKML.KML.KML import DisplayMode, ArgParser, NoParse, ColorParse, DumpD
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
-
 class BalloonStyle(SubStyle):
     """A KML 'BalloonStyle', per https://developers.google.com/kml/documentation/kmlreference#balloonstyle.
 
@@ -27,6 +26,7 @@ class BalloonStyle(SubStyle):
         ArgParser("text", NoParse, "text", DumpDirect),
         ArgParser("display_mode", NoParse, "displayMode", DumpDirect),
     )
+
     def __init__(
         self,
         text: str | None = None,

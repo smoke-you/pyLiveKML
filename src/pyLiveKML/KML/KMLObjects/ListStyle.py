@@ -1,10 +1,18 @@
 """ListStyle module."""
+
 from typing import Sequence, Iterator
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import ListItemType, ItemIconMode, ArgParser, NoParse, ColorParse, DumpDirect
+from pyLiveKML.KML.KML import (
+    ListItemType,
+    ItemIconMode,
+    ArgParser,
+    NoParse,
+    ColorParse,
+    DumpDirect,
+)
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 
@@ -19,7 +27,7 @@ class ItemIcon(Object):
     )
 
     def __init__(
-        self, 
+        self,
         icon_state: ItemIconMode | None = None,
         href: str | None = None,
     ):
@@ -50,7 +58,7 @@ class ListStyle(SubStyle):
         self,
         list_item_type: ListItemType | None = None,
         bg_color: GeoColor | int | None = None,
-        icons: ItemIcon | Sequence[ItemIcon] | None = None
+        icons: ItemIcon | Sequence[ItemIcon] | None = None,
     ):
         """ListStyle instance constructor."""
         SubStyle.__init__(self)

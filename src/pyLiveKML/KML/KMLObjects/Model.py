@@ -22,10 +22,11 @@ class Location(Object):
 
     _kml_type = "Location"
     _kml_fields = (
-        ArgParser("longitude", Angle180, "longitude", DumpDirect,),
-        ArgParser("latitude", Angle90, "latitude", DumpDirect,),
-        ArgParser("altitude", NoParse, "altitude", DumpDirect,),
+        ArgParser("longitude", Angle180, "longitude", DumpDirect),
+        ArgParser("latitude", Angle90, "latitude", DumpDirect),
+        ArgParser("altitude", NoParse, "altitude", DumpDirect),
     )
+    _suppress_id = True
 
     def __init__(
         self,
@@ -50,10 +51,11 @@ class Orientation(Object):
 
     _kml_type = "Location"
     _kml_fields = (
-        ArgParser("heading", Angle360, "heading", DumpDirect,),
-        ArgParser("tilt", AnglePos180, "tilt", DumpDirect,),
-        ArgParser("roll", Angle180, "roll", DumpDirect,),
+        ArgParser("heading", Angle360, "heading", DumpDirect),
+        ArgParser("tilt", AnglePos180, "tilt", DumpDirect),
+        ArgParser("roll", Angle180, "roll", DumpDirect),
     )
+    _suppress_id = True
 
     def __init__(
         self,
@@ -78,10 +80,11 @@ class Scale(Object):
 
     _kml_type = "Scale"
     _kml_fields = (
-        ArgParser("x", NoParse, "x", DumpDirect,),
-        ArgParser("y", NoParse, "y", DumpDirect,),
-        ArgParser("z", NoParse, "z", DumpDirect,),
+        ArgParser("x", NoParse, "x", DumpDirect),
+        ArgParser("y", NoParse, "y", DumpDirect),
+        ArgParser("z", NoParse, "z", DumpDirect),
     )
+    _suppress_id = True
 
     def __init__(
         self,
@@ -106,9 +109,10 @@ class Alias(Object):
 
     _kml_type = "Alias"
     _kml_fields = (
-        ArgParser("target_href", NoParse, "targetHref", DumpDirect,),
-        ArgParser("source_href", NoParse, "sourceHref", DumpDirect,),
+        ArgParser("target_href", NoParse, "targetHref", DumpDirect),
+        ArgParser("source_href", NoParse, "sourceHref", DumpDirect),
     )
+    _suppress_id = True
 
     def __init__(
         self,

@@ -8,7 +8,14 @@ from typing import Iterable, NamedTuple, Iterator, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, ObjectState, ArgParser, DumpDirect, NoParse, NoDump
+from pyLiveKML.KML.KML import (
+    KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
+    ObjectState,
+    ArgParser,
+    DumpDirect,
+    NoParse,
+    NoDump,
+)
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Region import Region
@@ -42,18 +49,18 @@ class Feature(Object, ABC):
         objects that are local to this :class:`~pyLiveKML.KML.KMLObjects.Feature`.
     """
 
-    _kml_fields = (
-        ArgParser("name", NoParse, "name", DumpDirect,),
-        ArgParser("visibility", NoParse, "visibility", DumpDirect,),
-        ArgParser("is_open", NoParse, "open", DumpDirect,),
-        ArgParser("author_name", NoParse, "", NoDump,),
-        ArgParser("author_link", NoParse, "", NoDump,),
-        ArgParser("address", NoParse, "address", DumpDirect,),
-        ArgParser("snippet", NoParse, "", NoDump,),
-        ArgParser("snippet_max_line", NoParse, "", NoDump,),
-        ArgParser("phone_number", NoParse, "phoneNumber", DumpDirect,),
-        ArgParser("description", NoParse, "description", DumpDirect,),
-        ArgParser("style_url", NoParse, "styleUrl", DumpDirect,),
+    _kml_fields = Object._kml_fields + (
+        ArgParser("name", NoParse, "name", DumpDirect),
+        ArgParser("visibility", NoParse, "visibility", DumpDirect),
+        ArgParser("is_open", NoParse, "open", DumpDirect),
+        ArgParser("author_name", NoParse, "", NoDump),
+        ArgParser("author_link", NoParse, "", NoDump),
+        ArgParser("address", NoParse, "address", DumpDirect),
+        ArgParser("snippet", NoParse, "", NoDump),
+        ArgParser("snippet_max_line", NoParse, "", NoDump),
+        ArgParser("phone_number", NoParse, "phoneNumber", DumpDirect),
+        ArgParser("description", NoParse, "description", DumpDirect),
+        ArgParser("style_url", NoParse, "styleUrl", DumpDirect),
     )
 
     def __init__(

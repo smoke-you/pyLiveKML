@@ -18,6 +18,7 @@ class Object(ABC):
 
     _kml_type: str = ""
     _kml_fields: tuple[ArgParser, ...] = tuple()
+    _suppress_id: bool = False
 
     def __init__(self) -> None:
         """Object instance constructor."""
@@ -114,7 +115,10 @@ class Object(ABC):
 
         :returns: The KML representation of the object as an etree.Element.
         """
-        root = etree.Element(_tag=self.kml_type, attrib={"id": str(self.id)})
+        attribs = {}
+        if not self._suppress_id:
+            attribs["id"] = str(self.id)
+        root = etree.Element(_tag=self.kml_type, attrib=attribs)
         self.build_kml(root)
         return root
 

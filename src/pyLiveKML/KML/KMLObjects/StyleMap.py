@@ -1,12 +1,38 @@
 """StyleMap module."""
 
+import enum
 from typing import Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.Style import Style
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
+from pyLiveKML.KML.KML import ArgParser, NoParse, DumpDirect
+
+
+class _StyleMap_Pair_Key(enum.Enum):
+    """Enumeration of possible pair keys for `StyleMap`."""
+
+    NORMAL = "normal"
+    HIGHLIGHT = "highlight"
+
+
+class _StyleMap_Pair(Object):
+    """Hidden class for use by `StyleMap`."""
+
+    _kml_type = "Pair"
+    _kml_fields = (
+        ArgParser("key", NoParse, "key", DumpDirect),
+        ArgParser("style_url", NoParse, "styleUrl", DumpDirect),
+    )
+    _suppress_id = True
+
+    def __init__(self, key: _StyleMap_Pair_Key, style_url: str):
+        """_StyleMap_Pair instance constructor."""
+        super().__init__()
+        self.key = key
+        self.style_url = style_url
 
 
 class StyleMap(StyleSelector):
@@ -40,110 +66,24 @@ class StyleMap(StyleSelector):
 
     def __init__(
         self,
-        normal_style_url: str | None = None,
-        normal_style: Style | None = None,
-        highlight_style_url: str | None = None,
-        highlight_style: Style | None = None,
+        normal_style_url: str,
+        highlight_style_url: str,
     ):
         """StyleMap instance constructor."""
         super().__init__()
-        self._normal_style_url: str | None = normal_style_url
-        self._normal_style: Style | None = normal_style
-        self._highlight_style_url: str | None = highlight_style_url
-        self._highlight_style: Style | None = highlight_style
+        self.normal = _StyleMap_Pair(_StyleMap_Pair_Key.NORMAL, normal_style_url)
+        self.highlight = _StyleMap_Pair(
+            _StyleMap_Pair_Key.HIGHLIGHT, highlight_style_url
+        )
 
     @property
     def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance.
-
-        Overridden from :attr:`pyLiveKML.KML.KMLObjects.Object.Object.children`. Yields
-        the children of a :class:`~pyLiveKML.KML.KMLObjects.Style`, i.e. up to two
-        :class:`~pyLiveKML.KML.KMLObjects.Style` instances.
-        """
-        if self._normal_style:
-            yield ObjectChild(parent=self, child=self._normal_style)
-        if self._highlight_style:
-            yield ObjectChild(parent=self, child=self._highlight_style)
-
-    @property
-    def normal_style_url(self) -> str | None:
-        """The URI of the normal style.
-
-        A URI that references the :class:`~pyLiveKML.KML.KMLObjects.Style` that will
-        be employed when the target :class:`~pyLiveKML.KML.KMLObjects.Feature` is
-        displayed in :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` mode.
-        """
-        return self._normal_style_url
-
-    @normal_style_url.setter
-    def normal_style_url(self, value: str | None) -> None:
-        if self._normal_style_url != value:
-            self._normal_style_url = value
-            self.field_changed()
-
-    @property
-    def normal_style(self) -> Style | None:
-        """The normal style to be applied.
-
-        An inline :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when
-        the target :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in
-        :attr:`~pyLiveKML.KML.KML.StyleState.NORMAL` mode.
-        """
-        return self._normal_style
-
-    @normal_style.setter
-    def normal_style(self, value: Style | None) -> None:
-        if self._normal_style != value:
-            self._normal_style = value
-            self.field_changed()
-
-    @property
-    def highlight_style_url(self) -> str | None:
-        """The URI of the highlight style.
-
-        A URI that references the :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when the target
-        :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT` mode.
-        """
-        return self._highlight_style_url
-
-    @highlight_style_url.setter
-    def highlight_style_url(self, value: str | None) -> None:
-        if self._highlight_style_url != value:
-            self._highlight_style_url = value
-            self.field_changed()
-
-    @property
-    def highlight_style(self) -> Style | None:
-        """The highlight style to be applied.
-
-        An inline :class:`~pyLiveKML.KML.KMLObjects.Style` that will be employed when
-        the target :class:`~pyLiveKML.KML.KMLObjects.Feature` is displayed in
-        :attr:`~pyLiveKML.KML.KML.StyleState.HIGHLIGHT` mode.
-        """
-        return self._highlight_style
-
-    @highlight_style.setter
-    def highlight_style(self, value: Style | None) -> None:
-        if self._highlight_style != value:
-            self._highlight_style = value
-            self.field_changed()
+        """The children of the instance."""
+        yield ObjectChild(parent=self, child=self.normal)
+        yield ObjectChild(parent=self, child=self.highlight)
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         if with_children:
-            if self._normal_style_url or self._normal_style:
-                normal = etree.SubElement(root, "Pair")
-                etree.SubElement(normal, "key").text = "normal"
-                if self._normal_style:
-                    normal.append(self._normal_style.construct_kml())
-                if self._normal_style_url:
-                    etree.SubElement(normal, "styleUrl").text = self._normal_style_url
-            if self._highlight_style_url or self._highlight_style:
-                highlight = etree.SubElement(root, "Pair")
-                etree.SubElement(highlight, "key").text = "highlight"
-                if self._highlight_style:
-                    highlight.append(self._highlight_style.construct_kml())
-                if self._highlight_style_url:
-                    etree.SubElement(highlight, "styleUrl").text = (
-                        self._highlight_style_url
-                    )
+            root.append(self.normal.construct_kml())
+            root.append(self.highlight.construct_kml())

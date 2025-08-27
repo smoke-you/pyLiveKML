@@ -1,9 +1,18 @@
 """Region module."""
 
+from typing import Iterator
+
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import AltitudeMode, Angle90, Angle180, ArgParser, NoParse, DumpDirect
-from pyLiveKML.KML.KMLObjects.Object import Object
+from pyLiveKML.KML.KML import (
+    AltitudeMode,
+    Angle90,
+    Angle180,
+    ArgParser,
+    NoParse,
+    DumpDirect,
+)
+from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 
 
 class LatLonAltBox(Object):
@@ -11,14 +20,15 @@ class LatLonAltBox(Object):
 
     _kml_type = "LatLonAltBox"
     _kml_fields = (
-        ArgParser("north", NoParse, "north", DumpDirect,),
-        ArgParser("south", NoParse, "south", DumpDirect,),
-        ArgParser("east", NoParse, "east", DumpDirect,),
-        ArgParser("west", NoParse, "west", DumpDirect,),
-        ArgParser("min_altitude", NoParse, "minAltitude", DumpDirect,),
-        ArgParser("max_altitude", NoParse, "maxAltitude", DumpDirect,),
-        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect,),
+        ArgParser("north", NoParse, "north", DumpDirect),
+        ArgParser("south", NoParse, "south", DumpDirect),
+        ArgParser("east", NoParse, "east", DumpDirect),
+        ArgParser("west", NoParse, "west", DumpDirect),
+        ArgParser("min_altitude", NoParse, "minAltitude", DumpDirect),
+        ArgParser("max_altitude", NoParse, "maxAltitude", DumpDirect),
+        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),
     )
+    _suppress_id = True
 
     def __init__(
         self,
@@ -42,17 +52,6 @@ class LatLonAltBox(Object):
         self.max_altitude = max_altitude
         self.altitude_mode = altitude_mode
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        box = etree.SubElement(root, self._kml_type)
-        etree.SubElement(box, "north").text = str(self.north)
-        etree.SubElement(box, "south").text = str(self.south)
-        etree.SubElement(box, "east").text = str(self.east)
-        etree.SubElement(box, "west").text = str(self.west)
-        etree.SubElement(box, "altitudeMode").text = self.altitude_mode.value
-        etree.SubElement(box, "minAltitude").text = str(self.min_altitude)
-        etree.SubElement(box, "maxAltitude").text = str(self.max_altitude)
-
 
 class Lod(Object):
     """Lod is an abbreviation for Level of Detail.
@@ -65,11 +64,12 @@ class Lod(Object):
 
     _kml_type = "Lod"
     _kml_fields = (
-        ArgParser("min_lod_pixels", NoParse, "minLodPixels", DumpDirect,),
-        ArgParser("max_lod_pixels", NoParse, "maxLodPixels", DumpDirect,),
-        ArgParser("min_fade_extent", NoParse, "minFadeExtent", DumpDirect,),
-        ArgParser("max_fade_extent", NoParse, "maxFadeExtent", DumpDirect,),
+        ArgParser("min_lod_pixels", NoParse, "minLodPixels", DumpDirect),
+        ArgParser("max_lod_pixels", NoParse, "maxLodPixels", DumpDirect),
+        ArgParser("min_fade_extent", NoParse, "minFadeExtent", DumpDirect),
+        ArgParser("max_fade_extent", NoParse, "maxFadeExtent", DumpDirect),
     )
+    _suppress_id = True
 
     def __init__(
         self,
@@ -85,14 +85,6 @@ class Lod(Object):
         self.max_lod_pixels = max_lod_pixels
         self.min_fade_extent = min_fade_extent
         self.max_fade_extent = max_fade_extent
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        lod = etree.SubElement(root, self._kml_type)
-        etree.SubElement(lod, "minLodPixels").text = str(self.min_lod_pixels)
-        etree.SubElement(lod, "maxLodPixels").text = str(self.max_lod_pixels)
-        etree.SubElement(lod, "minFadeExtent").text = str(self.min_fade_extent)
-        etree.SubElement(lod, "maxFadeExtent").text = str(self.max_fade_extent)
 
 
 class Region(Object):
@@ -123,7 +115,13 @@ class Region(Object):
             self, min_lod_pixels, max_lod_pixels, min_fade_extent, max_fade_extent
         )
 
+    @property
+    def children(self) -> Iterator[ObjectChild]:
+        """The children of the instance."""
+        yield ObjectChild(self, self.box)
+        yield ObjectChild(self, self.lod)
+
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        self.box.build_kml(root, with_children)
-        self.lod.build_kml(root, with_children)
+        root.append(self.box.construct_kml())
+        root.append(self.lod.construct_kml())

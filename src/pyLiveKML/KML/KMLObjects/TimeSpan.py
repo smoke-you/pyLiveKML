@@ -14,8 +14,8 @@ class TimeSpan(TimePrimitive):
 
     _kml_type = "TimeSpan"
     _kml_fields = TimePrimitive._kml_fields + (
-        ArgParser("begin", NoParse, "begin", DumpDirect,),
-        ArgParser("end", NoParse, "end", DumpDirect,),
+        ArgParser("begin", NoParse, "begin", DumpDirect),
+        ArgParser("end", NoParse, "end", DumpDirect),
     )
 
     def __init__(self, begin: datetime, end: datetime):

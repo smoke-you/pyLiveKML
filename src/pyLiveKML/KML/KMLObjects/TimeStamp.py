@@ -14,7 +14,7 @@ class TimeStamp(TimePrimitive):
 
     _kml_type = "TimeStamp"
     _kml_fields = TimePrimitive._kml_fields + (
-        ArgParser("when", NoParse, "when", DumpDirect,),
+        ArgParser("when", NoParse, "when", DumpDirect),
     )
 
     def __init__(self, when: datetime):

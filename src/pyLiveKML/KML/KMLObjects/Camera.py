@@ -24,13 +24,13 @@ class Camera(AbstractView):
 
     _kml_type = "Camera"
     _kml_fields = (
-        ArgParser("longitude", Angle180, "longitude", DumpDirect,),
-        ArgParser("latitude", Angle90, "latitude", DumpDirect,),
-        ArgParser("altitude", NoParse, "altitude", DumpDirect,),
-        ArgParser("heading", Angle360, "heading", DumpDirect,),
-        ArgParser("tilt", AnglePos180, "tilt", DumpDirect,),
-        ArgParser("roll", Angle180, "roll", DumpDirect,),
-        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect,),
+        ArgParser("longitude", Angle180, "longitude", DumpDirect),
+        ArgParser("latitude", Angle90, "latitude", DumpDirect),
+        ArgParser("altitude", NoParse, "altitude", DumpDirect),
+        ArgParser("heading", Angle360, "heading", DumpDirect),
+        ArgParser("tilt", AnglePos180, "tilt", DumpDirect),
+        ArgParser("roll", Angle180, "roll", DumpDirect),
+        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),
     )
 
     def __init__(
