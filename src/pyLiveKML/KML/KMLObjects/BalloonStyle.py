@@ -3,8 +3,9 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import DisplayMode
+from pyLiveKML.KML.KML import DisplayMode, ArgParser, NoParse, ColorParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
+
 
 
 class BalloonStyle(SubStyle):
@@ -20,7 +21,12 @@ class BalloonStyle(SubStyle):
     """
 
     _kml_type = "BalloonStyle"
-
+    _kml_fields = (
+        ArgParser("bg_color", ColorParse, "bgColor", DumpDirect),
+        ArgParser("text_color", ColorParse, "textColor", DumpDirect),
+        ArgParser("text", NoParse, "text", DumpDirect),
+        ArgParser("display_mode", NoParse, "displayMode", DumpDirect),
+    )
     def __init__(
         self,
         text: str | None = None,
@@ -30,79 +36,7 @@ class BalloonStyle(SubStyle):
     ):
         """BalloonStyle instance constructor."""
         SubStyle.__init__(self)
-        self._text: str | None = text
-        self._display_mode: DisplayMode | None = display_mode
-        self._bg_color: GeoColor | None = None
+        self.text = text
+        self.display_mode = display_mode
         self.bg_color = bg_color
-        self._text_color: GeoColor | None = None
         self.text_color = text_color
-
-    @property
-    def bg_color(self) -> GeoColor | None:
-        """The background color of the balloon, in 32-bit ABGR format."""
-        return self._bg_color
-
-    @bg_color.setter
-    def bg_color(self, value: GeoColor | int | None) -> None:
-        if isinstance(value, int):
-            value = GeoColor(value)
-        if self._bg_color != value:
-            self._bg_color = value
-            self.field_changed()
-
-    @property
-    def text_color(self) -> GeoColor | None:
-        """The color of the text in the balloon, in 32-bit ABGR format."""
-        return self._text_color
-
-    @text_color.setter
-    def text_color(self, value: GeoColor | int | None) -> None:
-        if isinstance(value, int):
-            value = GeoColor(value)
-        if self._text_color != value:
-            self._text_color = value
-            self.field_changed()
-
-    @property
-    def text(self) -> str | None:
-        """The text displayed in the balloon.
-
-        :note: HTML markup, e.g. tables, is permissible.
-        """
-        return self._text
-
-    @text.setter
-    def text(self, value: str | None) -> None:
-        if self._text != value:
-            self._text = value
-            self.field_changed()
-
-    @property
-    def display_mode(self) -> DisplayMode | None:
-        """The balloon :class:`~pyLiveKML.KML.KML.DisplayMode`."""
-        return self._display_mode
-
-    @display_mode.setter
-    def display_mode(self, value: DisplayMode | None) -> None:
-        if self._display_mode != value:
-            self._display_mode = value
-            self.field_changed()
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        if self._bg_color is not None:
-            etree.SubElement(root, "bgColor").text = str(self._bg_color)
-        if self._text_color is not None:
-            etree.SubElement(root, "textColor").text = str(self._text_color)
-        if self._text is not None:
-            etree.SubElement(root, "text").text = self._text
-        if self._display_mode is not None:
-            etree.SubElement(root, "displayMode").text = self._display_mode.value
-
-    def __str__(self) -> str:
-        """Return a string representation."""
-        return f"{self.kml_type}"
-
-    def __repr__(self) -> str:
-        """Return a debug representation."""
-        return self.__str__()

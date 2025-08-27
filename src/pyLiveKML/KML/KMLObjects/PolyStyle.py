@@ -35,16 +35,5 @@ class PolyStyle(ColorStyle):
     ):
         """PolyStyle instance constructor."""
         ColorStyle.__init__(self, color, color_mode)
-        self.fill: bool | None = fill
-        self.outline: bool | None = outline
-
-    # def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-    #     """Construct the KML content and append it to the provided etree.Element."""
-    #     if self.color is not None:
-    #         etree.SubElement(root, "color").text = str(self.color)
-    #     if self.color_mode is not None:
-    #         etree.SubElement(root, "colorMode").text = self.color_mode.value
-    #     if self._fill is not None:
-    #         etree.SubElement(root, "fill").text = str(int(self._fill))
-    #     if self._outline is not None:
-    #         etree.SubElement(root, "outline").text = str(int(self._outline))
+        self.fill = fill
+        self.outline = outline

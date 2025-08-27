@@ -24,6 +24,7 @@ class ItemIcon(Object):
         href: str | None = None,
     ):
         """ItemIcon instance constructor."""
+        super().__init__()
         self.icon_state = icon_state
         self.href = href
 

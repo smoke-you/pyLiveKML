@@ -9,7 +9,7 @@ from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, UUID4
-from pyLiveKML import NetworkLinkControl, GeoCoordinates, Feature, AltitudeMode, Region
+from pyLiveKML import NetworkLinkControl, GeoCoordinates, Feature, AltitudeMode, Region, Style, BalloonStyle, DisplayMode
 from scipy.spatial.transform import Rotation
 
 from .GeoEllipse import GeoEllipse
@@ -31,13 +31,14 @@ gpr = GeoRing(
     fill_color=0x4000FF00,
     altitude_mode=AltitudeMode.CLAMP_TO_GROUND,
 )
-# gpr.snippet = "This is a polygon with an internal cutout.\nYou can change the border and fill colours via the web UI."
+gpr.description = "This is a polygon with an internal cutout.\nYou can change the border and fill colours via the web UI."
 # gpr.region = Region(
 #     north=origin.lat + 0.05,
 #     south=origin.lat - 0.05,
 #     east=origin.lon + 0.05,
 #     west=origin.lon - 0.05,
 # )
+cast(Style, gpr._styles[0])._balloon_style = BalloonStyle(None, 0xff0000ff, 0xff400000, DisplayMode.DEFAULT)
 gpe = GeoEllipse(
     name="ellipse",
     origin=GeoCoordinates(lon=origin.lon, lat=origin.lat, alt=origin.alt),
@@ -49,8 +50,8 @@ gpe = GeoEllipse(
     fill_color=0x4000FF00,
     altitude_mode=AltitudeMode.ABSOLUTE,
 )
-# gpe.snippet = "This is a simple polygon.\nIt has no internal cutouts.\nYou can change the border and fill colours via the web UI."
-# gpe.snippet_max_lines = 3
+gpe.snippet = "This is a simple polygon.\nIt has no internal cutouts.\nYou can change the border and fill colours via the web UI."
+gpe.snippet_max_lines = 3
 # gpe.region = Region(
 #     north=origin.lat + 0.01,
 #     south=origin.lat - 0.01,
