@@ -2,7 +2,7 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import RefreshMode, ViewRefreshMode, GxParams
+from pyLiveKML.KML.KML import RefreshMode, ViewRefreshMode, ArgParser, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Link import Link
 
 
@@ -29,6 +29,12 @@ class Icon(Link):
     """
 
     _kml_type = "Icon"
+    _kml_fields = (
+        ArgParser("x", NoParse, "gx:x", DumpDirect),
+        ArgParser("y", NoParse, "gx:y", DumpDirect),
+        ArgParser("w", NoParse, "gx:w", DumpDirect),
+        ArgParser("h", NoParse, "gx:h", DumpDirect),
+    )
 
     def __init__(
         self,
@@ -40,7 +46,10 @@ class Icon(Link):
         view_bound_scale: float | None = None,
         view_format: str | None = None,
         http_query: str | None = None,
-        gx_params: GxParams | None = None,  # GxParams(0, 0, -1, -1)
+        x: int = 0,
+        y: int = 0,
+        w: int = -1,
+        h: int = -1,
     ):
         """Icon instance constructor."""
         Link.__init__(
@@ -54,27 +63,7 @@ class Icon(Link):
             view_format=view_format,
             http_query=http_query,
         )
-        self._gx_params: GxParams | None = gx_params
-
-    @property
-    def gx_params(self) -> GxParams | None:
-        """A :class:`GxParams` named tuple that describes how the icon is treated by GEP."""
-        return self._gx_params
-
-    @gx_params.setter
-    def gx_params(self, value: GxParams | None) -> None:
-        self._gx_params = value
-        self.field_changed()
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
-        if self._gx_params:
-            if self._gx_params.x != 0:
-                etree.SubElement(root, "gx:x").text = str(self._gx_params.x)
-            if self._gx_params.y != 0:
-                etree.SubElement(root, "gx:y").text = str(self._gx_params.y)
-            if self._gx_params.w != -1:
-                etree.SubElement(root, "gx:w").text = str(self._gx_params.w)
-            if self._gx_params.h != -1:
-                etree.SubElement(root, "gx:h").text = str(self._gx_params.h)
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h

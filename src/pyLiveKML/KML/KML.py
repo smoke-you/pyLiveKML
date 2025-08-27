@@ -17,27 +17,39 @@ synchronization update emitted by a :class:`~pyLiveKML.KML.NetworkLinkControl` o
 """
 
 
-kml_header: str = '<?xml version="1.0" encoding="UTF-8"?>'
+KML_DOCTYPE: str = '<?xml version="1.0" encoding="UTF-8"?>'
 """The XML tag that opens any XML document, including any KML document.
 """
 
+KML_HEADERS = {
+    "Content-Type": "application/vnd.google-earth.kml+xml"
+}
 
-def kml_tag() -> etree.Element:
+
+__root_namespace_map = {
+    "gx": "http://www.google.com/kml/ext/2.2",
+    "kml": "http://www.opengis.net/kml/2.2",
+    "atom": "http://www.w3.org/2005/Atom",
+}
+
+__root_attributes = {
+    "xmlns": "http://www.opengis.net/kml/2.2"
+}
+
+def kml_root_tag() -> etree.Element:
     """Construct the opening <kml> tag, with namespaces, for a KML document.
 
     :return: The <kml> tag, with namespaces, that encloses the contents of a KML document.
     :rtype: etree.Element
     """
-    nsmap = {
-        "gx": "http://www.google.com/kml/ext/2.2",
-        "kml": "http://www.opengis.net/kml/2.2",
-        "atom": "http://www.w3.org/2005/Atom",
-    }
-    attrib = {"xmlns": "http://www.opengis.net/kml/2.2"}
-    return etree.Element("kml", nsmap=nsmap, attrib=attrib)
+    # nsmap = {
+    #     "gx": "http://www.google.com/kml/ext/2.2",
+    #     "kml": "http://www.opengis.net/kml/2.2",
+    #     "atom": "http://www.w3.org/2005/Atom",
+    # }
+    # attrib = {"xmlns": "http://www.opengis.net/kml/2.2"}
+    return etree.Element("kml", nsmap=__root_namespace_map, attrib=__root_attributes)
 
-
-GxParams = NamedTuple("GxParams", [("x", int), ("y", int), ("w", int), ("h", int)])
 
 GxViewerOption = NamedTuple(
     "GxViewerOption", [("name", "GxViewerOptions"), ("enabled", bool)]
@@ -200,6 +212,10 @@ class Vec2Type(enum.Enum):
     """
 
     HOTSPOT = "hotSpot"
+    OVERLAY_XY = "overlayXY"
+    SCREEN_XY = "screenXY"
+    ROTATION_XY = "rotationXY"
+    SIZE = "size"
 
 
 class ObjectState(enum.Enum):

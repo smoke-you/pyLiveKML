@@ -24,8 +24,9 @@ from lxml import etree  # type: ignore
 from apps.KMLApp import find_apps, KMLControlRequest, KMLControlResponse
 from pyLiveKML import (
     RefreshMode,
-    kml_tag,
-    kml_header,
+    kml_root_tag,
+    KML_DOCTYPE,
+    KML_HEADERS,
     Folder,
     NetworkLink,
     NetworkLinkControl,
@@ -133,7 +134,7 @@ async def _() -> RedirectResponse:
 
 @app.get("/{filename}")
 async def _(filename: str, request: Request) -> Any:
-    kml = kml_tag()
+    root = kml_root_tag()
     if filename == "index.html":
         for c in gep_sync.container:
             c.select(False, True)
@@ -148,16 +149,16 @@ async def _(filename: str, request: Request) -> Any:
         }
         return templates.TemplateResponse("index.html.j2", context)
     elif filename == ELEMENTS_FILE:
-        kml.append(gep_sync.container.construct_kml())
+        root.append(gep_sync.container.construct_kml())
     elif filename == UPDATE_FILE:
-        kml.append(gep_sync.update_kml())
+        root.append(gep_sync.update_kml())
     elif filename == LOADER_FILE:
-        kml.append(gep_loader.construct_kml(with_features=True))
+        root.append(gep_loader.construct_kml(with_features=True))
     else:
         raise HTTPException(status_code=404, detail="Item not found")
     return PlainTextResponse(
-        content=etree.tostring(kml, doctype=kml_header, encoding="utf-8", pretty_print=True),
-        headers={"Content-Type": "application/vnd.google-earth.kml+xml"},
+        content=etree.tostring(root, doctype=KML_DOCTYPE, encoding="utf-8", pretty_print=True),
+        headers=KML_HEADERS,
     )
 
 

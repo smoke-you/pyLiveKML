@@ -5,9 +5,9 @@ from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
 from pyLiveKML.KML.KML import (
     KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
-    kml_tag,
-    kml_header,
-    GxParams,
+    kml_root_tag,
+    KML_DOCTYPE,
+    KML_HEADERS,
     GxViewerOption,
     GxViewerOptions,
     AltitudeMode,
@@ -81,7 +81,6 @@ __all__ = [
     "GeoColor",
     "GeoCoordinates",
     "Geometry",
-    "GxParams",
     "GxViewerOption",
     "GxViewerOptions",
     "Icon",
@@ -120,7 +119,8 @@ __all__ = [
     "Vec2",
     "Vec2Type",
     "ViewRefreshMode",
-    "kml_header",
-    "kml_tag",
+    "KML_DOCTYPE",
+    "KML_HEADERS",
+    "kml_root_tag",
     "errors",
 ]
