@@ -48,6 +48,7 @@ from pyLiveKML.KML.KMLObjects.Model import Alias, Model
 from pyLiveKML.KML.KMLObjects.MultiGeometry import MultiGeometry
 from pyLiveKML.KML.KMLObjects.NetworkLink import NetworkLink
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KML.KMLObjects.Overlay import Overlay
 from pyLiveKML.KML.KMLObjects.Placemark import Placemark
 from pyLiveKML.KML.KMLObjects.Point import Point
 from pyLiveKML.KML.KMLObjects.Polygon import Polygon
@@ -67,6 +68,9 @@ from pyLiveKML.KML.KMLObjects.Track import (
     TrackElement,
     TrackExtendedData,
 )
+from pyLiveKML.KML.KMLObjects.GroundOverlay import GroundOverlay
+from pyLiveKML.KML.KMLObjects.ScreenOverlay import ScreenOverlay
+from pyLiveKML.KML.KMLObjects.PhotoOverlay import PhotoOverlay
 
 
 __all__ = [

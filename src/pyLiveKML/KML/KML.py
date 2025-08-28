@@ -194,6 +194,29 @@ class ViewRefreshMode(enum.Enum):
     ON_REGION = "onRegion"
 
 
+class OverlayShapeEnum(enum.Enum):
+    """Enumeration of view shape options for KML <Overlay> subclass tags.
+
+    Refer to the KML documentation at
+    https://developers.google.com/kml/documentation/kmlreference#photooverlay.
+    """
+
+    RECTANGLE = "rectangle"
+    CYLINDER = "cylinder"
+    SPHERE = "sphere"
+
+
+class GridOriginEnum(enum.Enum):
+    """Enumeration of grid origin options for KML <Overlay> subclass tags.
+
+    Refer to the KML documentation at
+    https://developers.google.com/kml/documentation/kmlreference#photooverlay.
+    """
+
+    LOWER_LEFT = "lowerLeft"
+    UPPER_LEFT = "upperLeft"
+
+
 class Vec2Type(enum.Enum):
     """Enumeration of possible sub-types for KML :class:`~pyLiveKML.KML.KMLObjects.Vec2` objects.
 
