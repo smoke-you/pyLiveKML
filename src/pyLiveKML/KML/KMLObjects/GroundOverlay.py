@@ -25,7 +25,7 @@ class _GroundOverlay_LatLonBox(_BaseObject):
     """LatLonBox class, specific to the <GroundOverlay> KML tag."""
 
     _kml_type = "LatLonBox"
-    _kml_fields = (
+    _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("north", Angle90, "north", DumpDirect),
         _FieldDef("south", Angle90, "south", DumpDirect),
         _FieldDef("east", Angle180, "east", DumpDirect),

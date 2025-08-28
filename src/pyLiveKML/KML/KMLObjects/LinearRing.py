@@ -31,7 +31,7 @@ class LinearRing(Geometry):
     """
 
     _kml_type = "LinearRing"
-    _kml_fields = (
+    _kml_fields = Geometry._kml_fields + (
         _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
         _FieldDef("extrude", NoParse, "extrude", DumpDirect),
         _FieldDef("tessellate", NoParse, "tessellate", DumpDirect),

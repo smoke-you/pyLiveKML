@@ -16,7 +16,9 @@ class _IconStyle_Icon(_BaseObject):
     """A minimalist Icon class, used only within `IconStyle`."""
 
     _kml_type = "Icon"
-    _kml_fields = (_FieldDef("href", NoParse, "href", DumpDirect),)
+    _kml_fields = _BaseObject._kml_fields + (
+        _FieldDef("href", NoParse, "href", DumpDirect),
+    )
 
     def __init__(self, href: str):
         """_IconStyle_Icon instance constructor."""
@@ -45,7 +47,7 @@ class IconStyle(ColorStyle):
         _FieldDef("scale", NoParse, "scale", DumpDirect),
         _FieldDef("heading", NoParse, "heading", DumpDirect),
     )
-    _direct_children = ("icon",)
+    _direct_children = ColorStyle._direct_children + ("icon",)
 
     def __init__(
         self,

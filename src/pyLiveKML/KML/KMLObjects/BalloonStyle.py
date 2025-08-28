@@ -20,7 +20,7 @@ class BalloonStyle(SubStyle):
     """
 
     _kml_type = "BalloonStyle"
-    _kml_fields = (
+    _kml_fields = SubStyle._kml_fields + (
         _FieldDef("bg_color", ColorParse, "bgColor", DumpDirect),
         _FieldDef("text_color", ColorParse, "textColor", DumpDirect),
         _FieldDef("text", NoParse, "text", DumpDirect),

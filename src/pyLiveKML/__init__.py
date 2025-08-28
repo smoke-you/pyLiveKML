@@ -25,6 +25,7 @@ from pyLiveKML.KML.KML import (
     Angle180,
     AnglePos180,
     Angle360,
+    FlyToModeEnum,
 )
 from pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
 from pyLiveKML.KML.Vec2 import HotSpot, OverlayXY, ScreenXY, RotationXY, Size
@@ -71,6 +72,8 @@ from pyLiveKML.KML.KMLObjects.Track import (
 from pyLiveKML.KML.KMLObjects.GroundOverlay import GroundOverlay
 from pyLiveKML.KML.KMLObjects.ScreenOverlay import ScreenOverlay
 from pyLiveKML.KML.KMLObjects.PhotoOverlay import PhotoOverlay
+from pyLiveKML.KML.KMLObjects.Tour import GxTour
+from pyLiveKML.KML.KMLObjects.FlyTo import GxFlyTo
 
 
 __all__ = [
@@ -90,12 +93,16 @@ __all__ = [
     "DisplayMode",
     "Document",
     "Feature",
+    "FlyToModeEnum",
     "Folder",
     "GeoColor",
     "GeoCoordinates",
     "Geometry",
+    "GroundOverlay",
+    "GxFlyTo",
     "GxTimeSpan",
     "GxTimeStamp",
+    "GxTour",
     "GxTrack",
     "GxViewerOption",
     "GxViewerOptions",
@@ -123,6 +130,7 @@ __all__ = [
     "ObjectChild",
     "ObjectState",
     "OverlayXY",
+    "PhotoOverlay",
     "Placemark",
     "Point",
     "PolyStyle",
@@ -131,6 +139,7 @@ __all__ = [
     "Region",
     "RotationXY",
     "Schema",
+    "ScreenOverlay",
     "ScreenXY",
     "SimpleField",
     "Size",

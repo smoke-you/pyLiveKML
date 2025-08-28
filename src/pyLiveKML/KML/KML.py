@@ -113,6 +113,17 @@ class DisplayMode(str, enum.Enum):
     HIDE = "hide"
 
 
+class FlyToModeEnum(enum.Enum):
+    """Enumeration of options for KML <gx:FlyTo> tags.
+
+    Refer to the KML documentation at
+    https://developers.google.com/kml/documentation/kmlreference#gxflyto.
+    """
+
+    BOUNCE = "bounce"
+    SMOOTH = "smooth"
+
+
 class GxViewerOptions(enum.Enum):
     """Enumeration of options for KML <gx:option> tags.
 

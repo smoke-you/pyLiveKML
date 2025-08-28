@@ -19,7 +19,9 @@ class _Overlay_Icon(_BaseObject):
     """A minimalist Icon class, used only within `Overlay`."""
 
     _kml_type = "Icon"
-    _kml_fields = (_FieldDef("href", NoParse, "href", DumpDirect),)
+    _kml_fields = _BaseObject._kml_fields + (
+        _FieldDef("href", NoParse, "href", DumpDirect),
+    )
 
     def __init__(self, href: str):
         """_Overlay_Icon instance constructor."""

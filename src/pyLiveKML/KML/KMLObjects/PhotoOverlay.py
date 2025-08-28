@@ -27,7 +27,7 @@ class _PhotoOverlay_ViewVolume(_BaseObject):
     """A minimalist child class, used only within `PhotoOverlay`."""
 
     _kml_type = "ViewVolume"
-    _kml_fields = (
+    _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("left_fov", Angle180, "leftFov", DumpDirect),
         _FieldDef("right_fov", Angle180, "rightFov", DumpDirect),
         _FieldDef("bottom_fov", Angle90, "bottomFov", DumpDirect),
@@ -56,7 +56,7 @@ class _PhotoOverlay_ImagePyramid(_BaseObject):
     """A minimalist child class, used only within `PhotoOverlay`."""
 
     _kml_type = "ImagePyramid"
-    _kml_fields = (
+    _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("tile_size", NoParse, "tileSize", DumpDirect),
         _FieldDef("max_width", NoParse, "maxWidth", DumpDirect),
         _FieldDef("max_height", NoParse, "maxHeight", DumpDirect),

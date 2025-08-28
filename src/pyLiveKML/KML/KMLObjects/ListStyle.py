@@ -22,7 +22,7 @@ class ItemIcon(_BaseObject):
     """ItemIcon class definition."""
 
     _kml_type = "ItemIcon"
-    _kml_fields = (
+    _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("icon_state", NoParse, "state", DumpDirect),
         _FieldDef("href", NoParse, "href", DumpDirect),
     )
@@ -50,7 +50,7 @@ class ListStyle(SubStyle):
     """
 
     _kml_type = "ListStyle"
-    _kml_fields = (
+    _kml_fields = SubStyle._kml_fields + (
         _FieldDef("list_item_type", NoParse, "listItemType", DumpDirect),
         _FieldDef("bg_color", ColorParse, "bgColor", DumpDirect),
     )

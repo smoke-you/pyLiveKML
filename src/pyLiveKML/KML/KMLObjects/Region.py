@@ -20,7 +20,7 @@ class LatLonAltBox(_BaseObject):
     """A bounding box that describes an area of interest defined by geographic coordinates and altitudes."""
 
     _kml_type = "LatLonAltBox"
-    _kml_fields = (
+    _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("north", NoParse, "north", DumpDirect),
         _FieldDef("south", NoParse, "south", DumpDirect),
         _FieldDef("east", NoParse, "east", DumpDirect),
@@ -63,7 +63,7 @@ class Lod(_BaseObject):
     """
 
     _kml_type = "Lod"
-    _kml_fields = (
+    _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("min_lod_pixels", NoParse, "minLodPixels", DumpDirect),
         _FieldDef("max_lod_pixels", NoParse, "maxLodPixels", DumpDirect),
         _FieldDef("min_fade_extent", NoParse, "minFadeExtent", DumpDirect),
@@ -91,10 +91,7 @@ class Region(Object):
     """A KML 'Region', per https://developers.google.com/kml/documentation/kmlreference."""
 
     _kml_type = "Region"
-    _direct_children = (
-        "box",
-        "lod",
-    )
+    _direct_children = Object._direct_children + ("box", "lod")
 
     def __init__(
         self,
