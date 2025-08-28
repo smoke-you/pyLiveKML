@@ -24,13 +24,13 @@ KML_DOCTYPE: str = '<?xml version="1.0" encoding="UTF-8"?>'
 KML_HEADERS = {"Content-Type": "application/vnd.google-earth.kml+xml"}
 
 
-__root_namespace_map = {
+_root_namespace_map = {
     "gx": "http://www.google.com/kml/ext/2.2",
     "kml": "http://www.opengis.net/kml/2.2",
     "atom": "http://www.w3.org/2005/Atom",
 }
 
-__root_attributes = {"xmlns": "http://www.opengis.net/kml/2.2"}
+_root_attributes = {"xmlns": "http://www.opengis.net/kml/2.2"}
 
 
 def kml_root_tag() -> etree.Element:
@@ -39,7 +39,15 @@ def kml_root_tag() -> etree.Element:
     :return: The <kml> tag, with namespaces, that encloses the contents of a KML document.
     :rtype: etree.Element
     """
-    return etree.Element("kml", nsmap=__root_namespace_map, attrib=__root_attributes)
+    return etree.Element("kml", nsmap=_root_namespace_map, attrib=_root_attributes)
+
+
+def with_ns(tag: str) -> str:
+    parts = tag.split(":")
+    if len(parts) < 2:
+        return tag
+    else:
+        return f"{{{_root_namespace_map[parts[0]]}}}{''.join(parts[1:])}"
 
 
 GxViewerOption = NamedTuple(

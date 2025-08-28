@@ -13,6 +13,7 @@ from pyLiveKML.KML.KML import (
     _FieldDef,
     NoParse,
     DumpDirect,
+    with_ns
 )
 from pyLiveKML.KML.KMLObjects.Model import Model
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
@@ -128,11 +129,20 @@ class Track(Geometry):
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
         for e in self.elements:
-            etree.SubElement(root, "when").text = e.when.isoformat()
+            etree.SubElement(root, with_ns("when")).text = e.when.isoformat()
         for e in self.elements:
-            etree.SubElement(root, "gx:coord").text = str(e.coords)
+            etree.SubElement(root, with_ns("gx:coord")).text = str(e.coords)
         for e in self.elements:
-            etree.SubElement(root, "gx:angles").text = str(e.angles)
+            etree.SubElement(root, with_ns("gx:angles")).text = str(e.angles)
+
+        # TODO: fix this, just... fix it
+        # Under each <SchemaData> tag, it needs to create one <gx:SimpleDataArray> tag 
+        # for each key in the TrackExtendedData.data dict.
+        # Under each <gx:SimpleDataArray> tag, it needs to create one <gx:value> tag
+        # for each TrackElement in self. The tags that have a corresponding schema and 
+        # array should contain the corresponding value from the TrackExtendedData.dict, 
+        # while the tags that do not have corresponding parents should contain empty 
+        # strings.
         xdata = {
             schu: dict[str, list[str]]()
             for schu in sorted(
@@ -153,7 +163,7 @@ class Track(Geometry):
             )
             for kn, kv in xschd.items():
                 knroot = etree.SubElement(
-                    xchroot, "gx:SimpleArrayData", attrib={"kml:name": kn}
+                    xchroot, with_ns("gx:SimpleArrayData"), attrib={with_ns("kml:name"): kn}
                 )
                 for v in kv:
-                    etree.SubElement(knroot, "gx:value").text = v
+                    etree.SubElement(knroot, with_ns("gx:value")).text = v

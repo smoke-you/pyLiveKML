@@ -6,7 +6,7 @@ from typing import Any, Iterator, NamedTuple, Optional
 from uuid import uuid4, UUID
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import ObjectState, _FieldDef, NoDump
+from pyLiveKML.KML.KML import ObjectState, _FieldDef, NoDump, with_ns
 from pyLiveKML.KML._BaseObject import _BaseObject
 
 
@@ -102,7 +102,7 @@ class Object(_BaseObject, ABC):
                 attribs = None
                 if not getattr(dc, "_suppress_id", True):
                     attribs = {"id": str(dc.id)}
-                dc.build_kml(etree.SubElement(root, dc._kml_type, attrib=attribs), True)
+                dc.build_kml(etree.SubElement(root, with_ns(dc._kml_type), attrib=attribs), True)
 
     def construct_kml(self) -> etree.Element:
         """Construct this :class:`~pyLiveKML.KML.KMLObjects.Object`'s KML representation.
@@ -113,7 +113,7 @@ class Object(_BaseObject, ABC):
             attribs = None
         else:
             attribs = {"id": str(self.id)}
-        root = etree.Element(_tag=self.kml_type, attrib=attribs)
+        root = etree.Element(_tag=with_ns(self.kml_type), attrib=attribs)
         self.build_kml(root)
         return root
 
@@ -148,7 +148,7 @@ class Object(_BaseObject, ABC):
         """
         create = etree.Element("Create")
         parent_element = etree.SubElement(
-            create, _tag=parent.kml_type, attrib={"targetId": str(parent.id)}
+            create, _tag=with_ns(parent.kml_type), attrib={"targetId": str(parent.id)}
         )
         item = self.construct_kml()
         parent_element.append(item)
@@ -162,7 +162,7 @@ class Object(_BaseObject, ABC):
         """
         change = etree.Element("Change")
         item = etree.SubElement(
-            change, _tag=self.kml_type, attrib={"targetId": str(self.id)}
+            change, _tag=with_ns(self.kml_type), attrib={"targetId": str(self.id)}
         )
         self.build_kml(item, with_children=False)
         update.append(change)
@@ -173,7 +173,7 @@ class Object(_BaseObject, ABC):
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
         delete = etree.Element("Delete")
-        etree.SubElement(delete, _tag=self.kml_type, attrib={"targetId": str(self.id)})
+        etree.SubElement(delete, _tag=with_ns(self.kml_type), attrib={"targetId": str(self.id)})
         update.append(delete)
 
     def force_idle(self) -> None:
