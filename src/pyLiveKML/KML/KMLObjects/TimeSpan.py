@@ -26,5 +26,10 @@ class TimeSpan(TimePrimitive):
 
 
 class GxTimeSpan(TimeSpan):
+    """Version of `TimeSpan` under the `gx` namespace.
+
+    Available for use by `AbstractView` subclasses. Refer to Google KML documentation at
+    https://developers.google.com/kml/documentation/kmlreference#gx:timespan-and-gx:timestamp.
+    """
 
     _kml_type = "gx:TimeSpan"

@@ -20,6 +20,7 @@ from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 
 
 class TrackCoord:
+    """Coordinates class, specific to the <gx:Track> KML tag."""
 
     def __init__(
         self,
@@ -28,6 +29,7 @@ class TrackCoord:
         altitude: float = 0,
         empty: bool = False,
     ):
+        """TrackCoord instance constructor."""
         super().__init__()
         self.longitude = Angle180.parse(longitude)
         self.latitude = Angle90.parse(latitude)
@@ -35,10 +37,12 @@ class TrackCoord:
         self.empty = empty
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return "" if self.empty else f"{self.longitude} {self.latitude} {self.altitude}"
 
 
 class TrackAngles:
+    """Angles (heading/tilt/roll) class, specific to the <gx:Track> KML tag."""
 
     def __init__(
         self,
@@ -47,6 +51,7 @@ class TrackAngles:
         roll: float = 0,
         empty: bool = False,
     ) -> None:
+        """TrackAngles instance constructor."""
         super().__init__()
         self.heading = Angle360.parse(heading)
         self.tilt = AnglePos180.parse(tilt)
@@ -54,17 +59,25 @@ class TrackAngles:
         self.empty = empty
 
     def __str__(self) -> str:
+        """Return a string representation."""
         return "" if self.empty else f"{self.heading} {self.tilt} {self.roll}"
 
 
 class TrackExtendedData:
+    """Extended data class, specific to the <gx:Track> KML tag."""
 
     def __init__(self, schema_url: str, data: dict[str, str]) -> None:
+        """TrackExtendedData instance constructor."""
         self.schema_url = schema_url
         self.data = data
 
 
 class TrackElement:
+    """Track element class, specific to the <gx:Track> KML tag.
+
+    Used to collect the various components of each track point that are then distributed
+    across the <gx:Track> tag.
+    """
 
     def __init__(
         self,
@@ -73,6 +86,7 @@ class TrackElement:
         angles: TrackAngles,
         extended_data: TrackExtendedData | None = None,
     ) -> None:
+        """TrackElement instance constructor."""
         super().__init__()
         self.when = when
         self.coords = coords
@@ -93,7 +107,7 @@ class Track(Geometry):
         elements: TrackElement | Iterable[TrackElement] | None = None,
         model: Model | None = None,
     ) -> None:
-        """Model instance constructor."""
+        """Track instance constructor."""
         Object.__init__(self)
         self.altitude_mode = altitude_mode
         self.model = model
@@ -106,10 +120,12 @@ class Track(Geometry):
 
     @property
     def children(self) -> Iterator[ObjectChild]:
+        """The children of the instance."""
         if self.model:
             yield ObjectChild(self, self.model)
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
         for e in self.elements:
             etree.SubElement(root, "when").text = e.when.isoformat()

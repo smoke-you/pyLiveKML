@@ -24,5 +24,10 @@ class TimeStamp(TimePrimitive):
 
 
 class GxTimeStamp(TimeStamp):
+    """Version of `TimeStamp` under the `gx` namespace.
+
+    Available for use by `AbstractView` subclasses. Refer to Google KML documentation at
+    https://developers.google.com/kml/documentation/kmlreference#gx:timespan-and-gx:timestamp.
+    """
 
     _kml_type = "gx:TimeStamp"

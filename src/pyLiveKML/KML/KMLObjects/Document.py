@@ -79,6 +79,7 @@ class Document(Container):
                 self.schemas.extend(schemas)
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
         for s in self.schemas:
             root.append(s.construct_kml())

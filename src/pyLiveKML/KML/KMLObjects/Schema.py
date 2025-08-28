@@ -22,6 +22,11 @@ from pyLiveKML.KML.KMLObjects.TimeStamp import TimeStamp
 
 
 class SimpleField(_BaseObject):
+    """SimpleField class.
+
+    `Schema` instances contain a collection of `SimpleField` instances.
+    """
+
     _kml_type = "SimpleField"
 
     def __init__(
@@ -30,6 +35,7 @@ class SimpleField(_BaseObject):
         name: str,
         display_names: str | Iterable[str] | None,
     ) -> None:
+        """SimpleField instance constructor."""
         self.type = type
         self.name = name
         self.display_names = list[str]()
@@ -40,11 +46,12 @@ class SimpleField(_BaseObject):
                 self.display_names.extend(display_names)
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         for dn in self.display_names:
             etree.SubElement(root, "displayName").text = dn
 
     def construct_kml(self) -> etree.Element:
-        # attribs = { "type": self.type, "name": self.name }
+        """Construct this instances' KML representation."""
         root = etree.Element(self.kml_type, type=self.type, name=self.name)
         self.build_kml(root)
         return root
@@ -60,7 +67,7 @@ class Schema(Object):
         name: str,
         fields: SimpleField | Iterable[SimpleField],
     ) -> None:
-        """Model instance constructor."""
+        """Construct Schema instances."""
         Object.__init__(self)
         self.name = name
         self.fields = list[SimpleField]()
@@ -70,11 +77,12 @@ class Schema(Object):
             self.fields.extend(fields)
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
         for f in self.fields:
             root.append(f.construct_kml())
 
     def construct_kml(self) -> etree.Element:
-        # attribs = { "name": self.name, "id": str(self.id) }
+        """Construct this instances' KML representation."""
         root = etree.Element(self.kml_type, name=self.name, id=str(self.id))
         self.build_kml(root)
         return root
