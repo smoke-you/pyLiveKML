@@ -11,7 +11,7 @@ from pyLiveKML.KML.KML import (
     Angle180,
     Angle360,
     AltitudeMode,
-    ArgParser,
+    _FieldDef,
     NoParse,
     DumpDirect,
 )
@@ -24,13 +24,13 @@ class LookAt(AbstractView):
 
     _kml_type = "LookAt"
     _kml_fields = (
-        ArgParser("longitude", Angle180, "longitude", DumpDirect),
-        ArgParser("latitude", Angle90, "latitude", DumpDirect),
-        ArgParser("altitude", NoParse, "altitude", DumpDirect),
-        ArgParser("heading", Angle360, "heading", DumpDirect),
-        ArgParser("tilt", AnglePos90, "tilt", DumpDirect),
-        ArgParser("range", NoParse, "range", DumpDirect),
-        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),
+        _FieldDef("longitude", Angle180, "longitude", DumpDirect),
+        _FieldDef("latitude", Angle90, "latitude", DumpDirect),
+        _FieldDef("altitude", NoParse, "altitude", DumpDirect),
+        _FieldDef("heading", Angle360, "heading", DumpDirect),
+        _FieldDef("tilt", AnglePos90, "tilt", DumpDirect),
+        _FieldDef("range", NoParse, "range", DumpDirect),
+        _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
     )
 
     def __init__(

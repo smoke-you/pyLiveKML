@@ -3,7 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import ColorMode, ArgParser, NoParse, ColorParse, DumpDirect
+from pyLiveKML.KML.KML import ColorMode, _FieldDef, NoParse, ColorParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 
 
@@ -21,7 +21,7 @@ class LabelStyle(ColorStyle):
 
     _kml_type = "LabelStyle"
     _kml_fields = ColorStyle._kml_fields + (
-        ArgParser("scale", NoParse, "scale", DumpDirect),
+        _FieldDef("scale", NoParse, "scale", DumpDirect),
     )
 
     def __init__(

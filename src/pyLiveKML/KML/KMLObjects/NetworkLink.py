@@ -4,7 +4,7 @@ from typing import Iterator, Iterable, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import RefreshMode, ArgParser, NoParse, DumpDirect
+from pyLiveKML.KML.KML import RefreshMode, _FieldDef, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Feature import Feature
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild
@@ -30,8 +30,8 @@ class NetworkLink(Feature):
 
     _kml_type = "NetworkLink"
     _kml_fields = Feature._kml_fields + (
-        ArgParser("fly_to_view", NoParse, "flyToView", DumpDirect),
-        ArgParser("refresh_visibility", NoParse, "refreshVisibility", DumpDirect),
+        _FieldDef("fly_to_view", NoParse, "flyToView", DumpDirect),
+        _FieldDef("refresh_visibility", NoParse, "refreshVisibility", DumpDirect),
     )
     _direct_children = Feature._direct_children + ("link",)
 

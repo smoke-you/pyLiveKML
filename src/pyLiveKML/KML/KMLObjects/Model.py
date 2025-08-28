@@ -9,7 +9,7 @@ from pyLiveKML.KML.KML import (
     Angle180,
     AnglePos180,
     Angle360,
-    ArgParser,
+    _FieldDef,
     NoParse,
     DumpDirect,
 )
@@ -23,9 +23,9 @@ class Location(_BaseObject):
 
     _kml_type = "Location"
     _kml_fields = (
-        ArgParser("longitude", Angle180, "longitude", DumpDirect),
-        ArgParser("latitude", Angle90, "latitude", DumpDirect),
-        ArgParser("altitude", NoParse, "altitude", DumpDirect),
+        _FieldDef("longitude", Angle180, "longitude", DumpDirect),
+        _FieldDef("latitude", Angle90, "latitude", DumpDirect),
+        _FieldDef("altitude", NoParse, "altitude", DumpDirect),
     )
 
     def __init__(
@@ -46,9 +46,9 @@ class Orientation(_BaseObject):
 
     _kml_type = "Location"
     _kml_fields = (
-        ArgParser("heading", Angle360, "heading", DumpDirect),
-        ArgParser("tilt", AnglePos180, "tilt", DumpDirect),
-        ArgParser("roll", Angle180, "roll", DumpDirect),
+        _FieldDef("heading", Angle360, "heading", DumpDirect),
+        _FieldDef("tilt", AnglePos180, "tilt", DumpDirect),
+        _FieldDef("roll", Angle180, "roll", DumpDirect),
     )
 
     def __init__(
@@ -69,9 +69,9 @@ class Scale(_BaseObject):
 
     _kml_type = "Scale"
     _kml_fields = (
-        ArgParser("x", NoParse, "x", DumpDirect),
-        ArgParser("y", NoParse, "y", DumpDirect),
-        ArgParser("z", NoParse, "z", DumpDirect),
+        _FieldDef("x", NoParse, "x", DumpDirect),
+        _FieldDef("y", NoParse, "y", DumpDirect),
+        _FieldDef("z", NoParse, "z", DumpDirect),
     )
 
     def __init__(
@@ -92,8 +92,8 @@ class Alias(_BaseObject):
 
     _kml_type = "Alias"
     _kml_fields = (
-        ArgParser("target_href", NoParse, "targetHref", DumpDirect),
-        ArgParser("source_href", NoParse, "sourceHref", DumpDirect),
+        _FieldDef("target_href", NoParse, "targetHref", DumpDirect),
+        _FieldDef("source_href", NoParse, "sourceHref", DumpDirect),
     )
 
     def __init__(
@@ -133,7 +133,7 @@ class Model(Object):
     """A KML 'Model', per https://developers.google.com/kml/documentation/kmlreference#model."""
 
     _kml_type = "Model"
-    _fields = (ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),)
+    _fields = (_FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),)
     _direct_children = ("link", "location", "orientation", "scale", "resources")
 
     def __init__(

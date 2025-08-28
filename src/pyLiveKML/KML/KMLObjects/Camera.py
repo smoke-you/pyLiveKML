@@ -11,7 +11,7 @@ from pyLiveKML.KML.KML import (
     AnglePos180,
     Angle360,
     AltitudeMode,
-    ArgParser,
+    _FieldDef,
     NoParse,
     DumpDirect,
 )
@@ -24,13 +24,13 @@ class Camera(AbstractView):
 
     _kml_type = "Camera"
     _kml_fields = (
-        ArgParser("longitude", Angle180, "longitude", DumpDirect),
-        ArgParser("latitude", Angle90, "latitude", DumpDirect),
-        ArgParser("altitude", NoParse, "altitude", DumpDirect),
-        ArgParser("heading", Angle360, "heading", DumpDirect),
-        ArgParser("tilt", AnglePos180, "tilt", DumpDirect),
-        ArgParser("roll", Angle180, "roll", DumpDirect),
-        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),
+        _FieldDef("longitude", Angle180, "longitude", DumpDirect),
+        _FieldDef("latitude", Angle90, "latitude", DumpDirect),
+        _FieldDef("altitude", NoParse, "altitude", DumpDirect),
+        _FieldDef("heading", Angle360, "heading", DumpDirect),
+        _FieldDef("tilt", AnglePos180, "tilt", DumpDirect),
+        _FieldDef("roll", Angle180, "roll", DumpDirect),
+        _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
     )
 
     def __init__(

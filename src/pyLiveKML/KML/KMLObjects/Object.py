@@ -6,7 +6,7 @@ from typing import Any, Iterator, NamedTuple, Optional
 from uuid import uuid4, UUID
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import ObjectState, ArgParser, NoDump
+from pyLiveKML.KML.KML import ObjectState, _FieldDef, NoDump
 from pyLiveKML.KML._BaseObject import _BaseObject
 
 

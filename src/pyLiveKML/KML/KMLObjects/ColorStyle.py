@@ -4,7 +4,7 @@ from abc import ABC
 from typing import cast
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import ColorMode, ArgParser, NoParse, ColorParse, DumpDirect
+from pyLiveKML.KML.KML import ColorMode, _FieldDef, NoParse, ColorParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
@@ -27,9 +27,9 @@ class ColorStyle(SubStyle, ABC):
         to determine the displayed color.
     """
 
-    _kml_fields: tuple[ArgParser, ...] = (
-        ArgParser("color", ColorParse, "color", DumpDirect),
-        ArgParser("color_mode", NoParse, "colorMode", DumpDirect),
+    _kml_fields: tuple[_FieldDef, ...] = (
+        _FieldDef("color", ColorParse, "color", DumpDirect),
+        _FieldDef("color_mode", NoParse, "colorMode", DumpDirect),
     )
 
     def __init__(

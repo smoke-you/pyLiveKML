@@ -8,7 +8,7 @@ from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KML import (
     ListItemType,
     ItemIconMode,
-    ArgParser,
+    _FieldDef,
     NoParse,
     ColorParse,
     DumpDirect,
@@ -23,8 +23,8 @@ class ItemIcon(_BaseObject):
 
     _kml_type = "ItemIcon"
     _kml_fields = (
-        ArgParser("icon_state", NoParse, "state", DumpDirect),
-        ArgParser("href", NoParse, "href", DumpDirect),
+        _FieldDef("icon_state", NoParse, "state", DumpDirect),
+        _FieldDef("href", NoParse, "href", DumpDirect),
     )
 
     def __init__(
@@ -51,8 +51,8 @@ class ListStyle(SubStyle):
 
     _kml_type = "ListStyle"
     _kml_fields = (
-        ArgParser("list_item_type", NoParse, "listItemType", DumpDirect),
-        ArgParser("bg_color", ColorParse, "bgColor", DumpDirect),
+        _FieldDef("list_item_type", NoParse, "listItemType", DumpDirect),
+        _FieldDef("bg_color", ColorParse, "bgColor", DumpDirect),
     )
 
     def __init__(

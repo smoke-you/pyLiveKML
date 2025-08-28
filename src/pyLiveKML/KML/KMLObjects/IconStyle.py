@@ -5,7 +5,7 @@ from typing import Iterator
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import ColorMode, ArgParser, NoDump, NoParse, DumpDirect
+from pyLiveKML.KML.KML import ColorMode, _FieldDef, NoDump, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML._BaseObject import _BaseObject
@@ -16,7 +16,7 @@ class _IconStyle_Icon(_BaseObject):
     """A minimalist Icon class, used only within `IconStyle`."""
 
     _kml_type = "Icon"
-    _kml_fields = (ArgParser("href", NoParse, "href", DumpDirect),)
+    _kml_fields = (_FieldDef("href", NoParse, "href", DumpDirect),)
 
     def __init__(self, href: str):
         """_IconStyle_Icon instance constructor."""
@@ -41,9 +41,9 @@ class IconStyle(ColorStyle):
 
     _kml_type = "IconStyle"
     _kml_fields = ColorStyle._kml_fields + (
-        ArgParser("icon", NoParse, "", NoDump),
-        ArgParser("scale", NoParse, "scale", DumpDirect),
-        ArgParser("heading", NoParse, "heading", DumpDirect),
+        _FieldDef("icon", NoParse, "", NoDump),
+        _FieldDef("scale", NoParse, "scale", DumpDirect),
+        _FieldDef("heading", NoParse, "heading", DumpDirect),
     )
     _direct_children = ("icon",)
 

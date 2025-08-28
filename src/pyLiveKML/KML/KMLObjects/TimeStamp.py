@@ -6,7 +6,7 @@ from typing import Iterator, Any
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
-from pyLiveKML.KML.KML import ArgParser, NoParse, DumpDirect
+from pyLiveKML.KML.KML import _FieldDef, NoParse, DumpDirect
 
 
 class TimeStamp(TimePrimitive):
@@ -14,10 +14,15 @@ class TimeStamp(TimePrimitive):
 
     _kml_type = "TimeStamp"
     _kml_fields = TimePrimitive._kml_fields + (
-        ArgParser("when", NoParse, "when", DumpDirect),
+        _FieldDef("when", NoParse, "when", DumpDirect),
     )
 
     def __init__(self, when: datetime):
         """TimeStamp instance constructor."""
         TimePrimitive.__init__(self)
         self.when: datetime = when
+
+
+class GxTimeStamp(TimeStamp):
+
+    _kml_type = "gx:TimeStamp"

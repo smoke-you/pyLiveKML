@@ -46,8 +46,8 @@ GxViewerOption = NamedTuple(
     "GxViewerOption", [("name", "GxViewerOptions"), ("enabled", bool)]
 )
 
-ArgParser = NamedTuple(
-    "ArgParser",
+_FieldDef = NamedTuple(
+    "_FieldDef",
     [
         ("name", str),
         ("parser", Type["_KMLParser"]),

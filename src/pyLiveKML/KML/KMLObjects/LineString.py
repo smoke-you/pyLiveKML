@@ -5,7 +5,7 @@ from typing import Iterable, Iterator
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from pyLiveKML.KML.KML import AltitudeMode, ArgParser, NoParse, DumpDirect
+from pyLiveKML.KML.KML import AltitudeMode, _FieldDef, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 
 
@@ -32,11 +32,11 @@ class LineString(Geometry):
 
     _kml_type = "LineString"
     _kml_fields = (
-        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),
-        ArgParser("extrude", NoParse, "extrude", DumpDirect),
-        ArgParser("tessellate", NoParse, "tessellate", DumpDirect),
-        ArgParser("gx_altitude_offset", NoParse, "gx:altitudeOffset", DumpDirect),
-        ArgParser("gx_draw_order", NoParse, "gx:drawOrder", DumpDirect),
+        _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
+        _FieldDef("extrude", NoParse, "extrude", DumpDirect),
+        _FieldDef("tessellate", NoParse, "tessellate", DumpDirect),
+        _FieldDef("gx_altitude_offset", NoParse, "gx:altitudeOffset", DumpDirect),
+        _FieldDef("gx_draw_order", NoParse, "gx:drawOrder", DumpDirect),
     )
 
     def __init__(

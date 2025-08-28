@@ -53,15 +53,28 @@ from pyLiveKML.KML.KMLObjects.Point import Point
 from pyLiveKML.KML.KMLObjects.Polygon import Polygon
 from pyLiveKML.KML.KMLObjects.PolyStyle import PolyStyle
 from pyLiveKML.KML.KMLObjects.Region import Region
+from pyLiveKML.KML.KMLObjects.Schema import Schema, SimpleField
 from pyLiveKML.KML.KMLObjects.Style import Style
 from pyLiveKML.KML.KMLObjects.StyleMap import StyleMap
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
-from pyLiveKML.KML.KMLObjects.TimeStamp import TimeStamp
-from pyLiveKML.KML.KMLObjects.TimeSpan import TimeSpan
+from pyLiveKML.KML.KMLObjects.TimeStamp import TimeStamp, GxTimeStamp
+from pyLiveKML.KML.KMLObjects.TimeSpan import TimeSpan, GxTimeSpan
+from pyLiveKML.KML.KMLObjects.Track import (
+    Track,
+    TrackAngles,
+    TrackCoord,
+    TrackElement,
+    TrackExtendedData,
+)
 
 
 __all__ = [
+    "Track",
+    "TrackAngles",
+    "TrackCoord",
+    "TrackElement",
+    "TrackExtendedData",
     "Alias",
     "AltitudeMode",
     "Angle180",
@@ -82,6 +95,8 @@ __all__ = [
     "GeoColor",
     "GeoCoordinates",
     "Geometry",
+    "GxTimeSpan",
+    "GxTimeStamp",
     "GxViewerOption",
     "GxViewerOptions",
     "HotSpot",
@@ -115,7 +130,9 @@ __all__ = [
     "RefreshMode",
     "Region",
     "RotationXY",
+    "Schema",
     "ScreenXY",
+    "SimpleField",
     "Size",
     "Style",
     "StyleMap",

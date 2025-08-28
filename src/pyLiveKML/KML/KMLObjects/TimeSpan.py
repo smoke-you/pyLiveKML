@@ -6,7 +6,7 @@ from typing import Iterator
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
-from pyLiveKML.KML.KML import ArgParser, NoParse, DumpDirect
+from pyLiveKML.KML.KML import _FieldDef, NoParse, DumpDirect
 
 
 class TimeSpan(TimePrimitive):
@@ -14,8 +14,8 @@ class TimeSpan(TimePrimitive):
 
     _kml_type = "TimeSpan"
     _kml_fields = TimePrimitive._kml_fields + (
-        ArgParser("begin", NoParse, "begin", DumpDirect),
-        ArgParser("end", NoParse, "end", DumpDirect),
+        _FieldDef("begin", NoParse, "begin", DumpDirect),
+        _FieldDef("end", NoParse, "end", DumpDirect),
     )
 
     def __init__(self, begin: datetime, end: datetime):
@@ -23,3 +23,8 @@ class TimeSpan(TimePrimitive):
         TimePrimitive.__init__(self)
         self.begin = begin
         self.end = end
+
+
+class GxTimeSpan(TimeSpan):
+
+    _kml_type = "gx:TimeSpan"

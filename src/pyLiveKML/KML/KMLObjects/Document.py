@@ -2,8 +2,11 @@
 
 from typing import Iterable
 
+from lxml import etree  # type: ignore
+
 from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML.KMLObjects.Feature import Feature, Container
+from pyLiveKML.KML.KMLObjects.Schema import Schema
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
 
@@ -48,7 +51,8 @@ class Document(Container):
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
-        features: Iterable[Feature] | None = None,
+        features: Feature | Iterable[Feature] | None = None,
+        schemas: Schema | Iterable[Schema] | None = None,
     ):
         """Document instance constructor."""
         super().__init__(
@@ -67,3 +71,14 @@ class Document(Container):
             update_limit=update_limit,
             features=features,
         )
+        self.schemas = list[Schema]()
+        if schemas is not None:
+            if isinstance(schemas, Schema):
+                self.schemas.append(schemas)
+            else:
+                self.schemas.extend(schemas)
+
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        super().build_kml(root, with_children)
+        for s in self.schemas:
+            root.append(s.construct_kml())

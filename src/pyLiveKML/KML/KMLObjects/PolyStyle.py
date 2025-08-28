@@ -4,7 +4,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
-from pyLiveKML.KML.KML import ColorMode, ArgParser, NoParse, DumpDirect
+from pyLiveKML.KML.KML import ColorMode, _FieldDef, NoParse, DumpDirect
 
 
 class PolyStyle(ColorStyle):
@@ -22,8 +22,8 @@ class PolyStyle(ColorStyle):
 
     _kml_type = "PolyStyle"
     _kml_fields = ColorStyle._kml_fields + (
-        ArgParser("fill", NoParse, "fill", DumpDirect),
-        ArgParser("outline", NoParse, "outline", DumpDirect),
+        _FieldDef("fill", NoParse, "fill", DumpDirect),
+        _FieldDef("outline", NoParse, "outline", DumpDirect),
     )
 
     def __init__(

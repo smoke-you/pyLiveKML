@@ -3,7 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import DisplayMode, ArgParser, NoParse, ColorParse, DumpDirect
+from pyLiveKML.KML.KML import DisplayMode, _FieldDef, NoParse, ColorParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
@@ -21,10 +21,10 @@ class BalloonStyle(SubStyle):
 
     _kml_type = "BalloonStyle"
     _kml_fields = (
-        ArgParser("bg_color", ColorParse, "bgColor", DumpDirect),
-        ArgParser("text_color", ColorParse, "textColor", DumpDirect),
-        ArgParser("text", NoParse, "text", DumpDirect),
-        ArgParser("display_mode", NoParse, "displayMode", DumpDirect),
+        _FieldDef("bg_color", ColorParse, "bgColor", DumpDirect),
+        _FieldDef("text_color", ColorParse, "textColor", DumpDirect),
+        _FieldDef("text", NoParse, "text", DumpDirect),
+        _FieldDef("display_mode", NoParse, "displayMode", DumpDirect),
     )
 
     def __init__(

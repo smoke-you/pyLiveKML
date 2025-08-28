@@ -3,7 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from pyLiveKML.KML.KML import AltitudeMode, ArgParser, NoParse, DumpDirect
+from pyLiveKML.KML.KML import AltitudeMode, _FieldDef, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 
 
@@ -23,9 +23,9 @@ class Point(Geometry):
 
     _kml_type = "Point"
     _kml_fields = Geometry._kml_fields + (
-        ArgParser("extrude", NoParse, "extrude", DumpDirect),
-        ArgParser("altitude_mode", NoParse, "altitudeMode", DumpDirect),
-        ArgParser("coordinates", NoParse, "coordinates", DumpDirect),
+        _FieldDef("extrude", NoParse, "extrude", DumpDirect),
+        _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
+        _FieldDef("coordinates", NoParse, "coordinates", DumpDirect),
     )
 
     def __init__(

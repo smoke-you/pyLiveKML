@@ -11,7 +11,7 @@ from lxml import etree  # type: ignore
 from pyLiveKML.KML.KML import (
     KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
     ObjectState,
-    ArgParser,
+    _FieldDef,
     DumpDirect,
     NoParse,
     NoDump,
@@ -50,17 +50,17 @@ class Feature(Object, ABC):
     """
 
     _kml_fields = Object._kml_fields + (
-        ArgParser("name", NoParse, "name", DumpDirect),
-        ArgParser("visibility", NoParse, "visibility", DumpDirect),
-        ArgParser("is_open", NoParse, "open", DumpDirect),
-        ArgParser("author_name", NoParse, "", NoDump),
-        ArgParser("author_link", NoParse, "", NoDump),
-        ArgParser("address", NoParse, "address", DumpDirect),
-        ArgParser("snippet", NoParse, "", NoDump),
-        ArgParser("snippet_max_line", NoParse, "", NoDump),
-        ArgParser("phone_number", NoParse, "phoneNumber", DumpDirect),
-        ArgParser("description", NoParse, "description", DumpDirect),
-        ArgParser("style_url", NoParse, "styleUrl", DumpDirect),
+        _FieldDef("name", NoParse, "name", DumpDirect),
+        _FieldDef("visibility", NoParse, "visibility", DumpDirect),
+        _FieldDef("is_open", NoParse, "open", DumpDirect),
+        _FieldDef("author_name", NoParse, "", NoDump),
+        _FieldDef("author_link", NoParse, "", NoDump),
+        _FieldDef("address", NoParse, "address", DumpDirect),
+        _FieldDef("snippet", NoParse, "", NoDump),
+        _FieldDef("snippet_max_line", NoParse, "", NoDump),
+        _FieldDef("phone_number", NoParse, "phoneNumber", DumpDirect),
+        _FieldDef("description", NoParse, "description", DumpDirect),
+        _FieldDef("style_url", NoParse, "styleUrl", DumpDirect),
     )
     _direct_children = Object._direct_children + (
         "abstract_view",
@@ -294,7 +294,7 @@ class Container(list[Feature], Feature, ABC):
         styles: Iterable[StyleSelector] | None = None,
         region: Region | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
-        features: Iterable[Feature] | None = None,
+        features: Feature | Iterable[Feature] | None = None,
     ):
         """Feature instance constructor."""
         list[Feature].__init__(self)
@@ -317,8 +317,11 @@ class Container(list[Feature], Feature, ABC):
             region=region,
         )
         ABC.__init__(self)
-        if features:
-            self.extend(features)
+        if features is not None:
+            if isinstance(features, Feature):
+                self.append(features)
+            else:
+                self.extend(features)
         self._is_open: bool | None = is_open
         self._update_limit: int = 0
         self.update_limit = update_limit

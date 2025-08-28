@@ -4,13 +4,13 @@ from typing import Any, Iterator, NamedTuple, Optional
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import ArgParser, NoDump
+from pyLiveKML.KML.KML import _FieldDef, NoDump
 
 
 class _BaseObject(ABC):
 
     _kml_type: str = ""
-    _kml_fields: tuple[ArgParser, ...] = tuple()
+    _kml_fields: tuple[_FieldDef, ...] = tuple()
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Object setattr method."""

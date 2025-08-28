@@ -48,7 +48,7 @@ class Folder(Container):
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
-        features: Iterable[Feature] | None = None,
+        features: Feature | Iterable[Feature] | None = None,
     ):
         """Folder instance constructor."""
         super().__init__(
