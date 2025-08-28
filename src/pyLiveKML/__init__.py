@@ -62,7 +62,7 @@ from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 from pyLiveKML.KML.KMLObjects.TimeStamp import TimeStamp, GxTimeStamp
 from pyLiveKML.KML.KMLObjects.TimeSpan import TimeSpan, GxTimeSpan
 from pyLiveKML.KML.KMLObjects.Track import (
-    Track,
+    GxTrack,
     TrackAngles,
     TrackCoord,
     TrackElement,
@@ -74,11 +74,6 @@ from pyLiveKML.KML.KMLObjects.PhotoOverlay import PhotoOverlay
 
 
 __all__ = [
-    "Track",
-    "TrackAngles",
-    "TrackCoord",
-    "TrackElement",
-    "TrackExtendedData",
     "Alias",
     "AltitudeMode",
     "Angle180",
@@ -101,6 +96,7 @@ __all__ = [
     "Geometry",
     "GxTimeSpan",
     "GxTimeStamp",
+    "GxTrack",
     "GxViewerOption",
     "GxViewerOptions",
     "HotSpot",
@@ -145,6 +141,10 @@ __all__ = [
     "SubStyle",
     "TimeSpan",
     "TimeStamp",
+    "TrackAngles",
+    "TrackCoord",
+    "TrackElement",
+    "TrackExtendedData",
     "UnitsEnum",
     "ViewRefreshMode",
     "errors",

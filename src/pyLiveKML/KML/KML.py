@@ -43,6 +43,17 @@ def kml_root_tag() -> etree.Element:
 
 
 def with_ns(tag: str) -> str:
+    """Output a Clark-notation XML string from a colon-notation XML string.
+
+    If there is no colon in the text, just return the text. Otherwise, split the text
+    into two parts at the first colon. Look up the first part as a key in
+    `_root_namespace_map` and return the corresponding value, wrapped in {}, with the
+    second part of the original text appended.
+
+    For example, "gx:Track" would return "{http://www.google.com/kml/ext/2.2}Track".
+    lxml publishes this as a <gx:Track> tag. Ridiculous double-entry nonsense, but it
+    works.
+    """
     parts = tag.split(":")
     if len(parts) < 2:
         return tag

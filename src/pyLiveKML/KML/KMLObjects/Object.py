@@ -102,7 +102,9 @@ class Object(_BaseObject, ABC):
                 attribs = None
                 if not getattr(dc, "_suppress_id", True):
                     attribs = {"id": str(dc.id)}
-                dc.build_kml(etree.SubElement(root, with_ns(dc._kml_type), attrib=attribs), True)
+                dc.build_kml(
+                    etree.SubElement(root, with_ns(dc._kml_type), attrib=attribs), True
+                )
 
     def construct_kml(self) -> etree.Element:
         """Construct this :class:`~pyLiveKML.KML.KMLObjects.Object`'s KML representation.
@@ -173,7 +175,9 @@ class Object(_BaseObject, ABC):
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
         delete = etree.Element("Delete")
-        etree.SubElement(delete, _tag=with_ns(self.kml_type), attrib={"targetId": str(self.id)})
+        etree.SubElement(
+            delete, _tag=with_ns(self.kml_type), attrib={"targetId": str(self.id)}
+        )
         update.append(delete)
 
     def force_idle(self) -> None:

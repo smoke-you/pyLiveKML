@@ -13,7 +13,7 @@ from pyLiveKML.KML.KML import (
     _FieldDef,
     NoParse,
     DumpDirect,
-    with_ns
+    with_ns,
 )
 from pyLiveKML.KML.KMLObjects.Model import Model
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
@@ -95,8 +95,8 @@ class TrackElement:
         self.extended_data = extended_data
 
 
-class Track(Geometry):
-    """A KML 'gx:Track', per https://developers.google.com/kml/documentation/kmlreference#model."""
+class GxTrack(Geometry):
+    """A KML 'gx:Track', per https://developers.google.com/kml/documentation/kmlreference#gxtrack."""
 
     _kml_type = "gx:Track"
     _fields = (_FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),)
@@ -109,7 +109,7 @@ class Track(Geometry):
         model: Model | None = None,
     ) -> None:
         """Track instance constructor."""
-        Object.__init__(self)
+        Geometry.__init__(self)
         self.altitude_mode = altitude_mode
         self.model = model
         self.elements = list[TrackElement]()
@@ -136,12 +136,12 @@ class Track(Geometry):
             etree.SubElement(root, with_ns("gx:angles")).text = str(e.angles)
 
         # TODO: fix this, just... fix it
-        # Under each <SchemaData> tag, it needs to create one <gx:SimpleDataArray> tag 
+        # Under each <SchemaData> tag, it needs to create one <gx:SimpleDataArray> tag
         # for each key in the TrackExtendedData.data dict.
         # Under each <gx:SimpleDataArray> tag, it needs to create one <gx:value> tag
-        # for each TrackElement in self. The tags that have a corresponding schema and 
-        # array should contain the corresponding value from the TrackExtendedData.dict, 
-        # while the tags that do not have corresponding parents should contain empty 
+        # for each TrackElement in self. The tags that have a corresponding schema and
+        # array should contain the corresponding value from the TrackExtendedData.dict,
+        # while the tags that do not have corresponding parents should contain empty
         # strings.
         xdata = {
             schu: dict[str, list[str]]()
@@ -163,7 +163,9 @@ class Track(Geometry):
             )
             for kn, kv in xschd.items():
                 knroot = etree.SubElement(
-                    xchroot, with_ns("gx:SimpleArrayData"), attrib={with_ns("kml:name"): kn}
+                    xchroot,
+                    with_ns("gx:SimpleArrayData"),
+                    attrib={with_ns("kml:name"): kn},
                 )
                 for v in kv:
                     etree.SubElement(knroot, with_ns("gx:value")).text = v
