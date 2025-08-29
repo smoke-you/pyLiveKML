@@ -8,8 +8,8 @@ from pyLiveKML import (
     Point,
     Style,
 )
-from pyLiveKML.KML.KMLObjects.Object import ObjectState
-from pyLiveKML.KML.KMLObjects.Placemark import Placemark
+from pyLiveKML.KMLObjects.Object import ObjectState
+from pyLiveKML.KMLObjects.Placemark import Placemark
 
 from .AircraftData import AircraftData
 from ..helpers import description_builder

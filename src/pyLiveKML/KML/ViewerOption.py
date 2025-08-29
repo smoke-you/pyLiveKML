@@ -2,8 +2,8 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML import with_ns
 from pyLiveKML.KML import GxViewerOptionEnum
+from pyLiveKML.KML.utils import with_ns
 from pyLiveKML.KML._BaseObject import _BaseObject
 
 

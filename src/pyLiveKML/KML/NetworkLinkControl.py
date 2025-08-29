@@ -6,10 +6,10 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
-from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
-from pyLiveKML.KML.KMLObjects.Feature import Container
-from pyLiveKML.KML.KMLObjects.Folder import Folder
-from pyLiveKML.KML.KMLObjects.Object import ObjectState
+from pyLiveKML.KMLObjects.AbstractView import AbstractView
+from pyLiveKML.KMLObjects.Feature import Container
+from pyLiveKML.KMLObjects.Folder import Folder
+from pyLiveKML.KMLObjects.Object import ObjectState
 from pyLiveKML.KML.Update import Update
 
 
@@ -19,14 +19,14 @@ class NetworkLinkControl(_BaseObject):
     :param str target_href: The URI of the KML document that will be synchronized by this
         :class:`~pyLiveKML.KML.NetworkLinkControl`. Note that the specified document *must* already have been created
         in GEP in order to be synchronized.
-    :param Container|None container: The KML :class:`~pyLiveKML.KML.KMLObjects.Container` that will be the
-        root of the tree of KML :class:`~pyLiveKML.KML.KMLObjects.Feature` instances managed and synchronized by this
-        :class:`~pyLiveKML.KML.NetworkLinkControl`.  Note that if no :class:`~pyLiveKML.KML.KMLObjects.Container`, or
-        None, is specified then a :class:`~pyLiveKML.KML.KMLObjects.Folder` instance named 'Root' will be instantiated
+    :param Container|None container: The KML :class:`~pyLiveKML.KMLObjects.Container` that will be the
+        root of the tree of KML :class:`~pyLiveKML.KMLObjects.Feature` instances managed and synchronized by this
+        :class:`~pyLiveKML.KML.NetworkLinkControl`.  Note that if no :class:`~pyLiveKML.KMLObjects.Container`, or
+        None, is specified then a :class:`~pyLiveKML.KMLObjects.Folder` instance named 'Root' will be instantiated
         for it.
     :param int update_limit: The (approximate) maximum number of Create, Change and/or Delete KML tags that will be
         generated as a result of any single synchronization update.
-    :var Container container: The root of the tree of KML :class:`~pyLiveKML.KML.KMLObjects.Feature` instances that this
+    :var Container container: The root of the tree of KML :class:`~pyLiveKML.KMLObjects.Feature` instances that this
         :class:`~pyLiveKML.KML.NetworkLinkControl` synchronizes.
     :var str target_href: The URI of the KML document that will be synchronized by this
         :class:`~pyLiveKML.KML.NetworkLinkControl`.

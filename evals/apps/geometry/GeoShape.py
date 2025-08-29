@@ -14,7 +14,7 @@ from pyLiveKML import (
     Polygon,
     Style,
 )
-from pyLiveKML.KML.KMLObjects.Placemark import Placemark
+from pyLiveKML.KMLObjects.Placemark import Placemark
 from scipy.spatial.transform import Rotation
 
 from .geography import project_shape

@@ -17,7 +17,7 @@ from pyLiveKML import (
     NetworkLinkControl,
     Style,
 )
-from pyLiveKML.KML.KMLObjects.Feature import Feature
+from pyLiveKML.KMLObjects.Feature import Feature
 from scipy.spatial.transform import Rotation
 
 from .GeoEllipse import GeoEllipse

@@ -15,7 +15,7 @@ from .AircraftData import AircraftData
 from .AircraftLocation import AircraftLocation
 from ..KMLApp import KMLApp, KMLSelect
 from pyLiveKML import NetworkLinkControl
-from pyLiveKML.KML.KMLObjects.Feature import Feature
+from pyLiveKML.KMLObjects.Feature import Feature
 
 
 def load_adsb_exchange_data(filename: Path) -> AircraftLocation:

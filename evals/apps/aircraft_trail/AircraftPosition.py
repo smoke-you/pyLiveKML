@@ -2,7 +2,7 @@
 
 from typing import cast
 from pyLiveKML import GeoCoordinates, GxAltitudeModeEnum, IconStyle, Point, Style
-from pyLiveKML.KML.KMLObjects.Placemark import Placemark
+from pyLiveKML.KMLObjects.Placemark import Placemark
 
 from .AircraftData import AircraftData
 

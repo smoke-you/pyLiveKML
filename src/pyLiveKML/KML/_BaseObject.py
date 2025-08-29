@@ -4,8 +4,8 @@ from typing import Any, Type
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML import with_ns
 from pyLiveKML.KML.GeoColor import GeoColor
+from pyLiveKML.KML.utils import with_ns
 
 
 class _KMLDump(ABC):
@@ -193,7 +193,7 @@ class _BaseObject(ABC):
         """The class' KML type string.
 
         Property that specifies the name of the XML tag that forms the root of
-        the KML representation of this :class:`~pyLiveKML.KML.KMLObjects.Object`.
+        the KML representation of this :class:`~pyLiveKML.KMLObjects.Object`.
         """
         return self._kml_tag
 
@@ -201,7 +201,7 @@ class _BaseObject(ABC):
         """Construct the KML content and append it to the provided etree.Element.
 
         Generate the KML representation of the internal fields of this
-        :class:`~pyLiveKML.KML.KMLObjects.Object`, and append it to the provided root
+        :class:`~pyLiveKML.KMLObjects.Object`, and append it to the provided root
         etree.Element.
 
         :param etree.Element root: The root XML element that will be appended to.
@@ -214,7 +214,7 @@ class _BaseObject(ABC):
                 etree.SubElement(root, with_ns(f.typename)).text = value
 
     def construct_kml(self) -> etree.Element:
-        """Construct this :class:`~pyLiveKML.KML.KMLObjects.Object`'s KML representation.
+        """Construct this :class:`~pyLiveKML.KMLObjects.Object`'s KML representation.
 
         :returns: The KML representation of the object as an etree.Element.
         """

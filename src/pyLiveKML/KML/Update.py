@@ -4,8 +4,8 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML import with_ns
 from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
+from pyLiveKML.KML.utils import with_ns
 
 
 class Update(_BaseObject):
@@ -31,9 +31,7 @@ class Update(_BaseObject):
     """
 
     _kml_tag = "Update"
-    _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("target_href", "targetHref"),
-    )
+    _kml_fields = _BaseObject._kml_fields + (_FieldDef("target_href", "targetHref"),)
 
     def __init__(
         self,

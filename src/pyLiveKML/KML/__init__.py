@@ -2,12 +2,16 @@
 
 import enum
 
+
 class GxAltitudeModeEnum(enum.Enum):
     """Enumeration of options for KML <gx:altitudeMode> tags.
 
     Generally used in e.g. objects that derive from
-    :class:`~pyLiveKML.KML.KMLObjects.Geometry`. Refer to the KML documentation at
+    :class:`~pyLiveKML.KMLObjects.Geometry`. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
+
+    :note: For simplicity, all `altitudeMode` tags in pyLiveKML have been replaced with 
+        `gx:altitudeMode` tags to simplify implementation of the seafloor-based modes.
     """
 
     CLAMP_TO_SEAFLOOR = "clampToSeaFloor"
@@ -21,7 +25,7 @@ class ColorModeEnum(enum.Enum):
     """Enumeration of options for KML <colorMode> tags.
 
     Specifically for objects that derive from
-    :class:`~pyLiveKML.KML.KMLObjects.ColorStyle`. Refer to the KML documentation at
+    :class:`~pyLiveKML.KMLObjects.ColorStyle`. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
@@ -32,7 +36,7 @@ class ColorModeEnum(enum.Enum):
 class DisplayModeEnum(str, enum.Enum):
     """Enumeration of options for KML <displayMode> tags.
 
-    Specifically for :class:`~pyLiveKML.KML.KMLObjects.BalloonStyle` objects. Refer to
+    Specifically for :class:`~pyLiveKML.KMLObjects.BalloonStyle` objects. Refer to
     the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
@@ -78,7 +82,7 @@ class GxViewerOptionEnum(enum.Enum):
 class ItemIconModeEnum(str, enum.Enum):
     """Enumeration of options for KML <ItemIcon><state> tags.
 
-    Specifically for :class:`~pyLiveKML.KML.KMLObjects.ListStyle` objects. Refer to the
+    Specifically for :class:`~pyLiveKML.KMLObjects.ListStyle` objects. Refer to the
     KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
@@ -99,7 +103,7 @@ class ItemIconModeEnum(str, enum.Enum):
 class ListItemTypeEnum(str, enum.Enum):
     """Enumeration of options for KML <listItemType> tags.
 
-    Specifically for :class:`~pyLiveKML.KML.KMLObjects.ListStyle` objects. Refer to the
+    Specifically for :class:`~pyLiveKML.KMLObjects.ListStyle` objects. Refer to the
     KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
@@ -113,7 +117,7 @@ class ListItemTypeEnum(str, enum.Enum):
 class RefreshModeEnum(str, enum.Enum):
     """Enumeration of options for KML <refreshMode> tags.
 
-    Specifically for :class:`~pyLiveKML.KML.KMLObjects.Link` objects. Refer to the
+    Specifically for :class:`~pyLiveKML.KMLObjects.Link` objects. Refer to the
     KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
@@ -126,7 +130,7 @@ class RefreshModeEnum(str, enum.Enum):
 class StyleStateEnum(str, enum.Enum):
     """Enumeration of options for KML <Pair><key> tags.
 
-    Specifically for :class:`~pyLiveKML.KML.KMLObjects.StyleMap` objects. Refer to the
+    Specifically for :class:`~pyLiveKML.KMLObjects.StyleMap` objects. Refer to the
     KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
@@ -138,8 +142,8 @@ class StyleStateEnum(str, enum.Enum):
 class UnitsEnum(str, enum.Enum):
     """Enumeration of options for KML <unitsEnum> tags.
 
-    Specifically for :class:`~pyLiveKML.KML.KMLObjects.Vec2` instances in e.g.
-    :class:`~pyLiveKML.KML.KMLObjects.IconStyle` objects. Refer to the KML documentation at
+    Specifically for :class:`~pyLiveKML.KMLObjects.Vec2` instances in e.g.
+    :class:`~pyLiveKML.KMLObjects.IconStyle` objects. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
@@ -151,7 +155,7 @@ class UnitsEnum(str, enum.Enum):
 class ViewRefreshModeEnum(enum.Enum):
     """Enumeration of options for KML <viewRefreshMode> tags.
 
-    Specifically for :class:`~pyLiveKML.KML.KMLObjects.Link` objects. Refer to the
+    Specifically for :class:`~pyLiveKML.KMLObjects.Link` objects. Refer to the
     KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
