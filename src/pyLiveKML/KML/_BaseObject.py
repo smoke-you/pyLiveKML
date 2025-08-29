@@ -4,7 +4,7 @@ from typing import Any, Iterator, NamedTuple, Optional
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import _FieldDef, NoDump
+from pyLiveKML.KML.KML import _FieldDef, NoDump, with_ns
 
 
 class _BaseObject(ABC):
@@ -50,13 +50,13 @@ class _BaseObject(ABC):
         for f in (f for f in self._kml_fields if f.dumper != NoDump):
             value = f.dumper.dump(getattr(self, f.name))
             if value:
-                etree.SubElement(root, f.typename).text = value
+                etree.SubElement(root, with_ns(f.typename)).text = value
 
     def construct_kml(self) -> etree.Element:
         """Construct this :class:`~pyLiveKML.KML.KMLObjects.Object`'s KML representation.
 
         :returns: The KML representation of the object as an etree.Element.
         """
-        root = etree.Element(_tag=self.kml_type)
+        root = etree.Element(_tag=with_ns(self.kml_type))
         self.build_kml(root)
         return root

@@ -26,6 +26,7 @@ from pyLiveKML.KML.KML import (
     AnglePos180,
     Angle360,
     FlyToModeEnum,
+    GxPlayModeEnum,
 )
 from pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
 from pyLiveKML.KML.Vec2 import HotSpot, OverlayXY, ScreenXY, RotationXY, Size
@@ -74,6 +75,9 @@ from pyLiveKML.KML.KMLObjects.ScreenOverlay import ScreenOverlay
 from pyLiveKML.KML.KMLObjects.PhotoOverlay import PhotoOverlay
 from pyLiveKML.KML.KMLObjects.Tour import GxTour
 from pyLiveKML.KML.KMLObjects.FlyTo import GxFlyTo
+from pyLiveKML.KML.KMLObjects.SoundCue import GxSoundCue
+from pyLiveKML.KML.KMLObjects.Wait import GxWait
+from pyLiveKML.KML.KMLObjects.TourControl import GxTourControl
 
 
 __all__ = [
@@ -100,12 +104,16 @@ __all__ = [
     "Geometry",
     "GroundOverlay",
     "GxFlyTo",
+    "GxPlayModeEnum",
+    "GxSoundCue",
     "GxTimeSpan",
     "GxTimeStamp",
     "GxTour",
+    "GxTourControl",
     "GxTrack",
     "GxViewerOption",
     "GxViewerOptions",
+    "GxWait",
     "HotSpot",
     "Icon",
     "IconStyle",

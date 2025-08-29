@@ -124,6 +124,16 @@ class FlyToModeEnum(enum.Enum):
     SMOOTH = "smooth"
 
 
+class GxPlayModeEnum(enum.Enum):
+    """Enumeration of options for KML <gx:playMode> tags.
+
+    Used only by `gx:TourControl`. Refer to the KML documentation at
+    https://developers.google.com/kml/documentation/kmlreference#gxtourcontrol.
+    """
+
+    PAUSE = "pause"
+
+
 class GxViewerOptions(enum.Enum):
     """Enumeration of options for KML <gx:option> tags.
 
