@@ -98,7 +98,7 @@ class TrackElement:
 class GxTrack(Geometry):
     """A KML 'gx:Track', per https://developers.google.com/kml/documentation/kmlreference#gxtrack."""
 
-    _kml_type = "gx:Track"
+    _kml_tag = "gx:Track"
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
     )

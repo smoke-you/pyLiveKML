@@ -33,7 +33,7 @@ class Vec2(_BaseObject, ABC):
             "xunits": self.x_units.value,
             "yunits": self.y_units.value,
         }
-        etree.SubElement(root, self._kml_type, attrib=attribs)
+        etree.SubElement(root, self._kml_tag, attrib=attribs)
 
     def __eq__(self, other: object) -> bool:
         """Check equality."""
@@ -52,7 +52,7 @@ class HotSpot(Vec2):
     Used only by the `IconStyle` class.
     """
 
-    _kml_type = "hotSpot"
+    _kml_tag = "hotSpot"
 
 
 class OverlayXY(Vec2):
@@ -61,7 +61,7 @@ class OverlayXY(Vec2):
     Used only by the `ScreenOverlay` class.
     """
 
-    _kml_type = "overlayXY"
+    _kml_tag = "overlayXY"
 
 
 class ScreenXY(Vec2):
@@ -70,7 +70,7 @@ class ScreenXY(Vec2):
     Used only by the `ScreenOverlay` class.
     """
 
-    _kml_type = "screenXY"
+    _kml_tag = "screenXY"
 
 
 class RotationXY(Vec2):
@@ -79,7 +79,7 @@ class RotationXY(Vec2):
     Used only by the `ScreenOverlay` class.
     """
 
-    _kml_type = "rotationXY"
+    _kml_tag = "rotationXY"
 
 
 class Size(Vec2):
@@ -88,4 +88,4 @@ class Size(Vec2):
     Used only by the `ScreenOverlay` class.
     """
 
-    _kml_type = "size"
+    _kml_tag = "size"

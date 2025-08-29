@@ -170,7 +170,7 @@ class _FieldDef:
 
 class _BaseObject(ABC):
 
-    _kml_type: str = ""
+    _kml_tag: str = ""
     _kml_fields: tuple[_FieldDef, ...] = tuple()
 
     def __setattr__(self, name: str, value: Any) -> None:
@@ -189,13 +189,13 @@ class _BaseObject(ABC):
         )
 
     @property
-    def kml_type(self) -> str:
+    def kml_tag(self) -> str:
         """The class' KML type string.
 
         Property that specifies the name of the XML tag that forms the root of
         the KML representation of this :class:`~pyLiveKML.KML.KMLObjects.Object`.
         """
-        return self._kml_type
+        return self._kml_tag
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element.
@@ -218,6 +218,6 @@ class _BaseObject(ABC):
 
         :returns: The KML representation of the object as an etree.Element.
         """
-        root = etree.Element(_tag=with_ns(self.kml_type))
+        root = etree.Element(_tag=with_ns(self.kml_tag))
         self.build_kml(root)
         return root

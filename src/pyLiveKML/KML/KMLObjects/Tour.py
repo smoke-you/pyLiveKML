@@ -17,7 +17,7 @@ from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
 class GxTour(Object, list[TourPrimitive]):
     """A KML 'gx:Tour', per https://developers.google.com/kml/documentation/kmlreference#gxtour."""
 
-    _kml_type = "gx:Tour"
+    _kml_tag = "gx:Tour"
     _kml_fields = Object._kml_fields + (
         _FieldDef("name", NoParse, "name", DumpDirect),
         _FieldDef("description", NoParse, "description", DumpDirect),

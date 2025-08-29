@@ -11,7 +11,7 @@ from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 class MultiGeometry(Geometry, list[Geometry]):
     """A KML 'MultiGeometry', per https://developers.google.com/kml/documentation/kmlreference#multigeometry."""
 
-    _kml_type = "MultiGeometry"
+    _kml_tag = "MultiGeometry"
 
     def __init__(self, contents: Geometry | Sequence[Geometry] | None = None):
         """Folder instance constructor."""

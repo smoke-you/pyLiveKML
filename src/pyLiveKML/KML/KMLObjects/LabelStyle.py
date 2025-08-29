@@ -20,7 +20,7 @@ class LabelStyle(ColorStyle):
         either 'NORMAL' or 'RANDOM'.
     """
 
-    _kml_type = "LabelStyle"
+    _kml_tag = "LabelStyle"
     _kml_fields = ColorStyle._kml_fields + (
         _FieldDef("scale", NoParse, "scale", DumpDirect),
     )

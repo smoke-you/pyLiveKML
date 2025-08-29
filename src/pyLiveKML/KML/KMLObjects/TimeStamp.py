@@ -11,7 +11,7 @@ from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
 class TimeStamp(TimePrimitive):
     """A KML 'TimeStamp', per https://developers.google.com/kml/documentation/kmlreference#style."""
 
-    _kml_type = "TimeStamp"
+    _kml_tag = "TimeStamp"
     _kml_fields = TimePrimitive._kml_fields + (
         _FieldDef("when", NoParse, "when", DumpDirect),
     )
@@ -29,4 +29,4 @@ class GxTimeStamp(TimeStamp):
     https://developers.google.com/kml/documentation/kmlreference#gx:timespan-and-gx:timestamp.
     """
 
-    _kml_type = "gx:TimeStamp"
+    _kml_tag = "gx:TimeStamp"

@@ -34,7 +34,7 @@ class NetworkLinkControl(_BaseObject):
         synchronization update.
     """
 
-    _kml_type = "NetworkLinkControl"
+    _kml_tag = "NetworkLinkControl"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("min_refresh_period", NoParse, "minRefreshPeriod", DumpDirect),
         _FieldDef("max_session_length", NoParse, "maxSessionLength", DumpDirect),

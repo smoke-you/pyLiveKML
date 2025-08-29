@@ -19,7 +19,7 @@ from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 class ItemIcon(_BaseObject):
     """ItemIcon class definition."""
 
-    _kml_type = "ItemIcon"
+    _kml_tag = "ItemIcon"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("icon_state", NoParse, "state", DumpDirect),
         _FieldDef("href", NoParse, "href", DumpDirect),
@@ -47,7 +47,7 @@ class ListStyle(SubStyle):
     :param str|None item_icon_href: The (optional) URI for the image will be displayed for the list item.
     """
 
-    _kml_type = "ListStyle"
+    _kml_tag = "ListStyle"
     _kml_fields = SubStyle._kml_fields + (
         _FieldDef("list_item_type", NoParse, "listItemType", DumpDirect),
         _FieldDef("bg_color", ColorParse, "bgColor", DumpDirect),
@@ -74,4 +74,4 @@ class ListStyle(SubStyle):
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
         for i in self.icons:
-            i.build_kml(etree.SubElement(root, i._kml_type), False)
+            i.build_kml(etree.SubElement(root, i._kml_tag), False)

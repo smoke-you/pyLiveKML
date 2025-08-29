@@ -31,7 +31,7 @@ class LinearRing(Geometry):
         point that makes up the boundary of the :class:`~pyLiveKML.KML.KMLObjects.LinearRing`.
     """
 
-    _kml_type = "LinearRing"
+    _kml_tag = "LinearRing"
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
         _FieldDef("extrude", NoParse, "extrude", DumpDirect),

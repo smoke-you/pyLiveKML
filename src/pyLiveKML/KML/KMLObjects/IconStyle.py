@@ -18,7 +18,7 @@ from pyLiveKML.KML.Vec2 import HotSpot
 class _IconStyle_Icon(_BaseObject):
     """A minimalist Icon class, used only within `IconStyle`."""
 
-    _kml_type = "Icon"
+    _kml_tag = "Icon"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("href", NoParse, "href", DumpDirect),
     )
@@ -44,7 +44,7 @@ class IconStyle(ColorStyle):
         either 'NORMAL' or 'RANDOM'.
     """
 
-    _kml_type = "IconStyle"
+    _kml_tag = "IconStyle"
     _kml_fields = ColorStyle._kml_fields + (
         _FieldDef("icon", NoParse, "", NoDump),
         _FieldDef("scale", NoParse, "scale", DumpDirect),

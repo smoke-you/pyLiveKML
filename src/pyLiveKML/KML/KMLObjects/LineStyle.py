@@ -18,7 +18,7 @@ class LineStyle(ColorStyle):
     :param int|None color: The (optional) color of the line, as a 32-bit ABGR value.
     """
 
-    _kml_type = "LineStyle"
+    _kml_tag = "LineStyle"
     _kml_fields = ColorStyle._kml_fields + (
         _FieldDef("width", NoParse, "width", DumpDirect),
         _FieldDef("gx_outer_color", ColorParse, "gx:outerColor", DumpDirect),

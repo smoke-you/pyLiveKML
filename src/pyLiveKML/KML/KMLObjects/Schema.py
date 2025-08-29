@@ -14,7 +14,7 @@ class SimpleField(_BaseObject):
     `Schema` instances contain a collection of `SimpleField` instances.
     """
 
-    _kml_type = "SimpleField"
+    _kml_tag = "SimpleField"
 
     def __init__(
         self,
@@ -40,7 +40,7 @@ class SimpleField(_BaseObject):
     def construct_kml(self) -> etree.Element:
         """Construct this instances' KML representation."""
         root = etree.Element(
-            self.kml_type, attrib={"type": self.type, "name": self.name}
+            self.kml_tag, attrib={"type": self.type, "name": self.name}
         )
         self.build_kml(root)
         return root
@@ -49,7 +49,7 @@ class SimpleField(_BaseObject):
 class Schema(Object):
     """A KML 'Schema', per https://developers.google.com/kml/documentation/kmlreference#schema."""
 
-    _kml_type = "Schema"
+    _kml_tag = "Schema"
 
     def __init__(
         self,
@@ -73,7 +73,7 @@ class Schema(Object):
     def construct_kml(self) -> etree.Element:
         """Construct this instances' KML representation."""
         root = etree.Element(
-            self.kml_type, attrib={"name": self.name, "id": str(self.id)}
+            self.kml_tag, attrib={"name": self.name, "id": str(self.id)}
         )
         self.build_kml(root)
         return root

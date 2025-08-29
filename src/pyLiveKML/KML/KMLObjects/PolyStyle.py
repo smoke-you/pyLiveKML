@@ -21,7 +21,7 @@ class PolyStyle(ColorStyle):
     :param bool|None outline: Optional flag to indicate whether GEP should draw the polygon's outline.
     """
 
-    _kml_type = "PolyStyle"
+    _kml_tag = "PolyStyle"
     _kml_fields = ColorStyle._kml_fields + (
         _FieldDef("fill", NoParse, "fill", DumpDirect),
         _FieldDef("outline", NoParse, "outline", DumpDirect),

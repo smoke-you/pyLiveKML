@@ -24,7 +24,7 @@ from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
 class _Overlay_Icon(_BaseObject):
     """A minimalist Icon class, used only within `Overlay`."""
 
-    _kml_type = "Icon"
+    _kml_tag = "Icon"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("href", NoParse, "href", DumpDirect),
     )
@@ -38,7 +38,7 @@ class _Overlay_Icon(_BaseObject):
 class Overlay(Feature, ABC):
     """A KML 'Overlay', per https://developers.google.com/kml/documentation/kmlreference#overlay."""
 
-    _kml_type = ""
+    _kml_tag = ""
     _kml_fields = Feature._kml_fields + (
         _FieldDef("icon", NoParse, "", NoDump),
         _FieldDef("color", ColorParse, "color", DumpDirect),

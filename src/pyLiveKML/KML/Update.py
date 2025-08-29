@@ -30,7 +30,7 @@ class Update(_BaseObject):
         element, or iterable of KML elements, to be inserted under a child <Delete> tag.
     """
 
-    _kml_type = "Update"
+    _kml_tag = "Update"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("target_href", NoParse, "targetHref", DumpDirect),
     )

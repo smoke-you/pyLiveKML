@@ -15,7 +15,7 @@ class GxViewerOption(_BaseObject):
     :param bool enabled: Whether the view option is to be enabled.
     """
 
-    _kml_type = "gx:option"
+    _kml_tag = "gx:option"
 
     def __init__(self, option: GxViewerOptionEnum, enabled: bool):
         """GxViewerOption instance constructor."""
@@ -28,6 +28,6 @@ class GxViewerOption(_BaseObject):
         super().build_kml(root, with_children)
         etree.SubElement(
             root,
-            with_ns(self._kml_type),
+            with_ns(self._kml_tag),
             attrib={"name": self.option.value, "enabled": str(int(self.enabled))},
         )

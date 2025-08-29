@@ -12,7 +12,7 @@ from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 class _StyleMap_Pair(_BaseObject):
     """Hidden class for use by `StyleMap`."""
 
-    _kml_type = "Pair"
+    _kml_tag = "Pair"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("key", NoParse, "key", DumpDirect),
         _FieldDef("style_url", NoParse, "styleUrl", DumpDirect),
@@ -52,7 +52,7 @@ class StyleMap(StyleSelector):
         :class:`~pyLiveKML.KML.KMLObjects.Style`.
     """
 
-    _kml_type = "StyleMap"
+    _kml_tag = "StyleMap"
     _direct_children = StyleSelector._direct_children + ("normal", "highlight")
 
     def __init__(

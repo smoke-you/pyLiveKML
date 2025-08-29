@@ -14,7 +14,7 @@ from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
 class GxFlyTo(TourPrimitive):
     """A KML 'gx:FlyTo', per https://developers.google.com/kml/documentation/kmlreference#gxflyto."""
 
-    _kml_type = "gx:FlyTo"
+    _kml_tag = "gx:FlyTo"
     _kml_fields = TourPrimitive._kml_fields + (
         _FieldDef("duration", NoParse, "duration", DumpDirect),
         _FieldDef("fly_to_mode", NoParse, "flyToMode", DumpDirect),

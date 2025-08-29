@@ -11,7 +11,7 @@ from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
 class TimeSpan(TimePrimitive):
     """A KML 'TimeSpan', per https://developers.google.com/kml/documentation/kmlreference#style."""
 
-    _kml_type = "TimeSpan"
+    _kml_tag = "TimeSpan"
     _kml_fields = TimePrimitive._kml_fields + (
         _FieldDef("begin", NoParse, "begin", DumpDirect),
         _FieldDef("end", NoParse, "end", DumpDirect),
@@ -31,4 +31,4 @@ class GxTimeSpan(TimeSpan):
     https://developers.google.com/kml/documentation/kmlreference#gx:timespan-and-gx:timestamp.
     """
 
-    _kml_type = "gx:TimeSpan"
+    _kml_tag = "gx:TimeSpan"

@@ -16,7 +16,7 @@ from pyLiveKML.KML.Update import Update
 class GxAnimatedUpdate(TourPrimitive):
     """A KML 'gx:AnimatedUpdate', per https://developers.google.com/kml/documentation/kmlreference#gxanimatedupdate."""
 
-    _kml_type = "gx:AnimatedUpdate"
+    _kml_tag = "gx:AnimatedUpdate"
     _kml_fields = TourPrimitive._kml_fields + (
         _FieldDef("delayed_start", NoParse, "gx:delayedStart", DumpDirect),
         _FieldDef("duration", NoParse, "gx:duration", DumpDirect),

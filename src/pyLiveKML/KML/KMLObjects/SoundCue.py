@@ -13,7 +13,7 @@ from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
 class GxSoundCue(TourPrimitive):
     """A KML 'gx:SoundCue', per https://developers.google.com/kml/documentation/kmlreference#gxsoundcue."""
 
-    _kml_type = "gx:SoundCue"
+    _kml_tag = "gx:SoundCue"
     _kml_fields = TourPrimitive._kml_fields + (
         _FieldDef("href", NoParse, "href", DumpDirect),
         _FieldDef("delayed_start", NoParse, "gx:delayedStart", DumpDirect),

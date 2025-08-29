@@ -26,7 +26,7 @@ from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
 class _PhotoOverlay_ViewVolume(_BaseObject):
     """A minimalist child class, used only within `PhotoOverlay`."""
 
-    _kml_type = "ViewVolume"
+    _kml_tag = "ViewVolume"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("left_fov", Angle180, "leftFov", DumpDirect),
         _FieldDef("right_fov", Angle180, "rightFov", DumpDirect),
@@ -55,7 +55,7 @@ class _PhotoOverlay_ViewVolume(_BaseObject):
 class _PhotoOverlay_ImagePyramid(_BaseObject):
     """A minimalist child class, used only within `PhotoOverlay`."""
 
-    _kml_type = "ImagePyramid"
+    _kml_tag = "ImagePyramid"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("tile_size", NoParse, "tileSize", DumpDirect),
         _FieldDef("max_width", NoParse, "maxWidth", DumpDirect),
@@ -80,7 +80,7 @@ class _PhotoOverlay_ImagePyramid(_BaseObject):
 class PhotoOverlay(Overlay):
     """A KML 'PhotoOverlay', per https://developers.google.com/kml/documentation/kmlreference#photooverlay."""
 
-    _kml_type = "PhotoOverlay"
+    _kml_tag = "PhotoOverlay"
     _kml_fields = Overlay._kml_fields + (
         _FieldDef("rotation", NoParse, "rotation", DumpDirect),
         _FieldDef("shape", NoParse, "shape", DumpDirect),

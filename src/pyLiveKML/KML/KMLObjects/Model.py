@@ -22,7 +22,7 @@ from pyLiveKML.KML.KMLObjects.Object import Object
 class Location(_BaseObject):
     """Specifies the exact coordinates of the Model's origin in latitude, longitude, and altitude."""
 
-    _kml_type = "Location"
+    _kml_tag = "Location"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("longitude", Angle180, "longitude", DumpDirect),
         _FieldDef("latitude", Angle90, "latitude", DumpDirect),
@@ -45,7 +45,7 @@ class Location(_BaseObject):
 class Orientation(_BaseObject):
     """Describes rotation of a 3D model's coordinate system to position the object in Google Earth."""
 
-    _kml_type = "Location"
+    _kml_tag = "Location"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("heading", Angle360, "heading", DumpDirect),
         _FieldDef("tilt", AnglePos180, "tilt", DumpDirect),
@@ -68,7 +68,7 @@ class Orientation(_BaseObject):
 class Scale(_BaseObject):
     """Scales a model along the x, y, and z axes in the model's coordinate space."""
 
-    _kml_type = "Scale"
+    _kml_tag = "Scale"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("x", NoParse, "x", DumpDirect),
         _FieldDef("y", NoParse, "y", DumpDirect),
@@ -91,7 +91,7 @@ class Scale(_BaseObject):
 class Alias(_BaseObject):
     """<Alias> contains a mapping from a <sourceHref> to a <targetHref>."""
 
-    _kml_type = "Alias"
+    _kml_tag = "Alias"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("target_href", NoParse, "targetHref", DumpDirect),
         _FieldDef("source_href", NoParse, "sourceHref", DumpDirect),
@@ -111,7 +111,7 @@ class Alias(_BaseObject):
 class ResourceMap(_BaseObject):
     """<ResourceMap> contains a list of <Alias> objects."""
 
-    _kml_type = "ResourceMap"
+    _kml_tag = "ResourceMap"
 
     def __init__(self, resources: Sequence[Alias] | Alias | None = None) -> None:
         """ResourceMap instance constructor."""
@@ -133,7 +133,7 @@ class ResourceMap(_BaseObject):
 class Model(Object):
     """A KML 'Model', per https://developers.google.com/kml/documentation/kmlreference#model."""
 
-    _kml_type = "Model"
+    _kml_tag = "Model"
     _kml_fields = Object._kml_fields + (
         _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
     )

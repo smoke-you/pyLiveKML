@@ -14,7 +14,7 @@ from pyLiveKML.KML.KMLObjects.Track import GxTrack
 class MultiTrack(Geometry, list[GxTrack]):
     """A KML 'gx:MultiTrack', per https://developers.google.com/kml/documentation/kmlreference#gxmultitrack."""
 
-    _kml_type = "gx:MultiTrack"
+    _kml_tag = "gx:MultiTrack"
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
         _FieldDef("interpolate", NoParse, "gx:interpolate", DumpDirect),

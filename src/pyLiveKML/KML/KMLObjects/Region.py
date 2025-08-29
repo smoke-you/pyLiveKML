@@ -11,7 +11,7 @@ from pyLiveKML.KML._BaseObject import _BaseObject
 class LatLonAltBox(_BaseObject):
     """A bounding box that describes an area of interest defined by geographic coordinates and altitudes."""
 
-    _kml_type = "LatLonAltBox"
+    _kml_tag = "LatLonAltBox"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("north", NoParse, "north", DumpDirect),
         _FieldDef("south", NoParse, "south", DumpDirect),
@@ -54,7 +54,7 @@ class Lod(_BaseObject):
     opaque to transparent).
     """
 
-    _kml_type = "Lod"
+    _kml_tag = "Lod"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("min_lod_pixels", NoParse, "minLodPixels", DumpDirect),
         _FieldDef("max_lod_pixels", NoParse, "maxLodPixels", DumpDirect),
@@ -82,7 +82,7 @@ class Lod(_BaseObject):
 class Region(Object):
     """A KML 'Region', per https://developers.google.com/kml/documentation/kmlreference."""
 
-    _kml_type = "Region"
+    _kml_tag = "Region"
     _direct_children = Object._direct_children + ("box", "lod")
 
     def __init__(

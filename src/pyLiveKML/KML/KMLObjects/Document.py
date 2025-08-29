@@ -34,7 +34,7 @@ class Document(Container):
         :class:`~pyLiveKML.KML.KMLObjects.Document`.
     """
 
-    _kml_type = "Document"
+    _kml_tag = "Document"
 
     def __init__(
         self,

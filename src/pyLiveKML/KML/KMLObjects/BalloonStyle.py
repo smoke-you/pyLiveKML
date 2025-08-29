@@ -25,7 +25,7 @@ class BalloonStyle(SubStyle):
     :param DisplayMode|None display_mode: The (optional) :class:`~pyLiveKML.KML.KML.DisplayMode` of the balloon.
     """
 
-    _kml_type = "BalloonStyle"
+    _kml_tag = "BalloonStyle"
     _kml_fields = SubStyle._kml_fields + (
         _FieldDef("bg_color", ColorParse, "bgColor", DumpDirect),
         _FieldDef("text_color", ColorParse, "textColor", DumpDirect),

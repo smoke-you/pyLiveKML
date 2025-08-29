@@ -30,7 +30,7 @@ class Link(Object):
     :param str|None http_query: An (optional) set of parameters for the href.
     """
 
-    _kml_type = "Link"
+    _kml_tag = "Link"
     _kml_fields = Object._kml_fields + (
         _FieldDef("href", NoParse, "href", DumpDirect),
         _FieldDef("refresh_mode", NoParse, "refreshMode", DumpDirect),

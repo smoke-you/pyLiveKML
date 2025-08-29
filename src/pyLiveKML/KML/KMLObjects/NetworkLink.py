@@ -29,7 +29,7 @@ class NetworkLink(Feature):
         will be displayed as 'open' in the GEP user List View.
     """
 
-    _kml_type = "NetworkLink"
+    _kml_tag = "NetworkLink"
     _kml_fields = Feature._kml_fields + (
         _FieldDef("fly_to_view", NoParse, "flyToView", DumpDirect),
         _FieldDef("refresh_visibility", NoParse, "refreshVisibility", DumpDirect),

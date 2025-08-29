@@ -14,7 +14,7 @@ from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
 class GxTourControl(TourPrimitive):
     """A KML 'gx:TourControl', per https://developers.google.com/kml/documentation/kmlreference#gxtourcontrol."""
 
-    _kml_type = "gx:TourControl"
+    _kml_tag = "gx:TourControl"
     _kml_fields = TourPrimitive._kml_fields + (
         _FieldDef("play_mode", NoParse, "gx:playMode", DumpDirect),
     )

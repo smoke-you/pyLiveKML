@@ -29,7 +29,7 @@ class Icon(Link):
         image.
     """
 
-    _kml_type = "Icon"
+    _kml_tag = "Icon"
     _kml_fields = Link._kml_fields + (
         _FieldDef("x", NoParse, "gx:x", DumpDirect),
         _FieldDef("y", NoParse, "gx:y", DumpDirect),

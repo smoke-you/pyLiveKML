@@ -238,7 +238,7 @@ class Feature(Object, ABC):
 
     def __str__(self) -> str:
         """Return a string representation."""
-        return f"{self.kml_type}:{self.name}"
+        return f"{self.kml_tag}:{self.name}"
 
     def __repr__(self) -> str:
         """Return a debug representation."""

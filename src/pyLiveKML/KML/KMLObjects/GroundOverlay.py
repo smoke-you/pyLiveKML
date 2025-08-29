@@ -24,7 +24,7 @@ from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
 class _GroundOverlay_LatLonBox(_BaseObject):
     """LatLonBox class, specific to the <GroundOverlay> KML tag."""
 
-    _kml_type = "LatLonBox"
+    _kml_tag = "LatLonBox"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("north", Angle90, "north", DumpDirect),
         _FieldDef("south", Angle90, "south", DumpDirect),
@@ -52,7 +52,7 @@ class _GroundOverlay_LatLonBox(_BaseObject):
 class _GroundOverlay_LatLonQuad(_BaseObject):
     """LatLonQuad class, specific to the <GroundOverlay> KML tag."""
 
-    _kml_type = "gx:LatLonQuad"
+    _kml_tag = "gx:LatLonQuad"
 
     def __init__(
         self,
@@ -76,7 +76,7 @@ class _GroundOverlay_LatLonQuad(_BaseObject):
 class GroundOverlay(Overlay):
     """A KML 'GroundOverlay', per https://developers.google.com/kml/documentation/kmlreference#screenoverlay."""
 
-    _kml_type = "GroundOverlay"
+    _kml_tag = "GroundOverlay"
     _kml_fields = Overlay._kml_fields + (
         _FieldDef("altitude", NoParse, "altitude", DumpDirect),
         _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),

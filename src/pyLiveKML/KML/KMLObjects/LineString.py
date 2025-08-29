@@ -31,7 +31,7 @@ class LineString(Geometry):
         :class:`~pyLiveKML.KML.KMLObjects.LineString` objects should be drawn.
     """
 
-    _kml_type = "LineString"
+    _kml_tag = "LineString"
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
         _FieldDef("extrude", NoParse, "extrude", DumpDirect),

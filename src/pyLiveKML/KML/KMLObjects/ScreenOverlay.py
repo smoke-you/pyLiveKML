@@ -22,7 +22,7 @@ from pyLiveKML.KML.Vec2 import OverlayXY, RotationXY, ScreenXY, Size
 class ScreenOverlay(Overlay):
     """A KML 'ScreenOverlay', per https://developers.google.com/kml/documentation/kmlreference#screenoverlay."""
 
-    _kml_type = "ScreenOverlay"
+    _kml_tag = "ScreenOverlay"
     _kml_fields = Overlay._kml_fields + (
         _FieldDef("rotation", NoParse, "rotation", DumpDirect),
     )

@@ -22,7 +22,7 @@ from pyLiveKML.KML.ViewerOption import GxViewerOption
 class LookAt(AbstractView):
     """A KML 'LookAt', per https://developers.google.com/kml/documentation/kmlreference#lookat."""
 
-    _kml_type = "LookAt"
+    _kml_tag = "LookAt"
     _kml_fields = AbstractView._kml_fields + (
         _FieldDef("longitude", Angle180, "longitude", DumpDirect),
         _FieldDef("latitude", Angle90, "latitude", DumpDirect),

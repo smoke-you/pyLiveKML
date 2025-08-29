@@ -103,7 +103,7 @@ class Object(_BaseObject, ABC):
                 if not getattr(dc, "_suppress_id", True):
                     attribs = {"id": str(dc.id)}
                 dc.build_kml(
-                    etree.SubElement(root, with_ns(dc._kml_type), attrib=attribs), True
+                    etree.SubElement(root, with_ns(dc._kml_tag), attrib=attribs), True
                 )
 
     def construct_kml(self) -> etree.Element:
@@ -115,7 +115,7 @@ class Object(_BaseObject, ABC):
             attribs = None
         else:
             attribs = {"id": str(self.id)}
-        root = etree.Element(_tag=with_ns(self.kml_type), attrib=attribs)
+        root = etree.Element(_tag=with_ns(self.kml_tag), attrib=attribs)
         self.build_kml(root)
         return root
 
@@ -150,7 +150,7 @@ class Object(_BaseObject, ABC):
         """
         create = etree.Element("Create")
         parent_element = etree.SubElement(
-            create, _tag=with_ns(parent.kml_type), attrib={"targetId": str(parent.id)}
+            create, _tag=with_ns(parent.kml_tag), attrib={"targetId": str(parent.id)}
         )
         item = self.construct_kml()
         parent_element.append(item)
@@ -164,7 +164,7 @@ class Object(_BaseObject, ABC):
         """
         change = etree.Element("Change")
         item = etree.SubElement(
-            change, _tag=with_ns(self.kml_type), attrib={"targetId": str(self.id)}
+            change, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)}
         )
         self.build_kml(item, with_children=False)
         update.append(change)
@@ -176,7 +176,7 @@ class Object(_BaseObject, ABC):
         """
         delete = etree.Element("Delete")
         etree.SubElement(
-            delete, _tag=with_ns(self.kml_type), attrib={"targetId": str(self.id)}
+            delete, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)}
         )
         update.append(delete)
 
@@ -251,7 +251,7 @@ class Object(_BaseObject, ABC):
 
     def __str__(self) -> str:
         """Return a string representation."""
-        return f"{self.kml_type}"
+        return f"{self.kml_tag}"
 
     def __repr__(self) -> str:
         """Return a debug representation."""

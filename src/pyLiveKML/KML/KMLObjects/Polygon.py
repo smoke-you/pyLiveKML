@@ -12,7 +12,7 @@ from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 
 
 class _OuterBoundary(Object):
-    _kml_type = "outerBoundaryIs"
+    _kml_tag = "outerBoundaryIs"
     _direct_children = Object._direct_children + ("boundary",)
     _suppress_id = True
 
@@ -22,7 +22,7 @@ class _OuterBoundary(Object):
 
 
 class _InnerBoundary(Object):
-    _kml_type = "innerBoundaryIs"
+    _kml_tag = "innerBoundaryIs"
     _direct_children = Object._direct_children + ("boundary",)
     _suppress_id = True
 
@@ -51,7 +51,7 @@ class Polygon(Geometry):
         :class:`~pyLiveKML.KML.KMLObjects.Polygon` should follow the terrain.
     """
 
-    _kml_type = "Polygon"
+    _kml_tag = "Polygon"
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
         _FieldDef("extrude", NoParse, "extrude", DumpDirect),

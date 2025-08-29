@@ -22,7 +22,7 @@ class Point(Geometry):
         to the :class:`~pyLiveKML.KML.KMLObjects.Point` by GEP.
     """
 
-    _kml_type = "Point"
+    _kml_tag = "Point"
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("extrude", NoParse, "extrude", DumpDirect),
         _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),

@@ -22,7 +22,7 @@ from pyLiveKML.KML.ViewerOption import GxViewerOption
 class Camera(AbstractView):
     """A KML 'Camera', per https://developers.google.com/kml/documentation/kmlreference#camera."""
 
-    _kml_type = "Camera"
+    _kml_tag = "Camera"
     _kml_fields = AbstractView._kml_fields + (
         _FieldDef("longitude", Angle180, "longitude", DumpDirect),
         _FieldDef("latitude", Angle90, "latitude", DumpDirect),

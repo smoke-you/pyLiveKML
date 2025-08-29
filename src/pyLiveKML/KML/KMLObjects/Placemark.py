@@ -28,7 +28,7 @@ class Placemark(Feature):
         :class:`~pyLiveKML.KML.KMLObjects.Placemark`.
     """
 
-    _kml_type = "Placemark"
+    _kml_tag = "Placemark"
     _direct_children = Feature._direct_children + ("_geometry",)
 
     def __init__(

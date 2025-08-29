@@ -31,7 +31,7 @@ class Folder(Container):
         :class:`~pyLiveKML.KML.KMLObjects.Folder`.
     """
 
-    _kml_type = "Folder"
+    _kml_tag = "Folder"
 
     def __init__(
         self,
