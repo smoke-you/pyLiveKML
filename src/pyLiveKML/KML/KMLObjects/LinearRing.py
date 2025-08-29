@@ -4,7 +4,7 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import AltitudeModeEnum
+from pyLiveKML.KML import GxAltitudeModeEnum
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
@@ -33,7 +33,7 @@ class LinearRing(Geometry):
 
     _kml_tag = "LinearRing"
     _kml_fields = Geometry._kml_fields + (
-        _FieldDef("altitude_mode", "altitudeMode"),
+        _FieldDef("altitude_mode", "gx:altitudeMode"),
         _FieldDef("extrude"),
         _FieldDef("tessellate"),
         _FieldDef("gx_altitude_offset", "gx:altitudeOffset"),
@@ -42,7 +42,7 @@ class LinearRing(Geometry):
     def __init__(
         self,
         coordinates: Iterable[GeoCoordinates],
-        altitude_mode: AltitudeModeEnum | None = None,
+        altitude_mode: GxAltitudeModeEnum | None = None,
         extrude: bool | None = None,
         tessellate: bool | None = None,
         gx_altitude_offset: float | None = None,

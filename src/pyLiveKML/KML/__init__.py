@@ -64,19 +64,6 @@ def with_ns(tag: str) -> str:
     )
 
 
-class AltitudeModeEnum(enum.Enum):
-    """Enumeration of options for KML <altitudeMode> tags.
-
-    Generally used in e.g. objects that derive from
-    :class:`~pyLiveKML.KML.KMLObjects.Geometry`. Refer to the KML documentation at
-    https://developers.google.com/kml/documentation/kmlreference#kml-fields.
-    """
-
-    CLAMP_TO_GROUND = "clampToGround"
-    RELATIVE_TO_GROUND = "relativeToGround"
-    ABSOLUTE = "absolute"
-
-
 class GxAltitudeModeEnum(enum.Enum):
     """Enumeration of options for KML <gx:altitudeMode> tags.
 

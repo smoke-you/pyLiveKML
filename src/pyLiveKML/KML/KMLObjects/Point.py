@@ -2,7 +2,7 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import AltitudeModeEnum
+from pyLiveKML.KML import GxAltitudeModeEnum
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
@@ -25,7 +25,7 @@ class Point(Geometry):
     _kml_tag = "Point"
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("extrude"),
-        _FieldDef("altitude_mode", "altitudeMode"),
+        _FieldDef("altitude_mode", "gx:altitudeMode"),
         _FieldDef("coordinates"),
     )
 
@@ -33,7 +33,7 @@ class Point(Geometry):
         self,
         coordinates: GeoCoordinates,
         extrude: bool | None = None,
-        altitude_mode: AltitudeModeEnum | None = None,
+        altitude_mode: GxAltitudeModeEnum | None = None,
     ):
         """Point instance constructor."""
         Geometry.__init__(self)

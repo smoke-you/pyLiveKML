@@ -4,7 +4,7 @@ from typing import Sequence
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import AltitudeModeEnum
+from pyLiveKML.KML import GxAltitudeModeEnum
 from pyLiveKML.KML._BaseObject import (
     Angle90,
     AnglePos90,
@@ -29,7 +29,7 @@ class LookAt(AbstractView):
         _FieldDef("heading", parser=Angle360),
         _FieldDef("tilt", parser=AnglePos90),
         _FieldDef("range", parser=NoParse),
-        _FieldDef("altitude_mode", "altitudeMode"),
+        _FieldDef("altitude_mode", "gx:altitudeMode"),
     )
 
     def __init__(
@@ -42,7 +42,7 @@ class LookAt(AbstractView):
         heading: float = 0,
         tilt: float = 0,
         range: float = 0,
-        altitude_mode: AltitudeModeEnum | None = None,
+        altitude_mode: GxAltitudeModeEnum | None = None,
     ):
         """LookAt instance constructor."""
         AbstractView.__init__(self, viewer_options, time_primitive)
@@ -53,5 +53,5 @@ class LookAt(AbstractView):
         self.tilt = tilt
         self.range = range
         self.altitude_mode = (
-            AltitudeModeEnum.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode
+            GxAltitudeModeEnum.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode
         )

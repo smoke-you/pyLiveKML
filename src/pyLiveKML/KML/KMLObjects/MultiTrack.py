@@ -4,7 +4,7 @@ from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import AltitudeModeEnum
+from pyLiveKML.KML import GxAltitudeModeEnum
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild
@@ -16,13 +16,13 @@ class MultiTrack(Geometry, list[GxTrack]):
 
     _kml_tag = "gx:MultiTrack"
     _kml_fields = Geometry._kml_fields + (
-        _FieldDef("altitude_mode", "altitudeMode"),
+        _FieldDef("altitude_mode", "gx:altitudeMode"),
         _FieldDef("interpolate"),
     )
 
     def __init__(
         self,
-        altitude_mode: AltitudeModeEnum | None = None,
+        altitude_mode: GxAltitudeModeEnum | None = None,
         interpolate: bool = False,
         tracks: GxTrack | Iterable[GxTrack] | None = None,
     ) -> None:

@@ -1,7 +1,7 @@
 """pyLiveKML init module."""
 
 from pyLiveKML.KML import (
-    AltitudeModeEnum,
+    GxAltitudeModeEnum,
     ColorModeEnum,
     DisplayModeEnum,
     FlyToModeEnum,
@@ -69,7 +69,7 @@ from pyLiveKML.KML.ViewerOption import GxViewerOption
 # allows importing any of the instantiable KML objects and helpers from the `pyLiveKML` module
 __all__ = [
     "Alias",
-    "AltitudeModeEnum",
+    "GxAltitudeModeEnum",
     "BalloonStyle",
     "Camera",
     "ColorModeEnum",

@@ -4,7 +4,7 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import AltitudeModeEnum
+from pyLiveKML.KML import GxAltitudeModeEnum
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KML.KMLObjects.LinearRing import LinearRing
@@ -53,7 +53,7 @@ class Polygon(Geometry):
 
     _kml_tag = "Polygon"
     _kml_fields = Geometry._kml_fields + (
-        _FieldDef("altitude_mode", "altitudeMode"),
+        _FieldDef("altitude_mode", "gx:altitudeMode"),
         _FieldDef("extrude"),
         _FieldDef("tessellate"),
     )
@@ -66,7 +66,7 @@ class Polygon(Geometry):
         self,
         outer_boundary: LinearRing,
         inner_boundaries: LinearRing | Iterable[LinearRing] | None = None,
-        altitude_mode: AltitudeModeEnum | None = None,
+        altitude_mode: GxAltitudeModeEnum | None = None,
         extrude: bool | None = None,
         tessellate: bool | None = None,
     ):

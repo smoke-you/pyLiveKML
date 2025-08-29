@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pyLiveKML import GeoCoordinates, AltitudeModeEnum
+from pyLiveKML import GeoCoordinates, GxAltitudeModeEnum
 
 
 class AircraftData:
@@ -21,9 +21,9 @@ class AircraftData:
         """AircraftData instance constructor."""
         self.coordinates = GeoCoordinates(lon, lat, alt)
         self.altitude_mode = (
-            AltitudeModeEnum.CLAMP_TO_GROUND
+            GxAltitudeModeEnum.CLAMP_TO_GROUND
             if alt is None
-            else AltitudeModeEnum.ABSOLUTE
+            else GxAltitudeModeEnum.ABSOLUTE
         )
         self.timestamp = timestamp
         self.speed = speed

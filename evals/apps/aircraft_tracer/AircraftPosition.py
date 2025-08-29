@@ -5,7 +5,7 @@ from typing import Optional, cast
 
 from apps.helpers import description_builder
 from pyLiveKML import (
-    AltitudeModeEnum,
+    GxAltitudeModeEnum,
     GeoCoordinates,
     IconStyle,
     Point,
@@ -35,9 +35,9 @@ class AircraftPosition(Placemark):
             geometry=Point(
                 coordinates=GeoCoordinates(lon, lat, alt),
                 altitude_mode=(
-                    AltitudeModeEnum.CLAMP_TO_GROUND
+                    GxAltitudeModeEnum.CLAMP_TO_GROUND
                     if alt is None
-                    else AltitudeModeEnum.ABSOLUTE
+                    else GxAltitudeModeEnum.ABSOLUTE
                 ),
             ),
             inline_style=Style(

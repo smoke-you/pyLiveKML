@@ -77,7 +77,7 @@ class GroundOverlay(Overlay):
     _kml_tag = "GroundOverlay"
     _kml_fields = Overlay._kml_fields + (
         _FieldDef("altitude"),
-        _FieldDef("altitude_mode", "altitudeMode"),
+        _FieldDef("altitude_mode", "gx:altitudeMode"),
     )
     _direct_children = Overlay._direct_children + ("box", "quad")
 

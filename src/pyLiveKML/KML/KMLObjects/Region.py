@@ -2,7 +2,7 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import AltitudeModeEnum
+from pyLiveKML.KML import GxAltitudeModeEnum
 from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
 from pyLiveKML.KML.KMLObjects.Object import Object
 
@@ -18,7 +18,7 @@ class LatLonAltBox(_BaseObject):
         _FieldDef("west"),
         _FieldDef("min_altitude", "minAltitude"),
         _FieldDef("max_altitude", "maxAltitude"),
-        _FieldDef("altitude_mode", "altitudeMode"),
+        _FieldDef("altitude_mode", "gx:altitudeMode"),
     )
 
     def __init__(
@@ -30,7 +30,7 @@ class LatLonAltBox(_BaseObject):
         west: float,
         min_altitude: float = 0,
         max_altitude: float = 0,
-        altitude_mode: AltitudeModeEnum = AltitudeModeEnum.CLAMP_TO_GROUND,
+        altitude_mode: GxAltitudeModeEnum = GxAltitudeModeEnum.CLAMP_TO_GROUND,
     ):
         """LatLonAltBox instance constructor."""
         super().__init__()
@@ -92,7 +92,7 @@ class Region(Object):
         west: float,
         min_altitude: float = 0,
         max_altitude: float = 0,
-        altitude_mode: AltitudeModeEnum = AltitudeModeEnum.CLAMP_TO_GROUND,
+        altitude_mode: GxAltitudeModeEnum = GxAltitudeModeEnum.CLAMP_TO_GROUND,
         min_lod_pixels: float = 256,
         max_lod_pixels: float = -1,
         min_fade_extent: float = 0,
