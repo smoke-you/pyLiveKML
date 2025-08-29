@@ -7,11 +7,14 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
-from pyLiveKML.KML.KML import GxViewerOption
+from pyLiveKML.KML.ViewerOption import GxViewerOption
+from pyLiveKML.KML.KML import with_ns
 
 
 class AbstractView(Object, ABC):
-    """A KML 'Abstract', per https://developers.google.com/kml/documentation/kmlreference#abstractview."""
+    """A KML 'AbstractView', per https://developers.google.com/kml/documentation/kmlreference#abstractview."""
+
+    _direct_children = Object._direct_children + ("time_primitive",)
 
     def __init__(
         self,
@@ -27,23 +30,7 @@ class AbstractView(Object, ABC):
                 self._viewer_options.append(viewer_options)
             else:
                 self._viewer_options.extend(viewer_options)
-        self._time_primitive = time_primitive
-
-    @property
-    def time_primitive(self) -> TimePrimitive | None:
-        """The TimePrimitive associated with this Feature."""
-        return self._time_primitive
-
-    @time_primitive.setter
-    def time_primitive(self, value: TimePrimitive | None) -> None:
-        if self._time_primitive != value:
-            self._time_primitive = value
-            self.field_changed()
-
-    @property
-    def viewer_options(self) -> list[GxViewerOption]:
-        """The viewer options associated with this Feature."""
-        return self._viewer_options
+        self.time_primitive = time_primitive
 
     @property
     def children(self) -> Iterator[ObjectChild]:
@@ -53,14 +40,8 @@ class AbstractView(Object, ABC):
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
+        super().build_kml(root, with_children)
         if self._viewer_options:
-            opts = etree.SubElement(root, "gx:ViewerOptions")
+            opts = etree.SubElement(root, with_ns("gx:ViewerOptions"))
             for v in self._viewer_options:
-                etree.SubElement(
-                    opts,
-                    "gx:option",
-                    attribs={"name": v.name.value, "enabled": str(int(v.enabled))},
-                )
-        if with_children:
-            if self.time_primitive is not None:
-                root.append(self.time_primitive.construct_kml())
+                v.build_kml(opts)

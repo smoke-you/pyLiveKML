@@ -3,7 +3,7 @@
 import enum
 from abc import ABC, abstractmethod
 
-from typing import Any, NamedTuple, Type
+from typing import Any, Type
 
 from lxml import etree  # type: ignore
 
@@ -12,25 +12,27 @@ from pyLiveKML.KML.GeoColor import GeoColor
 KML_UPDATE_CONTAINER_LIMIT_DEFAULT: int = 100
 """The default value for the container update limit.
 
-The default maximum number of :class:`~pyLiveKML.KML.KMLObjects.Feature` objects that will be included in each 
-synchronization update emitted by a :class:`~pyLiveKML.KML.NetworkLinkControl` object.
+The default maximum number of :class:`~pyLiveKML.KML.KMLObjects.Feature` objects that 
+will be included in each synchronization update emitted by a 
+:class:`~pyLiveKML.KML.NetworkLinkControl` object.
 """
 
 
 KML_DOCTYPE: str = '<?xml version="1.0" encoding="UTF-8"?>'
-"""The XML tag that opens any XML document, including any KML document.
-"""
+"""The XML tag that opens any XML document, including any KML document."""
 
 KML_HEADERS = {"Content-Type": "application/vnd.google-earth.kml+xml"}
+"""The headers that should be included when a KML file is tranmitted via HTTP."""
 
-
-_root_namespace_map = {
+__root_namespace_map = {
     "gx": "http://www.google.com/kml/ext/2.2",
     "kml": "http://www.opengis.net/kml/2.2",
     "atom": "http://www.w3.org/2005/Atom",
 }
+"""The namespace map that is to applied to all Google Earth KML files."""
 
-_root_attributes = {"xmlns": "http://www.opengis.net/kml/2.2"}
+__root_attributes = {"xmlns": "http://www.opengis.net/kml/2.2"}
+"""The attributes that should be applied to all Google Earth KML files."""
 
 
 def kml_root_tag() -> etree.Element:
@@ -39,7 +41,7 @@ def kml_root_tag() -> etree.Element:
     :return: The <kml> tag, with namespaces, that encloses the contents of a KML document.
     :rtype: etree.Element
     """
-    return etree.Element("kml", nsmap=_root_namespace_map, attrib=_root_attributes)
+    return etree.Element("kml", nsmap=__root_namespace_map, attrib=__root_attributes)
 
 
 def with_ns(tag: str) -> str:
@@ -55,25 +57,42 @@ def with_ns(tag: str) -> str:
     works.
     """
     parts = tag.split(":")
-    if len(parts) < 2:
-        return tag
-    else:
-        return f"{{{_root_namespace_map[parts[0]]}}}{''.join(parts[1:])}"
+    return (
+        tag
+        if len(parts) < 2
+        else f"{{{__root_namespace_map[parts[0]]}}}{':'.join(parts[1:])}"
+    )
 
 
-GxViewerOption = NamedTuple(
-    "GxViewerOption", [("name", "GxViewerOptions"), ("enabled", bool)]
-)
+class _FieldDef:
+    """Describes how a field of a KML object is to be published.
 
-_FieldDef = NamedTuple(
-    "_FieldDef",
-    [
-        ("name", str),
-        ("parser", Type["_KMLParser"]),
-        ("typename", str),
-        ("dumper", Type["_KMLDump"]),
-    ],
-)
+    KML object class definitions specify a tuple of _FieldDef instances as the `_kml_fields`
+    class variable.
+
+    :param str name: The name of the field, from the perspective of the Python object.
+    :param Type[_KMLParser] parser: The parser class that will be used to transform any value
+        assigned to the field. This allows e.g. floats to be constrained to an appropriate
+        range.
+    :param str typename: The text that will be assigned to the KML tag for the field when it
+        is published. May include a prefixed and colon-separated namespace, e.g. "gx:option"
+        is valid.
+    :param Type[_KMLDump] dumper: The dumper class that will be used to convert and publish
+        the field's value to KML.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        parser: Type["_KMLParser"],
+        typename: str,
+        dumper: Type["_KMLDump"],
+    ):
+        """_FieldDef instance constructor."""
+        self.name = name
+        self.parser = parser
+        self.typename = typename
+        self.dumper = dumper
 
 
 class AltitudeMode(enum.Enum):
@@ -134,7 +153,7 @@ class GxPlayModeEnum(enum.Enum):
     PAUSE = "pause"
 
 
-class GxViewerOptions(enum.Enum):
+class GxViewerOptionEnum(enum.Enum):
     """Enumeration of options for KML <gx:option> tags.
 
     Used only by `AbstractView` subclasses. Refer to the KML documentation at
@@ -255,20 +274,6 @@ class GridOriginEnum(enum.Enum):
 
     LOWER_LEFT = "lowerLeft"
     UPPER_LEFT = "upperLeft"
-
-
-class Vec2Type(enum.Enum):
-    """Enumeration of possible sub-types for KML :class:`~pyLiveKML.KML.KMLObjects.Vec2` objects.
-
-    Refer to the KML documentation at
-    https://developers.google.com/kml/documentation/kmlreference#kml-fields.
-    """
-
-    HOTSPOT = "hotSpot"
-    OVERLAY_XY = "overlayXY"
-    SCREEN_XY = "screenXY"
-    ROTATION_XY = "rotationXY"
-    SIZE = "size"
 
 
 class ObjectState(enum.Enum):

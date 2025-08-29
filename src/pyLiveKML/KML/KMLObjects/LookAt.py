@@ -5,7 +5,6 @@ from typing import Sequence
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KML import (
-    GxViewerOption,
     Angle90,
     AnglePos90,
     Angle180,
@@ -17,6 +16,7 @@ from pyLiveKML.KML.KML import (
 )
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
+from pyLiveKML.KML.ViewerOption import GxViewerOption
 
 
 class LookAt(AbstractView):

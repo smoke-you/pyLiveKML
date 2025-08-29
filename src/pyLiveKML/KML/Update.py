@@ -5,40 +5,59 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML._BaseObject import _BaseObject
-from pyLiveKML.KML.KML import with_ns, _FieldDef, NoDump, NoParse
+from pyLiveKML.KML.KML import with_ns, _FieldDef, DumpDirect, NoParse
 
 
 class Update(_BaseObject):
-    """Update tag class."""
+    """Update tag class.
+
+    Refer https://developers.google.com/kml/documentation/kmlreference#update.
+
+    Specifies an addition, change, or deletion to KML data that has already been loaded
+    using the specified URL. The <targetHref> specifies the .kml or .kmz file whose data
+    (within Google Earth) is to be modified. <Update> is always contained in a
+    <NetworkLinkControl> (N.B. or a <gx:AnimatedUpdate>). Furthermore, the file
+    containing the <NetworkLinkControl> must have been loaded by a <NetworkLink>. See the
+    "Topics in KML" page on Updates for a detailed example of how <Update> works.
+
+    :param str target_href: Specifies the .kml or .kmz file whose data (within Google
+        Earth) is to be modified
+    :param etree.Element|Iterable[etree.Element]|None creates: An optional KML
+        element, or iterable of KML elements, to be inserted under a child <Create> tag.
+    :param etree.Element|Iterable[etree.Element]|None changes: An optional KML
+        element, or iterable of KML elements, to be inserted under a child <Change> tag.
+    :param etree.Element|Iterable[etree.Element]|None changes: An optional KML
+        element, or iterable of KML elements, to be inserted under a child <Delete> tag.
+    """
 
     _kml_type = "Update"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("target_href", NoParse, "targetHref", NoDump),
+        _FieldDef("target_href", NoParse, "targetHref", DumpDirect),
     )
 
     def __init__(
         self,
         target_href: str,
-        changes: etree.Element | Iterable[etree.Element] | None = None,
         creates: etree.Element | Iterable[etree.Element] | None = None,
+        changes: etree.Element | Iterable[etree.Element] | None = None,
         deletes: etree.Element | Iterable[etree.Element] | None = None,
     ):
         """Update instance constructor."""
         super().__init__()
         self.target_href = target_href
-        self.changes = list[etree.Element]()
         self.creates = list[etree.Element]()
+        self.changes = list[etree.Element]()
         self.deletes = list[etree.Element]()
-        if changes is not None:
-            if isinstance(changes, etree.Element):
-                self.changes.append(changes)
-            else:
-                self.changes.extend(changes)
         if creates is not None:
             if isinstance(creates, etree.Element):
                 self.creates.append(creates)
             else:
                 self.creates.extend(creates)
+        if changes is not None:
+            if isinstance(changes, etree.Element):
+                self.changes.append(changes)
+            else:
+                self.changes.extend(changes)
         if deletes is not None:
             if isinstance(deletes, etree.Element):
                 self.deletes.append(deletes)
@@ -54,6 +73,3 @@ class Update(_BaseObject):
             etree.SubElement(root, with_ns("Create")).extend(self.creates)
         if self.deletes:
             etree.SubElement(root, with_ns("Delete")).extend(self.deletes)
-                
-
-    

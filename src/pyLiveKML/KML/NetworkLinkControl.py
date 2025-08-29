@@ -4,14 +4,20 @@ from datetime import datetime
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML.KML.KML import (
+    KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
+    NoParse,
+    DumpDirect,
+)
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Feature import Container
 from pyLiveKML.KML.KMLObjects.Folder import Folder
 from pyLiveKML.KML.KMLObjects.Object import ObjectState
+from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
+from pyLiveKML.KML.Update import Update
 
 
-class NetworkLinkControl:
+class NetworkLinkControl(_BaseObject):
     """The NetworkLinkControl class synchronizes the internal state of a KML object tree rooted in its :attr:`container` attribute with GEP.
 
     :param str target_href: The URI of the KML document that will be synchronized by this
@@ -31,6 +37,18 @@ class NetworkLinkControl:
     :var int update_limit: The (approximate) maximum number of KML objects that will be synchronized by any single
         synchronization update.
     """
+
+    _kml_type = "NetworkLinkControl"
+    _kml_fields = _BaseObject._kml_fields + (
+        _FieldDef("min_refresh_period", NoParse, "minRefreshPeriod", DumpDirect),
+        _FieldDef("max_session_length", NoParse, "maxSessionLength", DumpDirect),
+        _FieldDef("cookie", NoParse, "cookie", DumpDirect),
+        _FieldDef("message", NoParse, "message", DumpDirect),
+        _FieldDef("link_name", NoParse, "linkName", DumpDirect),
+        _FieldDef("link_description", NoParse, "linkDescription", DumpDirect),
+        _FieldDef("link_snippet", NoParse, "linkSnippet", DumpDirect),
+        _FieldDef("link_expires", NoParse, "linkExpires", DumpDirect),
+    )
 
     def __init__(
         self,
@@ -62,6 +80,7 @@ class NetworkLinkControl:
         self.link_snippet = link_snippet
         self.link_expires = link_expires
         self.abstract_view = abstract_view
+        self.update = Update(target_href)
 
     def update_kml(self) -> etree.Element:
         """Generate a synchronization update by parsing the :attr:`container`.
@@ -69,33 +88,8 @@ class NetworkLinkControl:
         :return: The synchronization update.
         :rtype: etree.Element
         """
-        root = etree.Element("NetworkLinkControl")
-
-        if self.min_refresh_period is not None:
-            etree.SubElement(root, "minRefreshPeriod").text = (
-                f"{self.min_refresh_period:0.3f}"
-            )
-        if self.max_session_length is not None:
-            etree.SubElement(root, "maxSessionLength").text = str(
-                self.max_session_length
-            )
-        if self.cookie is not None:
-            etree.SubElement(root, "cookie").text = self.cookie
-        if self.message is not None:
-            etree.SubElement(root, "message").text = self.message
-        if self.link_name is not None:
-            etree.SubElement(root, "linkName").text = self.link_name
-        if self.link_description is not None:
-            etree.SubElement(root, "linkDescription").text = self.link_description
-        if self.link_snippet is not None:
-            etree.SubElement(root, "linkSnippet").text = self.link_snippet
-        if self.link_expires is not None:
-            etree.SubElement(root, "linkExpires").text = self.link_expires.isoformat()
-        if self.abstract_view is not None:
-            root.append(self.abstract_view.construct_kml())
-
-        update = etree.SubElement(root, "Update")
-        etree.SubElement(update, "targetHref").text = self.target_href
+        root = self.construct_kml()
+        update = self.update.construct_kml()
 
         for f in self.container.containers:
             f.feature.update_kml(f.container, update)
@@ -114,4 +108,6 @@ class NetworkLinkControl:
                 f.feature.update_kml(f.container, update)
                 for c in f.feature.children:
                     c.child.update_kml(c.parent, update)
+
+        root.append(update)
         return root
