@@ -4,7 +4,7 @@ from typing import Any, Type
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import with_ns
+from pyLiveKML import with_ns
 from pyLiveKML.KML.GeoColor import GeoColor
 
 

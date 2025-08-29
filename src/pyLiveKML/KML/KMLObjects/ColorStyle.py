@@ -28,7 +28,7 @@ class ColorStyle(SubStyle, ABC):
         to determine the displayed color.
     """
 
-    _kml_fields = SubStyle._kml_fields + (
+    _kml_fields: tuple[_FieldDef, ...] = SubStyle._kml_fields + (
         _FieldDef("color", parser=ColorParse),
         _FieldDef("color_mode", "colorMode"),
     )

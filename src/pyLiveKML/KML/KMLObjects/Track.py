@@ -5,7 +5,8 @@ from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import GxAltitudeModeEnum, with_ns
+from pyLiveKML import with_ns
+from pyLiveKML.KML import GxAltitudeModeEnum
 from pyLiveKML.KML._BaseObject import (
     _FieldDef,
     Angle180,

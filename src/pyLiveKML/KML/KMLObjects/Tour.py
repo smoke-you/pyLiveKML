@@ -4,7 +4,7 @@ from typing import Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import with_ns
+from pyLiveKML import with_ns
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive

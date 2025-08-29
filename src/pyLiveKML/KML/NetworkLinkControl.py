@@ -4,7 +4,7 @@ from datetime import datetime
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Feature import Container

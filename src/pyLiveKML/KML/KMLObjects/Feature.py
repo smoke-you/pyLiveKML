@@ -8,7 +8,7 @@ from typing import Iterable, NamedTuple, Iterator, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML._BaseObject import (
     _FieldDef,
     NoDump,
@@ -46,7 +46,7 @@ class Feature(Object, ABC):
         objects that are local to this :class:`~pyLiveKML.KML.KMLObjects.Feature`.
     """
 
-    _kml_fields = Object._kml_fields + (
+    _kml_fields: tuple[_FieldDef, ...] = Object._kml_fields + (
         _FieldDef("name"),
         _FieldDef("visibility"),
         _FieldDef("is_open", "open"),
@@ -59,7 +59,7 @@ class Feature(Object, ABC):
         _FieldDef("description"),
         _FieldDef("style_url", "styleUrl"),
     )
-    _direct_children = Object._direct_children + (
+    _direct_children: tuple[str, ...] = Object._direct_children + (
         "abstract_view",
         "time_primitive",
         "region",

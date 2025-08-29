@@ -15,6 +15,7 @@ class SubStyle(Object, ABC):
     is the abstract base class for the specific sub-styles that are optionally included
     as children :class:`~pyLiveKML.KML.KMLObjects.Style` objects.
     """
+    _kml_fields: tuple[_FieldDef, ...] = tuple()
 
     def __init__(self) -> None:
         """SubStyle instance constructor."""

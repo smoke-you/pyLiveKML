@@ -4,7 +4,7 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML.KMLObjects.Feature import Feature, Container
 from pyLiveKML.KML.KMLObjects.Schema import Schema
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector

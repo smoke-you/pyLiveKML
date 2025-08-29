@@ -7,7 +7,7 @@ from typing import Iterator, NamedTuple, Optional
 from uuid import uuid4, UUID
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import with_ns
+from pyLiveKML import with_ns
 from pyLiveKML.KML._BaseObject import _BaseObject
 
 

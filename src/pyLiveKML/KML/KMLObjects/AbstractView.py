@@ -5,7 +5,7 @@ from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import with_ns
+from pyLiveKML import with_ns
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
 from pyLiveKML.KML.ViewerOption import GxViewerOption

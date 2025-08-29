@@ -6,7 +6,6 @@ from typing import Iterable, cast
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KMLObjects.Feature import Feature
 from pyLiveKML.KML._BaseObject import (
     _BaseObject,
     _FieldDef,
@@ -14,6 +13,7 @@ from pyLiveKML.KML._BaseObject import (
     NoDump,
 )
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
+from pyLiveKML.KML.KMLObjects.Feature import Feature
 from pyLiveKML.KML.KMLObjects.Region import Region
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
@@ -37,12 +37,12 @@ class Overlay(Feature, ABC):
     """A KML 'Overlay', per https://developers.google.com/kml/documentation/kmlreference#overlay."""
 
     _kml_tag = ""
-    _kml_fields = Feature._kml_fields + (
+    _kml_fields: tuple[_FieldDef, ...] = Feature._kml_fields + (
         _FieldDef("icon", dumper=NoDump),
         _FieldDef("color", parser=ColorParse),
         _FieldDef("draw_order", "drawOrder"),
     )
-    _direct_children = Feature._direct_children + ("icon",)
+    _direct_children: tuple[str, ...] = Feature._direct_children + ("icon",)
 
     def __init__(
         self,
