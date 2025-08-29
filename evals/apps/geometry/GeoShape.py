@@ -6,16 +6,15 @@ from typing import Optional, cast
 import numpy
 from pyproj import Geod
 from pyLiveKML import (
-    GeoColor,
     GeoCoordinates,
     AltitudeMode,
     LineStyle,
     LinearRing,
-    Placemark,
     PolyStyle,
     Polygon,
     Style,
 )
+from pyLiveKML.KML.KMLObjects.Placemark import Placemark
 from scipy.spatial.transform import Rotation
 
 from .geography import project_shape

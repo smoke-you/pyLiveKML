@@ -1,7 +1,8 @@
 """AircraftPosition module."""
 
 from typing import cast
-from pyLiveKML import GeoCoordinates, AltitudeMode, IconStyle, Placemark, Point, Style
+from pyLiveKML import GeoCoordinates, AltitudeMode, IconStyle, Point, Style
+from pyLiveKML.KML.KMLObjects.Placemark import Placemark
 
 from .AircraftData import AircraftData
 

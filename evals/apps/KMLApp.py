@@ -10,7 +10,8 @@ from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel, UUID4
 
-from pyLiveKML import NetworkLinkControl, Feature
+from pyLiveKML import NetworkLinkControl
+from pyLiveKML.KML.KMLObjects.Feature import Feature
 
 
 class KMLSelect(BaseModel):

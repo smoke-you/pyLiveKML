@@ -6,19 +6,18 @@ from typing import cast
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, UUID4
 from pyLiveKML import (
-    NetworkLinkControl,
-    GeoCoordinates,
-    Feature,
     AltitudeMode,
-    Region,
-    Style,
     BalloonStyle,
     DisplayModeEnum,
+    GeoCoordinates,
+    NetworkLinkControl,
+    Style,
 )
+from pyLiveKML.KML.KMLObjects.Feature import Feature
 from scipy.spatial.transform import Rotation
 
 from .GeoEllipse import GeoEllipse

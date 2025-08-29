@@ -11,7 +11,8 @@ from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from pyLiveKML import NetworkLinkControl, Feature
+from pyLiveKML import NetworkLinkControl
+from pyLiveKML.KML.KMLObjects.Feature import Feature
 
 from .AircraftData import AircraftData
 from .AircraftTrail import AircraftTrail

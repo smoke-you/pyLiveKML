@@ -4,7 +4,8 @@ from typing import Iterator, Iterable, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import RefreshModeEnum, _FieldDef, NoParse, DumpDirect
+from pyLiveKML.KML import RefreshModeEnum
+from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
 from pyLiveKML.KML.KMLObjects.Feature import Feature
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild

@@ -4,14 +4,12 @@ from typing import Optional, Sequence, cast
 
 from lxml import etree  # type: ignore
 from pyLiveKML import (
-    ObjectState,
     IconStyle,
-    Placemark,
+    ObjectState,
     Point,
     Style,
-    LookAt,
-    AltitudeMode,
 )
+from pyLiveKML.KML.KMLObjects.Placemark import Placemark
 
 from .AircraftData import AircraftData
 from ..helpers import description_builder

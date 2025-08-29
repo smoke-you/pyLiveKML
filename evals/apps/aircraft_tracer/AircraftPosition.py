@@ -5,14 +5,14 @@ from typing import Optional, cast
 
 from apps.helpers import description_builder
 from pyLiveKML import (
-    GeoCoordinates,
     AltitudeMode,
+    GeoCoordinates,
     IconStyle,
-    Placemark,
     Point,
     Style,
     TimeStamp,
 )
+from pyLiveKML.KML.KMLObjects.Placemark import Placemark
 
 
 class AircraftPosition(Placemark):

@@ -10,7 +10,8 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.requests import Request
 from fastapi.templating import Jinja2Templates
-from pyLiveKML import Folder, Feature, NetworkLinkControl, TimeSpan
+from pyLiveKML import Folder, NetworkLinkControl, TimeSpan
+from pyLiveKML.KML.KMLObjects.Feature import Feature
 
 from .AircraftPosition import AircraftPosition
 from ..KMLApp import KMLApp, KMLSelect
