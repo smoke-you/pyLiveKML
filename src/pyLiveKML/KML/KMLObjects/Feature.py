@@ -11,8 +11,6 @@ from lxml import etree  # type: ignore
 from pyLiveKML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML._BaseObject import (
     _FieldDef,
-    DumpDirect,
-    NoParse,
     NoDump,
 )
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
@@ -49,17 +47,17 @@ class Feature(Object, ABC):
     """
 
     _kml_fields = Object._kml_fields + (
-        _FieldDef("name", NoParse, "name", DumpDirect),
-        _FieldDef("visibility", NoParse, "visibility", DumpDirect),
-        _FieldDef("is_open", NoParse, "open", DumpDirect),
-        _FieldDef("author_name", NoParse, "", NoDump),
-        _FieldDef("author_link", NoParse, "", NoDump),
-        _FieldDef("address", NoParse, "address", DumpDirect),
-        _FieldDef("snippet", NoParse, "", NoDump),
-        _FieldDef("snippet_max_line", NoParse, "", NoDump),
-        _FieldDef("phone_number", NoParse, "phoneNumber", DumpDirect),
-        _FieldDef("description", NoParse, "description", DumpDirect),
-        _FieldDef("style_url", NoParse, "styleUrl", DumpDirect),
+        _FieldDef("name"),
+        _FieldDef("visibility"),
+        _FieldDef("is_open", "open"),
+        _FieldDef("author_name", dumper=NoDump),
+        _FieldDef("author_link", dumper=NoDump),
+        _FieldDef("address"),
+        _FieldDef("snippet", dumper=NoDump),
+        _FieldDef("snippet_max_line", dumper=NoDump),
+        _FieldDef("phone_number", "phoneNumber"),
+        _FieldDef("description"),
+        _FieldDef("style_url", "styleUrl"),
     )
     _direct_children = Object._direct_children + (
         "abstract_view",

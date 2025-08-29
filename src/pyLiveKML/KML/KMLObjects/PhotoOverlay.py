@@ -10,8 +10,6 @@ from pyLiveKML.KML._BaseObject import (
     _FieldDef,
     Angle180,
     Angle90,
-    DumpDirect,
-    NoParse,
 )
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KML import GridOriginEnum
@@ -28,11 +26,11 @@ class _PhotoOverlay_ViewVolume(_BaseObject):
 
     _kml_tag = "ViewVolume"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("left_fov", Angle180, "leftFov", DumpDirect),
-        _FieldDef("right_fov", Angle180, "rightFov", DumpDirect),
-        _FieldDef("bottom_fov", Angle90, "bottomFov", DumpDirect),
-        _FieldDef("top_fov", Angle90, "topFov", DumpDirect),
-        _FieldDef("near", NoParse, "near", DumpDirect),
+        _FieldDef("left_fov", "leftFov", Angle180),
+        _FieldDef("right_fov", "rightFov", Angle180),
+        _FieldDef("bottom_fov", "bottomFov", Angle90),
+        _FieldDef("top_fov", "topFov", Angle90),
+        _FieldDef("near"),
     )
 
     def __init__(
@@ -57,10 +55,10 @@ class _PhotoOverlay_ImagePyramid(_BaseObject):
 
     _kml_tag = "ImagePyramid"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("tile_size", NoParse, "tileSize", DumpDirect),
-        _FieldDef("max_width", NoParse, "maxWidth", DumpDirect),
-        _FieldDef("max_height", NoParse, "maxHeight", DumpDirect),
-        _FieldDef("grid_origin", NoParse, "gridOrigin", DumpDirect),
+        _FieldDef("tile_size", "tileSize"),
+        _FieldDef("max_width", "maxWidth"),
+        _FieldDef("max_height", "maxHeight"),
+        _FieldDef("grid_origin", "gridOrigin"),
     )
 
     def __init__(
@@ -82,8 +80,8 @@ class PhotoOverlay(Overlay):
 
     _kml_tag = "PhotoOverlay"
     _kml_fields = Overlay._kml_fields + (
-        _FieldDef("rotation", NoParse, "rotation", DumpDirect),
-        _FieldDef("shape", NoParse, "shape", DumpDirect),
+        _FieldDef("rotation"),
+        _FieldDef("shape"),
     )
     _direct_children = Overlay._direct_children + (
         "point",

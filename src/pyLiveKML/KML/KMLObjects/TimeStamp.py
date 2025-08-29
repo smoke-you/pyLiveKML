@@ -4,8 +4,8 @@ from datetime import datetime
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
-from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
 
 
 class TimeStamp(TimePrimitive):
@@ -13,7 +13,7 @@ class TimeStamp(TimePrimitive):
 
     _kml_tag = "TimeStamp"
     _kml_fields = TimePrimitive._kml_fields + (
-        _FieldDef("when", NoParse, "when", DumpDirect),
+        _FieldDef("when"),
     )
 
     def __init__(self, when: datetime):

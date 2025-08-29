@@ -11,8 +11,6 @@ from pyLiveKML.KML._BaseObject import (
     _FieldDef,
     Angle180,
     Angle90,
-    DumpDirect,
-    NoParse,
 )
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Overlay import Overlay
@@ -26,11 +24,11 @@ class _GroundOverlay_LatLonBox(_BaseObject):
 
     _kml_tag = "LatLonBox"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("north", Angle90, "north", DumpDirect),
-        _FieldDef("south", Angle90, "south", DumpDirect),
-        _FieldDef("east", Angle180, "east", DumpDirect),
-        _FieldDef("west", Angle180, "west", DumpDirect),
-        _FieldDef("rotation", Angle180, "rotation", DumpDirect),
+        _FieldDef("north", parser=Angle90),
+        _FieldDef("south", parser=Angle90),
+        _FieldDef("east", parser=Angle180),
+        _FieldDef("west", parser=Angle180),
+        _FieldDef("rotation", parser=Angle180),
     )
 
     def __init__(
@@ -78,8 +76,8 @@ class GroundOverlay(Overlay):
 
     _kml_tag = "GroundOverlay"
     _kml_fields = Overlay._kml_fields + (
-        _FieldDef("altitude", NoParse, "altitude", DumpDirect),
-        _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
+        _FieldDef("altitude"),
+        _FieldDef("altitude_mode", "altitudeMode"),
     )
     _direct_children = Overlay._direct_children + ("box", "quad")
 

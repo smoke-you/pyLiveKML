@@ -147,7 +147,7 @@ class _FieldDef:
     :param Type[_KMLParser] parser: The parser class that will be used to transform any value
         assigned to the field. This allows e.g. floats to be constrained to an appropriate
         range.
-    :param str typename: The text that will be assigned to the KML tag for the field when it
+    :param str tag: The text that will be assigned to the KML tag for the field when it
         is published. May include a prefixed and colon-separated namespace, e.g. "gx:option"
         is valid.
     :param Type[_KMLDump] dumper: The dumper class that will be used to convert and publish
@@ -157,14 +157,14 @@ class _FieldDef:
     def __init__(
         self,
         name: str,
-        parser: Type[_KMLParser],
-        typename: str,
-        dumper: Type[_KMLDump],
+        tag: str | None = None,
+        parser: Type[_KMLParser] = NoParse,
+        dumper: Type[_KMLDump] = DumpDirect,
     ):
         """_FieldDef instance constructor."""
         self.name = name
+        self.typename = tag if tag is not None else name
         self.parser = parser
-        self.typename = typename
         self.dumper = dumper
 
 

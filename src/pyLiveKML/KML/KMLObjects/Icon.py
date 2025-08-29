@@ -3,7 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import RefreshModeEnum, ViewRefreshModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.Link import Link
 
 
@@ -31,10 +31,10 @@ class Icon(Link):
 
     _kml_tag = "Icon"
     _kml_fields = Link._kml_fields + (
-        _FieldDef("x", NoParse, "gx:x", DumpDirect),
-        _FieldDef("y", NoParse, "gx:y", DumpDirect),
-        _FieldDef("w", NoParse, "gx:w", DumpDirect),
-        _FieldDef("h", NoParse, "gx:h", DumpDirect),
+        _FieldDef("x", "gx:x"),
+        _FieldDef("y", "gx:y"),
+        _FieldDef("w", "gx:w"),
+        _FieldDef("h", "gx:h"),
     )
 
     def __init__(

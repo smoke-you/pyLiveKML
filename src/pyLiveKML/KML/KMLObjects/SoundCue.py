@@ -2,11 +2,7 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML._BaseObject import (
-    _FieldDef,
-    DumpDirect,
-    NoParse,
-)
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
 
 
@@ -15,8 +11,8 @@ class GxSoundCue(TourPrimitive):
 
     _kml_tag = "gx:SoundCue"
     _kml_fields = TourPrimitive._kml_fields + (
-        _FieldDef("href", NoParse, "href", DumpDirect),
-        _FieldDef("delayed_start", NoParse, "gx:delayedStart", DumpDirect),
+        _FieldDef("href"),
+        _FieldDef("delayed_start", "gx:delayedStart"),
     )
 
     def __init__(

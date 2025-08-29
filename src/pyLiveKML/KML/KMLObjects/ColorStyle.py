@@ -29,8 +29,8 @@ class ColorStyle(SubStyle, ABC):
     """
 
     _kml_fields = SubStyle._kml_fields + (
-        _FieldDef("color", ColorParse, "color", DumpDirect),
-        _FieldDef("color_mode", NoParse, "colorMode", DumpDirect),
+        _FieldDef("color", parser=ColorParse),
+        _FieldDef("color_mode", "colorMode"),
     )
 
     def __init__(

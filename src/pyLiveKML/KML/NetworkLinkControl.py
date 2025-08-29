@@ -5,7 +5,7 @@ from datetime import datetime
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
-from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef, NoParse, DumpDirect
+from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Feature import Container
 from pyLiveKML.KML.KMLObjects.Folder import Folder
@@ -36,14 +36,14 @@ class NetworkLinkControl(_BaseObject):
 
     _kml_tag = "NetworkLinkControl"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("min_refresh_period", NoParse, "minRefreshPeriod", DumpDirect),
-        _FieldDef("max_session_length", NoParse, "maxSessionLength", DumpDirect),
-        _FieldDef("cookie", NoParse, "cookie", DumpDirect),
-        _FieldDef("message", NoParse, "message", DumpDirect),
-        _FieldDef("link_name", NoParse, "linkName", DumpDirect),
-        _FieldDef("link_description", NoParse, "linkDescription", DumpDirect),
-        _FieldDef("link_snippet", NoParse, "linkSnippet", DumpDirect),
-        _FieldDef("link_expires", NoParse, "linkExpires", DumpDirect),
+        _FieldDef("min_refresh_period", "minRefreshPeriod"),
+        _FieldDef("max_session_length", "maxSessionLength"),
+        _FieldDef("cookie"),
+        _FieldDef("message"),
+        _FieldDef("link_name", "linkName"),
+        _FieldDef("link_description", "linkDescription"),
+        _FieldDef("link_snippet", "linkSnippet"),
+        _FieldDef("link_expires", "linkExpires"),
     )
 
     def __init__(

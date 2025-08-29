@@ -5,11 +5,7 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML._BaseObject import (
-    _FieldDef,
-    DumpDirect,
-    NoParse,
-)
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Overlay import Overlay
@@ -23,9 +19,7 @@ class ScreenOverlay(Overlay):
     """A KML 'ScreenOverlay', per https://developers.google.com/kml/documentation/kmlreference#screenoverlay."""
 
     _kml_tag = "ScreenOverlay"
-    _kml_fields = Overlay._kml_fields + (
-        _FieldDef("rotation", NoParse, "rotation", DumpDirect),
-    )
+    _kml_fields = Overlay._kml_fields + (_FieldDef("rotation"),)
     _direct_children = Overlay._direct_children + (
         "overlay_xy",
         "screen_xy",

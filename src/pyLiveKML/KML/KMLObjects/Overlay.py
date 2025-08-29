@@ -11,9 +11,7 @@ from pyLiveKML.KML._BaseObject import (
     _BaseObject,
     _FieldDef,
     ColorParse,
-    DumpDirect,
     NoDump,
-    NoParse,
 )
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Region import Region
@@ -26,7 +24,7 @@ class _Overlay_Icon(_BaseObject):
 
     _kml_tag = "Icon"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("href", NoParse, "href", DumpDirect),
+        _FieldDef("href"),
     )
 
     def __init__(self, href: str):
@@ -40,9 +38,9 @@ class Overlay(Feature, ABC):
 
     _kml_tag = ""
     _kml_fields = Feature._kml_fields + (
-        _FieldDef("icon", NoParse, "", NoDump),
-        _FieldDef("color", ColorParse, "color", DumpDirect),
-        _FieldDef("draw_order", NoParse, "drawOrder", DumpDirect),
+        _FieldDef("icon", dumper=NoDump),
+        _FieldDef("color", parser=ColorParse),
+        _FieldDef("draw_order", "drawOrder"),
     )
     _direct_children = Feature._direct_children + ("icon",)
 

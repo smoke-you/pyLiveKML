@@ -1,11 +1,11 @@
 """NetworkLink module."""
 
-from typing import Iterator, Iterable, cast
+from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import RefreshModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.Feature import Feature
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild
@@ -31,8 +31,8 @@ class NetworkLink(Feature):
 
     _kml_tag = "NetworkLink"
     _kml_fields = Feature._kml_fields + (
-        _FieldDef("fly_to_view", NoParse, "flyToView", DumpDirect),
-        _FieldDef("refresh_visibility", NoParse, "refreshVisibility", DumpDirect),
+        _FieldDef("fly_to_view", "flyToView"),
+        _FieldDef("refresh_visibility", "refreshVisibility"),
     )
     _direct_children = Feature._direct_children + ("link",)
 

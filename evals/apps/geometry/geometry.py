@@ -46,7 +46,7 @@ gpr.description = "This is a polygon with an internal cutout.\nYou can change th
 #     east=origin.lon + 0.05,
 #     west=origin.lon - 0.05,
 # )
-cast(Style, gpr._styles[0])._balloon_style = BalloonStyle(
+cast(Style, gpr._styles[0]).balloon_style = BalloonStyle(
     None, 0xFF0000FF, 0xFF400000, DisplayModeEnum.DEFAULT
 )
 gpe = GeoEllipse(

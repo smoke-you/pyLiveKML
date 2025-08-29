@@ -32,14 +32,14 @@ class Link(Object):
 
     _kml_tag = "Link"
     _kml_fields = Object._kml_fields + (
-        _FieldDef("href", NoParse, "href", DumpDirect),
-        _FieldDef("refresh_mode", NoParse, "refreshMode", DumpDirect),
-        _FieldDef("refresh_interval", NoParse, "refreshInterval", DumpDirect),
-        _FieldDef("view_refresh_mode", NoParse, "viewRefreshMode", DumpDirect),
-        _FieldDef("view_refresh_time", NoParse, "viewRefreshTime", DumpDirect),
-        _FieldDef("view_bound_scale", NoParse, "viewBoundScale", DumpDirect),
-        _FieldDef("view_format", NoParse, "viewFormat", DumpDirect),
-        _FieldDef("http_query", NoParse, "httpQuery", DumpDirect),
+        _FieldDef("href"),
+        _FieldDef("refresh_mode", "refreshMode"),
+        _FieldDef("refresh_interval", "refreshInterval"),
+        _FieldDef("view_refresh_mode", "viewRefreshMode"),
+        _FieldDef("view_refresh_time", "viewRefreshTime"),
+        _FieldDef("view_bound_scale", "viewBoundScale"),
+        _FieldDef("view_format", "viewFormat"),
+        _FieldDef("http_query", "httpQuery"),
     )
 
     def __init__(

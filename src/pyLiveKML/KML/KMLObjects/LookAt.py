@@ -12,7 +12,6 @@ from pyLiveKML.KML._BaseObject import (
     Angle360,
     _FieldDef,
     NoParse,
-    DumpDirect,
 )
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
@@ -24,13 +23,13 @@ class LookAt(AbstractView):
 
     _kml_tag = "LookAt"
     _kml_fields = AbstractView._kml_fields + (
-        _FieldDef("longitude", Angle180, "longitude", DumpDirect),
-        _FieldDef("latitude", Angle90, "latitude", DumpDirect),
-        _FieldDef("altitude", NoParse, "altitude", DumpDirect),
-        _FieldDef("heading", Angle360, "heading", DumpDirect),
-        _FieldDef("tilt", AnglePos90, "tilt", DumpDirect),
-        _FieldDef("range", NoParse, "range", DumpDirect),
-        _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
+        _FieldDef("longitude", parser=Angle180),
+        _FieldDef("latitude", parser=Angle90),
+        _FieldDef("altitude"),
+        _FieldDef("heading", parser=Angle360),
+        _FieldDef("tilt", parser=AnglePos90),
+        _FieldDef("range", parser=NoParse),
+        _FieldDef("altitude_mode", "altitudeMode"),
     )
 
     def __init__(

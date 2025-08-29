@@ -27,10 +27,10 @@ class BalloonStyle(SubStyle):
 
     _kml_tag = "BalloonStyle"
     _kml_fields = SubStyle._kml_fields + (
-        _FieldDef("bg_color", ColorParse, "bgColor", DumpDirect),
-        _FieldDef("text_color", ColorParse, "textColor", DumpDirect),
-        _FieldDef("text", NoParse, "text", DumpDirect),
-        _FieldDef("display_mode", NoParse, "displayMode", DumpDirect),
+        _FieldDef("bg_color", "bgColor", ColorParse),
+        _FieldDef("text_color", "textColor", ColorParse),
+        _FieldDef("text"),
+        _FieldDef("display_mode", "displayMode"),
     )
 
     def __init__(

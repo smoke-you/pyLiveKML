@@ -2,11 +2,7 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML._BaseObject import (
-    _FieldDef,
-    NoParse,
-    DumpDirect,
-)
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
 
 
@@ -15,7 +11,7 @@ class GxWait(TourPrimitive):
 
     _kml_tag = "gx:Wait"
     _kml_fields = TourPrimitive._kml_fields + (
-        _FieldDef("duration", NoParse, "duration", DumpDirect),
+        _FieldDef("duration"),
     )
 
     def __init__(

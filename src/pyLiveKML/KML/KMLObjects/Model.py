@@ -12,8 +12,6 @@ from pyLiveKML.KML._BaseObject import (
     Angle180,
     AnglePos180,
     Angle360,
-    DumpDirect,
-    NoParse,
 )
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.Object import Object
@@ -24,9 +22,9 @@ class Location(_BaseObject):
 
     _kml_tag = "Location"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("longitude", Angle180, "longitude", DumpDirect),
-        _FieldDef("latitude", Angle90, "latitude", DumpDirect),
-        _FieldDef("altitude", NoParse, "altitude", DumpDirect),
+        _FieldDef("longitude", parser=Angle180),
+        _FieldDef("latitude", parser=Angle90),
+        _FieldDef("altitude"),
     )
 
     def __init__(
@@ -47,9 +45,9 @@ class Orientation(_BaseObject):
 
     _kml_tag = "Location"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("heading", Angle360, "heading", DumpDirect),
-        _FieldDef("tilt", AnglePos180, "tilt", DumpDirect),
-        _FieldDef("roll", Angle180, "roll", DumpDirect),
+        _FieldDef("heading", parser=Angle360),
+        _FieldDef("tilt", parser=AnglePos180),
+        _FieldDef("roll", parser=Angle180),
     )
 
     def __init__(
@@ -70,9 +68,9 @@ class Scale(_BaseObject):
 
     _kml_tag = "Scale"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("x", NoParse, "x", DumpDirect),
-        _FieldDef("y", NoParse, "y", DumpDirect),
-        _FieldDef("z", NoParse, "z", DumpDirect),
+        _FieldDef("x"),
+        _FieldDef("y"),
+        _FieldDef("z"),
     )
 
     def __init__(
@@ -93,8 +91,8 @@ class Alias(_BaseObject):
 
     _kml_tag = "Alias"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("target_href", NoParse, "targetHref", DumpDirect),
-        _FieldDef("source_href", NoParse, "sourceHref", DumpDirect),
+        _FieldDef("target_href", "targetHref"),
+        _FieldDef("source_href", "sourceHref"),
     )
 
     def __init__(
@@ -135,7 +133,7 @@ class Model(Object):
 
     _kml_tag = "Model"
     _kml_fields = Object._kml_fields + (
-        _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
+        _FieldDef("altitude_mode", "altitudeMode"),
     )
     _direct_children = Object._direct_children + (
         "link",

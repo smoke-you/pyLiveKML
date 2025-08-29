@@ -4,11 +4,7 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML._BaseObject import (
-    _FieldDef,
-    NoParse,
-    DumpDirect,
-)
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
 from pyLiveKML.KML.Update import Update
 
@@ -18,8 +14,8 @@ class GxAnimatedUpdate(TourPrimitive):
 
     _kml_tag = "gx:AnimatedUpdate"
     _kml_fields = TourPrimitive._kml_fields + (
-        _FieldDef("delayed_start", NoParse, "gx:delayedStart", DumpDirect),
-        _FieldDef("duration", NoParse, "gx:duration", DumpDirect),
+        _FieldDef("delayed_start", "gx:delayedStart"),
+        _FieldDef("duration", "gx:duration"),
     )
     _direct_children = TourPrimitive._direct_children + ("update",)
 

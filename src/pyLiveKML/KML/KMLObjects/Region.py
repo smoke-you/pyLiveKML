@@ -3,9 +3,8 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import AltitudeModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
+from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
 from pyLiveKML.KML.KMLObjects.Object import Object
-from pyLiveKML.KML._BaseObject import _BaseObject
 
 
 class LatLonAltBox(_BaseObject):
@@ -13,13 +12,13 @@ class LatLonAltBox(_BaseObject):
 
     _kml_tag = "LatLonAltBox"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("north", NoParse, "north", DumpDirect),
-        _FieldDef("south", NoParse, "south", DumpDirect),
-        _FieldDef("east", NoParse, "east", DumpDirect),
-        _FieldDef("west", NoParse, "west", DumpDirect),
-        _FieldDef("min_altitude", NoParse, "minAltitude", DumpDirect),
-        _FieldDef("max_altitude", NoParse, "maxAltitude", DumpDirect),
-        _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
+        _FieldDef("north"),
+        _FieldDef("south"),
+        _FieldDef("east"),
+        _FieldDef("west"),
+        _FieldDef("min_altitude", "minAltitude"),
+        _FieldDef("max_altitude", "maxAltitude"),
+        _FieldDef("altitude_mode", "altitudeMode"),
     )
 
     def __init__(
@@ -56,10 +55,10 @@ class Lod(_BaseObject):
 
     _kml_tag = "Lod"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("min_lod_pixels", NoParse, "minLodPixels", DumpDirect),
-        _FieldDef("max_lod_pixels", NoParse, "maxLodPixels", DumpDirect),
-        _FieldDef("min_fade_extent", NoParse, "minFadeExtent", DumpDirect),
-        _FieldDef("max_fade_extent", NoParse, "maxFadeExtent", DumpDirect),
+        _FieldDef("min_lod_pixels", "minLodPixels"),
+        _FieldDef("max_lod_pixels", "maxLodPixels"),
+        _FieldDef("min_fade_extent", "minFadeExtent"),
+        _FieldDef("max_fade_extent", "maxFadeExtent"),
     )
 
     def __init__(

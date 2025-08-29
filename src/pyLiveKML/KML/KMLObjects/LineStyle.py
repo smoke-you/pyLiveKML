@@ -2,7 +2,7 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML._BaseObject import _FieldDef, ColorParse, DumpDirect, NoParse
+from pyLiveKML.KML._BaseObject import _FieldDef, ColorParse
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
 
@@ -20,11 +20,11 @@ class LineStyle(ColorStyle):
 
     _kml_tag = "LineStyle"
     _kml_fields = ColorStyle._kml_fields + (
-        _FieldDef("width", NoParse, "width", DumpDirect),
-        _FieldDef("gx_outer_color", ColorParse, "gx:outerColor", DumpDirect),
-        _FieldDef("gx_outer_width", NoParse, "gx:outerWidth", DumpDirect),
-        _FieldDef("gx_physical_width", NoParse, "gx:physicalWidth", DumpDirect),
-        _FieldDef("gx_label_visibility", NoParse, "gx:labelVisibility", DumpDirect),
+        _FieldDef("width"),
+        _FieldDef("gx_outer_color", "gx:outerColor", ColorParse),
+        _FieldDef("gx_outer_width", "gx:outerWidth"),
+        _FieldDef("gx_physical_width", "gx:physicalWidth"),
+        _FieldDef("gx_label_visibility", "gx:labelVisibility"),
     )
 
     def __init__(

@@ -3,11 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import GxPlayModeEnum
-from pyLiveKML.KML._BaseObject import (
-    _FieldDef,
-    NoParse,
-    DumpDirect,
-)
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
 
 
@@ -16,7 +12,7 @@ class GxTourControl(TourPrimitive):
 
     _kml_tag = "gx:TourControl"
     _kml_fields = TourPrimitive._kml_fields + (
-        _FieldDef("play_mode", NoParse, "gx:playMode", DumpDirect),
+        _FieldDef("play_mode", "gx:playMode"),
     )
 
     def __init__(

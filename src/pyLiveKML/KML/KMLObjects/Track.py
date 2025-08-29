@@ -12,8 +12,6 @@ from pyLiveKML.KML._BaseObject import (
     Angle360,
     Angle90,
     AnglePos180,
-    DumpDirect,
-    NoParse,
 )
 from pyLiveKML.KML.KMLObjects.Model import Model
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
@@ -100,7 +98,7 @@ class GxTrack(Geometry):
 
     _kml_tag = "gx:Track"
     _kml_fields = Geometry._kml_fields + (
-        _FieldDef("altitude_mode", NoParse, "altitudeMode", DumpDirect),
+        _FieldDef("altitude_mode", "altitudeMode"),
     )
     _direct_children = Geometry._direct_children + ("model",)
 

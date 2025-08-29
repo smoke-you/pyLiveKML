@@ -5,11 +5,7 @@ from typing import Iterator
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import with_ns
-from pyLiveKML.KML._BaseObject import (
-    _FieldDef,
-    DumpDirect,
-    NoParse,
-)
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
 
@@ -19,8 +15,8 @@ class GxTour(Object, list[TourPrimitive]):
 
     _kml_tag = "gx:Tour"
     _kml_fields = Object._kml_fields + (
-        _FieldDef("name", NoParse, "name", DumpDirect),
-        _FieldDef("description", NoParse, "description", DumpDirect),
+        _FieldDef("name"),
+        _FieldDef("description"),
     )
 
     def __init__(

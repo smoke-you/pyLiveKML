@@ -5,7 +5,7 @@ import enum
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import StyleStateEnum
-from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef, DumpDirect, NoParse
+from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
 
@@ -14,8 +14,8 @@ class _StyleMap_Pair(_BaseObject):
 
     _kml_tag = "Pair"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("key", NoParse, "key", DumpDirect),
-        _FieldDef("style_url", NoParse, "styleUrl", DumpDirect),
+        _FieldDef("key"),
+        _FieldDef("style_url", "styleUrl"),
     )
 
     def __init__(self, key: StyleStateEnum, style_url: str):

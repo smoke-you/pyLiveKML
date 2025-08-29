@@ -6,13 +6,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import ItemIconModeEnum, ListItemTypeEnum
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML._BaseObject import (
-    _BaseObject,
-    _FieldDef,
-    ColorParse,
-    DumpDirect,
-    NoParse,
-)
+from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef, ColorParse
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
@@ -21,8 +15,8 @@ class ItemIcon(_BaseObject):
 
     _kml_tag = "ItemIcon"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("icon_state", NoParse, "state", DumpDirect),
-        _FieldDef("href", NoParse, "href", DumpDirect),
+        _FieldDef("icon_state", "state"),
+        _FieldDef("href"),
     )
 
     def __init__(
@@ -49,8 +43,8 @@ class ListStyle(SubStyle):
 
     _kml_tag = "ListStyle"
     _kml_fields = SubStyle._kml_fields + (
-        _FieldDef("list_item_type", NoParse, "listItemType", DumpDirect),
-        _FieldDef("bg_color", ColorParse, "bgColor", DumpDirect),
+        _FieldDef("list_item_type", "listItemType"),
+        _FieldDef("bg_color", "bgColor", ColorParse),
     )
 
     def __init__(

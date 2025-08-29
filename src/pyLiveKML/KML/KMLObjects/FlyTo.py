@@ -4,8 +4,8 @@ from typing import Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import FlyToModeEnum, with_ns
-from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
+from pyLiveKML.KML import FlyToModeEnum
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
@@ -16,8 +16,8 @@ class GxFlyTo(TourPrimitive):
 
     _kml_tag = "gx:FlyTo"
     _kml_fields = TourPrimitive._kml_fields + (
-        _FieldDef("duration", NoParse, "duration", DumpDirect),
-        _FieldDef("fly_to_mode", NoParse, "flyToMode", DumpDirect),
+        _FieldDef("duration"),
+        _FieldDef("fly_to_mode", "flyToMode"),
     )
     _direct_children = TourPrimitive._direct_children + ("abstract_view",)
 
