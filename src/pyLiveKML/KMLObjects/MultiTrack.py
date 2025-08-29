@@ -11,7 +11,7 @@ from pyLiveKML.KMLObjects.Object import ObjectChild
 from pyLiveKML.KMLObjects.Track import GxTrack
 
 
-class MultiTrack(Geometry, list[GxTrack]):
+class GxMultiTrack(Geometry, list[GxTrack]):
     """A KML 'gx:MultiTrack', per https://developers.google.com/kml/documentation/kmlreference#gxmultitrack."""
 
     _kml_tag = "gx:MultiTrack"

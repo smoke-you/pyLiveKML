@@ -42,7 +42,7 @@ class LineString(Geometry):
 
     def __init__(
         self,
-        coordinates: Iterable[GeoCoordinates],
+        coordinates: Iterable[GeoCoordinates] | Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]],
         altitude_mode: GxAltitudeModeEnum | None = None,
         extrude: bool | None = None,
         tessellate: bool | None = None,
@@ -71,9 +71,13 @@ class LineString(Geometry):
         yield from self._coordinates
 
     @coordinates.setter
-    def coordinates(self, value: Iterable[GeoCoordinates]) -> None:
+    def coordinates(self, value: Iterable[GeoCoordinates] | Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]]) -> None:
         self._coordinates.clear()
-        self._coordinates.extend(value)
+        for c in value:
+            if isinstance(c, GeoCoordinates):
+                self._coordinates.append(c)
+            else:
+                self._coordinates.append(GeoCoordinates(*c))
         self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:

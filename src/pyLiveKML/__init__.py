@@ -8,6 +8,7 @@ from pyLiveKML.KML.utils import (
 )
 from pyLiveKML.KML import (
     GxAltitudeModeEnum,
+    GxAltitudeModeEnum as AltitudeModeEnum,
     ColorModeEnum,
     DisplayModeEnum,
     FlyToModeEnum,
@@ -43,8 +44,10 @@ from pyLiveKML.KMLObjects.ListStyle import ItemIcon, ListStyle
 from pyLiveKML.KMLObjects.LookAt import LookAt
 from pyLiveKML.KMLObjects.Model import Alias, Model
 from pyLiveKML.KMLObjects.MultiGeometry import MultiGeometry
+from pyLiveKML.KMLObjects.MultiTrack import GxMultiTrack
 from pyLiveKML.KMLObjects.NetworkLink import NetworkLink
 from pyLiveKML.KMLObjects.PhotoOverlay import PhotoOverlay
+from pyLiveKML.KMLObjects.Placemark import Placemark
 from pyLiveKML.KMLObjects.Point import Point
 from pyLiveKML.KMLObjects.PolyStyle import PolyStyle
 from pyLiveKML.KMLObjects.Polygon import Polygon
@@ -71,6 +74,7 @@ from pyLiveKML.KMLObjects.Wait import GxWait
 # allows importing any of the instantiable KML objects and helpers from the `pyLiveKML` module
 __all__ = [
     "Alias",
+    "AltitudeModeEnum",
     "GxAltitudeModeEnum",
     "BalloonStyle",
     "Camera",

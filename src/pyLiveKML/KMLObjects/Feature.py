@@ -9,6 +9,7 @@ from typing import Iterable, NamedTuple, Iterator, cast
 from lxml import etree  # type: ignore
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML.utils import with_ns
 from pyLiveKML.KML._BaseObject import _FieldDef, NoDump
 from pyLiveKML.KML.errors.errors import FeatureInaccessibleError
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
@@ -79,7 +80,7 @@ class Feature(Object, ABC):
         abstract_view: AbstractView | None = None,
         time_primitive: TimePrimitive | None = None,
         style_url: str | None = None,
-        styles: Iterable[StyleSelector] | None = None,
+        styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
     ):
         """Feature instance constructor."""
@@ -100,8 +101,11 @@ class Feature(Object, ABC):
         self._time_primitive = time_primitive
         self.style_url = style_url
         self._styles = list[StyleSelector]()
-        if styles:
-            self._styles.extend(styles)
+        if styles is not None:
+            if isinstance(styles, StyleSelector):
+                self._styles.append(styles)
+            else:
+                self._styles.extend(styles)
         self._region = region
 
     @property
@@ -195,10 +199,10 @@ class Feature(Object, ABC):
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
         if self.author_name is not None:
-            author = etree.SubElement(root, "atom:author")
-            etree.SubElement(author, "atom:name").text = self.author_name
+            author = etree.SubElement(root, with_ns("atom:author"))
+            etree.SubElement(author, with_ns("atom:name")).text = self.author_name
         if self.author_link is not None:
-            etree.SubElement(root, "atom:link", attribs={"href": self.author_link})
+            etree.SubElement(root, with_ns("atom:link"), attrib={"href": self.author_link})
         if self.snippet is not None:
             attribs = {}
             if self.snippet_max_lines is not None:
@@ -285,7 +289,7 @@ class Container(list[Feature], Feature, ABC):
         abstract_view: AbstractView | None = None,
         time_primitive: TimePrimitive | None = None,
         style_url: str | None = None,
-        styles: Iterable[StyleSelector] | None = None,
+        styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
         features: Feature | Iterable[Feature] | None = None,

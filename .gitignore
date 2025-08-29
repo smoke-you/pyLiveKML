@@ -4,4 +4,5 @@
 /**/*.egg-info/
 /**/__pycache__/
 /**/*_cache/
-/tests/
+/tests/debug.py
+/tests/output/

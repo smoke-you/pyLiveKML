@@ -24,19 +24,22 @@ class Point(Geometry):
 
     _kml_tag = "Point"
     _kml_fields = Geometry._kml_fields + (
-        _FieldDef("extrude"),
-        _FieldDef("altitude_mode", "gx:altitudeMode"),
         _FieldDef("coordinates"),
+        _FieldDef("altitude_mode", "gx:altitudeMode"),
+        _FieldDef("extrude"),
     )
 
     def __init__(
         self,
-        coordinates: GeoCoordinates,
-        extrude: bool | None = None,
+        coordinates: GeoCoordinates | tuple[float, float, float] | tuple[float, float],
         altitude_mode: GxAltitudeModeEnum | None = None,
+        extrude: bool | None = None,
     ):
         """Point instance constructor."""
         Geometry.__init__(self)
-        self.coordinates = coordinates
+        if isinstance(coordinates, GeoCoordinates):
+            self.coordinates = coordinates
+        else:
+            self.coordinates = GeoCoordinates(*coordinates)
         self.extrude = extrude
         self.altitude_mode = altitude_mode
