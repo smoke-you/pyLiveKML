@@ -4,7 +4,7 @@ from abc import ABC
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import UnitsEnum
+from pyLiveKML.KML import UnitsEnum
 from pyLiveKML.KML._BaseObject import _BaseObject
 
 

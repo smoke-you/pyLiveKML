@@ -1,24 +1,11 @@
 """Schema module."""
 
-from typing import Any, Iterator, Iterable, Sequence, NamedTuple
+from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
-    AltitudeMode,
-    Angle90,
-    Angle180,
-    AnglePos180,
-    Angle360,
-    _FieldDef,
-    NoParse,
-    DumpDirect,
-    NoDump,
-)
 from pyLiveKML.KML._BaseObject import _BaseObject
-from pyLiveKML.KML.KMLObjects.Model import Model
-from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
-from pyLiveKML.KML.KMLObjects.TimeStamp import TimeStamp
+from pyLiveKML.KML.KMLObjects.Object import Object
 
 
 class SimpleField(_BaseObject):
@@ -52,7 +39,9 @@ class SimpleField(_BaseObject):
 
     def construct_kml(self) -> etree.Element:
         """Construct this instances' KML representation."""
-        root = etree.Element(self.kml_type, type=self.type, name=self.name)
+        root = etree.Element(
+            self.kml_type, attrib={"type": self.type, "name": self.name}
+        )
         self.build_kml(root)
         return root
 
@@ -83,6 +72,8 @@ class Schema(Object):
 
     def construct_kml(self) -> etree.Element:
         """Construct this instances' KML representation."""
-        root = etree.Element(self.kml_type, name=self.name, id=str(self.id))
+        root = etree.Element(
+            self.kml_type, attrib={"name": self.name, "id": str(self.id)}
+        )
         self.build_kml(root)
         return root

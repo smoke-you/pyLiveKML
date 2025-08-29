@@ -1,14 +1,14 @@
 """AbstractView module."""
 
 from abc import ABC
-from typing import Iterator, Sequence
+from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML import with_ns
 from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
 from pyLiveKML.KML.ViewerOption import GxViewerOption
-from pyLiveKML.KML.KML import with_ns
 
 
 class AbstractView(Object, ABC):
@@ -18,7 +18,7 @@ class AbstractView(Object, ABC):
 
     def __init__(
         self,
-        viewer_options: Sequence[GxViewerOption] | GxViewerOption | None = None,
+        viewer_options: Iterable[GxViewerOption] | GxViewerOption | None = None,
         time_primitive: TimePrimitive | None = None,
     ) -> None:
         """AbstractView instance constructor."""

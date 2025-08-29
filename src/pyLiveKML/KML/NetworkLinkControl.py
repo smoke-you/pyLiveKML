@@ -4,16 +4,12 @@ from datetime import datetime
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
-    KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
-    NoParse,
-    DumpDirect,
-)
+from pyLiveKML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Feature import Container
 from pyLiveKML.KML.KMLObjects.Folder import Folder
 from pyLiveKML.KML.KMLObjects.Object import ObjectState
-from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
 from pyLiveKML.KML.Update import Update
 
 

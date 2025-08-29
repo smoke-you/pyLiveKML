@@ -1,27 +1,27 @@
 """pyLiveKML init module."""
 
-from pyLiveKML.KML.errors import errors
-from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from pyLiveKML.KML.KML import (
+from pyLiveKML.KML import (
     AltitudeMode,
-    ColorMode,
-    DisplayMode,
+    ColorModeEnum,
+    DisplayModeEnum,
     FlyToModeEnum,
     GxPlayModeEnum,
     GxViewerOptionEnum,
-    ItemIconMode,
+    ItemIconModeEnum,
     KML_DOCTYPE,
     KML_HEADERS,
     KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
-    ListItemType,
+    ListItemTypeEnum,
     ObjectState,
-    RefreshMode,
-    StyleState,
+    RefreshModeEnum,
+    StyleStateEnum,
     UnitsEnum,
-    ViewRefreshMode,
+    ViewRefreshModeEnum,
     kml_root_tag,
 )
+from pyLiveKML.KML.errors import errors
+from pyLiveKML.KML.GeoColor import GeoColor
+from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
 from pyLiveKML.KML.KMLObjects.BalloonStyle import BalloonStyle
 from pyLiveKML.KML.KMLObjects.Camera import Camera
 from pyLiveKML.KML.KMLObjects.Document import Document
@@ -73,8 +73,8 @@ __all__ = [
     "AltitudeMode",
     "BalloonStyle",
     "Camera",
-    "ColorMode",
-    "DisplayMode",
+    "ColorModeEnum",
+    "DisplayModeEnum",
     "Document",
     "FlyToModeEnum",
     "Folder",
@@ -96,7 +96,7 @@ __all__ = [
     "Icon",
     "IconStyle",
     "ItemIcon",
-    "ItemIconMode",
+    "ItemIconModeEnum",
     "KML_DOCTYPE",
     "KML_HEADERS",
     "KML_UPDATE_CONTAINER_LIMIT_DEFAULT",
@@ -105,7 +105,7 @@ __all__ = [
     "LineStyle",
     "LinearRing",
     "Link",
-    "ListItemType",
+    "ListItemTypeEnum",
     "ListStyle",
     "LookAt",
     "Model",
@@ -118,7 +118,7 @@ __all__ = [
     "Point",
     "PolyStyle",
     "Polygon",
-    "RefreshMode",
+    "RefreshModeEnum",
     "Region",
     "RotationXY",
     "Schema",
@@ -128,7 +128,7 @@ __all__ = [
     "Size",
     "Style",
     "StyleMap",
-    "StyleState",
+    "StyleStateEnum",
     "TimeSpan",
     "TimeStamp",
     "TrackAngles",
@@ -136,7 +136,7 @@ __all__ = [
     "TrackElement",
     "TrackExtendedData",
     "UnitsEnum",
-    "ViewRefreshMode",
+    "ViewRefreshModeEnum",
     "errors",
     "kml_root_tag",
 ]

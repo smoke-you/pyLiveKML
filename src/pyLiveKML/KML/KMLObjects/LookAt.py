@@ -4,12 +4,12 @@ from typing import Sequence
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
+from pyLiveKML.KML import AltitudeMode
+from pyLiveKML.KML._BaseObject import (
     Angle90,
     AnglePos90,
     Angle180,
     Angle360,
-    AltitudeMode,
     _FieldDef,
     NoParse,
     DumpDirect,

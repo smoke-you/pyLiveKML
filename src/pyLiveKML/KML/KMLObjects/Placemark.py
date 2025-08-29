@@ -1,13 +1,13 @@
 """Placemark module."""
 
-from typing import Iterator, cast
+from typing import Iterator
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KMLObjects.Feature import Feature
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
-from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 
 
 class Placemark(Feature):

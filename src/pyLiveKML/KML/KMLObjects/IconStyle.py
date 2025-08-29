@@ -1,14 +1,17 @@
 """IconStyle module."""
 
-from typing import Iterator
-
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML import ColorModeEnum
+from pyLiveKML.KML._BaseObject import (
+    _BaseObject,
+    _FieldDef,
+    DumpDirect,
+    NoDump,
+    NoParse,
+)
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import ColorMode, _FieldDef, NoDump, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
-from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
-from pyLiveKML.KML._BaseObject import _BaseObject
 from pyLiveKML.KML.Vec2 import HotSpot
 
 
@@ -55,7 +58,7 @@ class IconStyle(ColorStyle):
         scale: float = 1.0,
         heading: float | None = None,
         color: GeoColor | int | None = None,
-        color_mode: ColorMode | None = None,
+        color_mode: ColorModeEnum | None = None,
         hot_spot: HotSpot | None = None,
     ):
         """IconStyle instance constructor."""

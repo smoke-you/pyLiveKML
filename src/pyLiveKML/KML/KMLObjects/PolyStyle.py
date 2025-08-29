@@ -2,9 +2,10 @@
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML import ColorModeEnum
+from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
-from pyLiveKML.KML.KML import ColorMode, _FieldDef, NoParse, DumpDirect
 
 
 class PolyStyle(ColorStyle):
@@ -29,7 +30,7 @@ class PolyStyle(ColorStyle):
     def __init__(
         self,
         color: GeoColor | int | None = None,
-        color_mode: ColorMode | None = None,
+        color_mode: ColorModeEnum | None = None,
         fill: bool | None = None,
         outline: bool | None = None,
     ):

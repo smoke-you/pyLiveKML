@@ -1,15 +1,11 @@
 """MultiTrack module."""
 
-from datetime import datetime
 from typing import Iterator, Iterable
+
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
-    AltitudeMode,
-    _FieldDef,
-    NoParse,
-    DumpDirect,
-)
+from pyLiveKML.KML import AltitudeMode
+from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 from pyLiveKML.KML.KMLObjects.Track import GxTrack

@@ -9,9 +9,9 @@ from pyLiveKML.KML.KMLObjects.IconStyle import IconStyle
 from pyLiveKML.KML.KMLObjects.LabelStyle import LabelStyle
 from pyLiveKML.KML.KMLObjects.LineStyle import LineStyle
 from pyLiveKML.KML.KMLObjects.ListStyle import ListStyle
+from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 from pyLiveKML.KML.KMLObjects.PolyStyle import PolyStyle
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
-from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 
 
 class Style(StyleSelector):

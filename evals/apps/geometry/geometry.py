@@ -17,7 +17,7 @@ from pyLiveKML import (
     Region,
     Style,
     BalloonStyle,
-    DisplayMode,
+    DisplayModeEnum,
 )
 from scipy.spatial.transform import Rotation
 
@@ -48,7 +48,7 @@ gpr.description = "This is a polygon with an internal cutout.\nYou can change th
 #     west=origin.lon - 0.05,
 # )
 cast(Style, gpr._styles[0])._balloon_style = BalloonStyle(
-    None, 0xFF0000FF, 0xFF400000, DisplayMode.DEFAULT
+    None, 0xFF0000FF, 0xFF400000, DisplayModeEnum.DEFAULT
 )
 gpe = GeoEllipse(
     name="ellipse",

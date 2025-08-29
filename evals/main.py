@@ -23,7 +23,7 @@ from lxml import etree  # type: ignore
 
 from apps.KMLApp import find_apps, KMLControlRequest, KMLControlResponse
 from pyLiveKML import (
-    RefreshMode,
+    RefreshModeEnum,
     kml_root_tag,
     KML_DOCTYPE,
     KML_HEADERS,
@@ -80,7 +80,7 @@ gep_loader = Folder(
         NetworkLink(
             name="Update",
             href=UPDATE_HREF,
-            refresh_mode=RefreshMode.ON_INTERVAL,
+            refresh_mode=RefreshModeEnum.ON_INTERVAL,
             refresh_interval=REFRESH_INTERVAL,
         ),
     ],

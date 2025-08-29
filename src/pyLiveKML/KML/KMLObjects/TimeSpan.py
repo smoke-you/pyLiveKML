@@ -1,12 +1,11 @@
 """TimeSpan module."""
 
 from datetime import datetime
-from typing import Iterator
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
-from pyLiveKML.KML.KML import _FieldDef, NoParse, DumpDirect
+from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
 
 
 class TimeSpan(TimePrimitive):

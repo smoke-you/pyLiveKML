@@ -3,8 +3,9 @@
 from abc import ABC
 from typing import cast
 
+from pyLiveKML.KML import ColorModeEnum
+from pyLiveKML.KML._BaseObject import _FieldDef, NoParse, ColorParse, DumpDirect
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import ColorMode, _FieldDef, NoParse, ColorParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
@@ -27,13 +28,15 @@ class ColorStyle(SubStyle, ABC):
         to determine the displayed color.
     """
 
-    _kml_fields: tuple[_FieldDef, ...] = (
+    _kml_fields = SubStyle._kml_fields + (
         _FieldDef("color", ColorParse, "color", DumpDirect),
         _FieldDef("color_mode", NoParse, "colorMode", DumpDirect),
     )
 
     def __init__(
-        self, color: GeoColor | int | None = None, color_mode: ColorMode | None = None
+        self,
+        color: GeoColor | int | None = None,
+        color_mode: ColorModeEnum | None = None,
     ):
         """ColorStyle instance constructor."""
         SubStyle.__init__(self)

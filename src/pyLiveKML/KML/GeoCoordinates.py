@@ -1,7 +1,8 @@
 """GeoCoordinates module."""
 
 from typing import Any
-from pyLiveKML.KML.KML import Angle90, Angle180
+
+from pyLiveKML.KML._BaseObject import Angle90, Angle180
 
 
 class GeoCoordinates:
@@ -45,7 +46,3 @@ class GeoCoordinates:
             return f"{self.lon:0.6f},{self.lat:0.6f}"
         else:
             return f"{self.lon:0.6f},{self.lat:0.6f},{self.alt:0.1f}"
-
-    def __repr__(self) -> str:
-        """Return a debug representation."""
-        return self.__str__()

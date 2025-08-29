@@ -4,16 +4,9 @@ import enum
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML import StyleStateEnum
+from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef, DumpDirect, NoParse
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
-from pyLiveKML.KML.KML import _FieldDef, NoParse, DumpDirect
-from pyLiveKML.KML._BaseObject import _BaseObject
-
-
-class _StyleMap_Pair_Key(enum.Enum):
-    """Enumeration of possible pair keys for `StyleMap`."""
-
-    NORMAL = "normal"
-    HIGHLIGHT = "highlight"
 
 
 class _StyleMap_Pair(_BaseObject):
@@ -25,7 +18,7 @@ class _StyleMap_Pair(_BaseObject):
         _FieldDef("style_url", NoParse, "styleUrl", DumpDirect),
     )
 
-    def __init__(self, key: _StyleMap_Pair_Key, style_url: str):
+    def __init__(self, key: StyleStateEnum, style_url: str):
         """_StyleMap_Pair instance constructor."""
         super().__init__()
         self.key = key
@@ -69,7 +62,5 @@ class StyleMap(StyleSelector):
     ):
         """StyleMap instance constructor."""
         super().__init__()
-        self.normal = _StyleMap_Pair(_StyleMap_Pair_Key.NORMAL, normal_style_url)
-        self.highlight = _StyleMap_Pair(
-            _StyleMap_Pair_Key.HIGHLIGHT, highlight_style_url
-        )
+        self.normal = _StyleMap_Pair(StyleStateEnum.NORMAL, normal_style_url)
+        self.highlight = _StyleMap_Pair(StyleStateEnum.HIGHLIGHT, highlight_style_url)

@@ -2,8 +2,14 @@
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML import DisplayModeEnum
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import DisplayMode, _FieldDef, NoParse, ColorParse, DumpDirect
+from pyLiveKML.KML._BaseObject import (
+    _FieldDef,
+    ColorParse,
+    DumpDirect,
+    NoParse,
+)
 from pyLiveKML.KML.KMLObjects.SubStyle import SubStyle
 
 
@@ -32,7 +38,7 @@ class BalloonStyle(SubStyle):
         text: str | None = None,
         text_color: GeoColor | int | None = None,
         bg_color: GeoColor | int | None = None,
-        display_mode: DisplayMode | None = None,
+        display_mode: DisplayModeEnum | None = None,
     ):
         """BalloonStyle instance constructor."""
         SubStyle.__init__(self)

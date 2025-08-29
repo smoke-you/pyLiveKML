@@ -4,8 +4,8 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML._BaseObject import _BaseObject
-from pyLiveKML.KML.KML import with_ns, _FieldDef, DumpDirect, NoParse
+from pyLiveKML.KML import with_ns
+from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef, DumpDirect, NoParse
 
 
 class Update(_BaseObject):

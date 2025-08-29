@@ -1,7 +1,7 @@
 """AircraftTrail module."""
 
 from lxml import etree  # type: ignore
-from pyLiveKML import ObjectState, ListItemType, Object, Folder, ListStyle, Style
+from pyLiveKML import ObjectState, ListItemTypeEnum, Object, Folder, ListStyle, Style
 
 from .AircraftData import AircraftData
 from .AircraftPosition import AircraftPosition
@@ -24,7 +24,7 @@ class AircraftTrail(Folder):
             styles=[
                 Style(
                     list_style=ListStyle(
-                        list_item_type=ListItemType.CHECK_HIDE_CHILDREN,
+                        list_item_type=ListItemTypeEnum.CHECK_HIDE_CHILDREN,
                         bg_color=0xFF404000,
                     )
                 )

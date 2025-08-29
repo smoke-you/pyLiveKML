@@ -4,8 +4,9 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML import AltitudeMode
+from pyLiveKML.KML._BaseObject import _FieldDef, NoParse, DumpDirect
 from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
-from pyLiveKML.KML.KML import AltitudeMode, _FieldDef, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
 
 

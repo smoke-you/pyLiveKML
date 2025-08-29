@@ -2,9 +2,9 @@
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML._BaseObject import _FieldDef, ColorParse, DumpDirect, NoParse
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KMLObjects.ColorStyle import ColorStyle
-from pyLiveKML.KML.KML import _FieldDef, NoParse, ColorParse, DumpDirect
 
 
 class LineStyle(ColorStyle):

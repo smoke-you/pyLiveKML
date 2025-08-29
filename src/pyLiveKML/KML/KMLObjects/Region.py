@@ -1,18 +1,10 @@
 """Region module."""
 
-from typing import Iterator
-
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
-    AltitudeMode,
-    Angle90,
-    Angle180,
-    _FieldDef,
-    NoParse,
-    DumpDirect,
-)
-from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KML import AltitudeMode
+from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
+from pyLiveKML.KML.KMLObjects.Object import Object
 from pyLiveKML.KML._BaseObject import _BaseObject
 
 

@@ -2,9 +2,9 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import RefreshMode, ViewRefreshMode
+from pyLiveKML.KML import RefreshModeEnum, ViewRefreshModeEnum
+from pyLiveKML.KML._BaseObject import _FieldDef, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Object import Object
-from pyLiveKML.KML.KML import _FieldDef, NoParse, DumpDirect
 
 
 class Link(Object):
@@ -45,9 +45,9 @@ class Link(Object):
     def __init__(
         self,
         href: str | None = None,
-        refresh_mode: RefreshMode | None = None,
+        refresh_mode: RefreshModeEnum | None = None,
         refresh_interval: float | None = None,
-        view_refresh_mode: ViewRefreshMode | None = None,
+        view_refresh_mode: ViewRefreshModeEnum | None = None,
         view_refresh_time: float | None = None,
         view_bound_scale: float | None = None,
         view_format: str | None = None,

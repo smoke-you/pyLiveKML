@@ -6,9 +6,15 @@ from typing import Iterable, cast
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import _FieldDef, NoDump, NoParse, DumpDirect, ColorParse
 from pyLiveKML.KML.KMLObjects.Feature import Feature
-from pyLiveKML.KML._BaseObject import _BaseObject
+from pyLiveKML.KML._BaseObject import (
+    _BaseObject,
+    _FieldDef,
+    ColorParse,
+    DumpDirect,
+    NoDump,
+    NoParse,
+)
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.Region import Region
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector

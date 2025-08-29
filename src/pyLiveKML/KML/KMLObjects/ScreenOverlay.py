@@ -5,18 +5,18 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import (
+from pyLiveKML.KML._BaseObject import (
     _FieldDef,
-    NoParse,
     DumpDirect,
+    NoParse,
 )
-from pyLiveKML.KML.Vec2 import OverlayXY, ScreenXY, RotationXY, Size
+from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
+from pyLiveKML.KML.KMLObjects.Overlay import Overlay
 from pyLiveKML.KML.KMLObjects.Region import Region
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
-from pyLiveKML.KML.KMLObjects.Overlay import Overlay
+from pyLiveKML.KML.Vec2 import OverlayXY, RotationXY, ScreenXY, Size
 
 
 class ScreenOverlay(Overlay):

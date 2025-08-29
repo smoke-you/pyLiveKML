@@ -2,13 +2,8 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
-    RefreshMode,
-    ViewRefreshMode,
-    _FieldDef,
-    NoParse,
-    DumpDirect,
-)
+from pyLiveKML.KML import RefreshModeEnum, ViewRefreshModeEnum
+from pyLiveKML.KML._BaseObject import _FieldDef, DumpDirect, NoParse
 from pyLiveKML.KML.KMLObjects.Link import Link
 
 
@@ -45,9 +40,9 @@ class Icon(Link):
     def __init__(
         self,
         href: str | None = None,
-        refresh_mode: RefreshMode | None = None,
+        refresh_mode: RefreshModeEnum | None = None,
         refresh_interval: float | None = None,  # 4.0
-        view_refresh_mode: ViewRefreshMode | None = None,
+        view_refresh_mode: ViewRefreshModeEnum | None = None,
         view_refresh_time: float | None = None,
         view_bound_scale: float | None = None,
         view_format: str | None = None,

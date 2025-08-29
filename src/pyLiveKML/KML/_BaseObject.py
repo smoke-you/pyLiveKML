@@ -1,10 +1,171 @@
-from abc import ABC
-from collections.abc import Iterable
-from typing import Any, Iterator, NamedTuple, Optional
+from abc import ABC, abstractmethod
+from enum import Enum
+from typing import Any, Type
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import _FieldDef, NoDump, with_ns
+from pyLiveKML.KML import with_ns
+from pyLiveKML.KML.GeoColor import GeoColor
+
+
+class _KMLDump(ABC):
+
+    @classmethod
+    @abstractmethod
+    def dump(cls, value: Any) -> Any:
+        raise NotImplementedError
+
+
+class NoDump(_KMLDump):
+    """Dump nothing."""
+
+    @classmethod
+    def dump(cls, value: Any) -> Any:
+        """Dump and format a KML object field."""
+        return ""
+
+
+class DumpDirect(_KMLDump):
+    """Dump to string."""
+
+    @classmethod
+    def dump(cls, value: Any) -> Any:
+        """Dump and format a KML object field."""
+        if value is None:
+            return None
+        if isinstance(value, Enum):
+            return str(value.value)
+        if isinstance(value, bool):
+            return str(int(value))
+        return str(value)
+
+
+class _KMLParser(ABC):
+
+    @classmethod
+    @abstractmethod
+    def parse(cls, value: Any) -> Any:
+        raise NotImplementedError
+
+
+class NoParse(_KMLParser):
+    """A value that will not be changed."""
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        return value
+
+
+class Angle90(_KMLParser):
+    """A value ≥−90 and ≤90.
+
+    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    """
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        value = float(value)
+        return 90 if value > 90 else -90 if value < -90 else value
+
+
+class AnglePos90(_KMLParser):
+    """A value ≥0 and ≤90.
+
+    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    """
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        value = float(value)
+        return 90 if value > 90 else 0 if value < 0 else value
+
+
+class Angle180(_KMLParser):
+    """A value ≥−180 and ≤180.
+
+    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    """
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        value = float(value)
+        while value > 180:
+            value = value - 360
+        while value < -180:
+            value = value + 360
+        return value
+
+
+class AnglePos180(_KMLParser):
+    """A value ≥0 and ≤180.
+
+    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    """
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        value = float(value)
+        return 180 if value > 180 else 0 if value < 0 else value
+
+
+class Angle360(_KMLParser):
+    """A value ≥−360 and ≤360.
+
+    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    """
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        value = float(value)
+        return value % 360 if value > 360 else -(-value % 360) if value < 360 else value
+
+
+class ColorParse(_KMLParser):
+    """A color, typically as a 32-bit ABGR value."""
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        if isinstance(value, int):
+            return GeoColor(value)
+        return value
+
+
+class _FieldDef:
+    """Describes how a field of a KML object is to be published.
+
+    KML object class definitions specify a tuple of _FieldDef instances as the `_kml_fields`
+    class variable.
+
+    :param str name: The name of the field, from the perspective of the Python object.
+    :param Type[_KMLParser] parser: The parser class that will be used to transform any value
+        assigned to the field. This allows e.g. floats to be constrained to an appropriate
+        range.
+    :param str typename: The text that will be assigned to the KML tag for the field when it
+        is published. May include a prefixed and colon-separated namespace, e.g. "gx:option"
+        is valid.
+    :param Type[_KMLDump] dumper: The dumper class that will be used to convert and publish
+        the field's value to KML.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        parser: Type[_KMLParser],
+        typename: str,
+        dumper: Type[_KMLDump],
+    ):
+        """_FieldDef instance constructor."""
+        self.name = name
+        self.parser = parser
+        self.typename = typename
+        self.dumper = dumper
 
 
 class _BaseObject(ABC):

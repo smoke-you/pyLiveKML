@@ -6,19 +6,19 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KML.KML import (
+from pyLiveKML.KML._BaseObject import (
+    _BaseObject,
     _FieldDef,
-    NoParse,
-    DumpDirect,
     Angle180,
     Angle90,
+    DumpDirect,
+    NoParse,
 )
-from pyLiveKML.KML._BaseObject import _BaseObject
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
+from pyLiveKML.KML.KMLObjects.Overlay import Overlay
 from pyLiveKML.KML.KMLObjects.Region import Region
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
-from pyLiveKML.KML.KMLObjects.Overlay import Overlay
 
 
 class _GroundOverlay_LatLonBox(_BaseObject):

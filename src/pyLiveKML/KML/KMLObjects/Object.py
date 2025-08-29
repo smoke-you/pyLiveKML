@@ -2,11 +2,11 @@
 
 from abc import ABC
 from collections.abc import Iterable
-from typing import Any, Iterator, NamedTuple, Optional
+from typing import Iterator, NamedTuple, Optional
 from uuid import uuid4, UUID
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import ObjectState, _FieldDef, NoDump, with_ns
+from pyLiveKML.KML import ObjectState, with_ns
 from pyLiveKML.KML._BaseObject import _BaseObject
 
 

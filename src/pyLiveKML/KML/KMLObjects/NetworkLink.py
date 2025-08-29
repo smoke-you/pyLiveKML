@@ -4,7 +4,7 @@ from typing import Iterator, Iterable, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import RefreshMode, _FieldDef, NoParse, DumpDirect
+from pyLiveKML.KML.KML import RefreshModeEnum, _FieldDef, NoParse, DumpDirect
 from pyLiveKML.KML.KMLObjects.Feature import Feature
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.Object import ObjectChild
@@ -44,7 +44,7 @@ class NetworkLink(Feature):
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
         href: str | None = None,
-        refresh_mode: RefreshMode | None = None,
+        refresh_mode: RefreshModeEnum | None = None,
         refresh_interval: float | None = None,
         fly_to_view: bool | None = None,
         refresh_visibility: bool | None = None,

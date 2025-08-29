@@ -126,14 +126,6 @@ class GeoColor:
         """Return a string representation."""
         return f"{self._a:02x}{self._b:02x}{self._g:02x}{self._r:02x}"
 
-    def __repr__(self) -> str:
-        """Return a debug representation."""
-        return self.__str__()
-
     def __eq__(self, other: object) -> bool:
         """Check equality."""
         return isinstance(other, GeoColor) and self.value == other.value
-
-    def __ne__(self, other: object) -> bool:
-        """Check negative equality."""
-        return not self.__eq__(other)

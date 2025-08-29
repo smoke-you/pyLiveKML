@@ -2,7 +2,7 @@
 
 from typing import Iterable
 
-from pyLiveKML.KML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML.KMLObjects.Feature import Feature, Container
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 

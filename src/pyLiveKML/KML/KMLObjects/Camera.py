@@ -1,18 +1,18 @@
 """Camera module."""
 
-from typing import Sequence
+from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
+from pyLiveKML.KML import AltitudeMode
+from pyLiveKML.KML._BaseObject import (
+    _FieldDef,
     Angle90,
     Angle180,
     AnglePos180,
     Angle360,
-    AltitudeMode,
-    _FieldDef,
-    NoParse,
     DumpDirect,
+    NoParse,
 )
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive
@@ -35,7 +35,7 @@ class Camera(AbstractView):
 
     def __init__(
         self,
-        viewer_options: Sequence[GxViewerOption] | GxViewerOption | None = None,
+        viewer_options: Iterable[GxViewerOption] | GxViewerOption | None = None,
         time_primitive: TimePrimitive | None = None,
         longitude: float = 0,
         latitude: float = 0,

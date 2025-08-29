@@ -2,6 +2,7 @@
 
 from abc import ABC
 
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.KMLObjects.Object import Object
 
 

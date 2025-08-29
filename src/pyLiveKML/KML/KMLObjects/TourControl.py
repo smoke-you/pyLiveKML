@@ -2,11 +2,11 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
+from pyLiveKML.KML import GxPlayModeEnum
+from pyLiveKML.KML._BaseObject import (
     _FieldDef,
     NoParse,
     DumpDirect,
-    GxPlayModeEnum,
 )
 from pyLiveKML.KML.KMLObjects.TourPrimitive import TourPrimitive
 

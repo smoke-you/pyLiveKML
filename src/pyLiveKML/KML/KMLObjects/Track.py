@@ -2,22 +2,22 @@
 
 from datetime import datetime
 from typing import Iterator, Iterable
+
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
-    AltitudeMode,
-    Angle90,
-    Angle180,
-    AnglePos180,
-    Angle360,
+from pyLiveKML.KML import AltitudeMode, with_ns
+from pyLiveKML.KML._BaseObject import (
     _FieldDef,
-    NoParse,
+    Angle180,
+    Angle360,
+    Angle90,
+    AnglePos180,
     DumpDirect,
-    with_ns,
+    NoParse,
 )
 from pyLiveKML.KML.KMLObjects.Model import Model
 from pyLiveKML.KML.KMLObjects.Geometry import Geometry
-from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KML.KMLObjects.Object import ObjectChild
 
 
 class TrackCoord:

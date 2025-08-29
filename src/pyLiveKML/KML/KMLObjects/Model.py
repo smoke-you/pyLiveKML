@@ -1,21 +1,22 @@
 """Model module."""
 
-from typing import Any, Iterator, Sequence
+from typing import Sequence
+
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
-    AltitudeMode,
+from pyLiveKML.KML import AltitudeMode
+from pyLiveKML.KML._BaseObject import (
+    _BaseObject,
+    _FieldDef,
     Angle90,
     Angle180,
     AnglePos180,
     Angle360,
-    _FieldDef,
-    NoParse,
     DumpDirect,
+    NoParse,
 )
 from pyLiveKML.KML.KMLObjects.Link import Link
 from pyLiveKML.KML.KMLObjects.Object import Object
-from pyLiveKML.KML._BaseObject import _BaseObject
 
 
 class Location(_BaseObject):

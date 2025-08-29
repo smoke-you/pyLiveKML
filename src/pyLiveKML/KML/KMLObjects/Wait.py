@@ -2,7 +2,7 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.KML import (
+from pyLiveKML.KML._BaseObject import (
     _FieldDef,
     NoParse,
     DumpDirect,
