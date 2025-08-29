@@ -1,8 +1,9 @@
 """AircraftTrail module."""
 
 from lxml import etree  # type: ignore
-from pyLiveKML import ObjectState, ListItemTypeEnum, Folder, ListStyle, Style
-from pyLiveKML.KML.KMLObjects.Object import Object
+
+from pyLiveKML import ListItemTypeEnum, Folder, ListStyle, Style
+from pyLiveKML.KML.KMLObjects.Object import Object, ObjectState
 
 from .AircraftData import AircraftData
 from .AircraftPosition import AircraftPosition

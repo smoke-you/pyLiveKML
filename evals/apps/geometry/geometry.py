@@ -10,7 +10,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, UUID4
 from pyLiveKML import (
-    AltitudeMode,
+    AltitudeModeEnum,
     BalloonStyle,
     DisplayModeEnum,
     GeoCoordinates,
@@ -37,7 +37,7 @@ gpr = GeoRing(
     border_width=1,
     border_color=0xFF0000FF,
     fill_color=0x4000FF00,
-    altitude_mode=AltitudeMode.CLAMP_TO_GROUND,
+    altitude_mode=AltitudeModeEnum.CLAMP_TO_GROUND,
 )
 gpr.description = "This is a polygon with an internal cutout.\nYou can change the border and fill colours via the web UI."
 # gpr.region = Region(
@@ -58,7 +58,7 @@ gpe = GeoEllipse(
     border_width=1,
     border_color=0xFF0000FF,
     fill_color=0x4000FF00,
-    altitude_mode=AltitudeMode.ABSOLUTE,
+    altitude_mode=AltitudeModeEnum.ABSOLUTE,
 )
 gpe.snippet = "This is a simple polygon.\nIt has no internal cutouts.\nYou can change the border and fill colours via the web UI."
 gpe.snippet_max_lines = 3

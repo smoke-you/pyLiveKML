@@ -4,7 +4,7 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import AltitudeMode
+from pyLiveKML.KML import AltitudeModeEnum
 from pyLiveKML.KML._BaseObject import (
     _FieldDef,
     Angle90,
@@ -43,7 +43,7 @@ class Camera(AbstractView):
         heading: float = 0,
         tilt: float = 0,
         roll: float = 0,
-        altitude_mode: AltitudeMode | None = None,
+        altitude_mode: AltitudeModeEnum | None = None,
     ):
         """LookAt instance constructor."""
         AbstractView.__init__(self, viewer_options, time_primitive)
@@ -54,5 +54,5 @@ class Camera(AbstractView):
         self.tilt = tilt
         self.roll = roll
         self.altitude_mode = (
-            AltitudeMode.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode
+            AltitudeModeEnum.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode
         )

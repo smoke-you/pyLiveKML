@@ -2,12 +2,27 @@
 
 from abc import ABC
 from collections.abc import Iterable
+from enum import Enum
 from typing import Iterator, NamedTuple, Optional
 from uuid import uuid4, UUID
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import ObjectState, with_ns
+from pyLiveKML.KML import with_ns
 from pyLiveKML.KML._BaseObject import _BaseObject
+
+
+class ObjectState(Enum):
+    """Enumeration of possible states that objects derived from KML :class:`~pyLiveKML.KML.KMLObjects.Object` may hold.
+
+    The 'State' enumeration is specific to the :mod:`pyLiveKML` package, i.e. it is *not* part of the KML specification.
+    """
+
+    IDLE = 0
+    CREATING = 1
+    CREATED = 2
+    CHANGING = 3
+    DELETE_CREATED = 4
+    DELETE_CHANGED = 5
 
 
 class Object(_BaseObject, ABC):

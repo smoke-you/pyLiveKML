@@ -8,7 +8,7 @@ from typing import Iterable, NamedTuple, Iterator, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT, ObjectState
+from pyLiveKML.KML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML._BaseObject import (
     _FieldDef,
     DumpDirect,
@@ -16,7 +16,7 @@ from pyLiveKML.KML._BaseObject import (
     NoDump,
 )
 from pyLiveKML.KML.KMLObjects.AbstractView import AbstractView
-from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KML.KMLObjects.Object import Object, ObjectChild, ObjectState
 from pyLiveKML.KML.KMLObjects.Region import Region
 from pyLiveKML.KML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KML.KMLObjects.TimePrimitive import TimePrimitive

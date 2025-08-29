@@ -64,7 +64,7 @@ def with_ns(tag: str) -> str:
     )
 
 
-class AltitudeMode(enum.Enum):
+class AltitudeModeEnum(enum.Enum):
     """Enumeration of options for KML <altitudeMode> tags.
 
     Generally used in e.g. objects that derive from
@@ -72,6 +72,21 @@ class AltitudeMode(enum.Enum):
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
     """
 
+    CLAMP_TO_GROUND = "clampToGround"
+    RELATIVE_TO_GROUND = "relativeToGround"
+    ABSOLUTE = "absolute"
+
+
+class GxAltitudeModeEnum(enum.Enum):
+    """Enumeration of options for KML <gx:altitudeMode> tags.
+
+    Generally used in e.g. objects that derive from
+    :class:`~pyLiveKML.KML.KMLObjects.Geometry`. Refer to the KML documentation at
+    https://developers.google.com/kml/documentation/kmlreference#kml-fields.
+    """
+
+    CLAMP_TO_SEAFLOOR = "clampToSeaFloor"
+    RELATIVE_TO_SEAFLOOR = "relativeToSeaFloor"
     CLAMP_TO_GROUND = "clampToGround"
     RELATIVE_TO_GROUND = "relativeToGround"
     ABSOLUTE = "absolute"
@@ -243,17 +258,3 @@ class GridOriginEnum(enum.Enum):
 
     LOWER_LEFT = "lowerLeft"
     UPPER_LEFT = "upperLeft"
-
-
-class ObjectState(enum.Enum):
-    """Enumeration of possible states that objects derived from KML :class:`~pyLiveKML.KML.KMLObjects.Object` may hold.
-
-    The 'State' enumeration is specific to the :mod:`pyLiveKML` package, i.e. it is *not* part of the KML specification.
-    """
-
-    IDLE = 0
-    CREATING = 1
-    CREATED = 2
-    CHANGING = 3
-    DELETE_CREATED = 4
-    DELETE_CHANGED = 5

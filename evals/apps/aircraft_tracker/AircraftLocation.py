@@ -1,14 +1,14 @@
 """AircraftLocation module."""
 
-from typing import Optional, Sequence, cast
+from typing import Optional, Sequence
 
 from lxml import etree  # type: ignore
 from pyLiveKML import (
     IconStyle,
-    ObjectState,
     Point,
     Style,
 )
+from pyLiveKML.KML.KMLObjects.Object import ObjectState
 from pyLiveKML.KML.KMLObjects.Placemark import Placemark
 
 from .AircraftData import AircraftData
@@ -95,16 +95,16 @@ class AircraftLocation(Placemark):
 
         change = etree.Element("Change")
         pm = etree.SubElement(
-            change, _tag=self.kml_type, attrib={"targetId": str(self.id)}
+            change, _tag=self.kml_tag, attrib={"targetId": str(self.id)}
         )
         etree.SubElement(pm, "description").text = self._build_description()
         point = etree.SubElement(
-            change, _tag=self._point.kml_type, attrib={"targetId": str(self._point.id)}
+            change, _tag=self._point.kml_tag, attrib={"targetId": str(self._point.id)}
         )
         etree.SubElement(point, "coordinates").text = pos.coordinates.__str__()
         etree.SubElement(point, "altitudeMode").text = pos.altitude_mode.value
         style = etree.SubElement(
-            change, _tag=self._style.kml_type, attrib={"targetId": str(self._style.id)}
+            change, _tag=self._style.kml_tag, attrib={"targetId": str(self._style.id)}
         )
         icon_style = etree.SubElement(style, "IconStyle")
         etree.SubElement(icon_style, "heading").text = (
@@ -114,7 +114,7 @@ class AircraftLocation(Placemark):
 
     def __str__(self) -> str:
         """Return a string representation."""
-        return f"{self.kml_type}:{self.name}"
+        return f"{self.kml_tag}:{self.name}"
 
     def __repr__(self) -> str:
         """Return a debug representation."""

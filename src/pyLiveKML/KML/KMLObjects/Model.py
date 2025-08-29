@@ -4,7 +4,7 @@ from typing import Sequence
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import AltitudeMode
+from pyLiveKML.KML import AltitudeModeEnum
 from pyLiveKML.KML._BaseObject import (
     _BaseObject,
     _FieldDef,
@@ -148,7 +148,7 @@ class Model(Object):
     def __init__(
         self,
         link: Link,
-        altitude_mode: AltitudeMode | None = None,
+        altitude_mode: AltitudeModeEnum | None = None,
         longitude: float = 0,
         latitude: float = 0,
         altitude: float = 0,
@@ -164,7 +164,7 @@ class Model(Object):
         Object.__init__(self)
         self.link = link
         altitude_mode = (
-            AltitudeMode.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode
+            AltitudeModeEnum.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode
         )
         self.altitude_mode = altitude_mode
         self.location = Location(longitude, latitude, altitude)

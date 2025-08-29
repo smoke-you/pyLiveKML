@@ -3,7 +3,7 @@
 from typing import Optional, Iterator
 
 from numpy import ndarray, array
-from pyLiveKML import GeoCoordinates, AltitudeMode
+from pyLiveKML import GeoCoordinates, AltitudeModeEnum
 from scipy.spatial.transform import Rotation
 
 from .GeoShape import GeoShape
@@ -34,7 +34,7 @@ class GeoRing(GeoShape):
         fill_color: int = 0xFFFFFFFF,
         name: Optional[str] = None,
         selected: bool = False,
-        altitude_mode: AltitudeMode = AltitudeMode.CLAMP_TO_GROUND,
+        altitude_mode: AltitudeModeEnum = AltitudeModeEnum.CLAMP_TO_GROUND,
     ):
         """GeoRing instance constructor."""
         GeoShape.__init__(
