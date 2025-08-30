@@ -8,13 +8,12 @@ from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
 from fastapi.responses import PlainTextResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
-from lxml import etree   # type: ignore
+from lxml import etree  # type: ignore
 
 from pyLiveKML import kml_root_tag, KML_DOCTYPE, KML_HEADERS
-from pyLiveKML.KMLObjects.Feature import Feature
 
 from ..KMLApp import KMLApp
-from .build import build_data
+from .simple_builder import build_data
 
 simple_app = FastAPI()
 locdir = Path(__file__).parent
@@ -28,9 +27,7 @@ simple = KMLApp("Simple", description, "/simple", simple_app)
 async def _(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(
         "simple.html.j2",
-        {
-            "request": request
-        },
+        {"request": request},
     )
 
 

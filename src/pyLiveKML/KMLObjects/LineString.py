@@ -42,7 +42,11 @@ class LineString(Geometry):
 
     def __init__(
         self,
-        coordinates: Iterable[GeoCoordinates] | Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]],
+        coordinates: (
+            Iterable[GeoCoordinates]
+            | Iterable[tuple[float, float, float]]
+            | Iterable[tuple[float, float]]
+        ),
         altitude_mode: GxAltitudeModeEnum | None = None,
         extrude: bool | None = None,
         tessellate: bool | None = None,
@@ -71,7 +75,14 @@ class LineString(Geometry):
         yield from self._coordinates
 
     @coordinates.setter
-    def coordinates(self, value: Iterable[GeoCoordinates] | Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]]) -> None:
+    def coordinates(
+        self,
+        value: (
+            Iterable[GeoCoordinates]
+            | Iterable[tuple[float, float, float]]
+            | Iterable[tuple[float, float]]
+        ),
+    ) -> None:
         self._coordinates.clear()
         for c in value:
             if isinstance(c, GeoCoordinates):

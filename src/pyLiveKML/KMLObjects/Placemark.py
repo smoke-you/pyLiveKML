@@ -4,10 +4,13 @@ from typing import Iterator
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Feature import Feature
 from pyLiveKML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
+from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
 
 
 class Placemark(Feature):
@@ -29,21 +32,47 @@ class Placemark(Feature):
     """
 
     _kml_tag = "Placemark"
-    _direct_children = Feature._direct_children + ("_geometry",)
+    _direct_children = Feature._direct_children + ("geometry",)
 
     def __init__(
         self,
         geometry: Geometry,
         name: str | None = None,
         visibility: bool | None = None,
+        is_open: bool | None = None,
+        author_name: str | None = None,
+        author_link: str | None = None,
+        address: str | None = None,
+        phone_number: str | None = None,
+        snippet: str | None = None,
+        snippet_max_lines: int | None = None,
+        description: str | None = None,
+        abstract_view: AbstractView | None = None,
+        time_primitive: TimePrimitive | None = None,
         inline_style: StyleSelector | None = None,
         style_url: str | None = None,
+        region: Region | None = None,
     ):
         """Placemark instance constructor."""
-        Feature.__init__(self, name=name, visibility=visibility, style_url=style_url)
-        self._geometry = geometry
-        if inline_style:
-            self._styles.append(inline_style)
+        Feature.__init__(
+            self,
+            name=name,
+            visibility=visibility,
+            is_open=is_open,
+            author_name=author_name,
+            author_link=author_link,
+            address=address,
+            phone_number=phone_number,
+            snippet=snippet,
+            snippet_max_lines=snippet_max_lines,
+            description=description,
+            abstract_view=abstract_view,
+            time_primitive=time_primitive,
+            style_url=style_url,
+            styles=inline_style,
+            region=region,
+        )
+        self.geometry = geometry
 
     @property
     def children(self) -> Iterator[ObjectChild]:
@@ -55,17 +84,6 @@ class Placemark(Feature):
         :class:`~pyLiveKML.KMLObjects.StyleSelector` instances, and any dependent
         :class:`~pyLiveKML.KMLObjects.SubStyle` instances.
         """
+        yield from super(Feature, self).children
         yield ObjectChild(parent=self, child=self.geometry)
         yield from self.geometry.children
-        for s in self._styles:
-            yield ObjectChild(parent=self, child=s)
-            yield from s.children
-
-    @property
-    def geometry(self) -> Geometry:
-        """The child :class:`~pyLiveKML.KMLObjects.Geometry` instance.
-
-        The geospatial object, or :class:`~pyLiveKML.KMLObjects.Geometry`, that will
-        be displayed in GEP as this :class:`~pyLiveKML.KMLObjects.Placemark`.
-        """
-        return self._geometry

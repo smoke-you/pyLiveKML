@@ -10,7 +10,7 @@ class GxAltitudeModeEnum(enum.Enum):
     :class:`~pyLiveKML.KMLObjects.Geometry`. Refer to the KML documentation at
     https://developers.google.com/kml/documentation/kmlreference#kml-fields.
 
-    :note: For simplicity, all `altitudeMode` tags in pyLiveKML have been replaced with 
+    :note: For simplicity, all `altitudeMode` tags in pyLiveKML have been replaced with
         `gx:altitudeMode` tags to simplify implementation of the seafloor-based modes.
     """
 

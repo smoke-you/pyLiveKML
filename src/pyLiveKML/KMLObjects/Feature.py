@@ -97,8 +97,8 @@ class Feature(Object, ABC):
         self.snippet = snippet
         self.snippet_max_lines = snippet_max_lines
         self.description = description
-        self._abstract_view = abstract_view
-        self._time_primitive = time_primitive
+        self.abstract_view = abstract_view
+        self.time_primitive = time_primitive
         self.style_url = style_url
         self._styles = list[StyleSelector]()
         if styles is not None:
@@ -106,7 +106,7 @@ class Feature(Object, ABC):
                 self._styles.append(styles)
             else:
                 self._styles.extend(styles)
-        self._region = region
+        self.region = region
 
     @property
     def container(self) -> "Container|None":
@@ -130,39 +130,6 @@ class Feature(Object, ABC):
             raise FeatureInaccessibleError(
                 "If a Feature is visible in GEP, you cannot change its' 'container' property."
             )
-
-    @property
-    def abstract_view(self) -> AbstractView | None:
-        """The AbstractView associated with this Feature."""
-        return self._abstract_view
-
-    @abstract_view.setter
-    def abstract_view(self, value: AbstractView | None) -> None:
-        if self._abstract_view != value:
-            self._abstract_view = value
-            self.field_changed()
-
-    @property
-    def time_primitive(self) -> TimePrimitive | None:
-        """The TimePrimitive associated with this Feature."""
-        return self._time_primitive
-
-    @time_primitive.setter
-    def time_primitive(self, value: TimePrimitive | None) -> None:
-        if self._time_primitive != value:
-            self._time_primitive = value
-            self.field_changed()
-
-    @property
-    def region(self) -> Region | None:
-        """The active region for viewing this Feature."""
-        return self._region
-
-    @region.setter
-    def region(self, value: Region | None) -> None:
-        if self._region != value:
-            self._region = value
-            self.field_changed()
 
     @property
     def styles(self) -> Iterator[StyleSelector]:
@@ -202,22 +169,14 @@ class Feature(Object, ABC):
             author = etree.SubElement(root, with_ns("atom:author"))
             etree.SubElement(author, with_ns("atom:name")).text = self.author_name
         if self.author_link is not None:
-            etree.SubElement(root, with_ns("atom:link"), attrib={"href": self.author_link})
+            etree.SubElement(
+                root, with_ns("atom:link"), attrib={"href": self.author_link}
+            )
         if self.snippet is not None:
             attribs = {}
             if self.snippet_max_lines is not None:
                 attribs["maxLines"] = str(self.snippet_max_lines)
             etree.SubElement(root, "Snippet", attribs).text = self.snippet
-
-        # if with_children:
-        #     if self.abstract_view is not None:
-        #         root.append(self.abstract_view.construct_kml())
-        #     if self.time_primitive is not None:
-        #         root.append(self.time_primitive.construct_kml())
-        #     if self.region is not None:
-        #         root.append(self.region.construct_kml())
-        #     for s in self.styles:
-        #         root.append(s.construct_kml())
 
     # override Object.select() to enable upwards cascade, i.e. if a Feature contained
     # in an unselected parent Feature is selected, the parent Feature must also be
@@ -238,10 +197,6 @@ class Feature(Object, ABC):
     def __str__(self) -> str:
         """Return a string representation."""
         return f"{self.kml_tag}:{self.name}"
-
-    def __repr__(self) -> str:
-        """Return a debug representation."""
-        return self.__str__()
 
 
 class Container(list[Feature], Feature, ABC):
@@ -476,10 +431,6 @@ class Container(list[Feature], Feature, ABC):
     def __str__(self) -> str:
         """Return a string representation."""
         return Feature.__str__(self)
-
-    def __repr__(self) -> str:
-        """Return a debug representation."""
-        return Feature.__repr__(self)
 
 
 ContainedFeature = NamedTuple(
