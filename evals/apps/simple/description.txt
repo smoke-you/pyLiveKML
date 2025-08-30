@@ -1,0 +1,1 @@
+Retrieve a "simple" KML file; that is, a .kml file that can be loaded directly into Google Earth Pro.

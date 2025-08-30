@@ -1,4 +1,4 @@
-"""geometry module."""
+"""geometry KML app module."""
 
 from pathlib import Path
 from typing import cast

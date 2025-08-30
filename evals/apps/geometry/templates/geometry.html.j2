@@ -111,6 +111,9 @@
     <button onclick="checkAll()">All On</button>
     <button onclick="uncheckAll()">All Off</button>
     <br>
+    <br>
+    <a href="/update.kml">Pull "update.kml" file.</a>
+    <br>
     <script>
         {% for item in geolist %}
         document.getElementById("lat-{{ item.id }}").value = "{{ item.origin.lat }}";

@@ -45,7 +45,7 @@ class KMLApp:
         description: str,
         path: str,
         app: FastAPI,
-        data: Feature | list[Feature],
+        data: Feature | list[Feature] | None = None,
     ):
         """KMLApp instance constructor."""
         self.name = name
@@ -59,13 +59,14 @@ class KMLApp:
         """Associate the app's data with the KML synchronization controller."""
         if not self.sync:
             return
-        if isinstance(self.data, Feature):
-            if self.data.id not in map(lambda x: x.id, self.sync.container):
-                self.sync.container.append(self.data)
-        else:
-            for d in self.data:
-                if d.id not in map(lambda x: x.id, self.sync.container):
-                    self.sync.container.append(d)
+        if self.data is not None:
+            if isinstance(self.data, Feature):
+                if self.data.id not in map(lambda x: x.id, self.sync.container):
+                    self.sync.container.append(self.data)
+            else:
+                for d in self.data:
+                    if d.id not in map(lambda x: x.id, self.sync.container):
+                        self.sync.container.append(d)
 
 
 def find_apps(basedir: Path) -> list[KMLApp]:

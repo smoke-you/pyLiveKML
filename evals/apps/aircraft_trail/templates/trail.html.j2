@@ -66,6 +66,9 @@
     <label for="trail-sz">Trail Size: </label>
     <input type="number" id="trail-sz" min="{{ trailSz.min }}" max="{{ trailSz.max }}" onchange="setTrailSz(this.value)">
     <br>
+    <br>
+    <a href="/update.kml">Pull "update.kml" file.</a>
+    <br>
     <script>
         document.getElementById("trail-sz").value = "{{ trailSz.value }}";
     </script>
