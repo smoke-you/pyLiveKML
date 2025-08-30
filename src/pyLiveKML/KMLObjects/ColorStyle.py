@@ -42,4 +42,4 @@ class ColorStyle(SubStyle, ABC):
         SubStyle.__init__(self)
         ABC.__init__(self)
         self.color_mode = color_mode
-        self.color = cast(GeoColor | None, color)
+        self.color = GeoColor(color) if isinstance(color, int) else color

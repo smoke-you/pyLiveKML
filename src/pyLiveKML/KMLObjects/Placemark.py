@@ -7,7 +7,7 @@ from lxml import etree  # type: ignore
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Feature import Feature
 from pyLiveKML.KMLObjects.Geometry import Geometry
-from pyLiveKML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
@@ -87,3 +87,12 @@ class Placemark(Feature):
         yield from super(Feature, self).children
         yield ObjectChild(parent=self, child=self.geometry)
         yield from self.geometry.children
+
+    @property
+    def direct_children(self) -> Iterator[Object]:
+        """Retrieve a generator over the direct children of the object.
+
+        That is, retrieve any `Object` instances that are embedded in this `Object`.
+        """
+        yield from super().direct_children
+        yield self.geometry

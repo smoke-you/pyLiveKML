@@ -1,6 +1,6 @@
 """LinearRing module."""
 
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, cast
 
 from lxml import etree  # type: ignore
 
@@ -41,7 +41,11 @@ class LinearRing(Geometry):
 
     def __init__(
         self,
-        coordinates: Iterable[GeoCoordinates],
+        coordinates: (
+            Iterable[GeoCoordinates]
+            | Iterable[tuple[float, float, float]]
+            | Iterable[tuple[float, float]]
+        ),
         altitude_mode: GxAltitudeModeEnum | None = None,
         extrude: bool | None = None,
         tessellate: bool | None = None,
@@ -68,9 +72,23 @@ class LinearRing(Geometry):
         yield from self._coordinates
 
     @coordinates.setter
-    def coordinates(self, value: Iterable[GeoCoordinates]) -> None:
+    def coordinates(
+        self,
+        value: (
+            Iterable[GeoCoordinates]
+            | Iterable[tuple[float, float, float]]
+            | Iterable[tuple[float, float]]
+        ),
+    ) -> None:
         self._coordinates.clear()
-        self._coordinates.extend(value)
+        if isinstance(next(iter(value)), GeoCoordinates):
+            self._coordinates.extend(cast(Iterable[GeoCoordinates], value))
+        else:
+            vc = cast(
+                Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]],
+                value,
+            )
+            self._coordinates.extend((GeoCoordinates(*c) for c in vc))
         if len(self._coordinates) < 3:
             raise ValueError("There must be at least three points in the boundary.")
         self.field_changed()

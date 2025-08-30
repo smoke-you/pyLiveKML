@@ -31,11 +31,15 @@ class LineStyle(ColorStyle):
         self,
         width: float | None = None,
         color: GeoColor | int | None = None,
+        gx_outer_color: GeoColor | int | None = None,
+        gx_outer_width: float | None = None,
+        gx_physical_width: float | None = None,
+        gx_label_visibility: bool | None = None,
     ):
         """LineStyle instance constructor."""
         ColorStyle.__init__(self, color)
         self.width = width
-        self.gx_outer_color: int | None = None
-        self.gx_outer_width: float | None = None
-        self.gx_physical_width: float | None = None
-        self.gx_label_visibility: bool | None = None
+        self.gx_outer_color = gx_outer_color
+        self.gx_outer_width = gx_outer_width
+        self.gx_physical_width = gx_physical_width
+        self.gx_label_visibility = gx_label_visibility

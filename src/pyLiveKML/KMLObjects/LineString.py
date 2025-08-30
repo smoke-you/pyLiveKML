@@ -1,6 +1,6 @@
 """LineString module."""
 
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, cast
 
 from lxml import etree  # type: ignore
 
@@ -84,11 +84,14 @@ class LineString(Geometry):
         ),
     ) -> None:
         self._coordinates.clear()
-        for c in value:
-            if isinstance(c, GeoCoordinates):
-                self._coordinates.append(c)
-            else:
-                self._coordinates.append(GeoCoordinates(*c))
+        if isinstance(next(iter(value)), GeoCoordinates):
+            self._coordinates.extend(cast(Iterable[GeoCoordinates], value))
+        else:
+            vc = cast(
+                Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]],
+                value,
+            )
+            self._coordinates.extend((GeoCoordinates(*c) for c in vc))
         self.field_changed()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:

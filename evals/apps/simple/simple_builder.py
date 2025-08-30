@@ -21,6 +21,8 @@ from pyLiveKML import (
     IconStyle,
     LabelStyle,
     LineStyle,
+    PolyStyle,
+    StyleMap,
 )
 
 
@@ -30,10 +32,44 @@ root_style = Style(
         text="Some text goes here", text_color=0xFF0000FF, bg_color=0x40400000
     )
 )
-point_style = Style(
+ground_point_style = Style(
     icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/red-diamond.png")
 )
-line_style = Style(line_style=LineStyle(3, 0xFF20FF00))
+ground_linestr_style = Style(line_style=LineStyle(3, 0xFF20FF00))
+air_linestr_style = Style(line_style=LineStyle(5, 0xFF00FF20))
+ground_linring_style = Style(line_style=LineStyle(10, 0xFFFF0000))
+air_linring_style = Style(line_style=LineStyle(5, 0xFF0000FF))
+no_cutout_poly_style = Style(
+    line_style=LineStyle(1, 0xFF0000FF),  # red 1px border
+    poly_style=PolyStyle(0x6000FF00, fill=True, outline=True),  # 38% green fill
+)
+with_cutout_poly_style_normal = Style(
+    line_style=LineStyle(5, 0xFF00FF00),  # green 5px border
+    poly_style=PolyStyle(0x60FF0000, fill=True, outline=True),  # 38% blue fill
+)
+with_cutout_poly_style_highlight = Style(
+    line_style=LineStyle(5, 0xFF00FF00),  # green 5px border
+    poly_style=PolyStyle(0x600000FF, fill=True, outline=True),  # 38% red fill
+)
+with_cutout_poly_style = StyleMap(
+    f"#{with_cutout_poly_style_normal.id}", f"#{with_cutout_poly_style_highlight.id}"
+)
+
+multigeo_style_normal = Style(
+    icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/red-diamond.png"),
+    line_style=LineStyle(1, 0xFF0080FF),
+    poly_style=PolyStyle(0x6000FF00, fill=True, outline=True),
+    label_style=LabelStyle(0),
+)
+multigeo_style_highlight = Style(
+    icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/wht-stars.png", 2),
+    line_style=LineStyle(2, 0xFFFF8000),
+    poly_style=PolyStyle(0xFFFF0000, fill=True, outline=True),
+    label_style=LabelStyle(0),
+)
+multigeo_style = StyleMap(
+    f"#{multigeo_style_normal.id}", f"#{multigeo_style_highlight.id}"
+)
 
 # root Document, contains the various Folders for the Placemarks
 # Global Styles are stored here
@@ -47,11 +83,21 @@ build_data = Document(
     style_url=f"#{root_style.id}",
     styles=[
         root_style,
-        point_style,
-        line_style,
+        ground_point_style,
+        ground_linestr_style,
+        air_linestr_style,
+        ground_linring_style,
+        air_linring_style,
+        no_cutout_poly_style,
+        with_cutout_poly_style_normal,
+        with_cutout_poly_style_highlight,
+        with_cutout_poly_style,
+        multigeo_style_normal,
+        multigeo_style_highlight,
+        multigeo_style,
     ],
 )
-# points Folder
+
 points_folder = Folder(
     "Points",
     is_open=True,
@@ -63,7 +109,7 @@ points_folder = Folder(
             name="Point @ Ground",
             description="A simple Point, clamped to ground, and styled with a global style.",
             snippet="",
-            style_url=f"#{point_style.id}",
+            style_url=f"#{ground_point_style.id}",
         ),
         Placemark(
             Point(
@@ -98,9 +144,9 @@ linestr_folder = Folder(
                 )
             ),
             name="LineString @ Ground",
-            description="A simple LineString, clamped to ground.",
+            description="A simple LineString, clamped to ground, and lime-green in colour.",
             snippet="",
-            style_url=f"#{line_style.id}",
+            style_url=f"#{ground_linestr_style.id}",
         ),
         Placemark(
             LineString(
@@ -114,11 +160,175 @@ linestr_folder = Folder(
                 tessellate=True,
             ),
             name="LineString @ 500m",
-            description="A LineString located in the air, tessellated and extruded to ground.",
+            description="A LineString located in the air, tessellated and extruded to ground, and yellowish in color.",
             snippet="",
-            style_url=f"#{line_style.id}",
+            style_url=f"#{ground_linestr_style.id}",
         ),
     ],
 )
 
-build_data.extend((points_folder, linestr_folder))
+linring_folder = Folder(
+    "LineStrings",
+    is_open=True,
+    description="Contains several Placemarks hosting LinearRing geometries. Note that while Polygons are constructed from LinearRings, LinearRings may be created independent of Polygons.",
+    snippet="",
+    features=[
+        Placemark(
+            LinearRing(
+                (
+                    (151.18343, -33.89354),
+                    (151.18343, -33.88354),
+                    (151.19343, -33.88354),
+                    (151.19343, -33.89354),
+                    (151.18343, -33.89354),
+                ),
+                altitude_mode=AltitudeModeEnum.CLAMP_TO_GROUND,
+            ),
+            name="LinearRing @ Ground",
+            description="A LinearRing, clamped to ground, blue in color.",
+            snippet="",
+            style_url=f"#{ground_linring_style.id}",
+        ),
+        Placemark(
+            LinearRing(
+                (
+                    (151.18343, -33.89354, 1000),
+                    (151.18343, -33.88354, 1000),
+                    (151.19343, -33.88354, 1000),
+                    (151.19343, -33.89354, 1000),
+                    (151.18343, -33.89354, 1000),
+                ),
+                altitude_mode=AltitudeModeEnum.ABSOLUTE,
+                extrude=True,
+                tessellate=True,
+            ),
+            name="LinearRing @ 1000m",
+            description="A LinearRing, at 1000m, red in color, tessellated and extruded to ground.",
+            snippet="",
+            style_url=f"#{air_linring_style.id}",
+        ),
+        Placemark(
+            LinearRing(
+                (
+                    (151.18343, -33.89354, 2000),
+                    (151.18343, -33.88354, 2000),
+                    (151.19343, -33.88354, 2000),
+                    (151.19343, -33.89354, 2000),
+                    (151.18343, -33.89354, 2000),
+                ),
+                altitude_mode=AltitudeModeEnum.ABSOLUTE,
+            ),
+            name="LinearRing @ 2000m",
+            description="A LinearRing, at 2000m, purple in color.",
+            snippet="",
+            inline_style=Style(line_style=LineStyle(color=0xFFFF00FF, width=2.5)),
+        ),
+    ],
+)
+
+poly_folder = Folder(
+    "Polygons",
+    is_open=True,
+    description="Contains several Placemarks hosting Polygon geometries.",
+    snippet="",
+    features=[
+        Placemark(
+            Polygon(
+                LinearRing(
+                    (
+                        (151.20343, -33.89354),
+                        (151.20343, -33.88354),
+                        (151.21343, -33.88354),
+                        (151.21343, -33.89354),
+                        (151.20343, -33.89354),
+                    ),
+                    altitude_mode=AltitudeModeEnum.CLAMP_TO_GROUND,
+                ),
+            ),
+            name="Polygon @ Ground",
+            description="A Polygon, clamped to ground, lime-green fill, red border.",
+            snippet="",
+            style_url=f"#{no_cutout_poly_style.id}",
+        ),
+        Placemark(
+            Polygon(
+                LinearRing(
+                    (
+                        (151.22343, -33.89354, 200),
+                        (151.22343, -33.88354, 200),
+                        (151.23343, -33.88354, 200),
+                        (151.23343, -33.89354, 200),
+                        (151.22343, -33.89354, 200),
+                    ),
+                ),
+                [
+                    LinearRing(
+                        (
+                            (151.22443, -33.89254, 200),
+                            (151.22443, -33.89154, 200),
+                            (151.22543, -33.89154, 200),
+                            (151.22543, -33.89254, 200),
+                            (151.22443, -33.89254, 200),
+                        ),
+                    ),
+                    LinearRing(
+                        (
+                            (151.22443, -33.88954, 200),
+                            (151.22443, -33.88854, 200),
+                            (151.22543, -33.88854, 200),
+                            (151.22543, -33.88954, 200),
+                            (151.22443, -33.88954, 200),
+                        ),
+                    ),
+                ],
+                altitude_mode=AltitudeModeEnum.ABSOLUTE,
+            ),
+            name="Polygon @ 200m",
+            description="A Polygon, 200m, blue fill, thick green border, cutouts. Fill changes to red on hover.",
+            snippet="",
+            style_url=f"#{with_cutout_poly_style.id}",
+        ),
+    ],
+)
+
+multigeo_folder = Folder(
+    "Multigeometry",
+    is_open=True,
+    description="Contains a Placemark hosting a MultiGeometry.",
+    snippet="",
+    features=[
+        Placemark(
+            MultiGeometry(
+                [
+                    Point((151.18843, -33.92354, 200), AltitudeModeEnum.ABSOLUTE),
+                    Polygon(
+                        LinearRing(
+                            (
+                                (151.18643, -33.92554),
+                                (151.18643, -33.92154),
+                                (151.19043, -33.92154),
+                                (151.19043, -33.92554),
+                                (151.18643, -33.92554),
+                            ),
+                        ),
+                        altitude_mode=AltitudeModeEnum.CLAMP_TO_GROUND,
+                    ),
+                ],
+            ),
+            name="MultiGeometry",
+            description="A MultiGeometry hosting a Point @ 200m and a Polygon clamped to ground.",
+            snippet="",
+            style_url=f"#{multigeo_style.id}",
+        )
+    ],
+)
+
+build_data.extend(
+    (
+        points_folder,
+        linestr_folder,
+        linring_folder,
+        poly_folder,
+        multigeo_folder,
+    )
+)

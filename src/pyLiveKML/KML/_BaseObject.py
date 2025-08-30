@@ -175,7 +175,7 @@ class _BaseObject(ABC):
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Object setattr method."""
-        match = next(filter(lambda x: x.name, self._kml_fields), None)
+        match = next(filter(lambda x: x.name == name, self._kml_fields), None)
         value = match.parser.parse(value) if match is not None else value
         return super().__setattr__(name, value)
 

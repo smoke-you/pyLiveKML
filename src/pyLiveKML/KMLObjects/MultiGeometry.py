@@ -5,7 +5,7 @@ from typing import Iterator, Sequence
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KMLObjects.Geometry import Geometry
-from pyLiveKML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KMLObjects.Object import Object, ObjectChild
 
 
 class MultiGeometry(Geometry, list[Geometry]):
@@ -27,6 +27,14 @@ class MultiGeometry(Geometry, list[Geometry]):
         """The children of the instance."""
         for g in self:
             yield ObjectChild(parent=self, child=g)
+
+    @property
+    def direct_children(self) -> Iterator[Object]:
+        """Retrieve a generator over the direct children of the object.
+
+        That is, retrieve any `Object` instances that are embedded in this `Object`.
+        """
+        yield from self
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
