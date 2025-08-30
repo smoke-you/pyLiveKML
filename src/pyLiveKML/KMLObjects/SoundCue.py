@@ -6,7 +6,7 @@ from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 
-class GxSoundCue(TourPrimitive):
+class SoundCue(TourPrimitive):
     """A KML 'gx:SoundCue', per https://developers.google.com/kml/documentation/kmlreference#gxsoundcue."""
 
     _kml_tag = "gx:SoundCue"

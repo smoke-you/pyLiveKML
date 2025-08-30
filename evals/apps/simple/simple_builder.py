@@ -14,8 +14,8 @@ from pyLiveKML import (
     LinearRing,
     Polygon,
     MultiGeometry,
-    GxTrack,
-    GxMultiTrack,
+    Track,
+    MultiTrack,
     Style,
     BalloonStyle,
     IconStyle,
@@ -318,20 +318,24 @@ multigeo_folder = Folder(
             name="[Point @ 200m, Poly @ Ground]",
             description="A MultiGeometry hosting a Point @ 200m and a Polygon clamped to ground.\nBoth Point and Polygon respond to mouse hover.",
             snippet="",
-            inline_style = StyleMap(
+            inline_style=StyleMap(
                 Style(
-                    icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/red-diamond.png"),
+                    icon_style=IconStyle(
+                        "http://maps.google.com/mapfiles/kml/paddle/red-diamond.png"
+                    ),
                     line_style=LineStyle(1, 0xFF0080FF),
                     poly_style=PolyStyle(0x6000FF00, fill=True, outline=True),
                     label_style=LabelStyle(0),
                 ),
                 Style(
-                    icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/wht-stars.png", 2),
+                    icon_style=IconStyle(
+                        "http://maps.google.com/mapfiles/kml/paddle/wht-stars.png", 2
+                    ),
                     line_style=LineStyle(2, 0xFFFF8000),
                     poly_style=PolyStyle(0xFFFF0000, fill=True, outline=True),
                     label_style=LabelStyle(0),
-                )
-            )
+                ),
+            ),
         )
     ],
 )

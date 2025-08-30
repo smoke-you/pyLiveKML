@@ -6,7 +6,7 @@ from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 
-class GxWait(TourPrimitive):
+class Wait(TourPrimitive):
     """A KML 'gx:Wait', per https://developers.google.com/kml/documentation/kmlreference#gxwait."""
 
     _kml_tag = "gx:Wait"

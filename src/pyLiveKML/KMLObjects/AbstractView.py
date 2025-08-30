@@ -5,7 +5,7 @@ from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.ViewerOption import GxViewerOption
+from pyLiveKML.KML.ViewerOption import ViewerOption
 from pyLiveKML.KML.utils import with_ns
 from pyLiveKML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
@@ -18,15 +18,15 @@ class AbstractView(Object, ABC):
 
     def __init__(
         self,
-        viewer_options: Iterable[GxViewerOption] | GxViewerOption | None = None,
+        viewer_options: Iterable[ViewerOption] | ViewerOption | None = None,
         time_primitive: TimePrimitive | None = None,
     ) -> None:
         """AbstractView instance constructor."""
         Object.__init__(self)
         ABC.__init__(self)
-        self._viewer_options = list[GxViewerOption]()
+        self._viewer_options = list[ViewerOption]()
         if viewer_options is not None:
-            if isinstance(viewer_options, GxViewerOption):
+            if isinstance(viewer_options, ViewerOption):
                 self._viewer_options.append(viewer_options)
             else:
                 self._viewer_options.extend(viewer_options)

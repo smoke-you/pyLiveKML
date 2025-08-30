@@ -3,7 +3,7 @@
 import enum
 
 
-class GxAltitudeModeEnum(enum.Enum):
+class AltitudeModeEnum(enum.Enum):
     """Enumeration of options for KML <gx:altitudeMode> tags.
 
     Generally used in e.g. objects that derive from
@@ -56,7 +56,7 @@ class FlyToModeEnum(enum.Enum):
     SMOOTH = "smooth"
 
 
-class GxPlayModeEnum(enum.Enum):
+class PlayModeEnum(enum.Enum):
     """Enumeration of options for KML <gx:playMode> tags.
 
     Used only by `gx:TourControl`. Refer to the KML documentation at
@@ -66,7 +66,7 @@ class GxPlayModeEnum(enum.Enum):
     PAUSE = "pause"
 
 
-class GxViewerOptionEnum(enum.Enum):
+class ViewerOptionEnum(enum.Enum):
     """Enumeration of options for KML <gx:option> tags.
 
     Used only by `AbstractView` subclasses. Refer to the KML documentation at

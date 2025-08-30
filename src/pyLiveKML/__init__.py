@@ -7,13 +7,13 @@ from pyLiveKML.KML.utils import (
     KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
 )
 from pyLiveKML.KML import (
-    GxAltitudeModeEnum,
-    GxAltitudeModeEnum as AltitudeModeEnum,
+    AltitudeModeEnum,
+    AltitudeModeEnum as AltitudeModeEnum,
     ColorModeEnum,
     DisplayModeEnum,
     FlyToModeEnum,
-    GxPlayModeEnum,
-    GxViewerOptionEnum,
+    PlayModeEnum,
+    ViewerOptionEnum,
     ItemIconModeEnum,
     ListItemTypeEnum,
     RefreshModeEnum,
@@ -26,11 +26,11 @@ from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
 from pyLiveKML.KML.NetworkLinkControl import NetworkLinkControl
 from pyLiveKML.KML.Vec2 import HotSpot, OverlayXY, ScreenXY, RotationXY, Size
-from pyLiveKML.KML.ViewerOption import GxViewerOption
+from pyLiveKML.KML.ViewerOption import ViewerOption
 from pyLiveKML.KMLObjects.BalloonStyle import BalloonStyle
 from pyLiveKML.KMLObjects.Camera import Camera
 from pyLiveKML.KMLObjects.Document import Document
-from pyLiveKML.KMLObjects.FlyTo import GxFlyTo
+from pyLiveKML.KMLObjects.FlyTo import FlyTo
 from pyLiveKML.KMLObjects.Folder import Folder
 from pyLiveKML.KMLObjects.GroundOverlay import GroundOverlay
 from pyLiveKML.KMLObjects.Icon import Icon
@@ -44,7 +44,7 @@ from pyLiveKML.KMLObjects.ListStyle import ItemIcon, ListStyle
 from pyLiveKML.KMLObjects.LookAt import LookAt
 from pyLiveKML.KMLObjects.Model import Alias, Model
 from pyLiveKML.KMLObjects.MultiGeometry import MultiGeometry
-from pyLiveKML.KMLObjects.MultiTrack import GxMultiTrack
+from pyLiveKML.KMLObjects.MultiTrack import MultiTrack
 from pyLiveKML.KMLObjects.NetworkLink import NetworkLink
 from pyLiveKML.KMLObjects.PhotoOverlay import PhotoOverlay
 from pyLiveKML.KMLObjects.Placemark import Placemark
@@ -54,28 +54,28 @@ from pyLiveKML.KMLObjects.Polygon import Polygon
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.Schema import Schema, SimpleField
 from pyLiveKML.KMLObjects.ScreenOverlay import ScreenOverlay
-from pyLiveKML.KMLObjects.SoundCue import GxSoundCue
+from pyLiveKML.KMLObjects.SoundCue import SoundCue
 from pyLiveKML.KMLObjects.Style import Style
 from pyLiveKML.KMLObjects.StyleMap import StyleMap
-from pyLiveKML.KMLObjects.TimeSpan import TimeSpan, GxTimeSpan
+from pyLiveKML.KMLObjects.TimeSpan import TimeSpan, TimeSpan
 from pyLiveKML.KMLObjects.TimeStamp import TimeStamp, GxTimeStamp
-from pyLiveKML.KMLObjects.Tour import GxTour
-from pyLiveKML.KMLObjects.TourControl import GxTourControl
+from pyLiveKML.KMLObjects.Tour import Tour
+from pyLiveKML.KMLObjects.TourControl import TourControl
 from pyLiveKML.KMLObjects.Track import (
-    GxTrack,
+    Track,
     TrackAngles,
     TrackCoord,
     TrackElement,
     TrackExtendedData,
 )
-from pyLiveKML.KMLObjects.Wait import GxWait
+from pyLiveKML.KMLObjects.Wait import Wait
 
 # global imports wrapper
 # allows importing any of the instantiable KML objects and helpers from the `pyLiveKML` module
 __all__ = [
     "Alias",
     "AltitudeModeEnum",
-    "GxAltitudeModeEnum",
+    "AltitudeModeEnum",
     "BalloonStyle",
     "Camera",
     "ColorModeEnum",
@@ -86,17 +86,17 @@ __all__ = [
     "GeoColor",
     "GeoCoordinates",
     "GroundOverlay",
-    "GxFlyTo",
-    "GxPlayModeEnum",
-    "GxSoundCue",
-    "GxTimeSpan",
+    "FlyTo",
+    "PlayModeEnum",
+    "SoundCue",
+    "TimeSpan",
     "GxTimeStamp",
-    "GxTour",
-    "GxTourControl",
-    "GxTrack",
-    "GxViewerOption",
-    "GxViewerOptionEnum",
-    "GxWait",
+    "Tour",
+    "TourControl",
+    "Track",
+    "ViewerOption",
+    "ViewerOptionEnum",
+    "Wait",
     "HotSpot",
     "Icon",
     "IconStyle",

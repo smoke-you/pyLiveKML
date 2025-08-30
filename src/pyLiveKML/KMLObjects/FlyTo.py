@@ -11,7 +11,7 @@ from pyLiveKML.KMLObjects.Object import ObjectChild
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 
-class GxFlyTo(TourPrimitive):
+class FlyTo(TourPrimitive):
     """A KML 'gx:FlyTo', per https://developers.google.com/kml/documentation/kmlreference#gxflyto."""
 
     _kml_tag = "gx:FlyTo"

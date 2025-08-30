@@ -2,12 +2,12 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import GxViewerOptionEnum
+from pyLiveKML.KML import ViewerOptionEnum
 from pyLiveKML.KML.utils import with_ns
 from pyLiveKML.KML._BaseObject import _BaseObject
 
 
-class GxViewerOption(_BaseObject):
+class ViewerOption(_BaseObject):
     """Enables special viewing modes in Google Earth 6.0 and later.
 
     Refer https://developers.google.com/kml/documentation/kmlreference#elements-specific-to-abstractview.
@@ -18,7 +18,7 @@ class GxViewerOption(_BaseObject):
 
     _kml_tag = "gx:option"
 
-    def __init__(self, option: GxViewerOptionEnum, enabled: bool):
+    def __init__(self, option: ViewerOptionEnum, enabled: bool):
         """GxViewerOption instance constructor."""
         super().__init__()
         self.option = option

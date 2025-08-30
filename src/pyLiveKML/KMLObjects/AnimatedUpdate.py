@@ -9,7 +9,7 @@ from pyLiveKML.KML.Update import Update
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 
-class GxAnimatedUpdate(TourPrimitive):
+class AnimatedUpdate(TourPrimitive):
     """A KML 'gx:AnimatedUpdate', per https://developers.google.com/kml/documentation/kmlreference#gxanimatedupdate."""
 
     _kml_tag = "gx:AnimatedUpdate"

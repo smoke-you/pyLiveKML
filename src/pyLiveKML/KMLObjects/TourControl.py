@@ -2,12 +2,12 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import GxPlayModeEnum
+from pyLiveKML.KML import PlayModeEnum
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 
-class GxTourControl(TourPrimitive):
+class TourControl(TourPrimitive):
     """A KML 'gx:TourControl', per https://developers.google.com/kml/documentation/kmlreference#gxtourcontrol."""
 
     _kml_tag = "gx:TourControl"
@@ -15,7 +15,7 @@ class GxTourControl(TourPrimitive):
 
     def __init__(
         self,
-        play_mode: GxPlayModeEnum = GxPlayModeEnum.PAUSE,
+        play_mode: PlayModeEnum = PlayModeEnum.PAUSE,
     ) -> None:
         """GxTourControl instance constructor."""
         TourPrimitive.__init__(self)

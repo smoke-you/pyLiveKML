@@ -4,14 +4,14 @@ from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import GxAltitudeModeEnum
+from pyLiveKML.KML import AltitudeModeEnum
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KMLObjects.Object import ObjectChild
-from pyLiveKML.KMLObjects.Track import GxTrack
+from pyLiveKML.KMLObjects.Track import Track
 
 
-class GxMultiTrack(Geometry, list[GxTrack]):
+class MultiTrack(Geometry, list[Track]):
     """A KML 'gx:MultiTrack', per https://developers.google.com/kml/documentation/kmlreference#gxmultitrack."""
 
     _kml_tag = "gx:MultiTrack"
@@ -22,16 +22,16 @@ class GxMultiTrack(Geometry, list[GxTrack]):
 
     def __init__(
         self,
-        altitude_mode: GxAltitudeModeEnum | None = None,
+        altitude_mode: AltitudeModeEnum | None = None,
         interpolate: bool = False,
-        tracks: GxTrack | Iterable[GxTrack] | None = None,
+        tracks: Track | Iterable[Track] | None = None,
     ) -> None:
         """Track instance constructor."""
         Geometry.__init__(self)
         self.altitude_mode = altitude_mode
         self.interpolate = interpolate
         if tracks is not None:
-            if isinstance(tracks, GxTrack):
+            if isinstance(tracks, Track):
                 self.append(tracks)
             else:
                 self.extend(tracks)

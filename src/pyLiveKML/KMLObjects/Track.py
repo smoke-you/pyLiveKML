@@ -5,7 +5,7 @@ from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import GxAltitudeModeEnum
+from pyLiveKML.KML import AltitudeModeEnum
 from pyLiveKML.KML._BaseObject import (
     _FieldDef,
     Angle180,
@@ -94,7 +94,7 @@ class TrackElement:
         self.extended_data = extended_data
 
 
-class GxTrack(Geometry):
+class Track(Geometry):
     """A KML 'gx:Track', per https://developers.google.com/kml/documentation/kmlreference#gxtrack."""
 
     _kml_tag = "gx:Track"
@@ -105,7 +105,7 @@ class GxTrack(Geometry):
 
     def __init__(
         self,
-        altitude_mode: GxAltitudeModeEnum | None = None,
+        altitude_mode: AltitudeModeEnum | None = None,
         elements: TrackElement | Iterable[TrackElement] | None = None,
         model: Model | None = None,
     ) -> None:

@@ -7,7 +7,7 @@ import numpy
 from pyproj import Geod
 from pyLiveKML import (
     GeoCoordinates,
-    GxAltitudeModeEnum,
+    AltitudeModeEnum,
     LineStyle,
     LinearRing,
     PolyStyle,
@@ -33,7 +33,7 @@ class GeoShape(Placemark, ABC):
         fill_color: int = 0xFFFFFFFF,
         name: Optional[str] = None,
         selected: bool = False,
-        altitude_mode: GxAltitudeModeEnum = GxAltitudeModeEnum.CLAMP_TO_GROUND,
+        altitude_mode: AltitudeModeEnum = AltitudeModeEnum.CLAMP_TO_GROUND,
     ) -> None:
         """GeoShape instance constructor."""
         self._origin = origin

@@ -9,9 +9,9 @@ from typing import Iterable, NamedTuple, Iterator, cast
 from lxml import etree  # type: ignore
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
-from pyLiveKML.utils import with_ns
 from pyLiveKML.KML._BaseObject import _FieldDef, NoDump
 from pyLiveKML.KML.errors.errors import FeatureInaccessibleError
+from pyLiveKML.KML.utils import with_ns
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Object import Object, ObjectChild, ObjectState
 from pyLiveKML.KMLObjects.Region import Region

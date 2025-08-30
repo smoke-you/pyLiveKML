@@ -10,7 +10,7 @@ from pyLiveKML.KMLObjects.Object import Object, ObjectChild
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 
-class GxTour(Object, list[TourPrimitive]):
+class Tour(Object, list[TourPrimitive]):
     """A KML 'gx:Tour', per https://developers.google.com/kml/documentation/kmlreference#gxtour."""
 
     _kml_tag = "gx:Tour"

@@ -1,7 +1,7 @@
 """AircraftPosition module."""
 
 from typing import cast
-from pyLiveKML import GeoCoordinates, GxAltitudeModeEnum, IconStyle, Point, Style
+from pyLiveKML import GeoCoordinates, AltitudeModeEnum, IconStyle, Point, Style
 from pyLiveKML.KMLObjects.Placemark import Placemark
 
 from .AircraftData import AircraftData
@@ -13,9 +13,9 @@ class AircraftPosition(Placemark):
     def __init__(self, data: AircraftData):
         """AircraftPosition instance constructor."""
         altitude_mode = (
-            GxAltitudeModeEnum.CLAMP_TO_GROUND
+            AltitudeModeEnum.CLAMP_TO_GROUND
             if data.coordinates.alt is None
-            else GxAltitudeModeEnum.ABSOLUTE
+            else AltitudeModeEnum.ABSOLUTE
         )
         point = Point(coordinates=data.coordinates, altitude_mode=altitude_mode)
         style = Style(

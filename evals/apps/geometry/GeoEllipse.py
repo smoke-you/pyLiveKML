@@ -5,7 +5,7 @@ from typing import Optional, Iterator
 
 from numpy import ndarray, array
 from scipy.spatial.transform import Rotation
-from pyLiveKML import GeoCoordinates, GxAltitudeModeEnum
+from pyLiveKML import GeoCoordinates, AltitudeModeEnum
 
 from .GeoShape import GeoShape
 
@@ -42,7 +42,7 @@ class GeoEllipse(GeoShape):
         fill_color: int = 0xFFFFFFFF,
         name: Optional[str] = None,
         selected: bool = False,
-        altitude_mode: GxAltitudeModeEnum = GxAltitudeModeEnum.CLAMP_TO_GROUND,
+        altitude_mode: AltitudeModeEnum = AltitudeModeEnum.CLAMP_TO_GROUND,
     ):
         """GeoEllipse instance constructor."""
         GeoShape.__init__(

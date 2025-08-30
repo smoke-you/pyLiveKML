@@ -4,7 +4,7 @@ from typing import Sequence
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML import GxAltitudeModeEnum
+from pyLiveKML.KML import AltitudeModeEnum
 from pyLiveKML.KML._BaseObject import (
     Angle90,
     AnglePos90,
@@ -13,7 +13,7 @@ from pyLiveKML.KML._BaseObject import (
     _FieldDef,
     NoParse,
 )
-from pyLiveKML.KML.ViewerOption import GxViewerOption
+from pyLiveKML.KML.ViewerOption import ViewerOption
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
 
@@ -34,7 +34,7 @@ class LookAt(AbstractView):
 
     def __init__(
         self,
-        viewer_options: Sequence[GxViewerOption] | GxViewerOption | None = None,
+        viewer_options: Sequence[ViewerOption] | ViewerOption | None = None,
         time_primitive: TimePrimitive | None = None,
         longitude: float = 0,
         latitude: float = 0,
@@ -42,7 +42,7 @@ class LookAt(AbstractView):
         heading: float = 0,
         tilt: float = 0,
         range: float = 0,
-        altitude_mode: GxAltitudeModeEnum | None = None,
+        altitude_mode: AltitudeModeEnum | None = None,
     ):
         """LookAt instance constructor."""
         AbstractView.__init__(self, viewer_options, time_primitive)
@@ -53,7 +53,5 @@ class LookAt(AbstractView):
         self.tilt = tilt
         self.range = range
         self.altitude_mode = (
-            GxAltitudeModeEnum.CLAMP_TO_GROUND
-            if altitude_mode is None
-            else altitude_mode
+            AltitudeModeEnum.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode
         )

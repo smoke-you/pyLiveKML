@@ -21,6 +21,8 @@ class _StyleMap_Pair(_BaseObject):
         """_StyleMap_Pair instance constructor."""
         super().__init__()
         self.key = key
+        self.style: Style | None
+        self.style_url: str | None
         if isinstance(style_ref, Style):
             self.style = style_ref
             self.style_url = None
