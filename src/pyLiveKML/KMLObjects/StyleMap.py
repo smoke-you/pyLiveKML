@@ -1,12 +1,11 @@
 """StyleMap module."""
 
-import enum
-
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import StyleStateEnum
 from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
+from pyLiveKML.KMLObjects.Style import Style
 
 
 class _StyleMap_Pair(_BaseObject):
@@ -18,11 +17,22 @@ class _StyleMap_Pair(_BaseObject):
         _FieldDef("style_url", "styleUrl"),
     )
 
-    def __init__(self, key: StyleStateEnum, style_url: str):
+    def __init__(self, key: StyleStateEnum, style_ref: str | Style):
         """_StyleMap_Pair instance constructor."""
         super().__init__()
         self.key = key
-        self.style_url = style_url
+        if isinstance(style_ref, Style):
+            self.style = style_ref
+            self.style_url = None
+        else:
+            self.style = None
+            self.style_url = style_ref
+
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
+        super().build_kml(root, with_children)
+        if self.style is not None:
+            root.append(self.style.construct_kml())
 
 
 class StyleMap(StyleSelector):
@@ -57,10 +67,10 @@ class StyleMap(StyleSelector):
 
     def __init__(
         self,
-        normal_style_url: str,
-        highlight_style_url: str,
+        normal_style_ref: str | Style,
+        highlight_style_ref: str | Style,
     ):
         """StyleMap instance constructor."""
         super().__init__()
-        self.normal = _StyleMap_Pair(StyleStateEnum.NORMAL, normal_style_url)
-        self.highlight = _StyleMap_Pair(StyleStateEnum.HIGHLIGHT, highlight_style_url)
+        self.normal = _StyleMap_Pair(StyleStateEnum.NORMAL, normal_style_ref)
+        self.highlight = _StyleMap_Pair(StyleStateEnum.HIGHLIGHT, highlight_style_ref)

@@ -55,21 +55,21 @@ with_cutout_poly_style = StyleMap(
     f"#{with_cutout_poly_style_normal.id}", f"#{with_cutout_poly_style_highlight.id}"
 )
 
-multigeo_style_normal = Style(
-    icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/red-diamond.png"),
-    line_style=LineStyle(1, 0xFF0080FF),
-    poly_style=PolyStyle(0x6000FF00, fill=True, outline=True),
-    label_style=LabelStyle(0),
-)
-multigeo_style_highlight = Style(
-    icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/wht-stars.png", 2),
-    line_style=LineStyle(2, 0xFFFF8000),
-    poly_style=PolyStyle(0xFFFF0000, fill=True, outline=True),
-    label_style=LabelStyle(0),
-)
-multigeo_style = StyleMap(
-    f"#{multigeo_style_normal.id}", f"#{multigeo_style_highlight.id}"
-)
+# multigeo_style_normal = Style(
+#     icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/red-diamond.png"),
+#     line_style=LineStyle(1, 0xFF0080FF),
+#     poly_style=PolyStyle(0x6000FF00, fill=True, outline=True),
+#     label_style=LabelStyle(0),
+# )
+# multigeo_style_highlight = Style(
+#     icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/wht-stars.png", 2),
+#     line_style=LineStyle(2, 0xFFFF8000),
+#     poly_style=PolyStyle(0xFFFF0000, fill=True, outline=True),
+#     label_style=LabelStyle(0),
+# )
+# multigeo_style = StyleMap(
+#     f"#{multigeo_style_normal.id}", f"#{multigeo_style_highlight.id}"
+# )
 
 # root Document, contains the various Folders for the Placemarks
 # Global Styles are stored here
@@ -92,9 +92,9 @@ build_data = Document(
         with_cutout_poly_style_normal,
         with_cutout_poly_style_highlight,
         with_cutout_poly_style,
-        multigeo_style_normal,
-        multigeo_style_highlight,
-        multigeo_style,
+        # multigeo_style_normal,
+        # multigeo_style_highlight,
+        # multigeo_style,
     ],
 )
 
@@ -292,33 +292,46 @@ poly_folder = Folder(
 )
 
 multigeo_folder = Folder(
-    "Multigeometry",
+    "Multigeometries",
     is_open=True,
-    description="Contains a Placemark hosting a MultiGeometry.",
+    description="Contains a Placemark hosting MultiGeometry geometries.",
     snippet="",
     features=[
         Placemark(
             MultiGeometry(
                 [
-                    Point((151.18843, -33.92354, 200), AltitudeModeEnum.ABSOLUTE),
+                    Point((151.18843, -33.90354, 200), AltitudeModeEnum.ABSOLUTE),
                     Polygon(
                         LinearRing(
                             (
-                                (151.18643, -33.92554),
-                                (151.18643, -33.92154),
-                                (151.19043, -33.92154),
-                                (151.19043, -33.92554),
-                                (151.18643, -33.92554),
+                                (151.18643, -33.90554),
+                                (151.18643, -33.90154),
+                                (151.19043, -33.90154),
+                                (151.19043, -33.90554),
+                                (151.18643, -33.90554),
                             ),
                         ),
                         altitude_mode=AltitudeModeEnum.CLAMP_TO_GROUND,
                     ),
                 ],
             ),
-            name="MultiGeometry",
-            description="A MultiGeometry hosting a Point @ 200m and a Polygon clamped to ground.",
+            name="[Point @ 200m, Poly @ Ground]",
+            description="A MultiGeometry hosting a Point @ 200m and a Polygon clamped to ground.\nBoth Point and Polygon respond to mouse hover.",
             snippet="",
-            style_url=f"#{multigeo_style.id}",
+            inline_style = StyleMap(
+                Style(
+                    icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/red-diamond.png"),
+                    line_style=LineStyle(1, 0xFF0080FF),
+                    poly_style=PolyStyle(0x6000FF00, fill=True, outline=True),
+                    label_style=LabelStyle(0),
+                ),
+                Style(
+                    icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/wht-stars.png", 2),
+                    line_style=LineStyle(2, 0xFFFF8000),
+                    poly_style=PolyStyle(0xFFFF0000, fill=True, outline=True),
+                    label_style=LabelStyle(0),
+                )
+            )
         )
     ],
 )
