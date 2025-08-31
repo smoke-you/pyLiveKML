@@ -137,7 +137,7 @@ async def _(filename: str, request: Request) -> Any:
     root = kml_root_tag()
     if filename == "index.html":
         for c in gep_sync.container:
-            c.select(False, True)
+            c.activate(False, True)
         context = {
             "request": request,
             "applist": applist,
@@ -167,7 +167,7 @@ async def _(filename: str, request: Request) -> Any:
 @app.post("/clear")
 async def _() -> None:
     for c in gep_sync.container:
-        c.select(False, True)
+        c.activate(False, True)
 
 
 @app.post("/control", response_model=KMLControlResponse)

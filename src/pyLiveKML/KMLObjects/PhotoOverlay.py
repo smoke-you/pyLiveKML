@@ -6,7 +6,7 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import GridOriginEnum
-from pyLiveKML.KML._BaseObject import (
+from pyLiveKML.KML.Object import (
     _BaseObject,
     _FieldDef,
     Angle180,
@@ -14,7 +14,7 @@ from pyLiveKML.KML._BaseObject import (
 )
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
-from pyLiveKML.KMLObjects.Object import _ChildDef
+from pyLiveKML.KML.Object import _ChildDef
 from pyLiveKML.KMLObjects.Overlay import Overlay
 from pyLiveKML.KMLObjects.Point import Point
 from pyLiveKML.KMLObjects.Region import Region

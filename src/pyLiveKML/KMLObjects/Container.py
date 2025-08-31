@@ -11,7 +11,7 @@ from lxml import etree  # type: ignore
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Feature import Feature
-from pyLiveKML.KMLObjects.Object import Object, ObjectState, _ListObject
+from pyLiveKML.KML.Object import Object, ObjectState, _ListObject
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
@@ -187,14 +187,14 @@ class Container(_ListObject[Feature], Feature, ABC):
     #                 root.append(f.construct_kml())
     #     return root
 
-    def append(self, item: Feature) -> None:
+    def append(self, value: Feature) -> None:
         """Append a :class:`~pyLiveKML.KMLObjects.Feature` to this :class:`~pyLiveKML.KMLObjects.Container`.
 
         :param Feature item: The :class:`~pyLiveKML.KMLObjects.Feature` to be appended.
         """
-        _ListObject[Feature].append(self, item)
+        _ListObject[Feature].append(self, value)
 
-    def remove(self, __value: Feature) -> None:
+    def remove(self, value: Feature) -> None:
         """Remove a :class:`~pyLiveKML.KMLObjects.Feature` from this :class:`~pyLiveKML.KMLObjects.Container`.
 
         Of course, the :class:`~pyLiveKML.KMLObjects.Feature` must be enclosed in this
@@ -202,9 +202,9 @@ class Container(_ListObject[Feature], Feature, ABC):
 
         :param Feature __value: The :class:`~pyLiveKML.KMLObjects.Feature` to be removed.
         """
-        if __value.active:
-            self.__deleted.append(__value)
-        _ListObject[Feature].remove(self, __value)
+        if value.active:
+            self.__deleted.append(value)
+        _ListObject[Feature].remove(self, value)
 
     def force_idle(self, cascade: bool = False) -> None:
         """Force this instance, and _optionally_ its children, to the IDLE state.
@@ -232,7 +232,7 @@ class Container(_ListObject[Feature], Feature, ABC):
             elif isinstance(f, Feature):
                 f.force_idle()
 
-    def select(self, value: bool, cascade: bool = False) -> None:
+    def activate(self, value: bool, cascade: bool = False) -> None:
         """Cascade select upwards, but do not cascade deselect upwards.
 
         Overrides :func:`~pyLiveKML.KMLObjects.Feature.Feature.select` to implement select/deselect cascade to
@@ -240,10 +240,10 @@ class Container(_ListObject[Feature], Feature, ABC):
         :class:`~pyLiveKML.KMLObjects.Container` is deleted from GEP, its' enclosed
         :class:`~pyLiveKML.KMLObjects.Feature` objects are forced IDLE to maintain synchronization.
         """
-        Feature.select(self, value, cascade)
+        Feature.activate(self, value, cascade)
         if cascade:
             for f in self:
-                f.select(value, True)
+                f.activate(value, True)
         if (
             self._state == ObjectState.DELETE_CREATED
             or self._state == ObjectState.DELETE_CHANGED

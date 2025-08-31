@@ -2,8 +2,8 @@
 
 from abc import ABC
 
-from pyLiveKML.KML._BaseObject import _FieldDef
-from pyLiveKML.KMLObjects.Object import Object
+from pyLiveKML.KML.Object import _FieldDef
+from pyLiveKML.KML.Object import Object
 
 
 class SubStyle(Object, ABC):

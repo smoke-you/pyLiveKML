@@ -5,7 +5,7 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KMLObjects.Geometry import Geometry
-from pyLiveKML.KMLObjects.Object import _ListObject
+from pyLiveKML.KML.Object import _ListObject
 
 
 class MultiGeometry(_ListObject[Geometry], Geometry):

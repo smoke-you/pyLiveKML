@@ -8,10 +8,10 @@ from typing import Iterable, Iterator, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML._BaseObject import _FieldDef, NoDump
+from pyLiveKML.KML.Object import _FieldDef, NoDump
 from pyLiveKML.KML.utils import with_ns
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
-from pyLiveKML.KMLObjects.Object import Object, _ChildDef
+from pyLiveKML.KML.Object import Object, _ChildDef
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
@@ -141,7 +141,7 @@ class Feature(Object, ABC):
     # override Object.select() to enable upwards cascade, i.e. if a Feature contained
     # in an unselected parent Feature is selected, the parent Feature must also be
     # selected in order for GEP synchronization to work correctly.
-    def select(self, value: bool, cascade: bool = False) -> None:
+    def activate(self, value: bool, cascade: bool = False) -> None:
         """Cascade select upwards, but do not cascade deselect upwards.
 
         Overrides :func:`~pyLiveKML.KMLObjects.Object.Object.select` to implement upwards cascade of selection.
@@ -149,10 +149,10 @@ class Feature(Object, ABC):
         unselected  parent :class:`~pyLiveKML.KMLObjects.Feature` is selected, the reverse tree's parents must also
         be selected in order for GEP synchronization to work correctly.
         """
-        Object.select(self, value, cascade)
+        Object.activate(self, value, cascade)
         # Cascade Select *upwards* for Features, but *do not* cascade Deselect upwards
         if value and self._container:
-            self._container.select(True, False)
+            self._container.activate(True, False)
 
     def __str__(self) -> str:
         """Return a string representation."""

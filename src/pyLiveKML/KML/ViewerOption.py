@@ -4,7 +4,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import ViewerOptionEnum
 from pyLiveKML.KML.utils import with_ns
-from pyLiveKML.KML._BaseObject import _BaseObject
+from pyLiveKML.KML.Object import _BaseObject
 
 
 class ViewerOption(_BaseObject):

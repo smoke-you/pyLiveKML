@@ -5,7 +5,7 @@ from abc import ABC
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import UnitsEnum
-from pyLiveKML.KML._BaseObject import _BaseObject
+from pyLiveKML.KML.Object import _BaseObject
 
 
 class Vec2(_BaseObject, ABC):

@@ -2,7 +2,7 @@
 
 from abc import ABC
 
-from pyLiveKML.KMLObjects.Object import Object
+from pyLiveKML.KML.Object import Object
 
 
 class Geometry(Object, ABC):

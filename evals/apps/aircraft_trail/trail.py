@@ -64,7 +64,7 @@ trail_data: list[AircraftTrail] = [
     for file in locdir.parent.joinpath("aircraft_data").glob("*.json")
 ]
 for a in trail_data:
-    a.select(False, True)
+    a.activate(False, True)
 trail = KMLApp(
     "Trail", description, "/trail", trail_app, cast(list[Feature], trail_data)
 )
@@ -95,7 +95,7 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
     for s in select_list:
         for f in cast(NetworkLinkControl, trail.sync).container:
             if s.id == f.id:
-                f.select(s.checked, True)
+                f.activate(s.checked, True)
                 break
 
 

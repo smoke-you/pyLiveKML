@@ -54,7 +54,7 @@ class GeoShape(Placemark, ABC):
             ),
         )
         ABC.__init__(self)
-        self.select(selected)
+        self.activate(selected)
 
     @property
     def polygon(self) -> Polygon:

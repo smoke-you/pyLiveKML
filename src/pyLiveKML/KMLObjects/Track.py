@@ -6,7 +6,7 @@ from lxml import etree  # type: ignore
 
 from dateutil.parser import parse as dtparse
 from pyLiveKML.KML import AltitudeModeEnum
-from pyLiveKML.KML._BaseObject import (
+from pyLiveKML.KML.Object import (
     _FieldDef,
     Angle180,
     Angle360,
@@ -17,7 +17,7 @@ from pyLiveKML.KML.errors import TrackElementsMismatch
 from pyLiveKML.KML.utils import with_ns
 from pyLiveKML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KMLObjects.Model import Model
-from pyLiveKML.KMLObjects.Object import ObjectChild, _ChildDef
+from pyLiveKML.KML.Object import ObjectChild, _ChildDef
 from pyLiveKML.KMLObjects.Schema import Schema
 
 

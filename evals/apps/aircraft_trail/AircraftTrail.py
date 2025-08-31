@@ -4,7 +4,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML import ListItemTypeEnum, Folder, ListStyle, Style
 from pyLiveKML.KMLObjects.Object import Object, ObjectState
-from pyLiveKML.KML._BaseObject import _BaseObject
+from pyLiveKML.KML.Object import _BaseObject
 
 from .AircraftData import AircraftData
 from .AircraftPosition import AircraftPosition
@@ -55,7 +55,7 @@ class AircraftTrail(Folder):
             self.__idx = 0
         data_point = self.data[self.__idx]
         new_pos = AircraftPosition(data_point)
-        new_pos.select(True)
+        new_pos.activate(True)
         self.append(new_pos)
         while len(self) > self.trail_sz:
             self.remove(self[0])

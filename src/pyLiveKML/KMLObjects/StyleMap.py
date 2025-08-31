@@ -3,8 +3,8 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import StyleStateEnum
-from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
-from pyLiveKML.KMLObjects.Object import _ChildDef
+from pyLiveKML.KML.Object import _BaseObject, _FieldDef
+from pyLiveKML.KML.Object import _ChildDef
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.Style import Style
 

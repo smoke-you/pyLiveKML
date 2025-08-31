@@ -1,7 +1,9 @@
+"""Object module."""
+
 from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Any, Generic, Iterable, Iterator, NamedTuple, Type, TypeVar, cast
-
+from uuid import uuid4, UUID
 
 from lxml import etree  # type: ignore
 
@@ -171,13 +173,6 @@ class _FieldDef:
         self.dumper = dumper
 
 
-_LOB = TypeVar("_LOB")
-
-
-class _ListObject(list[_LOB], Generic[_LOB]):
-    pass
-
-
 class _ChildDef:
 
     def __init__(
@@ -210,10 +205,12 @@ class _BaseObject(ABC):
     _kml_tag: str = ""
     _kml_fields: tuple[_FieldDef, ...] = tuple()
     _direct_children: tuple[_ChildDef, ...] = tuple()
+    _suppress_id: bool = True
 
     def __init__(self) -> None:
         """Object instance constructor."""
         super().__init__()
+        self._id = uuid4()
         self._selected: bool = False
         self._container: _BaseObject | None = None
         self._state: ObjectState = ObjectState.IDLE
@@ -221,8 +218,11 @@ class _BaseObject(ABC):
     def __setattr__(self, name: str, value: Any) -> None:
         """Object setattr method."""
         match = next(filter(lambda x: x.name == name, self._kml_fields), None)
-        value = match.parser.parse(value) if match is not None else value
-        changed = value != getattr(self, name)
+        changed = False
+        if match is not None:
+            value = match.parser.parse(value)
+            if value != getattr(self, name, None):
+                changed = True
         super().__setattr__(name, value)
         if changed:
             self.field_changed()
@@ -235,6 +235,11 @@ class _BaseObject(ABC):
                 self._kml_fields,
             )
         )
+
+    @property
+    def id(self) -> UUID:
+        """The unique identifier of this :class:`~pyLiveKML.KMLObjects.Object`."""
+        return self._id
 
     @property
     def state(self) -> ObjectState:
@@ -256,7 +261,7 @@ class _BaseObject(ABC):
 
     @active.setter
     def active(self, value: bool) -> None:
-        self.select(value)
+        self.activate(value)
 
     @property
     def children(self) -> Iterator["ObjectChild"]:
@@ -449,11 +454,11 @@ class _BaseObject(ABC):
         ):
             self._state = ObjectState.IDLE
 
-    def select(self, value: bool, cascade: bool = False) -> None:
-        """Select or deselect this :class:`~pyLiveKML.KMLObjects.Object` for display in GEP.
+    def activate(self, value: bool, cascade: bool = False) -> None:
+        """Activate or deactivate this :class:`~pyLiveKML.KMLObjects.Object` for display in GEP.
 
-        :param bool value: True for selection, False for deselection
-        :param bool cascade: True if the selection is to be cascaded to all child Objects.
+        :param bool value: True for activation, False for deactivation
+        :param bool cascade: True if the activation is to be cascaded to all child Objects.
         """
         if self._state == ObjectState.CREATING:
             self._state = ObjectState.IDLE if not value else self._state
@@ -467,13 +472,62 @@ class _BaseObject(ABC):
             self._state = ObjectState.CHANGING if value else self._state
         else:  # implies default state is IDLE
             self._state = ObjectState.CREATING if value else self._state
-        # cascade Select downwards for Children
+        # cascade Activate downwards for Children
         if value:
             for c in self.children:
-                c.child.select(True)
+                c.child.activate(True)
         else:
             for c in self.children:
                 c.child.force_idle()
+
+
+class Object(_BaseObject, ABC):
+    """A KML 'Object', per https://developers.google.com/kml/documentation/kmlreference#object.
+
+    Note that the :class:`~pyLiveKML.KMLObjects.Object` class is explicitly abstract,
+    and is the base class from which most other KML elements (anything with an :attr:`id`
+    property) derive.
+    """
+
+    _suppress_id: bool = False
+
+    def __init__(self) -> None:
+        """Object instance constructor."""
+        super().__init__()
+
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element.
+
+        Generate the KML representation of the internal fields of this
+        :class:`~pyLiveKML.KMLObjects.Object`, and append it to the provided root
+        etree.Element.
+
+        :param etree.Element root: The root XML element that will be appended to.
+        :param bool with_children: True if the children of this instance should be
+            included in the build.
+        """
+        super().build_kml(root, with_children)
+        if with_children:
+            for dc in self.direct_children:
+                id = None
+                if not getattr(dc, "_suppress_id", True):
+                    id = getattr(dc, "id", None)
+                attribs = None if id is None else {"id": str(id)}
+                branch = etree.SubElement(root, with_ns(dc._kml_tag), attrib=attribs)
+                dc.build_kml(branch, True)
+
+    def construct_kml(self) -> etree.Element:
+        """Construct this :class:`~pyLiveKML.KMLObjects.Object`'s KML representation.
+
+        :returns: The KML representation of the object as an etree.Element.
+        """
+        if self._suppress_id:
+            attribs = None
+        else:
+            attribs = {"id": str(self.id)}
+        root = etree.Element(_tag=with_ns(self.kml_tag), attrib=attribs)
+        self.build_kml(root)
+        return root
 
 
 ObjectChild = NamedTuple(
@@ -481,3 +535,33 @@ ObjectChild = NamedTuple(
 )
 """Named tuple that describes a parent:child relationship between two :class:`~pyLiveKML.KMLObjects.Object` instances.
 """
+
+
+_LOB = TypeVar("_LOB", bound="_BaseObject")
+
+
+class _ListObject(_BaseObject, list[_LOB], Generic[_LOB]):
+    """Internal class for KML objects that may contain a list of a type of child object.
+
+    The most obvious example is `Container` and it's subclasses `Document` and `Folder`,
+    but there are others: `MultiGeometry`, `MultiTrack`, `Schema` and `Tour`.
+
+    The point to this is to allow for detection and handling of changes to the contents
+    of these lists.
+    """
+
+    def clear(self) -> None:
+        self.field_changed()
+        super().clear()
+
+    def remove(self, value: _LOB) -> None:
+        self.field_changed()
+        super().remove(value)
+
+    def append(self, value: _LOB) -> None:
+        self.field_changed()
+        super().append(value)
+
+    def extend(self, iterable: Iterable[_LOB]) -> None:
+        self.field_changed()
+        super().extend(iterable)

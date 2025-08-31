@@ -5,7 +5,7 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import AltitudeModeEnum
-from pyLiveKML.KML._BaseObject import (
+from pyLiveKML.KML.Object import (
     _FieldDef,
     Angle90,
     Angle180,

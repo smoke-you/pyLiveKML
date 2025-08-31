@@ -3,8 +3,8 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import AltitudeModeEnum
-from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
-from pyLiveKML.KMLObjects.Object import Object, _ChildDef
+from pyLiveKML.KML.Object import _BaseObject, _FieldDef
+from pyLiveKML.KML.Object import Object, _ChildDef
 
 
 class LatLonAltBox(_BaseObject):

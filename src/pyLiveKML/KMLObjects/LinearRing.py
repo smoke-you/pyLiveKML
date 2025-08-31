@@ -5,7 +5,7 @@ from typing import Iterable, Iterator, cast
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import AltitudeModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef
+from pyLiveKML.KML.Object import _FieldDef
 from pyLiveKML.KML.GeoCoordinates import GeoCoordinates
 from pyLiveKML.KMLObjects.Geometry import Geometry
 

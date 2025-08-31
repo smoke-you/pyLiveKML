@@ -76,7 +76,7 @@ with open(locdir.joinpath("description.txt"), "r") as f:
 templates = Jinja2Templates(directory=locdir.joinpath("templates"))
 geodata: list[GeoShape] = [gpr, gpe]
 for g in geodata:
-    g.select(False, True)
+    g.activate(False, True)
 geometry = KMLApp(
     "Geometry", description, "/geometry", geo_app, cast(list[Feature], geodata)
 )
@@ -102,7 +102,7 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
     for s in select_list:
         for f in cast(NetworkLinkControl, geometry.sync).container:
             if s.id == f.id:
-                f.select(s.checked, True)
+                f.activate(s.checked, True)
                 break
 
 

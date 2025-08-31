@@ -4,8 +4,8 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML._BaseObject import _BaseObject
-from pyLiveKML.KMLObjects.Object import Object, _ListObject
+from pyLiveKML.KML.Object import _BaseObject
+from pyLiveKML.KML.Object import Object, _ListObject
 
 
 class SimpleField(_BaseObject):

@@ -3,8 +3,8 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import RefreshModeEnum, ViewRefreshModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef
-from pyLiveKML.KMLObjects.Object import Object
+from pyLiveKML.KML.Object import _FieldDef
+from pyLiveKML.KML.Object import Object
 
 
 class Link(Object):

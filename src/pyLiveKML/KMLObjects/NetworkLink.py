@@ -5,10 +5,9 @@ from typing import Iterator, Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import RefreshModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef
+from pyLiveKML.KML.Object import _FieldDef, ObjectChild, _ChildDef
 from pyLiveKML.KMLObjects.Feature import Feature
 from pyLiveKML.KMLObjects.Link import Link
-from pyLiveKML.KMLObjects.Object import ObjectChild, _ChildDef
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 
 

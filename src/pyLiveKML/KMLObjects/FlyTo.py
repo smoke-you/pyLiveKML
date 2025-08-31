@@ -5,9 +5,9 @@ from typing import Iterator
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import FlyToModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef
+from pyLiveKML.KML.Object import _FieldDef
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
-from pyLiveKML.KMLObjects.Object import _ChildDef
+from pyLiveKML.KML.Object import _ChildDef
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 

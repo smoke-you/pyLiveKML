@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from pyLiveKML.KML._BaseObject import Angle90, Angle180
+from pyLiveKML.KML.Object import Angle90, Angle180
 
 
 class GeoCoordinates:

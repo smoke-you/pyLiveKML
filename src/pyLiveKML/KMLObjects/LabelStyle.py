@@ -3,7 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import ColorModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef
+from pyLiveKML.KML.Object import _FieldDef
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KMLObjects.ColorStyle import ColorStyle
 

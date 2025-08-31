@@ -56,7 +56,7 @@ tracker_data = [
     for file in locdir.parent.joinpath("aircraft_data").glob("*.json")
 ]
 for a in tracker_data:
-    a.select(False, True)
+    a.activate(False, True)
 tracker = KMLApp(
     "Tracker", description, "/tracker", tracker_app, cast(list[Feature], tracker_data)
 )
@@ -79,5 +79,5 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
     for s in select_list:
         for f in cast(NetworkLinkControl, tracker.sync).container:
             if s.id == f.id:
-                f.select(s.checked, True)
+                f.activate(s.checked, True)
                 break

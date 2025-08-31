@@ -7,7 +7,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.ViewerOption import ViewerOption
 from pyLiveKML.KML.utils import with_ns
-from pyLiveKML.KMLObjects.Object import Object, ObjectChild, _ChildDef
+from pyLiveKML.KML.Object import Object, ObjectChild, _ChildDef
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
 
 

@@ -5,9 +5,9 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import ItemIconModeEnum, ListItemTypeEnum
-from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef, ColorParse
+from pyLiveKML.KML.Object import _BaseObject, _FieldDef, ColorParse
 from pyLiveKML.KML.GeoColor import GeoColor
-from pyLiveKML.KMLObjects.Object import _ChildDef
+from pyLiveKML.KML.Object import _ChildDef
 from pyLiveKML.KMLObjects.SubStyle import SubStyle
 
 

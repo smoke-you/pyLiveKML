@@ -5,10 +5,10 @@ from typing import Iterable, Iterator
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import AltitudeModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef
+from pyLiveKML.KML.Object import _FieldDef
 from pyLiveKML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KMLObjects.LinearRing import LinearRing
-from pyLiveKML.KMLObjects.Object import Object, ObjectChild, _ChildDef
+from pyLiveKML.KML.Object import Object, ObjectChild, _ChildDef
 
 
 class _OuterBoundary(Object):

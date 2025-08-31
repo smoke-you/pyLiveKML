@@ -4,7 +4,7 @@ from abc import ABC
 from typing import cast
 
 from pyLiveKML.KML import ColorModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef, NoParse, ColorParse, DumpDirect
+from pyLiveKML.KML.Object import _FieldDef, NoParse, ColorParse, DumpDirect
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KMLObjects.SubStyle import SubStyle
 

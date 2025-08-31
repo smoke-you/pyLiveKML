@@ -3,11 +3,11 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import ColorModeEnum
-from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef, NoDump
+from pyLiveKML.KML.Object import _BaseObject, _FieldDef, NoDump
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.Vec2 import HotSpot
 from pyLiveKML.KMLObjects.ColorStyle import ColorStyle
-from pyLiveKML.KMLObjects.Object import _ChildDef
+from pyLiveKML.KML.Object import _ChildDef
 
 
 class _IconStyle_Icon(_BaseObject):
