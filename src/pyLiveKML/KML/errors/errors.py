@@ -15,3 +15,19 @@ class FeatureInaccessibleError(FeatureError):
     """
 
     pass
+
+
+class TrackError(FeatureError):
+    """Wrapper class for errors with :class:`~Track` classes and subclasses."""
+
+    pass
+
+
+class TrackElementsMismatch(TrackError):
+    """Indicates that there was a problem with the `elements` data passed to a :class:`~Track`.
+
+    This typically occurs when the `elements` data has mismatched lengths for its
+    `extended_data` fields.
+    """
+
+    pass

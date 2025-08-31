@@ -4,3 +4,5 @@ lxml
 mypy
 ruff
 sphinx
+python-dateutil
+types-python-dateutil

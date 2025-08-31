@@ -1,10 +1,10 @@
 """Track module."""
 
 from datetime import datetime
-from typing import Iterator, Iterable
-
+from typing import Iterator, Iterable, Any
 from lxml import etree  # type: ignore
 
+from dateutil.parser import parse as dtparse
 from pyLiveKML.KML import AltitudeModeEnum
 from pyLiveKML.KML._BaseObject import (
     _FieldDef,
@@ -13,10 +13,12 @@ from pyLiveKML.KML._BaseObject import (
     Angle90,
     AnglePos180,
 )
+from pyLiveKML.KML.errors import TrackElementsMismatch
 from pyLiveKML.KML.utils import with_ns
 from pyLiveKML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KMLObjects.Model import Model
 from pyLiveKML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KMLObjects.Schema import Schema
 
 
 class TrackCoord:
@@ -27,18 +29,16 @@ class TrackCoord:
         longitude: float = 0,
         latitude: float = 0,
         altitude: float = 0,
-        empty: bool = False,
     ):
         """TrackCoord instance constructor."""
         super().__init__()
         self.longitude = Angle180.parse(longitude)
         self.latitude = Angle90.parse(latitude)
         self.altitude = altitude
-        self.empty = empty
 
     def __str__(self) -> str:
         """Return a string representation."""
-        return "" if self.empty else f"{self.longitude} {self.latitude} {self.altitude}"
+        return f"{self.longitude} {self.latitude} {self.altitude}"
 
 
 class TrackAngles:
@@ -49,27 +49,16 @@ class TrackAngles:
         heading: float = 0,
         tilt: float = 0,
         roll: float = 0,
-        empty: bool = False,
     ) -> None:
         """TrackAngles instance constructor."""
         super().__init__()
         self.heading = Angle360.parse(heading)
         self.tilt = AnglePos180.parse(tilt)
         self.roll = Angle180.parse(roll)
-        self.empty = empty
 
     def __str__(self) -> str:
         """Return a string representation."""
-        return "" if self.empty else f"{self.heading} {self.tilt} {self.roll}"
-
-
-class TrackExtendedData:
-    """Extended data class, specific to the <gx:Track> KML tag."""
-
-    def __init__(self, schema_url: str, data: dict[str, str]) -> None:
-        """TrackExtendedData instance constructor."""
-        self.schema_url = schema_url
-        self.data = data
+        return f"{self.heading} {self.tilt} {self.roll}"
 
 
 class TrackElement:
@@ -81,16 +70,27 @@ class TrackElement:
 
     def __init__(
         self,
-        when: datetime,
-        coords: TrackCoord,
-        angles: TrackAngles,
-        extended_data: TrackExtendedData | None = None,
+        when: datetime | str,
+        coords: TrackCoord | tuple[float, ...] | None,
+        angles: TrackAngles | tuple[float, ...] | None,
+        extended_data: dict[str, dict[str, Any]] | None = None,
     ) -> None:
         """TrackElement instance constructor."""
         super().__init__()
-        self.when = when
-        self.coords = coords
-        self.angles = angles
+        if isinstance(when, datetime):
+            self.when = when
+        else:
+            self.when = dtparse(when)
+        self.coords: TrackCoord | None = None
+        if coords is None or isinstance(coords, TrackCoord):
+            self.coords = coords
+        else:
+            self.coords = TrackCoord(*coords)
+        self.angles: TrackAngles | None = None
+        if angles is None or isinstance(angles, TrackAngles):
+            self.angles = angles
+        else:
+            self.angles = TrackAngles(*angles)
         self.extended_data = extended_data
 
 
@@ -113,12 +113,42 @@ class Track(Geometry):
         Geometry.__init__(self)
         self.altitude_mode = altitude_mode
         self.model = model
-        self.elements = list[TrackElement]()
-        if elements is not None:
-            if isinstance(elements, TrackElement):
-                self.elements.append(elements)
-            else:
-                self.elements.extend(elements)
+        self._schemas = dict[str, set[str]]()
+        self._elements = list[TrackElement]()
+        self.elements = elements
+
+    @property
+    def elements(self) -> Iterator[TrackElement]:
+        """Retrieve a generator over the set of enclosed `TrackElements`."""
+        yield from self._elements
+
+    @elements.setter
+    def elements(self, value: TrackElement | Iterable[TrackElement] | None) -> None:
+        self._elements.clear()
+        self._schemas.clear()
+        if value is None:
+            return
+        if isinstance(value, TrackElement):
+            self._elements.append(value)
+        else:
+            xdlens = set[int]()
+            for e in value:
+                if e.extended_data is None:
+                    xdlens.add(0)
+                else:
+                    for fname in e.extended_data.values():
+                        for fval in fname.values():
+                            xdlens.add(0 if fval is None else len(fval))
+            if len(xdlens) != 1:
+                raise TrackElementsMismatch()
+            self._elements.extend(value)
+            for xd in (
+                e.extended_data for e in self._elements if e.extended_data is not None
+            ):
+                for schema, fields in xd.items():
+                    if schema not in self._schemas:
+                        self._schemas[schema] = set[str]()
+                    self._schemas[schema].update(fields.keys())
 
     @property
     def children(self) -> Iterator[ObjectChild]:
@@ -129,44 +159,33 @@ class Track(Geometry):
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
+        value: str
         for e in self.elements:
             etree.SubElement(root, with_ns("when")).text = e.when.isoformat()
         for e in self.elements:
-            etree.SubElement(root, with_ns("gx:coord")).text = str(e.coords)
+            value = "" if e.coords is None else str(e.coords)
+            etree.SubElement(root, with_ns("gx:coord")).text = value
         for e in self.elements:
-            etree.SubElement(root, with_ns("gx:angles")).text = str(e.angles)
+            value = "" if e.angles is None else str(e.angles)
+            etree.SubElement(root, with_ns("gx:angles")).text = value
 
-        # TODO: fix this, just... fix it
-        # Under each <SchemaData> tag, it needs to create one <gx:SimpleDataArray> tag
-        # for each key in the TrackExtendedData.data dict.
-        # Under each <gx:SimpleDataArray> tag, it needs to create one <gx:value> tag
-        # for each TrackElement in self. The tags that have a corresponding schema and
-        # array should contain the corresponding value from the TrackExtendedData.dict,
-        # while the tags that do not have corresponding parents should contain empty
-        # strings.
-        xdata = {
-            schu: dict[str, list[str]]()
-            for schu in sorted(
-                {e.extended_data.schema_url for e in self.elements if e.extended_data}
-            )
-        }
-        for txd in (e.extended_data for e in self.elements if e.extended_data):
-            for txn, txv in txd.data.items():
-                if txn not in xdata[txd.schema_url]:
-                    xdata[txd.schema_url][txn] = list[str]()
-                xdata[txd.schema_url][txn].append(txv)
-        if not xdata:
-            return
-        xdroot = etree.SubElement(root, "ExtendedData")
-        for xsch, xschd in xdata.items():
-            xchroot = etree.SubElement(
-                xdroot, "SchemaData", attrib={"schema_url": xsch}
-            )
-            for kn, kv in xschd.items():
-                knroot = etree.SubElement(
-                    xchroot,
-                    with_ns("gx:SimpleArrayData"),
-                    attrib={with_ns("kml:name"): kn},
-                )
-                for v in kv:
-                    etree.SubElement(knroot, with_ns("gx:value")).text = v
+        if self._schemas:
+            e_xd = etree.SubElement(root, "ExtendedData")
+            for sch, fields in self._schemas.items():
+                e_sch = etree.SubElement(e_xd, "SchemaData", attrib={"schemaUrl": sch})
+                for f in sorted(fields):
+                    e_field = etree.SubElement(
+                        e_sch,
+                        with_ns("gx:SimpleArrayData"),
+                        attrib={with_ns("kml:name"): f},
+                    )
+                    for e in self.elements:
+                        value = ""
+                        if (
+                            e.extended_data
+                            and sch in e.extended_data
+                            and f in e.extended_data[sch]
+                            and e.extended_data[sch][f] is not None
+                        ):
+                            value = str(e.extended_data[sch][f])
+                        etree.SubElement(e_field, with_ns("gx:value")).text = value

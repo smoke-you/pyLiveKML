@@ -123,7 +123,9 @@ class Angle360(_KMLParser):
     def parse(cls, value: Any) -> Any:
         """Transform the argument."""
         value = float(value)
-        return value % 360 if value > 360 else -(-value % 360) if value < 360 else value
+        return (
+            value % 360 if value > 360 else -(-value % 360) if value < -360 else value
+        )
 
 
 class ColorParse(_KMLParser):

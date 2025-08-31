@@ -32,7 +32,6 @@ class Placemark(Feature):
     """
 
     _kml_tag = "Placemark"
-    _direct_children = Feature._direct_children + ("geometry",)
 
     def __init__(
         self,

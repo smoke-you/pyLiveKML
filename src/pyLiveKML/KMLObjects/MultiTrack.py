@@ -17,7 +17,7 @@ class MultiTrack(Geometry, list[Track]):
     _kml_tag = "gx:MultiTrack"
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("altitude_mode", "gx:altitudeMode"),
-        _FieldDef("interpolate"),
+        _FieldDef("interpolate", "gx:interpolate"),
     )
 
     def __init__(
