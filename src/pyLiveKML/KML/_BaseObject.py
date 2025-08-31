@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Any, Type
+from typing import Any, Type, Iterator, Iterable, NamedTuple, cast
 
 from lxml import etree  # type: ignore
 
@@ -170,10 +170,49 @@ class _FieldDef:
         self.dumper = dumper
 
 
+class _ListObject:
+    pass
+
+
+class _ChildDef:
+
+    def __init__(
+        self,
+        name: str,
+        tag: str | None = None,
+        use_tag: bool = True,
+    ) -> None:
+        self.name = name
+        self.tag = name if tag is None else tag
+        self.use_tag = use_tag
+
+
+class ObjectState(Enum):
+    """Enumeration of possible states that objects derived from KML :class:`~pyLiveKML.KMLObjects.Object` may hold.
+
+    The 'State' enumeration is specific to the :mod:`pyLiveKML` package, i.e. it is *not* part of the KML specification.
+    """
+
+    IDLE = 0
+    CREATING = 1
+    CREATED = 2
+    CHANGING = 3
+    DELETE_CREATED = 4
+    DELETE_CHANGED = 5
+
+
 class _BaseObject(ABC):
 
     _kml_tag: str = ""
     _kml_fields: tuple[_FieldDef, ...] = tuple()
+    _direct_children: tuple[_ChildDef, ...] = tuple()
+
+    def __init__(self) -> None:
+        """Object instance constructor."""
+        super().__init__()
+        self._selected: bool = False
+        self._container: _BaseObject | None = None
+        self._state: ObjectState = ObjectState.IDLE
 
     def __setattr__(self, name: str, value: Any) -> None:
         """Object setattr method."""
@@ -183,12 +222,80 @@ class _BaseObject(ABC):
 
     def __eq__(self, value: object) -> bool:
         """Object eq method."""
-        return isinstance(value, type(self)) and all(
+        return isinstance(value, self.__class__) and all(
             map(
                 lambda x: getattr(self, x.name) == getattr(value, x.name),
                 self._kml_fields,
             )
         )
+
+    @property
+    def state(self) -> ObjectState:
+        """The current GEP synchronization state of this :class:`~pyLiveKML.KMLObjects.Object`."""
+        return self._state
+
+    @property
+    def selected(self) -> bool:
+        """Flag to indicate whether the instance has been selected for display.
+
+        True if this :class:`~pyLiveKML.KMLObjects.Object` has been created in the
+        UI and is not scheduled for deletion, otherwise False.
+        """
+        return (
+            ObjectState.CREATING,
+            ObjectState.CREATED,
+            ObjectState.CHANGING,
+        ).__contains__(self._state)
+
+    @selected.setter
+    def selected(self, value: bool) -> None:
+        self.select(value)
+
+    @property
+    def children(self) -> Iterator["ObjectChild"]:
+        """The children of the instance.
+
+        A generator to retrieve the children of this :class:`~pyLiveKML.KMLObjects.Object` as
+        :class:`~pyLiveKML.KMLObjects.Object.ObjectChild` instances.
+
+        :returns: A generator of :class:`~pyLiveKML.KMLObjects.Object.ObjectChild` named tuples that describes
+            each child :class:`~pyLiveKML.KMLObjects.Object` as a (parent, child)
+        """
+        # The return; yield pattern is used to trick linters into accepting that this is a generator that yields
+        # nothing, as opposed to yielding None
+        for c in self._direct_children:
+            c_obj = getattr(self, c.name, None)
+            if c_obj:
+                if isinstance(c_obj, Iterable):
+                    for cc in c_obj:
+                        yield ObjectChild(self, cc)
+                else:
+                    yield ObjectChild(self, c_obj)
+
+
+    @property
+    def direct_children(self) -> Iterator["_BaseObject"]:
+        """Retrieve a generator over the direct children of the object.
+
+        That is, retrieve any `Object` instances that are embedded in this `Object`.
+        """
+        for dc in self._direct_children:
+            dcobj = getattr(self, dc.name, None)
+            if dcobj: 
+                if isinstance(dcobj, _BaseObject):
+                    if isinstance(dcobj, _ListObject):
+                        yield cast(_BaseObject, dcobj)
+                    elif isinstance(dcobj, Iterable):
+                        yield from dcobj
+                    else:
+                        yield dcobj
+                elif isinstance(dcobj, Iterable):
+                    for elem in dcobj:
+                        if isinstance(elem, _BaseObject):
+                            yield elem
+        if isinstance(self, _ListObject):
+            for c in cast(list[_BaseObject], self):
+                yield c
 
     @property
     def kml_tag(self) -> str:
@@ -223,3 +330,148 @@ class _BaseObject(ABC):
         root = etree.Element(_tag=with_ns(self.kml_tag))
         self.build_kml(root)
         return root
+
+    def update_kml(self, parent: "_BaseObject", update: etree.Element) -> None:
+        """Update this :class:`~pyLiveKML.KMLObjects.Object`'s KML representation.
+
+        Retrieve a complete child <Create>, <Change> or <Delete> KML tag as a child of an <Update> tag.
+        The type of child tag retrieved is dependent on the current state of this
+        :class:`~pyLiveKML.KMLObjects.Object`.
+
+        :param Object parent: The immediate parent :class:`~pyLiveKML.KMLObjects.Object` of this
+            :class:`~pyLiveKML.KMLObjects.Object`. The parent is required only for <Create> tags.
+        :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
+        """
+        if self._state == ObjectState.CREATING:
+            self.create_kml(parent, update)
+        elif self._state == ObjectState.CHANGING:
+            self.change_kml(update)
+        elif (
+            self._state == ObjectState.DELETE_CREATED
+            or self._state == ObjectState.DELETE_CHANGED
+        ):
+            self.delete_kml(update)
+        self.update_generated()
+
+    def create_kml(self, parent: "_BaseObject", update: etree.Element) -> etree.Element:
+        """Construct a complete <Create> element tree as a child of an <Update> tag.
+
+        :param Object parent: The immediate parent :class:`~pyLiveKML.KMLObjects.Object` of this
+            :class:`~pyLiveKML.KMLObjects.Object`. The parent must be specified for GEP synchronization.
+        :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
+        """
+        create = etree.Element("Create")
+        p_id = getattr(parent, "id", None)
+        attribs = None
+        if p_id is not None:
+            attribs = {"targetId": str(p_id)}
+        parent_element = etree.SubElement(
+            create, _tag=with_ns(parent.kml_tag), attrib=attribs
+        )
+        item = self.construct_kml()
+        parent_element.append(item)
+        update.append(create)
+        return item
+
+    def change_kml(self, update: etree.Element) -> None:
+        """Construct a complete <Change> element tree as a child of an <Update> tag.
+
+        :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
+        """
+        change = etree.Element("Change")
+        p_id = getattr(self, "id", None)
+        attribs = None
+        if p_id is not None:
+            attribs = {"targetId": str(p_id)}
+        item = etree.SubElement(change, _tag=with_ns(self.kml_tag), attrib=attribs)
+        self.build_kml(item, with_children=False)
+        update.append(change)
+
+    def delete_kml(self, update: etree.Element) -> None:
+        """Construct a complete <Delete> element tree as a child of an <Update> tag.
+
+        :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
+        """
+        delete = etree.Element("Delete")
+        p_id = getattr(self, "id", None)
+        attribs = None
+        if p_id is not None:
+            attribs = {"targetId": str(p_id)}
+        etree.SubElement(delete, _tag=with_ns(self.kml_tag), attrib=attribs)
+        update.append(delete)
+
+    def force_idle(self) -> None:
+        """Force this :class:`~pyLiveKML.KMLObjects.Object` and **all of its children** to the IDLE state.
+
+        This is typically done after the object has been deselected, which will cause
+        it to be deleted from GEP at the next synchronization update. When the
+        :class:`~pyLiveKML.KMLObjects.Object` is deleted by GEP, all of its
+        children, and any :class:`~pyLiveKML.KMLObjects.Feature` objects that it
+        encloses, will also be automatically deleted. There is no need to emit <Delete>
+        tags for these deletions, and in fact doing so will likely cause GEP to have
+        conniptions.
+        """
+        self._state = ObjectState.IDLE
+        for c in self.children:
+            c.child.force_idle()
+
+    def field_changed(self) -> None:
+        """Flag that a field or property of this :class:`~pyLiveKML.KMLObjects.Object` has changed.
+
+        If this flag is set, it indicates that re-synchronization with GEP may be required.
+        """
+        if self._state == ObjectState.CREATED:  # or self._state == State.IDLE:
+            self._state = ObjectState.CHANGING
+        elif self._state == ObjectState.DELETE_CREATED:
+            self._state = ObjectState.DELETE_CHANGED
+        elif self._state == ObjectState.IDLE:
+            pass
+
+    def update_generated(self) -> None:
+        """Modify the state of the :class:`~pyLiveKML.KMLObjects.Object` to reflect that a synchronization update has been emitted."""
+        if self._state == ObjectState.CREATING:
+            self._state = ObjectState.CREATED
+            # if the object is being created, so are all of its descendants, in a single tag; set them created too
+            for c in self.children:
+                c.child.update_generated()
+        elif self._state == ObjectState.CHANGING:
+            # if the object is changing, don't mess with its descendants - they are updated elsewhere if necessary
+            self._state = ObjectState.CREATED
+        elif (
+            self._state == ObjectState.DELETE_CREATED
+            or self._state == ObjectState.DELETE_CHANGED
+        ):
+            self._state = ObjectState.IDLE
+
+    def select(self, value: bool, cascade: bool = False) -> None:
+        """Select or deselect this :class:`~pyLiveKML.KMLObjects.Object` for display in GEP.
+
+        :param bool value: True for selection, False for deselection
+        :param bool cascade: True if the selection is to be cascaded to all child Objects.
+        """
+        if self._state == ObjectState.CREATING:
+            self._state = ObjectState.IDLE if not value else self._state
+        elif self._state == ObjectState.CREATED:
+            self._state = ObjectState.DELETE_CREATED if not value else self._state
+        elif self._state == ObjectState.CHANGING:
+            self._state = ObjectState.DELETE_CHANGED if not value else self._state
+        elif self._state == ObjectState.DELETE_CREATED:
+            self._state = ObjectState.CREATING if value else self._state
+        elif self._state == ObjectState.DELETE_CHANGED:
+            self._state = ObjectState.CHANGING if value else self._state
+        else:  # implies default state is IDLE
+            self._state = ObjectState.CREATING if value else self._state
+        # cascade Select downwards for Children
+        if value:
+            for c in self.children:
+                c.child.select(True)
+        else:
+            for c in self.children:
+                c.child.force_idle()
+
+
+ObjectChild = NamedTuple(
+    "ObjectChild", [("parent", _BaseObject), ("child", _BaseObject)]
+)
+"""Named tuple that describes a parent:child relationship between two :class:`~pyLiveKML.KMLObjects.Object` instances.
+"""

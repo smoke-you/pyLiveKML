@@ -78,32 +78,32 @@ class NetworkLinkControl(_BaseObject):
         self.abstract_view = abstract_view
         self.update = Update(target_href)
 
-    def update_kml(self) -> etree.Element:
+    def update_kml(self, parent: "_BaseObject", update: etree.Element) -> etree.Element:
         """Generate a synchronization update by parsing the :attr:`container`.
 
         :return: The synchronization update.
         :rtype: etree.Element
         """
         root = self.construct_kml()
-        update = self.update.construct_kml()
+        _update = self.update.construct_kml()
 
         for f in self.container.containers:
-            f.feature.update_kml(f.container, update)
+            f.feature.update_kml(f.container, _update)
             for c in f.feature.children:
-                c.child.update_kml(c.parent, update)
+                c.child.update_kml(c.parent, _update)
             if isinstance(f.feature, Container):
                 for d in f.feature.flush:
-                    d.delete_kml(update)
+                    d.delete_kml(_update)
 
         for f in self.container.features:
-            if len(update) >= self.container.update_limit:
+            if len(_update) >= self.container.update_limit:
                 break
             if f.feature._state == ObjectState.CREATING:
-                f.feature.update_kml(f.container, update)
+                f.feature.update_kml(f.container, _update)
             else:
-                f.feature.update_kml(f.container, update)
+                f.feature.update_kml(f.container, _update)
                 for c in f.feature.children:
-                    c.child.update_kml(c.parent, update)
+                    c.child.update_kml(c.parent, _update)
 
-        root.append(update)
+        root.append(_update)
         return root

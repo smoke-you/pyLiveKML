@@ -83,8 +83,8 @@ class StyleMap(StyleSelector):
 
     _kml_tag = "StyleMap"
     _direct_children = StyleSelector._direct_children + (
-        _ChildDef("normal"),
-        _ChildDef("highlight"),
+        _ChildDef("_normal"),
+        _ChildDef("_highlight"),
     )
 
     def __init__(

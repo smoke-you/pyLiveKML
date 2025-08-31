@@ -34,7 +34,7 @@ async def _(request: Request) -> HTMLResponse:
 @simple_app.get("/simple_data.kml")
 async def _(request: Request) -> PlainTextResponse:
     root = kml_root_tag()
-    root.append(build_data.construct_kml(True))
+    root.append(build_data.construct_kml())
     return PlainTextResponse(
         content=etree.tostring(
             root, doctype=KML_DOCTYPE, encoding="utf-8", pretty_print=True

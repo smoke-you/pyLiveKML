@@ -58,8 +58,8 @@ class Polygon(Geometry):
         _FieldDef("tessellate"),
     )
     _direct_children = Geometry._direct_children + (
-        _ChildDef("outer_boundary"),
-        _ChildDef("inner_boundaries"),
+        _ChildDef("_outer_boundary"),
+        _ChildDef("_inner_boundaries"),
     )
 
     def __init__(
