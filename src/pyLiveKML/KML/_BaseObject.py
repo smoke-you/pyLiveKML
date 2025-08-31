@@ -218,7 +218,10 @@ class _BaseObject(ABC):
         """Object setattr method."""
         match = next(filter(lambda x: x.name == name, self._kml_fields), None)
         value = match.parser.parse(value) if match is not None else value
-        return super().__setattr__(name, value)
+        changed = value != getattr(self, name)
+        super().__setattr__(name, value)
+        if changed:
+            self.field_changed()
 
     def __eq__(self, value: object) -> bool:
         """Object eq method."""
@@ -235,7 +238,7 @@ class _BaseObject(ABC):
         return self._state
 
     @property
-    def selected(self) -> bool:
+    def active(self) -> bool:
         """Flag to indicate whether the instance has been selected for display.
 
         True if this :class:`~pyLiveKML.KMLObjects.Object` has been created in the
@@ -247,8 +250,8 @@ class _BaseObject(ABC):
             ObjectState.CHANGING,
         ).__contains__(self._state)
 
-    @selected.setter
-    def selected(self, value: bool) -> None:
+    @active.setter
+    def active(self, value: bool) -> None:
         self.select(value)
 
     @property

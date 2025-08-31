@@ -202,7 +202,7 @@ class Container(list[Feature], _ListObject, Feature, ABC):
 
         :param Feature __value: The :class:`~pyLiveKML.KMLObjects.Feature` to be removed.
         """
-        if __value.selected:
+        if __value.active:
             self.__deleted.append(__value)
         list[Feature].remove(self, __value)
 

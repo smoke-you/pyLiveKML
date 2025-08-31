@@ -78,7 +78,7 @@ class NetworkLinkControl(_BaseObject):
         self.abstract_view = abstract_view
         self.update = Update(target_href)
 
-    def update_kml(self, parent: "_BaseObject", update: etree.Element) -> etree.Element:
+    def build_update(self) -> etree.Element:
         """Generate a synchronization update by parsing the :attr:`container`.
 
         :return: The synchronization update.
