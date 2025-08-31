@@ -46,7 +46,7 @@ class SimpleField(_BaseObject):
         return root
 
 
-class Schema(list[SimpleField], _ListObject, Object):
+class Schema(_ListObject[SimpleField], Object):
     """A KML 'Schema', per https://developers.google.com/kml/documentation/kmlreference#schema."""
 
     _kml_tag = "Schema"
@@ -58,6 +58,7 @@ class Schema(list[SimpleField], _ListObject, Object):
     ) -> None:
         """Construct Schema instances."""
         Object.__init__(self)
+        _ListObject[SimpleField].__init__(self)
         self.name = name
         if isinstance(fields, SimpleField):
             self.append(fields)

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Any, Type, Iterator, Iterable, NamedTuple, cast
+from typing import Any, Generic, Iterable, Iterator, NamedTuple, Type, TypeVar, cast
+
 
 from lxml import etree  # type: ignore
 
@@ -170,7 +171,10 @@ class _FieldDef:
         self.dumper = dumper
 
 
-class _ListObject:
+_LOB = TypeVar("_LOB")
+
+
+class _ListObject(list[_LOB], Generic[_LOB]):
     pass
 
 
@@ -275,7 +279,6 @@ class _BaseObject(ABC):
                 else:
                     yield ObjectChild(self, c_obj)
 
-
     @property
     def direct_children(self) -> Iterator["_BaseObject"]:
         """Retrieve a generator over the direct children of the object.
@@ -284,7 +287,7 @@ class _BaseObject(ABC):
         """
         for dc in self._direct_children:
             dcobj = getattr(self, dc.name, None)
-            if dcobj: 
+            if dcobj:
                 if isinstance(dcobj, _BaseObject):
                     if isinstance(dcobj, _ListObject):
                         yield cast(_BaseObject, dcobj)

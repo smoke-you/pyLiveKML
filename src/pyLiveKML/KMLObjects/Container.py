@@ -17,7 +17,7 @@ from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
 
 
-class Container(list[Feature], _ListObject, Feature, ABC):
+class Container(_ListObject[Feature], Feature, ABC):
     """A KML 'Container', per https://developers.google.com/kml/documentation/kmlreference#container.
 
     :note: While Containers are explicitly abstract,
@@ -68,7 +68,6 @@ class Container(list[Feature], _ListObject, Feature, ABC):
         features: Feature | Iterable[Feature] | None = None,
     ):
         """Feature instance constructor."""
-        list[Feature].__init__(self)
         Feature.__init__(
             self,
             name=name,
@@ -87,6 +86,7 @@ class Container(list[Feature], _ListObject, Feature, ABC):
             styles=styles,
             region=region,
         )
+        _ListObject[Feature].__init__(self)
         ABC.__init__(self)
         self.__deleted: list[Feature] = list[Feature]()
         self.features = features
@@ -192,7 +192,7 @@ class Container(list[Feature], _ListObject, Feature, ABC):
 
         :param Feature item: The :class:`~pyLiveKML.KMLObjects.Feature` to be appended.
         """
-        list[Feature].append(self, item)
+        _ListObject[Feature].append(self, item)
 
     def remove(self, __value: Feature) -> None:
         """Remove a :class:`~pyLiveKML.KMLObjects.Feature` from this :class:`~pyLiveKML.KMLObjects.Container`.
@@ -204,7 +204,7 @@ class Container(list[Feature], _ListObject, Feature, ABC):
         """
         if __value.active:
             self.__deleted.append(__value)
-        list[Feature].remove(self, __value)
+        _ListObject[Feature].remove(self, __value)
 
     def force_idle(self, cascade: bool = False) -> None:
         """Force this instance, and _optionally_ its children, to the IDLE state.
@@ -214,7 +214,7 @@ class Container(list[Feature], _ListObject, Feature, ABC):
         instances, and child :class:`~pyLiveKML.KMLObjects.Object` instances, that is rooted in this
         :class:`~pyLiveKML.KMLObjects.Container` to be forced to the IDLE state.
         """
-        Object.force_idle(self)
+        super().force_idle()
         if cascade:
             self.force_features_idle()
 

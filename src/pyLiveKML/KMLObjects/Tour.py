@@ -10,15 +10,17 @@ from pyLiveKML.KMLObjects.Object import Object, _ListObject
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 
-class Playlist(list[TourPrimitive], _ListObject, _BaseObject):
+class Playlist(_ListObject[TourPrimitive], _BaseObject):
+    """Playlist child object, per https://developers.google.com/kml/documentation/kmlreference#gxtour."""
 
     _kml_tag = "gx:PlayList"
 
     def __init__(
         self, items: TourPrimitive | Iterable[TourPrimitive] | None = None
     ) -> None:
+        """Playlist instance constructor."""
         _BaseObject.__init__(self)
-        list[TourPrimitive].__init__(self)
+        _ListObject[TourPrimitive].__init__(self)
         if items is not None:
             if isinstance(items, TourPrimitive):
                 self.append(items)

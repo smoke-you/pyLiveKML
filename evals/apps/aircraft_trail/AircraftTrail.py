@@ -4,6 +4,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML import ListItemTypeEnum, Folder, ListStyle, Style
 from pyLiveKML.KMLObjects.Object import Object, ObjectState
+from pyLiveKML.KML._BaseObject import _BaseObject
 
 from .AircraftData import AircraftData
 from .AircraftPosition import AircraftPosition
@@ -37,7 +38,7 @@ class AircraftTrail(Folder):
         self.snippet = "Aircraft Trail"
         self.__idx: int = -1
 
-    def update_kml(self, parent: Object, update: etree.Element) -> None:
+    def update_kml(self, parent: _BaseObject, update: etree.Element) -> None:
         """Update the trail display."""
         # calculate trail behaviour **before** generating the update - see note in trail(), below
         self.trail()

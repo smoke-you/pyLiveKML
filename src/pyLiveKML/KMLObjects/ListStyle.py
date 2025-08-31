@@ -64,6 +64,7 @@ class ListStyle(SubStyle):
 
     @property
     def icons(self) -> Iterable[ItemIcon]:
+        """Generator across icon instances."""
         yield from self._icons
 
     @icons.setter

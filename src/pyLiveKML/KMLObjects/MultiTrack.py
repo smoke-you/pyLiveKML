@@ -11,7 +11,7 @@ from pyLiveKML.KMLObjects.Object import _ListObject
 from pyLiveKML.KMLObjects.Track import Track
 
 
-class MultiTrack(list[Track], _ListObject, Geometry):
+class MultiTrack(_ListObject[Track], Geometry):
     """A KML 'gx:MultiTrack', per https://developers.google.com/kml/documentation/kmlreference#gxmultitrack."""
 
     _kml_tag = "gx:MultiTrack"
@@ -28,6 +28,7 @@ class MultiTrack(list[Track], _ListObject, Geometry):
     ) -> None:
         """Track instance constructor."""
         Geometry.__init__(self)
+        _ListObject[Track].__init__(self)
         self.altitude_mode = altitude_mode
         self.interpolate = interpolate
         if tracks is not None:

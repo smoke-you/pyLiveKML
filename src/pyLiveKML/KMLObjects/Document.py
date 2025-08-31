@@ -77,6 +77,7 @@ class Document(Container):
 
     @property
     def schemas(self) -> Iterable[Schema]:
+        """Generator across schema instances."""
         yield from self._schemas
 
     @schemas.setter

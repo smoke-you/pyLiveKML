@@ -99,6 +99,7 @@ class StyleMap(StyleSelector):
 
     @property
     def normal(self) -> str | Style | None:
+        """Normal style reference or instance."""
         return self._normal.value
 
     @normal.setter
@@ -107,6 +108,7 @@ class StyleMap(StyleSelector):
 
     @property
     def highlight(self) -> str | Style | None:
+        """Highlight style reference or instance."""
         return self._highlight.value
 
     @highlight.setter

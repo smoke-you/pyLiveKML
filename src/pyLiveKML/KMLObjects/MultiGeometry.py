@@ -8,7 +8,7 @@ from pyLiveKML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KMLObjects.Object import _ListObject
 
 
-class MultiGeometry(list[Geometry], _ListObject, Geometry):
+class MultiGeometry(_ListObject[Geometry], Geometry):
     """A KML 'MultiGeometry', per https://developers.google.com/kml/documentation/kmlreference#multigeometry."""
 
     _kml_tag = "MultiGeometry"
@@ -16,6 +16,7 @@ class MultiGeometry(list[Geometry], _ListObject, Geometry):
     def __init__(self, contents: Geometry | Iterable[Geometry] | None = None):
         """Folder instance constructor."""
         Geometry.__init__(self)
+        _ListObject[Geometry].__init__(self)
         if contents is not None:
             if isinstance(contents, Geometry):
                 self.append(contents)

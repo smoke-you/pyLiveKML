@@ -81,6 +81,7 @@ class Polygon(Geometry):
 
     @property
     def outer_boundary(self) -> LinearRing:
+        """Outer boundary."""
         return self._outer_boundary.boundary
 
     @outer_boundary.setter
@@ -89,6 +90,7 @@ class Polygon(Geometry):
 
     @property
     def inner_boundaries(self) -> Iterator[LinearRing]:
+        """Generator across inner boundaries."""
         for b in self._inner_boundaries:
             yield b.boundary
 
