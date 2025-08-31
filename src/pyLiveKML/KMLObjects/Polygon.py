@@ -8,12 +8,12 @@ from pyLiveKML.KML import AltitudeModeEnum
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KMLObjects.LinearRing import LinearRing
-from pyLiveKML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KMLObjects.Object import Object, ObjectChild, _ChildDef
 
 
 class _OuterBoundary(Object):
     _kml_tag = "outerBoundaryIs"
-    _direct_children = Object._direct_children + ("boundary",)
+    _direct_children = Object._direct_children + (_ChildDef("boundary"),)
     _suppress_id = True
 
     def __init__(self, boundary: LinearRing) -> None:
@@ -23,7 +23,7 @@ class _OuterBoundary(Object):
 
 class _InnerBoundary(Object):
     _kml_tag = "innerBoundaryIs"
-    _direct_children = Object._direct_children + ("boundary",)
+    _direct_children = Object._direct_children + (_ChildDef("boundary"),)
     _suppress_id = True
 
     def __init__(self, boundary: LinearRing) -> None:
@@ -58,8 +58,8 @@ class Polygon(Geometry):
         _FieldDef("tessellate"),
     )
     _direct_children = Geometry._direct_children + (
-        "outer_boundary",
-        "inner_boundaries",
+        _ChildDef("outer_boundary"),
+        _ChildDef("inner_boundaries"),
     )
 
     def __init__(
@@ -72,25 +72,31 @@ class Polygon(Geometry):
     ):
         """Polygon instance constructor."""
         Geometry.__init__(self)
-        self.outer_boundary = _OuterBoundary(outer_boundary)
-        self.inner_boundaries = list[_InnerBoundary]()
-        if inner_boundaries is not None:
-            if isinstance(inner_boundaries, LinearRing):
-                self.inner_boundaries.append(_InnerBoundary(inner_boundaries))
-            else:
-                self.inner_boundaries.extend(map(_InnerBoundary, inner_boundaries))
+        self._outer_boundary = _OuterBoundary(outer_boundary)
+        self._inner_boundaries = list[_InnerBoundary]()
+        self.inner_boundaries = inner_boundaries
         self.extrude = extrude
         self.tessellate = tessellate
         self.altitude_mode = altitude_mode
 
     @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance.
+    def outer_boundary(self) -> LinearRing:
+        return self._outer_boundary.boundary
 
-        Overridden from :attr:`pyLiveKML.KMLObjects.Object.Object.children` to yield the children of a
-        :class:`~pyLiveKML.KMLObjects.Polygon`, i.e. one or more :class:`~pyLiveKML.KMLObjects.LinearRing`
-        instances, being the :attr:`outer_boundary` and zero or more :attr:`inner_boundaries`.
-        """
-        yield ObjectChild(parent=self, child=self.outer_boundary.boundary)
-        for b in self.inner_boundaries:
-            yield ObjectChild(parent=self, child=b.boundary)
+    @outer_boundary.setter
+    def outer_boundary(self, value: LinearRing) -> None:
+        self._outer_boundary = _OuterBoundary(value)
+
+    @property
+    def inner_boundaries(self) -> Iterator[LinearRing]:
+        for b in self._inner_boundaries:
+            yield b.boundary
+
+    @inner_boundaries.setter
+    def inner_boundaries(self, value: LinearRing | Iterable[LinearRing] | None) -> None:
+        self._inner_boundaries.clear()
+        if value is not None:
+            if isinstance(value, LinearRing):
+                self._inner_boundaries.append(_InnerBoundary(value))
+            else:
+                self._inner_boundaries.extend(map(_InnerBoundary, value))

@@ -9,7 +9,7 @@ from pyLiveKML.KMLObjects.IconStyle import IconStyle
 from pyLiveKML.KMLObjects.LabelStyle import LabelStyle
 from pyLiveKML.KMLObjects.LineStyle import LineStyle
 from pyLiveKML.KMLObjects.ListStyle import ListStyle
-from pyLiveKML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KMLObjects.Object import ObjectChild, _ChildDef
 from pyLiveKML.KMLObjects.PolyStyle import PolyStyle
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 
@@ -36,12 +36,12 @@ class Style(StyleSelector):
 
     _kml_tag = "Style"
     _direct_children = StyleSelector._direct_children + (
-        "balloon_style",
-        "icon_style",
-        "label_style",
-        "line_style",
-        "list_style",
-        "poly_style",
+        _ChildDef("balloon_style"),
+        _ChildDef("icon_style"),
+        _ChildDef("label_style"),
+        _ChildDef("line_style"),
+        _ChildDef("list_style"),
+        _ChildDef("poly_style"),
     )
 
     def __init__(
@@ -61,24 +61,3 @@ class Style(StyleSelector):
         self.line_style = line_style
         self.list_style = list_style
         self.poly_style = poly_style
-
-    @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance.
-
-        Overridden from :attr:`pyLiveKML.KMLObjects.Object.Object.children` to yield
-        the children of a :class:`~pyLiveKML.KMLObjects.Style`, i.e. one or more
-        :class:`~pyLiveKML.KMLObjects.SubStyle` instances.
-        """
-        if self.balloon_style:
-            yield ObjectChild(parent=self, child=self.balloon_style)
-        if self.icon_style:
-            yield ObjectChild(parent=self, child=self.icon_style)
-        if self.label_style:
-            yield ObjectChild(parent=self, child=self.label_style)
-        if self.line_style:
-            yield ObjectChild(parent=self, child=self.line_style)
-        if self.list_style:
-            yield ObjectChild(parent=self, child=self.list_style)
-        if self.poly_style:
-            yield ObjectChild(parent=self, child=self.poly_style)

@@ -7,7 +7,7 @@ from lxml import etree  # type: ignore
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
-from pyLiveKML.KMLObjects.Feature import Container
+from pyLiveKML.KMLObjects.Container import Container
 from pyLiveKML.KMLObjects.Folder import Folder
 from pyLiveKML.KMLObjects.Object import ObjectState
 from pyLiveKML.KML.Update import Update

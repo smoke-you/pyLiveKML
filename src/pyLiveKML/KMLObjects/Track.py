@@ -17,7 +17,7 @@ from pyLiveKML.KML.errors import TrackElementsMismatch
 from pyLiveKML.KML.utils import with_ns
 from pyLiveKML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KMLObjects.Model import Model
-from pyLiveKML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KMLObjects.Object import ObjectChild, _ChildDef
 from pyLiveKML.KMLObjects.Schema import Schema
 
 
@@ -101,7 +101,7 @@ class Track(Geometry):
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("altitude_mode", "gx:altitudeMode"),
     )
-    _direct_children = Geometry._direct_children + ("model",)
+    _direct_children = Geometry._direct_children + (_ChildDef("model"),)
 
     def __init__(
         self,
@@ -150,12 +150,6 @@ class Track(Geometry):
                         self._schemas[schema] = set[str]()
                     self._schemas[schema].update(fields.keys())
 
-    @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance."""
-        if self.model:
-            yield ObjectChild(self, self.model)
-
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
@@ -168,7 +162,6 @@ class Track(Geometry):
         for e in self.elements:
             value = "" if e.angles is None else str(e.angles)
             etree.SubElement(root, with_ns("gx:angles")).text = value
-
         if self._schemas:
             e_xd = etree.SubElement(root, "ExtendedData")
             for sch, fields in self._schemas.items():

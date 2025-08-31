@@ -1,12 +1,13 @@
 """ListStyle module."""
 
-from typing import Sequence
+from typing import Iterable
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import ItemIconModeEnum, ListItemTypeEnum
 from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef, ColorParse
 from pyLiveKML.KML.GeoColor import GeoColor
+from pyLiveKML.KMLObjects.Object import _ChildDef
 from pyLiveKML.KMLObjects.SubStyle import SubStyle
 
 
@@ -46,26 +47,30 @@ class ListStyle(SubStyle):
         _FieldDef("list_item_type", "listItemType"),
         _FieldDef("bg_color", "bgColor", ColorParse),
     )
+    _direct_children = SubStyle._direct_children + (_ChildDef("icons", None, False),)
 
     def __init__(
         self,
         list_item_type: ListItemTypeEnum | None = None,
         bg_color: GeoColor | int | None = None,
-        icons: ItemIcon | Sequence[ItemIcon] | None = None,
+        icons: ItemIcon | Iterable[ItemIcon] | None = None,
     ):
         """ListStyle instance constructor."""
         SubStyle.__init__(self)
         self.list_item_type = list_item_type
         self.bg_color = bg_color
-        self.icons = list[ItemIcon]()
-        if icons is not None:
-            if isinstance(icons, ItemIcon):
-                self.icons.append(icons)
-            else:
-                self.icons.extend(icons)
+        self._icons = list[ItemIcon]()
+        self.icons = icons
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
-        for i in self.icons:
-            i.build_kml(etree.SubElement(root, i._kml_tag), False)
+    @property
+    def icons(self) -> Iterable[ItemIcon]:
+        yield from self._icons
+
+    @icons.setter
+    def icons(self, value: ItemIcon | Iterable[ItemIcon] | None) -> None:
+        self._icons.clear()
+        if value is not None:
+            if isinstance(value, ItemIcon):
+                self._icons.append(value)
+            else:
+                self._icons.extend(value)

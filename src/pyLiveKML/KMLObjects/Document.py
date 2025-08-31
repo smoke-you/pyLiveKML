@@ -5,7 +5,8 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
-from pyLiveKML.KMLObjects.Feature import Feature, Container
+from pyLiveKML.KMLObjects.Container import Container
+from pyLiveKML.KMLObjects.Feature import Feature
 from pyLiveKML.KMLObjects.Schema import Schema
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 
@@ -71,15 +72,18 @@ class Document(Container):
             update_limit=update_limit,
             features=features,
         )
-        self.schemas = list[Schema]()
-        if schemas is not None:
-            if isinstance(schemas, Schema):
-                self.schemas.append(schemas)
-            else:
-                self.schemas.extend(schemas)
+        self._schemas = list[Schema]()
+        self.schemas = schemas
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
-        for s in self.schemas:
-            root.append(s.construct_kml())
+    @property
+    def schemas(self) -> Iterable[Schema]:
+        yield from self._schemas
+
+    @schemas.setter
+    def schemas(self, value: Schema | Iterable[Schema] | None) -> None:
+        self._schemas.clear()
+        if value is not None:
+            if isinstance(value, Schema):
+                self._schemas.append(value)
+            else:
+                self._schemas.extend(value)

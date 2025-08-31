@@ -9,6 +9,7 @@ from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.Vec2 import OverlayXY, RotationXY, ScreenXY, Size
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
+from pyLiveKML.KMLObjects.Object import _ChildDef
 from pyLiveKML.KMLObjects.Overlay import Overlay
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
@@ -21,10 +22,10 @@ class ScreenOverlay(Overlay):
     _kml_tag = "ScreenOverlay"
     _kml_fields = Overlay._kml_fields + (_FieldDef("rotation"),)
     _direct_children = Overlay._direct_children + (
-        "overlay_xy",
-        "screen_xy",
-        "rotation_xy",
-        "size",
+        _ChildDef("overlay_xy"),
+        _ChildDef("screen_xy"),
+        _ChildDef("rotation_xy"),
+        _ChildDef("size"),
     )
 
     def __init__(

@@ -7,11 +7,11 @@ from lxml import etree  # type: ignore
 from pyLiveKML.KML import AltitudeModeEnum
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KMLObjects.Geometry import Geometry
-from pyLiveKML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KMLObjects.Object import _ListObject
 from pyLiveKML.KMLObjects.Track import Track
 
 
-class MultiTrack(Geometry, list[Track]):
+class MultiTrack(list[Track], _ListObject, Geometry):
     """A KML 'gx:MultiTrack', per https://developers.google.com/kml/documentation/kmlreference#gxmultitrack."""
 
     _kml_tag = "gx:MultiTrack"
@@ -35,16 +35,3 @@ class MultiTrack(Geometry, list[Track]):
                 self.append(tracks)
             else:
                 self.extend(tracks)
-
-    @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance."""
-        for t in self:
-            yield ObjectChild(parent=self, child=t)
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
-        if with_children:
-            for t in self:
-                root.append(t.construct_kml())

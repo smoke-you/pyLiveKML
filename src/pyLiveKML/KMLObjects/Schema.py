@@ -5,7 +5,7 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML._BaseObject import _BaseObject
-from pyLiveKML.KMLObjects.Object import Object
+from pyLiveKML.KMLObjects.Object import Object, _ListObject
 
 
 class SimpleField(_BaseObject):
@@ -46,7 +46,7 @@ class SimpleField(_BaseObject):
         return root
 
 
-class Schema(Object):
+class Schema(list[SimpleField], _ListObject, Object):
     """A KML 'Schema', per https://developers.google.com/kml/documentation/kmlreference#schema."""
 
     _kml_tag = "Schema"
@@ -59,21 +59,7 @@ class Schema(Object):
         """Construct Schema instances."""
         Object.__init__(self)
         self.name = name
-        self.fields = list[SimpleField]()
         if isinstance(fields, SimpleField):
-            self.fields.append(fields)
+            self.append(fields)
         else:
-            self.fields.extend(fields)
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        for f in self.fields:
-            root.append(f.construct_kml())
-
-    def construct_kml(self) -> etree.Element:
-        """Construct this instances' KML representation."""
-        root = etree.Element(
-            self.kml_tag, attrib={"name": self.name, "id": str(self.id)}
-        )
-        self.build_kml(root)
-        return root
+            self.extend(fields)

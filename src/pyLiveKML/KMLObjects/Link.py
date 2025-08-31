@@ -3,7 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import RefreshModeEnum, ViewRefreshModeEnum
-from pyLiveKML.KML._BaseObject import _FieldDef, NoParse, DumpDirect
+from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KMLObjects.Object import Object
 
 

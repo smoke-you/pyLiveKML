@@ -14,7 +14,7 @@ from pyLiveKML.KML._BaseObject import (
     Angle360,
 )
 from pyLiveKML.KMLObjects.Link import Link
-from pyLiveKML.KMLObjects.Object import Object
+from pyLiveKML.KMLObjects.Object import Object, _ChildDef
 
 
 class Location(_BaseObject):
@@ -134,11 +134,11 @@ class Model(Object):
     _kml_tag = "Model"
     _kml_fields = Object._kml_fields + (_FieldDef("altitude_mode", "gx:altitudeMode"),)
     _direct_children = Object._direct_children + (
-        "link",
-        "location",
-        "orientation",
-        "scale",
-        "resources",
+        _ChildDef("link"),
+        _ChildDef("location"),
+        _ChildDef("orientation"),
+        _ChildDef("scale"),
+        _ChildDef("resources"),
     )
 
     def __init__(

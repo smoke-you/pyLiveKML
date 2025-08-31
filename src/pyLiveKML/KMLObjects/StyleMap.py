@@ -4,6 +4,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import StyleStateEnum
 from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
+from pyLiveKML.KMLObjects.Object import _ChildDef
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.Style import Style
 
@@ -29,6 +30,22 @@ class _StyleMap_Pair(_BaseObject):
         else:
             self.style = None
             self.style_url = style_ref
+
+    @property
+    def value(self) -> str | Style | None:
+        return self.style_url if self.style_url else self.style
+
+    @value.setter
+    def value(self, value: str | Style | None) -> None:
+        if value is None:
+            self.style = None
+            self.style_url = None
+        elif isinstance(value, str):
+            self.style = None
+            self.style_url = value
+        else:
+            self.style = value
+            self.style_url = None
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
@@ -65,7 +82,10 @@ class StyleMap(StyleSelector):
     """
 
     _kml_tag = "StyleMap"
-    _direct_children = StyleSelector._direct_children + ("normal", "highlight")
+    _direct_children = StyleSelector._direct_children + (
+        _ChildDef("normal"),
+        _ChildDef("highlight"),
+    )
 
     def __init__(
         self,
@@ -74,5 +94,21 @@ class StyleMap(StyleSelector):
     ):
         """StyleMap instance constructor."""
         super().__init__()
-        self.normal = _StyleMap_Pair(StyleStateEnum.NORMAL, normal_style_ref)
-        self.highlight = _StyleMap_Pair(StyleStateEnum.HIGHLIGHT, highlight_style_ref)
+        self._normal = _StyleMap_Pair(StyleStateEnum.NORMAL, normal_style_ref)
+        self._highlight = _StyleMap_Pair(StyleStateEnum.HIGHLIGHT, highlight_style_ref)
+
+    @property
+    def normal(self) -> str | Style | None:
+        return self._normal.value
+
+    @normal.setter
+    def normal(self, value: str | Style | None) -> None:
+        self._normal.value = value
+
+    @property
+    def highlight(self) -> str | Style | None:
+        return self._highlight.value
+
+    @highlight.setter
+    def highlight(self, value: str | Style | None) -> None:
+        self._highlight.value = value

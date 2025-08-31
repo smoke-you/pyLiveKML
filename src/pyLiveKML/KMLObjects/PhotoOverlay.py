@@ -14,6 +14,7 @@ from pyLiveKML.KML._BaseObject import (
 )
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
+from pyLiveKML.KMLObjects.Object import _ChildDef
 from pyLiveKML.KMLObjects.Overlay import Overlay
 from pyLiveKML.KMLObjects.Point import Point
 from pyLiveKML.KMLObjects.Region import Region
@@ -84,9 +85,9 @@ class PhotoOverlay(Overlay):
         _FieldDef("shape"),
     )
     _direct_children = Overlay._direct_children + (
-        "point",
-        "view_volume",
-        "image_pyramid",
+        _ChildDef("point"),
+        _ChildDef("view_volume"),
+        _ChildDef("image_pyramid"),
     )
 
     def __init__(

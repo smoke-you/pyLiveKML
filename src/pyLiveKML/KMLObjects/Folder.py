@@ -3,7 +3,8 @@
 from typing import Iterable
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
-from pyLiveKML.KMLObjects.Feature import Feature, Container
+from pyLiveKML.KMLObjects.Feature import Feature
+from pyLiveKML.KMLObjects.Container import Container
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 
 
@@ -46,7 +47,7 @@ class Folder(Container):
         snippet_max_lines: int | None = None,
         description: str | None = None,
         style_url: str | None = None,
-        styles: Iterable[StyleSelector] | None = None,
+        styles: StyleSelector | Iterable[StyleSelector] | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
         features: Feature | Iterable[Feature] | None = None,
     ):

@@ -8,7 +8,7 @@ from pyLiveKML.KML import RefreshModeEnum
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KMLObjects.Feature import Feature
 from pyLiveKML.KMLObjects.Link import Link
-from pyLiveKML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KMLObjects.Object import ObjectChild, _ChildDef
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 
 
@@ -34,7 +34,7 @@ class NetworkLink(Feature):
         _FieldDef("fly_to_view", "flyToView"),
         _FieldDef("refresh_visibility", "refreshVisibility"),
     )
-    _direct_children = Feature._direct_children + ("link",)
+    _direct_children = Feature._direct_children + (_ChildDef("link"),)
 
     def __init__(
         self,

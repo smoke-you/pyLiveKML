@@ -7,7 +7,7 @@ from lxml import etree  # type: ignore
 from pyLiveKML.KML import FlyToModeEnum
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
-from pyLiveKML.KMLObjects.Object import ObjectChild
+from pyLiveKML.KMLObjects.Object import _ChildDef
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 
@@ -19,7 +19,7 @@ class FlyTo(TourPrimitive):
         _FieldDef("duration"),
         _FieldDef("fly_to_mode", "flyToMode"),
     )
-    _direct_children = TourPrimitive._direct_children + ("abstract_view",)
+    _direct_children = TourPrimitive._direct_children + (_ChildDef("abstract_view"),)
 
     def __init__(
         self,
@@ -32,8 +32,3 @@ class FlyTo(TourPrimitive):
         self.duration = duration
         self.fly_to_mode = fly_to_mode
         self.abstract_view = abstract_view
-
-    @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance."""
-        yield ObjectChild(self, self.abstract_view)

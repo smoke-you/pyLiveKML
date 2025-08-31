@@ -1,16 +1,32 @@
 """Tour module."""
 
-from typing import Iterator
+from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML._BaseObject import _FieldDef
+from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
 from pyLiveKML.KML.utils import with_ns
-from pyLiveKML.KMLObjects.Object import Object, ObjectChild
+from pyLiveKML.KMLObjects.Object import Object, _ListObject
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 
-class Tour(Object, list[TourPrimitive]):
+class Playlist(list[TourPrimitive], _ListObject, _BaseObject):
+
+    _kml_tag = "gx:PlayList"
+
+    def __init__(
+        self, items: TourPrimitive | Iterable[TourPrimitive] | None = None
+    ) -> None:
+        _BaseObject.__init__(self)
+        list[TourPrimitive].__init__(self)
+        if items is not None:
+            if isinstance(items, TourPrimitive):
+                self.append(items)
+            else:
+                self.extend(items)
+
+
+class Tour(Object):
     """A KML 'gx:Tour', per https://developers.google.com/kml/documentation/kmlreference#gxtour."""
 
     _kml_tag = "gx:Tour"
@@ -23,30 +39,10 @@ class Tour(Object, list[TourPrimitive]):
         self,
         name: str | None = None,
         description: str | None = None,
-        tours: TourPrimitive | list[TourPrimitive] | None = None,
+        playlist: TourPrimitive | list[TourPrimitive] | None = None,
     ) -> None:
         """Track instance constructor."""
         Object.__init__(self)
-        list[TourPrimitive].__init__(self)
         self.name = name
         self.description = description
-        if tours is not None:
-            if isinstance(tours, TourPrimitive):
-                self.append(tours)
-            else:
-                self.extend(tours)
-
-    @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance."""
-        for t in self:
-            yield ObjectChild(parent=self, child=t)
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
-        if with_children:
-            if len(self) > 0:
-                tours = etree.SubElement(root, with_ns("gx:Playlist"))
-                for t in self:
-                    tours.append(t.construct_kml())
+        self.playlist = Playlist(playlist)

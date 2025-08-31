@@ -8,8 +8,8 @@
             "name": "Python: pyLiveKML server",
             "type": "debugpy",
             "request": "launch",
-            // "program": "${workspaceRoot}/tests/debug.py",
-            "program": "${workspaceRoot}/evals/main.py",
+            "program": "${workspaceRoot}/tests/debug.py",
+            // "program": "${workspaceRoot}/evals/main.py",
             "console": "integratedTerminal",
             "justMyCode": false,
             "env": {

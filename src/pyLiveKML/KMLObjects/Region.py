@@ -4,7 +4,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import AltitudeModeEnum
 from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef
-from pyLiveKML.KMLObjects.Object import Object
+from pyLiveKML.KMLObjects.Object import Object, _ChildDef
 
 
 class LatLonAltBox(_BaseObject):
@@ -82,7 +82,10 @@ class Region(Object):
     """A KML 'Region', per https://developers.google.com/kml/documentation/kmlreference."""
 
     _kml_tag = "Region"
-    _direct_children = Object._direct_children + ("box", "lod")
+    _direct_children = Object._direct_children + (
+        _ChildDef("box"),
+        _ChildDef("lod"),
+    )
 
     def __init__(
         self,

@@ -14,6 +14,7 @@ from pyLiveKML.KML._BaseObject import (
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Feature import Feature
+from pyLiveKML.KMLObjects.Object import _ChildDef
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
@@ -40,7 +41,7 @@ class Overlay(Feature, ABC):
         _FieldDef("color", parser=ColorParse),
         _FieldDef("draw_order", "drawOrder"),
     )
-    _direct_children: tuple[str, ...] = Feature._direct_children + ("icon",)
+    _direct_children = Feature._direct_children + (_ChildDef("icon"),)
 
     def __init__(
         self,

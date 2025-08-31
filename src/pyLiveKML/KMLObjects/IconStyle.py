@@ -7,6 +7,7 @@ from pyLiveKML.KML._BaseObject import _BaseObject, _FieldDef, NoDump
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.Vec2 import HotSpot
 from pyLiveKML.KMLObjects.ColorStyle import ColorStyle
+from pyLiveKML.KMLObjects.Object import _ChildDef
 
 
 class _IconStyle_Icon(_BaseObject):
@@ -42,7 +43,10 @@ class IconStyle(ColorStyle):
         _FieldDef("scale"),
         _FieldDef("heading"),
     )
-    _direct_children = ColorStyle._direct_children + ("icon",)
+    _direct_children = ColorStyle._direct_children + (
+        _ChildDef("icon"),
+        _ChildDef("hot_spot"),
+    )
 
     def __init__(
         self,
@@ -59,9 +63,3 @@ class IconStyle(ColorStyle):
         self.heading = heading
         self.icon = _IconStyle_Icon(icon)
         self.hot_spot = hot_spot
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
-        if self.hot_spot:
-            self.hot_spot.build_kml(root, False)

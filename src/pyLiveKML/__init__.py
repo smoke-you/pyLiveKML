@@ -59,7 +59,7 @@ from pyLiveKML.KMLObjects.Style import Style
 from pyLiveKML.KMLObjects.StyleMap import StyleMap
 from pyLiveKML.KMLObjects.TimeSpan import TimeSpan, TimeSpan
 from pyLiveKML.KMLObjects.TimeStamp import TimeStamp, GxTimeStamp
-from pyLiveKML.KMLObjects.Tour import Tour
+from pyLiveKML.KMLObjects.Tour import Tour, Playlist
 from pyLiveKML.KMLObjects.TourControl import TourControl
 from pyLiveKML.KMLObjects.Track import (
     Track,
@@ -111,6 +111,7 @@ __all__ = [
     "OverlayXY",
     "PhotoOverlay",
     "Placemark",
+    "Playlist",
     "PlayModeEnum",
     "Point",
     "PolyStyle",

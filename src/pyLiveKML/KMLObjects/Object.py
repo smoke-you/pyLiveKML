@@ -1,14 +1,29 @@
 """Object module."""
 
 from abc import ABC
-from collections.abc import Iterable
 from enum import Enum
-from typing import Iterator, NamedTuple, Optional
+from typing import Iterator, Iterable, NamedTuple, Optional, cast
 from uuid import uuid4, UUID
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML._BaseObject import _BaseObject
 from pyLiveKML.KML.utils import with_ns
+
+
+class _ListObject:
+    pass
+
+class _ChildDef:
+
+    def __init__(
+        self,
+        name: str,
+        tag: str | None = None,
+        use_tag: bool = True,
+    ) -> None:
+        self.name = name
+        self.tag = name if tag is None else tag
+        self.use_tag = use_tag
 
 
 class ObjectState(Enum):
@@ -33,7 +48,7 @@ class Object(_BaseObject, ABC):
     property) derive.
     """
 
-    _direct_children: tuple[str, ...] = tuple()
+    _direct_children: tuple[_ChildDef, ...] = tuple()
     _suppress_id: bool = False
 
     def __init__(self) -> None:
@@ -83,22 +98,33 @@ class Object(_BaseObject, ABC):
         """
         # The return; yield pattern is used to trick linters into accepting that this is a generator that yields
         # nothing, as opposed to yielding None
-        return
-        yield
+        for c in self._direct_children:
+            c_obj = getattr(self, c.name, None)
+            if c_obj:
+                if isinstance(c_obj, Iterable):
+                    for cc in c_obj:
+                        yield ObjectChild(self, cc)
+                else:
+                    yield ObjectChild(self, c_obj)
 
     @property
-    def direct_children(self) -> Iterator["Object"]:
+    def direct_children(self) -> Iterator[_BaseObject]:
         """Retrieve a generator over the direct children of the object.
 
         That is, retrieve any `Object` instances that are embedded in this `Object`.
         """
         for dc in self._direct_children:
-            dcobj = getattr(self, dc, None)
-            if dcobj:
-                if isinstance(dcobj, Iterable):
+            dcobj = getattr(self, dc.name, None)
+            if dcobj and isinstance(dcobj, _BaseObject):
+                if isinstance(dcobj, _ListObject):
+                    yield dcobj
+                elif isinstance(dcobj, Iterable):
                     yield from dcobj
                 else:
                     yield dcobj
+        if isinstance(self, _ListObject):
+            for c in cast(list[_BaseObject], self):
+                yield c
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element.
@@ -113,10 +139,13 @@ class Object(_BaseObject, ABC):
         """
         super().build_kml(root, with_children)
         if with_children:
+            # children = [x for x in self.direct_children]
+            # pass
             for dc in self.direct_children:
-                attribs = None
+                id = None
                 if not getattr(dc, "_suppress_id", True):
-                    attribs = {"id": str(dc.id)}
+                    id = getattr(dc, "id", None)
+                attribs = None if id is None else {"id": str(id)}
                 dc.build_kml(
                     etree.SubElement(root, with_ns(dc._kml_tag), attrib=attribs), True
                 )

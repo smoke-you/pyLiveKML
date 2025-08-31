@@ -6,6 +6,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML._BaseObject import _FieldDef
 from pyLiveKML.KML.Update import Update
+from pyLiveKML.KMLObjects.Object import _ChildDef
 from pyLiveKML.KMLObjects.TourPrimitive import TourPrimitive
 
 
@@ -17,7 +18,7 @@ class AnimatedUpdate(TourPrimitive):
         _FieldDef("delayed_start", "gx:delayedStart"),
         _FieldDef("duration", "gx:duration"),
     )
-    _direct_children = TourPrimitive._direct_children + ("update",)
+    _direct_children = TourPrimitive._direct_children + (_ChildDef("update"),)
 
     def __init__(
         self,

@@ -13,6 +13,7 @@ from pyLiveKML.KML._BaseObject import (
 )
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
+from pyLiveKML.KMLObjects.Object import _ChildDef
 from pyLiveKML.KMLObjects.Overlay import Overlay
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
@@ -79,7 +80,10 @@ class GroundOverlay(Overlay):
         _FieldDef("altitude"),
         _FieldDef("altitude_mode", "gx:altitudeMode"),
     )
-    _direct_children = Overlay._direct_children + ("box", "quad")
+    _direct_children = Overlay._direct_children + (
+        _ChildDef("box"),
+        _ChildDef("quad"),
+    )
 
     def __init__(
         self,
