@@ -332,13 +332,19 @@ class _BaseObject(ABC):
             value = f.dumper.dump(getattr(self, f.name))
             if value:
                 etree.SubElement(root, with_ns(f.typename)).text = value
+        if with_children:
+            for dc in self.direct_children:
+                branch = dc.construct_kml()
+                root.append(branch)
+
 
     def construct_kml(self) -> etree.Element:
         """Construct this :class:`~pyLiveKML.KMLObjects.Object`'s KML representation.
 
         :returns: The KML representation of the object as an etree.Element.
         """
-        root = etree.Element(_tag=with_ns(self.kml_tag))
+        attribs = None if self._suppress_id else {"id": str(self.id)}
+        root = etree.Element(_tag=with_ns(self.kml_tag), attrib=attribs)
         self.build_kml(root)
         return root
 
@@ -494,40 +500,6 @@ class Object(_BaseObject, ABC):
     def __init__(self) -> None:
         """Object instance constructor."""
         super().__init__()
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element.
-
-        Generate the KML representation of the internal fields of this
-        :class:`~pyLiveKML.KMLObjects.Object`, and append it to the provided root
-        etree.Element.
-
-        :param etree.Element root: The root XML element that will be appended to.
-        :param bool with_children: True if the children of this instance should be
-            included in the build.
-        """
-        super().build_kml(root, with_children)
-        if with_children:
-            for dc in self.direct_children:
-                id = None
-                if not getattr(dc, "_suppress_id", True):
-                    id = getattr(dc, "id", None)
-                attribs = None if id is None else {"id": str(id)}
-                branch = etree.SubElement(root, with_ns(dc._kml_tag), attrib=attribs)
-                dc.build_kml(branch, True)
-
-    def construct_kml(self) -> etree.Element:
-        """Construct this :class:`~pyLiveKML.KMLObjects.Object`'s KML representation.
-
-        :returns: The KML representation of the object as an etree.Element.
-        """
-        if self._suppress_id:
-            attribs = None
-        else:
-            attribs = {"id": str(self.id)}
-        root = etree.Element(_tag=with_ns(self.kml_tag), attrib=attribs)
-        self.build_kml(root)
-        return root
 
 
 ObjectChild = NamedTuple(
