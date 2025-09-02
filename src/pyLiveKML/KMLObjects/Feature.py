@@ -138,19 +138,19 @@ class Feature(Object, ABC):
                 attribs["maxLines"] = str(self.snippet_max_lines)
             etree.SubElement(root, "Snippet", attribs).text = self.snippet
 
-    # override Object.select() to enable upwards cascade, i.e. if a Feature contained
-    # in an unselected parent Feature is selected, the parent Feature must also be
-    # selected in order for GEP synchronization to work correctly.
+    # override Object.activate() to enable upwards cascade, i.e. if a Feature contained
+    # in an inactive parent Feature is activate, the parent Feature must also be
+    # activated in order for GEP synchronization to work correctly.
     def activate(self, value: bool, cascade: bool = False) -> None:
-        """Cascade select upwards, but do not cascade deselect upwards.
+        """Cascade activation upwards, but do not cascade activation upwards.
 
-        Overrides :func:`~pyLiveKML.KMLObjects.Object.Object.select` to implement upwards cascade of selection.
-        That is, if a :class:`~pyLiveKML.KMLObjects.Feature` enclosed in the object tree depending from an
-        unselected  parent :class:`~pyLiveKML.KMLObjects.Feature` is selected, the reverse tree's parents must also
-        be selected in order for GEP synchronization to work correctly.
+        Overrides :func:`~pyLiveKML.KMLObjects.Object.Object.select` to implement upwards cascade of activation.
+        That is, if a :class:`~pyLiveKML.KMLObjects.Feature` enclosed in the object tree depending from a
+        deactivated  parent :class:`~pyLiveKML.KMLObjects.Feature` is activated, the reverse tree's parents must also
+        be activated in order for GEP synchronization to work correctly.
         """
         Object.activate(self, value, cascade)
-        # Cascade Select *upwards* for Features, but *do not* cascade Deselect upwards
+        # Cascade activation *upwards* for Features, but *do not* cascade deactivation upwards
         if value and self._container:
             self._container.activate(True, False)
 

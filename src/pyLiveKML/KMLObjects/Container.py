@@ -88,7 +88,7 @@ class Container(_ListObject[Feature], Feature, ABC):
         )
         _ListObject[Feature].__init__(self)
         ABC.__init__(self)
-        self.__deleted: list[Feature] = list[Feature]()
+        self._deleted: list[Feature] = list[Feature]()
         self.features = features
         self._is_open: bool | None = is_open
         self._update_limit: int = 0
@@ -130,7 +130,7 @@ class Container(_ListObject[Feature], Feature, ABC):
 
     @features.setter
     def features(self, value: Feature | Iterable[Feature] | None) -> None:
-        self.__deleted.extend(self)
+        self._deleted.extend(self)
         self.clear()
         if value is not None:
             if isinstance(value, Feature):
@@ -165,9 +165,9 @@ class Container(_ListObject[Feature], Feature, ABC):
 
         :returns: A generator of :class:`~pyLiveKML.KMLObjects.Feature` objects.
         """
-        while len(self.__deleted) > 0:
-            f = self.__deleted[0]
-            self.__deleted.remove(f)
+        while len(self._deleted) > 0:
+            f = self._deleted[0]
+            self._deleted.remove(f)
             yield f
 
     # def construct_kml(self, with_features: bool = False) -> etree.Element:
@@ -203,7 +203,7 @@ class Container(_ListObject[Feature], Feature, ABC):
         :param Feature __value: The :class:`~pyLiveKML.KMLObjects.Feature` to be removed.
         """
         if value.active:
-            self.__deleted.append(value)
+            self._deleted.append(value)
         _ListObject[Feature].remove(self, value)
 
     def force_idle(self, cascade: bool = False) -> None:
@@ -233,9 +233,9 @@ class Container(_ListObject[Feature], Feature, ABC):
                 f.force_idle()
 
     def activate(self, value: bool, cascade: bool = False) -> None:
-        """Cascade select upwards, but do not cascade deselect upwards.
+        """Cascade activate upwards, but do not cascade deactivate upwards.
 
-        Overrides :func:`~pyLiveKML.KMLObjects.Feature.Feature.select` to implement select/deselect cascade to
+        Overrides :func:`~pyLiveKML.KMLObjects.Feature.Feature.activate` to implement activate/deactivate cascade to
         enclosed :class:`~pyLiveKML.KMLObjects.Feature` objects, and to ensure that if a
         :class:`~pyLiveKML.KMLObjects.Container` is deleted from GEP, its' enclosed
         :class:`~pyLiveKML.KMLObjects.Feature` objects are forced IDLE to maintain synchronization.
@@ -248,7 +248,7 @@ class Container(_ListObject[Feature], Feature, ABC):
             self._state == ObjectState.DELETE_CREATED
             or self._state == ObjectState.DELETE_CHANGED
         ):
-            self.__deleted.clear()
+            self._deleted.clear()
             self.force_features_idle()
 
     def __str__(self) -> str:

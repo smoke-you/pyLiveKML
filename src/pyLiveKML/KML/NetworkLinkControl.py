@@ -119,3 +119,6 @@ class NetworkLinkControl(_BaseObject):
                     self.update.deletes.append(ObjectChild(obj, lcobj))
                 lcobj.update_generated()
                 self._sync_child_objects(lcobj)
+        if isinstance(obj, Container):
+            self.update.deletes.extend((ObjectChild(obj, delobj) for delobj in obj._deleted))
+            obj._deleted.clear()

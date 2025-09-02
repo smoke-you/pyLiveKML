@@ -388,11 +388,7 @@ class _BaseObject(ABC):
 
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
-        p_id = getattr(self, "id", None)
-        attribs = None
-        if p_id is not None:
-            attribs = {"id": str(p_id)}
-        item = etree.SubElement(root, _tag=with_ns(self.kml_tag), attrib=attribs)
+        item = etree.SubElement(root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)})
         self.build_kml(item, with_children=False)
 
     def delete_kml(self, root: etree.Element) -> None:

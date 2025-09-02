@@ -37,11 +37,21 @@ class AircraftTrail(Folder):
         self.snippet = "Aircraft Trail"
         self.__idx: int = -1
 
-    def update_kml(self, parent: _BaseObject, update: etree.Element) -> None:
-        """Update the trail display."""
-        # calculate trail behaviour **before** generating the update - see note in trail(), below
+    def activate(self, value: bool, cascade: bool = False) -> None:
+        if value:
+            self.clear()
+            self._deleted.clear()
+            self.force_features_idle()
+        return super().activate(value, cascade)
+
+    def create_kml(self, root: etree.Element, parent: _BaseObject) -> etree.Element:
+        elem = super().create_kml(root, parent)
         self.trail()
-        Folder.update_kml(self, parent, update)
+        return elem
+
+    def change_kml(self, root: etree.Element) -> None:
+        self.trail()
+        super().change_kml(root)
 
     def trail(self) -> None:
         """Update the trail, adding a new point at the head and removing the tail."""
@@ -58,7 +68,7 @@ class AircraftTrail(Folder):
         self.append(new_pos)
         while len(self) > self.trail_sz:
             self.remove(self[0])
-        self._description = description_builder(
+        self.description = description_builder(
             src={
                 "Transponder": data_point.transponder,
                 "Flight": data_point.flight,
@@ -69,4 +79,3 @@ class AircraftTrail(Folder):
             },
             title_color=0x7F007F,
         )
-        self.field_changed()
