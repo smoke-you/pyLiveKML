@@ -2,6 +2,18 @@
 
 The current version on PyPi is 0.0.4, from August 2022.  I can't update it (yet) because I can't access my PyPi account (yet).  Hopefully soon, pretty please PyPi :)
 
+# Currency, in General
+
+I'm currently working on a major update to 1.0.0, including:
+
+1. Adding in all of the KML (and KML extension) classes defined by Google.
+
+2. Reworking inheritance to minimize the amount of class-specific behaviour.
+
+3. Ensuring that classes can be instantiated directly, as well as via the live feed mechanism using `<NetworkLinkControl>` tags. Added a "simple" eval app to this end.
+
+The update work has completely broken the live update mechanism, and invalidated much of the documentation (such as it was). Live update will be restored before the 1.0.0 release, but documentation may trail somewhat.
+
 # What is pyLiveKML?
 
 pyLiveKML is an implementation of Google's 
