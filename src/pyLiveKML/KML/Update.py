@@ -29,9 +29,7 @@ class CreateList(_UpdateList):
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         for c in (c for c in self if not c.parent._suppress_id):
-            parent = etree.SubElement(root, c.parent._kml_tag, attrib={"targetId": str(c.parent.id)})
-            parent.append(c.child.construct_kml())
-            c.child.update_generated()
+            c.child.create_kml(root, c.parent)
         self.clear()
 
 
@@ -42,9 +40,7 @@ class ChangeList(_UpdateList):
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         for c in (c for c in self if not c.child._suppress_id):
-            child = etree.SubElement(root, c.child._kml_tag, attrib={"targetId": str(c.child.id)})
-            c.child.build_kml(child, False)
-            c.child.update_generated()
+            c.child.change_kml(root)
         self.clear()
 
 
@@ -55,8 +51,7 @@ class DeleteList(_UpdateList):
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         for c in (c for c in self if not c.child._suppress_id):
-            etree.SubElement(root, c.child._kml_tag, attrib={"targetId": str(c.child.id)})
-            c.child.update_generated()
+            c.child.delete_kml(root)
         self.clear()
 
 
@@ -109,7 +104,7 @@ class Update(_BaseObject):
         super().build_kml(root, with_children)
         if self.creates:
             root.append(self.creates.construct_kml())
-        # if self.changes:
-        #     root.append(self.changes.construct_kml())
+        if self.changes:
+            root.append(self.changes.construct_kml())
         if self.deletes:
             root.append(self.deletes.construct_kml())

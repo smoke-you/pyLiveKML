@@ -103,17 +103,19 @@ class NetworkLinkControl(_BaseObject):
                     self.update.changes.append(ObjectChild(obj, dcobj))
                 elif dcobj.state in (ObjectState.DELETE_CHANGED, ObjectState.DELETE_CREATED):
                     self.update.deletes.append(ObjectChild(obj, dcobj))
+                dcobj.update_generated()
                 self._sync_child_objects(dcobj)
             elif isinstance(dcobj, Iterable):
                 for iobj in dcobj:
                     if isinstance(iobj, _BaseObject):
                         self._sync_child_objects(iobj)
         if isinstance(obj, _ListObject):
-            for lc in (cast(_BaseObject, lc) for lc in obj):
-                if lc._state == ObjectState.CREATING:
-                    self.update.creates.append(ObjectChild(obj, lc))
-                elif lc.state == ObjectState.CHANGING:
-                    self.update.changes.append(ObjectChild(obj, lc))
-                elif lc.state in (ObjectState.DELETE_CHANGED, ObjectState.DELETE_CREATED):
-                    self.update.deletes.append(ObjectChild(obj, lc))
-                self._sync_child_objects(lc)
+            for lcobj in (cast(_BaseObject, lc) for lc in obj):
+                if lcobj._state == ObjectState.CREATING:
+                    self.update.creates.append(ObjectChild(obj, lcobj))
+                elif lcobj.state == ObjectState.CHANGING:
+                    self.update.changes.append(ObjectChild(obj, lcobj))
+                elif lcobj.state in (ObjectState.DELETE_CHANGED, ObjectState.DELETE_CREATED):
+                    self.update.deletes.append(ObjectChild(obj, lcobj))
+                lcobj.update_generated()
+                self._sync_child_objects(lcobj)

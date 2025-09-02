@@ -370,52 +370,37 @@ class _BaseObject(ABC):
             self.delete_kml(update)
         self.update_generated()
 
-    def create_kml(self, parent: "_BaseObject", update: etree.Element) -> etree.Element:
+    def create_kml(self, root: etree.Element, parent: "_BaseObject") -> etree.Element:
         """Construct a complete <Create> element tree as a child of an <Update> tag.
 
         :param Object parent: The immediate parent :class:`~pyLiveKML.KMLObjects.Object` of this
             :class:`~pyLiveKML.KMLObjects.Object`. The parent must be specified for GEP synchronization.
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
-        create = etree.Element("Create")
-        p_id = getattr(parent, "id", None)
-        attribs = None
-        if p_id is not None:
-            attribs = {"targetId": str(p_id)}
-        parent_element = etree.SubElement(
-            create, _tag=with_ns(parent.kml_tag), attrib=attribs
-        )
+        parent_element = etree.Element(with_ns(parent.kml_tag), attrib={"targetId": str(parent.id)})
         item = self.construct_kml()
         parent_element.append(item)
-        update.append(create)
+        root.append(parent_element)
         return item
 
-    def change_kml(self, update: etree.Element) -> None:
+    def change_kml(self, root: etree.Element) -> None:
         """Construct a complete <Change> element tree as a child of an <Update> tag.
 
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
-        change = etree.Element("Change")
         p_id = getattr(self, "id", None)
         attribs = None
         if p_id is not None:
-            attribs = {"targetId": str(p_id)}
-        item = etree.SubElement(change, _tag=with_ns(self.kml_tag), attrib=attribs)
+            attribs = {"id": str(p_id)}
+        item = etree.SubElement(root, _tag=with_ns(self.kml_tag), attrib=attribs)
         self.build_kml(item, with_children=False)
-        update.append(change)
 
-    def delete_kml(self, update: etree.Element) -> None:
+    def delete_kml(self, root: etree.Element) -> None:
         """Construct a complete <Delete> element tree as a child of an <Update> tag.
 
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
-        delete = etree.Element("Delete")
-        p_id = getattr(self, "id", None)
-        attribs = None
-        if p_id is not None:
-            attribs = {"targetId": str(p_id)}
-        etree.SubElement(delete, _tag=with_ns(self.kml_tag), attrib=attribs)
-        update.append(delete)
+        etree.SubElement(root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)})
 
     def force_idle(self) -> None:
         """Force this :class:`~pyLiveKML.KMLObjects.Object` and **all of its children** to the IDLE state.

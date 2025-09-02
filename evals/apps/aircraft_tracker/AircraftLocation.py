@@ -1,6 +1,6 @@
 """AircraftLocation module."""
 
-from typing import Optional, Sequence
+from typing import Optional, Sequence, cast
 
 from lxml import etree  # type: ignore
 from pyLiveKML import (
@@ -8,7 +8,7 @@ from pyLiveKML import (
     Point,
     Style,
 )
-from pyLiveKML.KMLObjects.Object import ObjectState
+from pyLiveKML.KML.Object import ObjectState
 from pyLiveKML.KMLObjects.Placemark import Placemark
 
 from .AircraftData import AircraftData
@@ -79,7 +79,7 @@ class AircraftLocation(Placemark):
             self._state = ObjectState.IDLE
 
     # Loop through the positions from 0 to len-1 then restart
-    def change_kml(self, update: etree.Element) -> None:
+    def change_kml(self, root: etree.Element) -> None:
         """Construct a complete <Change> KML tag."""
         self._pid += 1
         if self._pid >= len(self._positions):
@@ -93,24 +93,22 @@ class AircraftLocation(Placemark):
             self._style.icon_style.heading = pos.heading
             self._style.icon_style._state = ObjectState.IDLE
 
-        change = etree.Element("Change")
         pm = etree.SubElement(
-            change, _tag=self.kml_tag, attrib={"targetId": str(self.id)}
+            root, _tag=self.kml_tag, attrib={"targetId": str(self.id)}
         )
         etree.SubElement(pm, "description").text = self._build_description()
         point = etree.SubElement(
-            change, _tag=self._point.kml_tag, attrib={"targetId": str(self._point.id)}
+            root, _tag=self._point.kml_tag, attrib={"targetId": str(self._point.id)}
         )
         etree.SubElement(point, "coordinates").text = pos.coordinates.__str__()
         etree.SubElement(point, "altitudeMode").text = pos.altitude_mode.value
         style = etree.SubElement(
-            change, _tag=self._style.kml_tag, attrib={"targetId": str(self._style.id)}
+            root, _tag=self._style.kml_tag, attrib={"targetId": str(self._style.id)}
         )
         icon_style = etree.SubElement(style, "IconStyle")
         etree.SubElement(icon_style, "heading").text = (
             "0" if pos.heading is None else f"{pos.heading:0.1f}"
         )
-        update.append(change)
 
     def __str__(self) -> str:
         """Return a string representation."""

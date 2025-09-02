@@ -3,8 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML import ListItemTypeEnum, Folder, ListStyle, Style
-from pyLiveKML.KMLObjects.Object import Object, ObjectState
-from pyLiveKML.KML.Object import _BaseObject
+from pyLiveKML.KML.Object import ObjectState, _BaseObject
 
 from .AircraftData import AircraftData
 from .AircraftPosition import AircraftPosition
