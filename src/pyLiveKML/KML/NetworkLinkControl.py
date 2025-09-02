@@ -1,6 +1,7 @@
 """NetworkLinkControl module."""
 
 from datetime import datetime
+from itertools import islice
 from typing import cast, Iterable
 
 from lxml import etree  # type: ignore
@@ -10,6 +11,7 @@ from pyLiveKML.KML.Object import _BaseObject, _FieldDef, ObjectState, _ChildDef,
 from pyLiveKML.KML.Update import Update
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Container import Container
+from pyLiveKML.KMLObjects.Feature import Feature
 from pyLiveKML.KMLObjects.Folder import Folder
 
 
@@ -110,7 +112,11 @@ class NetworkLinkControl(_BaseObject):
                     if isinstance(iobj, _BaseObject):
                         self._sync_child_objects(iobj)
         if isinstance(obj, _ListObject):
-            for lcobj in (cast(_BaseObject, lc) for lc in obj):
+            if isinstance(obj, Container):
+                limit = obj.update_limit
+            else:
+                limit = self.update_limit
+            for lcobj in (lc for lc in islice(obj, limit)):
                 if lcobj._state == ObjectState.CREATING:
                     self.update.creates.append(ObjectChild(obj, lcobj))
                 elif lcobj.state == ObjectState.CHANGING:
@@ -120,5 +126,8 @@ class NetworkLinkControl(_BaseObject):
                 lcobj.update_generated()
                 self._sync_child_objects(lcobj)
         if isinstance(obj, Container):
-            self.update.deletes.extend((ObjectChild(obj, delobj) for delobj in obj._deleted))
-            obj._deleted.clear()
+            limit = obj.update_limit
+            deletes = [ObjectChild(obj, delobj) for delobj in islice(obj._deleted, limit)]
+            self.update.deletes.extend(deletes)
+            for d in (d.child for d in deletes):
+                obj._deleted.remove(cast(Feature, d))

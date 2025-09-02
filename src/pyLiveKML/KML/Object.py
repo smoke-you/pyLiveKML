@@ -377,11 +377,17 @@ class _BaseObject(ABC):
             :class:`~pyLiveKML.KMLObjects.Object`. The parent must be specified for GEP synchronization.
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
-        parent_element = etree.Element(with_ns(parent.kml_tag), attrib={"targetId": str(parent.id)})
-        item = self.construct_kml()
-        parent_element.append(item)
-        root.append(parent_element)
-        return item
+        parent_element = etree.SubElement(root, with_ns(parent.kml_tag), attrib={"targetId": str(parent.id)})
+
+        child_attribs = None if self._suppress_id else {"id": str(self.id)}
+        child_element = etree.SubElement(parent_element, with_ns(self.kml_tag), attrib=child_attribs)
+        self.build_kml(child_element, False)
+        return child_element
+
+        # item = self.construct_kml()
+        # parent_element.append(item)
+        # root.append(parent_element)
+        # return item
 
     def change_kml(self, root: etree.Element) -> None:
         """Construct a complete <Change> element tree as a child of an <Update> tag.
@@ -429,9 +435,9 @@ class _BaseObject(ABC):
         """Modify the state of the :class:`~pyLiveKML.KMLObjects.Object` to reflect that a synchronization update has been emitted."""
         if self._state == ObjectState.CREATING:
             self._state = ObjectState.CREATED
-            # if the object is being created, so are all of its descendants, in a single tag; set them created too
-            for c in self.children:
-                c.child.update_generated()
+            # # if the object is being created, so are all of its descendants, in a single tag; set them created too
+            # for c in self.children:
+            #     c.child.update_generated()
         elif self._state == ObjectState.CHANGING:
             # if the object is changing, don't mess with its descendants - they are updated elsewhere if necessary
             self._state = ObjectState.CREATED
@@ -461,11 +467,11 @@ class _BaseObject(ABC):
             self._state = ObjectState.CREATING if value else self._state
         # cascade Activate downwards for Children
         if value:
-            for c in self.children:
-                c.child.activate(True)
+            for c in self.direct_children:
+                c.activate(True, cascade)
         else:
-            for c in self.children:
-                c.child.force_idle()
+            for c in self.direct_children:
+                c.force_idle()
 
 
 class Object(_BaseObject, ABC):
