@@ -1,7 +1,7 @@
 """NetworkLinkControl module."""
 
 from datetime import datetime
-from typing import cast
+from typing import cast, Iterable
 
 from lxml import etree  # type: ignore
 
@@ -85,9 +85,9 @@ class NetworkLinkControl(_BaseObject):
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
 
-        # TODO: The real work gets done here
+        # The real work gets done here.
         # Walk the tree under the `container`, looking at each object's state, and 
-        # create, update or delete it as necessary
+        # create, update or delete it as necessary.
 
         self._sync_child_objects(self.container)
         super().build_kml(root, with_children)
@@ -95,7 +95,7 @@ class NetworkLinkControl(_BaseObject):
 
     def _sync_child_objects(self, obj: _BaseObject) -> None:
         for dc in obj._direct_children:
-            dcobj = getattr(self, dc.name, None)
+            dcobj = getattr(obj, dc.name, None)
             if isinstance(dcobj, _BaseObject):
                 if dcobj.state == ObjectState.CREATING:
                     self.update.creates.append(ObjectChild(obj, dcobj))
@@ -104,6 +104,10 @@ class NetworkLinkControl(_BaseObject):
                 elif dcobj.state in (ObjectState.DELETE_CHANGED, ObjectState.DELETE_CREATED):
                     self.update.deletes.append(ObjectChild(obj, dcobj))
                 self._sync_child_objects(dcobj)
+            elif isinstance(dcobj, Iterable):
+                for iobj in dcobj:
+                    if isinstance(iobj, _BaseObject):
+                        self._sync_child_objects(iobj)
         if isinstance(obj, _ListObject):
             for lc in (cast(_BaseObject, lc) for lc in obj):
                 if lc._state == ObjectState.CREATING:
