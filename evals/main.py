@@ -149,9 +149,11 @@ async def _(filename: str, request: Request) -> Any:
         }
         return templates.TemplateResponse("index.html.j2", context)
     elif filename == ELEMENTS_FILE:
-        root.append(gep_sync.container.construct_kml())
+        elems = etree.SubElement(root, gep_sync.container._kml_tag, attrib={"id": str(gep_sync.container.id)})
+        gep_sync.container.build_kml(elems, False)
+        # root.append(gep_sync.container.construct_kml())
     elif filename == UPDATE_FILE:
-        root.append(gep_sync.build_update())
+        root.append(gep_sync.construct_kml())
     elif filename == LOADER_FILE:
         root.append(gep_loader.construct_kml())
     else:

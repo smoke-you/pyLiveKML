@@ -1,11 +1,12 @@
 """NetworkLinkControl module."""
 
 from datetime import datetime
+from typing import cast
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
-from pyLiveKML.KML.Object import _BaseObject, _FieldDef, ObjectState
+from pyLiveKML.KML.Object import _BaseObject, _FieldDef, ObjectState, _ChildDef, ObjectChild, _ListObject
 from pyLiveKML.KML.Update import Update
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Container import Container
@@ -44,6 +45,9 @@ class NetworkLinkControl(_BaseObject):
         _FieldDef("link_snippet", "linkSnippet"),
         _FieldDef("link_expires", "linkExpires"),
     )
+    _direct_children = _BaseObject._direct_children + (
+        _ChildDef("update"),
+    )
 
     def __init__(
         self,
@@ -77,32 +81,35 @@ class NetworkLinkControl(_BaseObject):
         self.abstract_view = abstract_view
         self.update = Update(target_href)
 
-    def build_update(self) -> etree.Element:
-        """Generate a synchronization update by parsing the :attr:`container`.
 
-        :return: The synchronization update.
-        :rtype: etree.Element
-        """
-        root = self.construct_kml()
-        _update = self.update.construct_kml()
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
 
-        for f in self.container.containers:
-            f.feature.update_kml(f.container, _update)
-            for c in f.feature.children:
-                c.child.update_kml(c.parent, _update)
-            if isinstance(f.feature, Container):
-                for d in f.feature.flush:
-                    d.delete_kml(_update)
+        # TODO: The real work gets done here
+        # Walk the tree under the `container`, looking at each object's state, and 
+        # create, update or delete it as necessary
 
-        for f in self.container.features:
-            if len(_update) >= self.container.update_limit:
-                break
-            if f.feature._state == ObjectState.CREATING:
-                f.feature.update_kml(f.container, _update)
-            else:
-                f.feature.update_kml(f.container, _update)
-                for c in f.feature.children:
-                    c.child.update_kml(c.parent, _update)
+        self._sync_child_objects(self.container)
+        super().build_kml(root, with_children)
 
-        root.append(_update)
-        return root
+
+    def _sync_child_objects(self, obj: _BaseObject) -> None:
+        for dc in obj._direct_children:
+            dcobj = getattr(self, dc.name, None)
+            if isinstance(dcobj, _BaseObject):
+                if dcobj.state == ObjectState.CREATING:
+                    self.update.creates.append(ObjectChild(obj, dcobj))
+                elif dcobj.state == ObjectState.CHANGING:
+                    self.update.changes.append(ObjectChild(obj, dcobj))
+                elif dcobj.state in (ObjectState.DELETE_CHANGED, ObjectState.DELETE_CREATED):
+                    self.update.deletes.append(ObjectChild(obj, dcobj))
+                self._sync_child_objects(dcobj)
+        if isinstance(obj, _ListObject):
+            for lc in (cast(_BaseObject, lc) for lc in obj):
+                if lc._state == ObjectState.CREATING:
+                    self.update.creates.append(ObjectChild(obj, lc))
+                elif lc.state == ObjectState.CHANGING:
+                    self.update.changes.append(ObjectChild(obj, lc))
+                elif lc.state in (ObjectState.DELETE_CHANGED, ObjectState.DELETE_CREATED):
+                    self.update.deletes.append(ObjectChild(obj, lc))
+                self._sync_child_objects(lc)

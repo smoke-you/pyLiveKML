@@ -1,11 +1,63 @@
 """Update module."""
 
+from abc import ABC
 from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.Object import _BaseObject, _FieldDef
+from pyLiveKML.KML.Object import _BaseObject, _FieldDef, ObjectChild
 from pyLiveKML.KML.utils import with_ns
+
+
+class _UpdateList(_BaseObject, list[ObjectChild], ABC):
+
+    def __init__(self, items: ObjectChild | Iterable[ObjectChild] | None = None) -> None:
+        _BaseObject.__init__(self)
+        list[ObjectChild].__init__(self)
+        ABC.__init__(self)
+        if items is not None:
+            if isinstance(items, ObjectChild):
+                self.append(items)
+            else:
+                self.extend(items)
+
+
+class CreateList(_UpdateList):
+
+    _kml_tag = "Create"
+
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
+        for c in (c for c in self if not c.parent._suppress_id):
+            parent = etree.SubElement(root, c.parent._kml_tag, attrib={"targetId": str(c.parent.id)})
+            parent.append(c.child.construct_kml())
+            c.child.update_generated()
+        self.clear()
+
+
+class ChangeList(_UpdateList):
+
+    _kml_tag = "Change"
+
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
+        for c in (c for c in self if not c.child._suppress_id):
+            child = etree.SubElement(root, c.child._kml_tag, attrib={"targetId": str(c.child.id)})
+            c.child.build_kml(child, False)
+            c.child.update_generated()
+        self.clear()
+
+
+class DeleteList(_UpdateList):
+
+    _kml_tag = "Delete"
+
+    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+        """Construct the KML content and append it to the provided etree.Element."""
+        for c in (c for c in self if not c.child._suppress_id):
+            etree.SubElement(root, c.child._kml_tag, attrib={"targetId": str(c.child.id)})
+            c.child.update_generated()
+        self.clear()
 
 
 class Update(_BaseObject):
@@ -36,38 +88,28 @@ class Update(_BaseObject):
     def __init__(
         self,
         target_href: str,
-        creates: etree.Element | Iterable[etree.Element] | None = None,
-        changes: etree.Element | Iterable[etree.Element] | None = None,
-        deletes: etree.Element | Iterable[etree.Element] | None = None,
+        creates: ObjectChild | Iterable[ObjectChild] | None = None,
+        changes: ObjectChild | Iterable[ObjectChild] | None = None,
+        deletes: ObjectChild | Iterable[ObjectChild] | None = None,
     ):
         """Update instance constructor."""
         super().__init__()
         self.target_href = target_href
-        self.creates = list[etree.Element]()
-        self.changes = list[etree.Element]()
-        self.deletes = list[etree.Element]()
-        if creates is not None:
-            if isinstance(creates, etree.Element):
-                self.creates.append(creates)
-            else:
-                self.creates.extend(creates)
-        if changes is not None:
-            if isinstance(changes, etree.Element):
-                self.changes.append(changes)
-            else:
-                self.changes.extend(changes)
-        if deletes is not None:
-            if isinstance(deletes, etree.Element):
-                self.deletes.append(deletes)
-            else:
-                self.deletes.extend(deletes)
+        self.creates = CreateList(creates)
+        self.changes = ChangeList(changes)
+        self.deletes = DeleteList(deletes)
+
+    def clear(self) -> None:
+        self.creates.clear()
+        self.changes.clear()
+        self.deletes.clear()
 
     def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
-        if self.changes:
-            etree.SubElement(root, with_ns("Change")).extend(self.changes)
         if self.creates:
-            etree.SubElement(root, with_ns("Create")).extend(self.creates)
+            root.append(self.creates.construct_kml())
+        # if self.changes:
+        #     root.append(self.changes.construct_kml())
         if self.deletes:
-            etree.SubElement(root, with_ns("Delete")).extend(self.deletes)
+            root.append(self.deletes.construct_kml())
