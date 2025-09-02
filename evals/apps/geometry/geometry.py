@@ -147,6 +147,7 @@ async def _(ctrl: KMLControlRequest) -> KMLControlResponse:
                 if g.id == fill.id:
                     g.fill_rgb = fill.rgb[1:]
                     g.fill_alpha = fill.alpha
+                    g._styles[0].field_changed()
                     break
         border = ctrl.req.get("border", None)
         if border:
@@ -155,6 +156,7 @@ async def _(ctrl: KMLControlRequest) -> KMLControlResponse:
                 if g.id == border.id:
                     g.border_rgb = border.rgb[1:]
                     g.border_alpha = border.alpha
+                    g._styles[0].field_changed()
                     break
         rotate = ctrl.req.get("rotate", None)
         if rotate:

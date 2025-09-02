@@ -17,7 +17,6 @@ class SubStyle(Object, ABC):
     """
 
     _kml_fields: tuple[_FieldDef, ...] = tuple()
-    _suppress_id = True
 
     def __init__(self) -> None:
         """SubStyle instance constructor."""
