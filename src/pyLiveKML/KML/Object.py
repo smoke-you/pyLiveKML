@@ -347,12 +347,10 @@ class _BaseObject(ABC):
                 etree.SubElement(root, with_ns(f.typename)).text = value
         if with_dependents:
             for dd in self.dependents:
-                print(dd.parent, dd.child)
                 branch = dd.child.construct_kml()
                 root.append(branch)
         if with_children:
             for dc in self.children:
-                print(dc.parent, dc.child)
                 branch = dc.child.construct_kml()
                 root.append(branch)
 
@@ -444,6 +442,8 @@ class _BaseObject(ABC):
         conniptions.
         """
         self._state = ObjectState.IDLE
+        for d in self.dependents:
+            d.child.force_idle()
         for c in self.children:
             c.child.force_idle()
 
@@ -474,6 +474,9 @@ class _BaseObject(ABC):
             or self._state == ObjectState.DELETE_CHANGED
         ):
             self._state = ObjectState.IDLE
+        
+        for d in self.dependents:
+            d.child.update_generated()
 
     def activate(self, value: bool, cascade: bool = False) -> None:
         """Activate or deactivate this :class:`~pyLiveKML.KMLObjects.Object` for display in GEP.

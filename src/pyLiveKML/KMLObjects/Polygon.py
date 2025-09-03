@@ -8,7 +8,7 @@ from pyLiveKML.KML import AltitudeModeEnum
 from pyLiveKML.KML.Object import _FieldDef
 from pyLiveKML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KMLObjects.LinearRing import LinearRing
-from pyLiveKML.KML.Object import Object, ObjectChild, _ChildDef
+from pyLiveKML.KML.Object import Object, ObjectChild, _ChildDef, ObjectState
 
 
 class _OuterBoundary(Object):
@@ -87,6 +87,7 @@ class Polygon(Geometry):
     @outer_boundary.setter
     def outer_boundary(self, value: LinearRing) -> None:
         self._outer_boundary = _OuterBoundary(value)
+        self._outer_boundary.boundary._state = ObjectState.CHANGING
 
     @property
     def inner_boundaries(self) -> Iterator[LinearRing]:
@@ -102,3 +103,5 @@ class Polygon(Geometry):
                 self._inner_boundaries.append(_InnerBoundary(value))
             else:
                 self._inner_boundaries.extend(map(_InnerBoundary, value))
+        for b in self._inner_boundaries:
+            b.boundary._state = ObjectState.CHANGING

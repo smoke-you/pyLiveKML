@@ -6,16 +6,21 @@ from typing import cast
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
+from lxml import etree  # type: ignore
 from pydantic import BaseModel, UUID4
 from pyLiveKML import (
     AltitudeModeEnum,
     BalloonStyle,
     DisplayModeEnum,
+    Document,
     GeoCoordinates,
     NetworkLinkControl,
     Style,
+    kml_root_tag,
+    KML_DOCTYPE, 
+    KML_HEADERS,
 )
 from pyLiveKML.KMLObjects.Feature import Feature
 from scipy.spatial.transform import Rotation
@@ -90,6 +95,22 @@ async def _(request: Request) -> HTMLResponse:
             "request": request,
             "geolist": geodata,
         },
+    )
+
+
+@geo_app.get("/loadable.kml")
+async def _(request: Request) -> PlainTextResponse:
+    root = kml_root_tag()
+    doc = Document(
+        "geometry",
+        features=[x for x in geodata if x.active],
+    )
+    root.append(doc.construct_kml())
+    return PlainTextResponse(
+        content=etree.tostring(
+            root, doctype=KML_DOCTYPE, encoding="utf-8", pretty_print=True
+        ),
+        headers=KML_HEADERS,
     )
 
 

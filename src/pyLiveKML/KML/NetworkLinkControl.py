@@ -45,7 +45,6 @@ class NetworkLinkControl(_BaseObject):
 
     _kml_tag = "NetworkLinkControl"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("target_href", "targetHref"),
         _FieldDef("min_refresh_period", "minRefreshPeriod"),
         _FieldDef("max_session_length", "maxSessionLength"),
         _FieldDef("cookie"),
@@ -55,9 +54,6 @@ class NetworkLinkControl(_BaseObject):
         _FieldDef("link_snippet", "linkSnippet"),
         _FieldDef("link_expires", "linkExpires"),
     )
-    # _kml_children = _BaseObject._kml_children + (
-    #     _ChildDef("update"),
-    # )
     _kml_dependents = _BaseObject._kml_dependents + (_DependentDef("update"),)
 
     def __init__(
@@ -119,6 +115,9 @@ class NetworkLinkControl(_BaseObject):
                 ObjectState.DELETE_CREATED,
             ):
                 self.update.deletes.append(d_obj)
+            d_obj.child.update_generated()
+            if isinstance(d_obj.child, _BaseObject):
+                self._sync_child_objects(d_obj.child)
 
         for c_obj in obj.children:
             if c_obj.child.state == ObjectState.CREATING:
@@ -130,6 +129,7 @@ class NetworkLinkControl(_BaseObject):
                 ObjectState.DELETE_CREATED,
             ):
                 self.update.deletes.append(c_obj)
+            c_obj.child.update_generated()
             if isinstance(c_obj.child, _BaseObject):
                 self._sync_child_objects(c_obj.child)
 

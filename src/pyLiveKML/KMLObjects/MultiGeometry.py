@@ -22,3 +22,7 @@ class MultiGeometry(_ListObject[Geometry], Geometry):
                 self.append(contents)
             else:
                 self.extend(contents)
+
+    def build_kml(self, root: etree.Element, with_children: bool = True, with_dependents: bool = True) -> None:
+        for dd in self:
+            root.append(dd.construct_kml(with_children, with_dependents))

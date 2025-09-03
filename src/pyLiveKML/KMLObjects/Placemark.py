@@ -4,10 +4,10 @@ from typing import Iterator
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.KML.Object import ObjectChild
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Feature import Feature
 from pyLiveKML.KMLObjects.Geometry import Geometry
-from pyLiveKML.KML.Object import _ChildDef, _DependentDef
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
@@ -32,7 +32,6 @@ class Placemark(Feature):
     """
 
     _kml_tag = "Placemark"
-    _kml_dependents = Feature._kml_dependents + (_DependentDef("geometry"),)
 
     def __init__(
         self,
@@ -73,3 +72,12 @@ class Placemark(Feature):
             region=region,
         )
         self.geometry = geometry
+
+    @property
+    def dependents(self) -> Iterator[ObjectChild]:
+        yield ObjectChild(self, self.geometry)
+
+    def activate(self, value: bool, cascade: bool = False) -> None:
+        super().activate(value, cascade)
+        if cascade:
+            self.geometry.activate(value, True)
