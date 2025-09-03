@@ -82,7 +82,7 @@ class Region(Object):
     """A KML 'Region', per https://developers.google.com/kml/documentation/kmlreference."""
 
     _kml_tag = "Region"
-    _direct_children = Object._direct_children + (
+    _kml_children = Object._kml_children + (
         _ChildDef("box"),
         _ChildDef("lod"),
     )

@@ -72,7 +72,8 @@ class KMLApp:
 def find_apps(basedir: Path) -> list[KMLApp]:
     """Find all KMLApp instances located under the given path."""
     apps = list[KMLApp]()
-    for file in Path(basedir).rglob("*.py"):
+    # for file in Path(basedir).rglob("*.py"):
+    for file in Path(basedir).rglob("geometry.py"):
         modpath = ".".join(file.parent.parts[-2:]) + "." + file.stem
         try:
             items = inspect.getmembers(importlib.import_module(modpath))

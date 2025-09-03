@@ -65,7 +65,12 @@ class _GroundOverlay_LatLonQuad(_BaseObject):
         """_GroundOverlay_LatLonQuad instance constructor."""
         self.quad = quad
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         etree.SubElement(root, "coordinates").text = " ".join(
             (",".join(map(str, x)) for x in self.quad)
@@ -80,7 +85,7 @@ class GroundOverlay(Overlay):
         _FieldDef("altitude"),
         _FieldDef("altitude_mode", "gx:altitudeMode"),
     )
-    _direct_children = Overlay._direct_children + (
+    _kml_children = Overlay._kml_children + (
         _ChildDef("box"),
         _ChildDef("quad"),
     )

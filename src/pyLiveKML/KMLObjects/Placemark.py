@@ -7,7 +7,7 @@ from lxml import etree  # type: ignore
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Feature import Feature
 from pyLiveKML.KMLObjects.Geometry import Geometry
-from pyLiveKML.KML.Object import _ChildDef
+from pyLiveKML.KML.Object import _ChildDef, _DependentDef
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
@@ -32,7 +32,7 @@ class Placemark(Feature):
     """
 
     _kml_tag = "Placemark"
-    _direct_children = Feature._direct_children + (_ChildDef("geometry"),)
+    _kml_dependents = Feature._kml_dependents + (_DependentDef("geometry"),)
 
     def __init__(
         self,

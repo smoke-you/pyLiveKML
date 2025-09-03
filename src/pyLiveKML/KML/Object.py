@@ -179,11 +179,20 @@ class _ChildDef:
         self,
         name: str,
         tag: str | None = None,
-        use_tag: bool = True,
     ) -> None:
         self.name = name
         self.tag = name if tag is None else tag
-        self.use_tag = use_tag
+
+
+class _DependentDef:
+
+    def __init__(
+        self,
+        name: str,
+        tag: str | None = None,
+    ):
+        self.name = name
+        self.tag = name if tag is None else tag
 
 
 class ObjectState(Enum):
@@ -204,7 +213,8 @@ class _BaseObject(ABC):
 
     _kml_tag: str = ""
     _kml_fields: tuple[_FieldDef, ...] = tuple()
-    _direct_children: tuple[_ChildDef, ...] = tuple()
+    _kml_children: tuple[_ChildDef, ...] = tuple()
+    _kml_dependents: tuple[_DependentDef, ...] = tuple()
     _suppress_id: bool = True
 
     def __init__(self) -> None:
@@ -236,6 +246,9 @@ class _BaseObject(ABC):
             )
         )
 
+    def __str__(self) -> str:
+        return self._kml_tag
+
     @property
     def id(self) -> UUID:
         """The unique identifier of this :class:`~pyLiveKML.KMLObjects.Object`."""
@@ -264,20 +277,21 @@ class _BaseObject(ABC):
         self.activate(value)
 
     @property
+    def fields(self) -> Iterator[tuple[str, Any]]:
+        for f in self._kml_fields:
+            f_obj = getattr(self, f.name, None)
+            if f_obj is not None:
+                yield ((f.name, f_obj))
+
+    @property
     def children(self) -> Iterator["ObjectChild"]:
-        """The children of the instance.
+        """A generator over the children of the instance.
 
-        A generator to retrieve the children of this :class:`~pyLiveKML.KMLObjects.Object` as
-        :class:`~pyLiveKML.KMLObjects.Object.ObjectChild` instances.
-
-        :returns: A generator of :class:`~pyLiveKML.KMLObjects.Object.ObjectChild` named tuples that describes
-            each child :class:`~pyLiveKML.KMLObjects.Object` as a (parent, child)
+        In this context, children are child objects that the parent *does not* rely upon.
         """
-        # The return; yield pattern is used to trick linters into accepting that this is a generator that yields
-        # nothing, as opposed to yielding None
-        for c in self._direct_children:
+        for c in self._kml_children:
             c_obj = getattr(self, c.name, None)
-            if c_obj:
+            if c_obj is not None:
                 if isinstance(c_obj, Iterable):
                     for cc in c_obj:
                         yield ObjectChild(self, cc)
@@ -285,28 +299,22 @@ class _BaseObject(ABC):
                     yield ObjectChild(self, c_obj)
 
     @property
-    def direct_children(self) -> Iterator["_BaseObject"]:
-        """Retrieve a generator over the direct children of the object.
+    def dependents(self) -> Iterator["ObjectChild"]:
+        """A generator over the dependents of the instance.
 
-        That is, retrieve any `Object` instances that are embedded in this `Object`.
+        In this context, dependents are child objects that the parent relies upon, rather
+        than contains. For example, the Features stored under a Container are *not*
+        dependents of the Container, but they are children.
         """
-        for dc in self._direct_children:
-            dcobj = getattr(self, dc.name, None)
-            if dcobj:
-                if isinstance(dcobj, _BaseObject):
-                    if isinstance(dcobj, _ListObject):
-                        yield cast(_BaseObject, dcobj)
-                    elif isinstance(dcobj, Iterable):
-                        yield from dcobj
-                    else:
-                        yield dcobj
-                elif isinstance(dcobj, Iterable):
-                    for elem in dcobj:
-                        if isinstance(elem, _BaseObject):
-                            yield elem
-        if isinstance(self, _ListObject):
-            for c in cast(list[_BaseObject], self):
-                yield c
+
+        for d in self._kml_dependents:
+            d_obj = getattr(self, d.name, None)
+            if d_obj is not None:
+                if isinstance(d_obj, Iterable):
+                    for dd in d_obj:
+                        yield ObjectChild(self, dd)
+                else:
+                    yield ObjectChild(self, d_obj)
 
     @property
     def kml_tag(self) -> str:
@@ -317,7 +325,12 @@ class _BaseObject(ABC):
         """
         return self._kml_tag
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element.
 
         Generate the KML representation of the internal fields of this
@@ -332,20 +345,27 @@ class _BaseObject(ABC):
             value = f.dumper.dump(getattr(self, f.name))
             if value:
                 etree.SubElement(root, with_ns(f.typename)).text = value
+        if with_dependents:
+            for dd in self.dependents:
+                print(dd.parent, dd.child)
+                branch = dd.child.construct_kml()
+                root.append(branch)
         if with_children:
-            for dc in self.direct_children:
-                branch = dc.construct_kml()
+            for dc in self.children:
+                print(dc.parent, dc.child)
+                branch = dc.child.construct_kml()
                 root.append(branch)
 
-
-    def construct_kml(self) -> etree.Element:
+    def construct_kml(
+        self, with_children: bool = True, with_dependents: bool = True
+    ) -> etree.Element:
         """Construct this :class:`~pyLiveKML.KMLObjects.Object`'s KML representation.
 
         :returns: The KML representation of the object as an etree.Element.
         """
         attribs = None if self._suppress_id else {"id": str(self.id)}
         root = etree.Element(_tag=with_ns(self.kml_tag), attrib=attribs)
-        self.build_kml(root)
+        self.build_kml(root, with_children, with_dependents)
         return root
 
     def update_kml(self, parent: "_BaseObject", update: etree.Element) -> None:
@@ -377,10 +397,14 @@ class _BaseObject(ABC):
             :class:`~pyLiveKML.KMLObjects.Object`. The parent must be specified for GEP synchronization.
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
-        parent_element = etree.SubElement(root, with_ns(parent.kml_tag), attrib={"targetId": str(parent.id)})
+        parent_element = etree.SubElement(
+            root, with_ns(parent.kml_tag), attrib={"targetId": str(parent.id)}
+        )
 
         child_attribs = None if self._suppress_id else {"id": str(self.id)}
-        child_element = etree.SubElement(parent_element, with_ns(self.kml_tag), attrib=child_attribs)
+        child_element = etree.SubElement(
+            parent_element, with_ns(self.kml_tag), attrib=child_attribs
+        )
         self.build_kml(child_element, False)
         return child_element
 
@@ -394,7 +418,9 @@ class _BaseObject(ABC):
 
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
-        item = etree.SubElement(root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)})
+        item = etree.SubElement(
+            root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)}
+        )
         self.build_kml(item, with_children=False)
 
     def delete_kml(self, root: etree.Element) -> None:
@@ -402,7 +428,9 @@ class _BaseObject(ABC):
 
         :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
         """
-        etree.SubElement(root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)})
+        etree.SubElement(
+            root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)}
+        )
 
     def force_idle(self) -> None:
         """Force this :class:`~pyLiveKML.KMLObjects.Object` and **all of its children** to the IDLE state.
@@ -467,11 +495,11 @@ class _BaseObject(ABC):
             self._state = ObjectState.CREATING if value else self._state
         # cascade Activate downwards for Children
         if value:
-            for c in self.direct_children:
-                c.activate(True, cascade)
+            for c in self.children:
+                c.child.activate(True, cascade)
         else:
-            for c in self.direct_children:
-                c.force_idle()
+            for c in self.children:
+                c.child.force_idle()
 
 
 class Object(_BaseObject, ABC):
@@ -483,6 +511,7 @@ class Object(_BaseObject, ABC):
     """
 
     _suppress_id: bool = False
+    _kml_children: tuple[_ChildDef, ...] = _BaseObject._kml_children
 
     def __init__(self) -> None:
         """Object instance constructor."""

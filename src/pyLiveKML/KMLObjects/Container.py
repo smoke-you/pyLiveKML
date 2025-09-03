@@ -11,7 +11,7 @@ from lxml import etree  # type: ignore
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Feature import Feature
-from pyLiveKML.KML.Object import Object, ObjectState, _ListObject
+from pyLiveKML.KML.Object import ObjectState, _ChildDef, ObjectChild, _ListObject
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
@@ -46,6 +46,10 @@ class Container(_ListObject[Feature], Feature, ABC):
     :param Iterable[Feature]|None features: An (optional) Iterable of :class:`~pyLiveKML.KMLObjects.Feature`
         objects to be enclosed by this :class:`~pyLiveKML.KMLObjects.Container`.
     """
+
+    _kml_children: tuple[_ChildDef, ...] = Feature._kml_children + (
+        _ChildDef("contents"),
+    )
 
     def __init__(
         self,
@@ -93,6 +97,10 @@ class Container(_ListObject[Feature], Feature, ABC):
         self._is_open: bool | None = is_open
         self._update_limit: int = 0
         self.update_limit = update_limit
+
+    @property
+    def contents(self) -> Iterator[Feature]:
+        yield from self
 
     @property
     def containers(self) -> Iterator["ContainedFeature"]:
@@ -169,30 +177,6 @@ class Container(_ListObject[Feature], Feature, ABC):
             f = self._deleted[0]
             self._deleted.remove(f)
             yield f
-
-    # def construct_kml(self, with_features: bool = False) -> etree.Element:
-    #     """Construct the KML content for the instance.
-
-    #     Overridden from :func:`~pyLiveKML.KMLObjects.Object.construct_kml` to allow
-    #     for the creation of contained or enclosed
-    #     :class:`~pyLiveKML.KMLObjects.Feature` instances, including other
-    #     :class:`~pyLiveKML.KMLObjects.Container` instances.
-    #     """
-    #     root = super().construct_kml()
-    #     if with_features:
-    #         for f in self:
-    #             if isinstance(f, Container):
-    #                 root.append(f.construct_kml(with_features=True))
-    #             elif isinstance(f, Feature):
-    #                 root.append(f.construct_kml())
-    #     return root
-
-    def append(self, value: Feature) -> None:
-        """Append a :class:`~pyLiveKML.KMLObjects.Feature` to this :class:`~pyLiveKML.KMLObjects.Container`.
-
-        :param Feature item: The :class:`~pyLiveKML.KMLObjects.Feature` to be appended.
-        """
-        _ListObject[Feature].append(self, value)
 
     def remove(self, value: Feature) -> None:
         """Remove a :class:`~pyLiveKML.KMLObjects.Feature` from this :class:`~pyLiveKML.KMLObjects.Container`.

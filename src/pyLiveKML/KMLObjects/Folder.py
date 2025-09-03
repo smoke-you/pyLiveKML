@@ -3,9 +3,11 @@
 from typing import Iterable
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Feature import Feature
 from pyLiveKML.KMLObjects.Container import Container
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
+from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
 
 
 class Folder(Container):
@@ -46,6 +48,8 @@ class Folder(Container):
         snippet: str | None = None,
         snippet_max_lines: int | None = None,
         description: str | None = None,
+        abstract_view: AbstractView | None = None,
+        time_primitive: TimePrimitive | None = None,
         style_url: str | None = None,
         styles: StyleSelector | Iterable[StyleSelector] | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
@@ -63,6 +67,8 @@ class Folder(Container):
             snippet=snippet,
             snippet_max_lines=snippet_max_lines,
             description=description,
+            abstract_view=abstract_view,
+            time_primitive=time_primitive,
             style_url=style_url,
             styles=styles,
             update_limit=update_limit,

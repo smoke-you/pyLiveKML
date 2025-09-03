@@ -14,6 +14,7 @@ from pyLiveKML.KML.Object import (
     Angle360,
 )
 from pyLiveKML.KMLObjects.Link import Link
+from pyLiveKML.KMLObjects.Geometry import Geometry
 from pyLiveKML.KML.Object import Object, _ChildDef
 
 
@@ -43,7 +44,7 @@ class Location(_BaseObject):
 class Orientation(_BaseObject):
     """Describes rotation of a 3D model's coordinate system to position the object in Google Earth."""
 
-    _kml_tag = "Location"
+    _kml_tag = "Orientation"
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("heading", parser=Angle360),
         _FieldDef("tilt", parser=AnglePos180),
@@ -121,19 +122,24 @@ class ResourceMap(_BaseObject):
             else:
                 self.resources.extend(resources)
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
+        super().build_kml(root, with_children, with_dependents)
         for r in self.resources:
             root.append(r.construct_kml())
 
 
-class Model(Object):
+class Model(Geometry):
     """A KML 'Model', per https://developers.google.com/kml/documentation/kmlreference#model."""
 
     _kml_tag = "Model"
     _kml_fields = Object._kml_fields + (_FieldDef("altitude_mode", "gx:altitudeMode"),)
-    _direct_children = Object._direct_children + (
+    _kml_children = Object._kml_children + (
         _ChildDef("link"),
         _ChildDef("location"),
         _ChildDef("orientation"),
@@ -145,15 +151,9 @@ class Model(Object):
         self,
         link: Link,
         altitude_mode: AltitudeModeEnum | None = None,
-        longitude: float = 0,
-        latitude: float = 0,
-        altitude: float = 0,
-        heading: float = 0,
-        tilt: float = 0,
-        roll: float = 0,
-        x: float = 0,
-        y: float = 0,
-        z: float = 0,
+        coords: tuple[float, float, float] = (0, 0, 0),
+        angles: tuple[float, float, float] = (0, 0, 0),
+        scales: tuple[float, float, float] = (0, 0, 0),
         resources: Sequence[Alias] | Alias | None = None,
     ) -> None:
         """Model instance constructor."""
@@ -163,7 +163,7 @@ class Model(Object):
             AltitudeModeEnum.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode
         )
         self.altitude_mode = altitude_mode
-        self.location = Location(longitude, latitude, altitude)
-        self.orientation = Orientation(heading, tilt, roll)
-        self.scale = Scale(x, y, z)
+        self.location = Location(*coords)
+        self.orientation = Orientation(*angles)
+        self.scale = Scale(*scales)
         self.resources = ResourceMap(resources)

@@ -25,7 +25,12 @@ class Vec2(_BaseObject, ABC):
         self.x_units = x_units
         self.y_units = y_units
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         attribs = {
             "x": str(self.x),

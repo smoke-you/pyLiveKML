@@ -84,7 +84,7 @@ class PhotoOverlay(Overlay):
         _FieldDef("rotation"),
         _FieldDef("shape"),
     )
-    _direct_children = Overlay._direct_children + (
+    _kml_children = Overlay._kml_children + (
         _ChildDef("point"),
         _ChildDef("view_volume"),
         _ChildDef("image_pyramid"),

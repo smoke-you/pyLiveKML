@@ -32,17 +32,24 @@ class SimpleField(_BaseObject):
             else:
                 self.display_names.extend(display_names)
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         for dn in self.display_names:
             etree.SubElement(root, "displayName").text = dn
 
-    def construct_kml(self) -> etree.Element:
+    def construct_kml(
+        self, with_children: bool = True, with_dependents: bool = True
+    ) -> etree.Element:
         """Construct this instances' KML representation."""
         root = etree.Element(
             self.kml_tag, attrib={"type": self.type, "name": self.name}
         )
-        self.build_kml(root)
+        self.build_kml(root, with_children, with_dependents)
         return root
 
 

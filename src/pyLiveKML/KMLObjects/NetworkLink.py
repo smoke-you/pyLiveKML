@@ -33,7 +33,7 @@ class NetworkLink(Feature):
         _FieldDef("fly_to_view", "flyToView"),
         _FieldDef("refresh_visibility", "refreshVisibility"),
     )
-    _direct_children = Feature._direct_children + (_ChildDef("link"),)
+    _kml_children = Feature._kml_children + (_ChildDef("link"),)
 
     def __init__(
         self,
@@ -62,10 +62,3 @@ class NetworkLink(Feature):
         self.link = Link(href, refresh_mode, refresh_interval)
         self.fly_to_view = fly_to_view
         self.refresh_visibility = refresh_visibility
-
-    @property
-    def children(self) -> Iterator[ObjectChild]:
-        """The children of the instance."""
-        if self.link:
-            yield ObjectChild(self, self.link)
-        yield from super().children

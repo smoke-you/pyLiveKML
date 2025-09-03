@@ -1,6 +1,7 @@
 """TimeSpan module."""
 
 from datetime import datetime
+from dateutil.parser import parse as dtparser
 
 from lxml import etree  # type: ignore
 
@@ -17,11 +18,19 @@ class TimeSpan(TimePrimitive):
         _FieldDef("end"),
     )
 
-    def __init__(self, begin: datetime, end: datetime):
+    def __init__(self, begin: datetime | str, end: datetime | str):
         """TimeSpan instance constructor."""
         TimePrimitive.__init__(self)
-        self.begin = begin
-        self.end = end
+        self.begin: datetime
+        self.end: datetime
+        if isinstance(begin, str):
+            self.begin = dtparser(begin)
+        else:
+            self.begin = begin
+        if isinstance(end, str):
+            self.end = dtparser(end)
+        else:
+            self.end = end
 
 
 class GxTimeSpan(TimeSpan):

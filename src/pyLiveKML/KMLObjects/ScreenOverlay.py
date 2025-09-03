@@ -21,7 +21,7 @@ class ScreenOverlay(Overlay):
 
     _kml_tag = "ScreenOverlay"
     _kml_fields = Overlay._kml_fields + (_FieldDef("rotation"),)
-    _direct_children = Overlay._direct_children + (
+    _kml_children = Overlay._kml_children + (
         _ChildDef("overlay_xy"),
         _ChildDef("screen_xy"),
         _ChildDef("rotation_xy"),

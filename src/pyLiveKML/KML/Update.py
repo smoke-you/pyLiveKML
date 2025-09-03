@@ -11,7 +11,9 @@ from pyLiveKML.KML.utils import with_ns
 
 class _UpdateList(_BaseObject, list[ObjectChild], ABC):
 
-    def __init__(self, items: ObjectChild | Iterable[ObjectChild] | None = None) -> None:
+    def __init__(
+        self, items: ObjectChild | Iterable[ObjectChild] | None = None
+    ) -> None:
         _BaseObject.__init__(self)
         list[ObjectChild].__init__(self)
         ABC.__init__(self)
@@ -26,7 +28,12 @@ class CreateList(_UpdateList):
 
     _kml_tag = "Create"
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         for c in (c for c in self if not c.parent._suppress_id):
             c.child.create_kml(root, c.parent)
@@ -37,7 +44,12 @@ class ChangeList(_UpdateList):
 
     _kml_tag = "Change"
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         for c in (c for c in self if not c.child._suppress_id):
             c.child.change_kml(root)
@@ -48,7 +60,12 @@ class DeleteList(_UpdateList):
 
     _kml_tag = "Delete"
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         for c in (c for c in self if not c.child._suppress_id):
             c.child.delete_kml(root)
@@ -99,12 +116,17 @@ class Update(_BaseObject):
         self.changes.clear()
         self.deletes.clear()
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
+        super().build_kml(root, with_children, with_dependents)
         if self.creates:
-            root.append(self.creates.construct_kml())
+            root.append(self.creates.construct_kml(with_children, with_dependents))
         if self.changes:
-            root.append(self.changes.construct_kml())
+            root.append(self.changes.construct_kml(with_children, with_dependents))
         if self.deletes:
-            root.append(self.deletes.construct_kml())
+            root.append(self.deletes.construct_kml(with_children, with_dependents))

@@ -3,7 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import ColorModeEnum
-from pyLiveKML.KML.Object import _BaseObject, _FieldDef, NoDump
+from pyLiveKML.KML.Object import _BaseObject, _FieldDef, NoDump, _DependentDef
 from pyLiveKML.KML.GeoColor import GeoColor
 from pyLiveKML.KML.Vec2 import HotSpot
 from pyLiveKML.KMLObjects.ColorStyle import ColorStyle
@@ -43,9 +43,9 @@ class IconStyle(ColorStyle):
         _FieldDef("scale"),
         _FieldDef("heading"),
     )
-    _direct_children = ColorStyle._direct_children + (
-        _ChildDef("icon"),
-        _ChildDef("hot_spot"),
+    _kml_dependents = ColorStyle._kml_dependents + (
+        _DependentDef("icon"),
+        _DependentDef("hot_spot"),
     )
 
     def __init__(

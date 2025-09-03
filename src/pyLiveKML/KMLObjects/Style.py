@@ -35,7 +35,7 @@ class Style(StyleSelector):
     """
 
     _kml_tag = "Style"
-    _direct_children = StyleSelector._direct_children + (
+    _kml_children = StyleSelector._kml_children + (
         _ChildDef("balloon_style"),
         _ChildDef("icon_style"),
         _ChildDef("label_style"),

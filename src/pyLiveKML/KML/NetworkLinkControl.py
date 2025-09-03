@@ -7,7 +7,14 @@ from typing import cast, Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
-from pyLiveKML.KML.Object import _BaseObject, _FieldDef, ObjectState, _ChildDef, ObjectChild, _ListObject
+from pyLiveKML.KML.Object import (
+    _BaseObject,
+    _FieldDef,
+    ObjectState,
+    _ChildDef,
+    ObjectChild,
+    _DependentDef,
+)
 from pyLiveKML.KML.Update import Update
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
 from pyLiveKML.KMLObjects.Container import Container
@@ -38,6 +45,7 @@ class NetworkLinkControl(_BaseObject):
 
     _kml_tag = "NetworkLinkControl"
     _kml_fields = _BaseObject._kml_fields + (
+        _FieldDef("target_href", "targetHref"),
         _FieldDef("min_refresh_period", "minRefreshPeriod"),
         _FieldDef("max_session_length", "maxSessionLength"),
         _FieldDef("cookie"),
@@ -47,9 +55,10 @@ class NetworkLinkControl(_BaseObject):
         _FieldDef("link_snippet", "linkSnippet"),
         _FieldDef("link_expires", "linkExpires"),
     )
-    _direct_children = _BaseObject._direct_children + (
-        _ChildDef("update"),
-    )
+    # _kml_children = _BaseObject._kml_children + (
+    #     _ChildDef("update"),
+    # )
+    _kml_dependents = _BaseObject._kml_dependents + (_DependentDef("update"),)
 
     def __init__(
         self,
@@ -67,6 +76,7 @@ class NetworkLinkControl(_BaseObject):
         abstract_view: AbstractView | None = None,
     ):
         """NetworkLinkControl instance constructor."""
+        super().__init__()
         self.target_href: str = target_href
         self.container: Container = (
             Folder("Root", is_open=True) if container is None else container
@@ -83,51 +93,64 @@ class NetworkLinkControl(_BaseObject):
         self.abstract_view = abstract_view
         self.update = Update(target_href)
 
-
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
 
         # The real work gets done here.
-        # Walk the tree under the `container`, looking at each object's state, and 
+        # Walk the tree under the `container`, looking at each object's state, and
         # create, update or delete it as necessary.
 
         self._sync_child_objects(self.container)
-        super().build_kml(root, with_children)
-
+        super().build_kml(root, with_children, with_dependents)
 
     def _sync_child_objects(self, obj: _BaseObject) -> None:
-        for dc in obj._direct_children:
-            dcobj = getattr(obj, dc.name, None)
-            if isinstance(dcobj, _BaseObject):
-                if dcobj.state == ObjectState.CREATING:
-                    self.update.creates.append(ObjectChild(obj, dcobj))
-                elif dcobj.state == ObjectState.CHANGING:
-                    self.update.changes.append(ObjectChild(obj, dcobj))
-                elif dcobj.state in (ObjectState.DELETE_CHANGED, ObjectState.DELETE_CREATED):
-                    self.update.deletes.append(ObjectChild(obj, dcobj))
-                dcobj.update_generated()
-                self._sync_child_objects(dcobj)
-            elif isinstance(dcobj, Iterable):
-                for iobj in dcobj:
-                    if isinstance(iobj, _BaseObject):
-                        self._sync_child_objects(iobj)
-        if isinstance(obj, _ListObject):
-            if isinstance(obj, Container):
-                limit = obj.update_limit
-            else:
-                limit = self.update_limit
-            for lcobj in (lc for lc in islice(obj, limit)):
-                if lcobj._state == ObjectState.CREATING:
-                    self.update.creates.append(ObjectChild(obj, lcobj))
-                elif lcobj.state == ObjectState.CHANGING:
-                    self.update.changes.append(ObjectChild(obj, lcobj))
-                elif lcobj.state in (ObjectState.DELETE_CHANGED, ObjectState.DELETE_CREATED):
-                    self.update.deletes.append(ObjectChild(obj, lcobj))
-                lcobj.update_generated()
-                self._sync_child_objects(lcobj)
-        if isinstance(obj, Container):
-            limit = obj.update_limit
-            deletes = [ObjectChild(obj, delobj) for delobj in islice(obj._deleted, limit)]
-            self.update.deletes.extend(deletes)
-            for d in (d.child for d in deletes):
-                obj._deleted.remove(cast(Feature, d))
+        for d_obj in obj.dependents:
+            if d_obj.child.state == ObjectState.CREATING:
+                self.update.creates.append(d_obj)
+            elif d_obj.child.state == ObjectState.CHANGING:
+                self.update.changes.append(d_obj)
+            elif d_obj.child.state in (
+                ObjectState.DELETE_CHANGED,
+                ObjectState.DELETE_CREATED,
+            ):
+                self.update.deletes.append(d_obj)
+
+        for c_obj in obj.children:
+            if c_obj.child.state == ObjectState.CREATING:
+                self.update.creates.append(c_obj)
+            elif c_obj.child.state == ObjectState.CHANGING:
+                self.update.changes.append(c_obj)
+            elif c_obj.child.state in (
+                ObjectState.DELETE_CHANGED,
+                ObjectState.DELETE_CREATED,
+            ):
+                self.update.deletes.append(c_obj)
+            if isinstance(c_obj.child, _BaseObject):
+                self._sync_child_objects(c_obj.child)
+
+        # for dc in obj._kml_children:
+        #     dcobj = getattr(obj, dc.name, None)
+        #     if isinstance(dcobj, _BaseObject):
+        #         if dcobj.state == ObjectState.CREATING:
+        #             self.update.creates.append(ObjectChild(obj, dcobj))
+        #         elif dcobj.state == ObjectState.CHANGING:
+        #             self.update.changes.append(ObjectChild(obj, dcobj))
+        #         elif dcobj.state in (ObjectState.DELETE_CHANGED, ObjectState.DELETE_CREATED):
+        #             self.update.deletes.append(ObjectChild(obj, dcobj))
+        #         dcobj.update_generated()
+        #         self._sync_child_objects(dcobj)
+        #     elif isinstance(dcobj, Iterable):
+        #         for iobj in dcobj:
+        #             if isinstance(iobj, _BaseObject):
+        #                 self._sync_child_objects(iobj)
+        # if isinstance(obj, Container):
+        #     limit = obj.update_limit
+        #     deletes = [ObjectChild(obj, delobj) for delobj in islice(obj._deleted, limit)]
+        #     self.update.deletes.extend(deletes)
+        #     for d in (d.child for d in deletes):
+        #         obj._deleted.remove(cast(Feature, d))

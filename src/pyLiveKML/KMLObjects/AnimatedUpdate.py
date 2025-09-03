@@ -18,7 +18,7 @@ class AnimatedUpdate(TourPrimitive):
         _FieldDef("delayed_start", "gx:delayedStart"),
         _FieldDef("duration", "gx:duration"),
     )
-    _direct_children = TourPrimitive._direct_children + (_ChildDef("update"),)
+    _kml_children = TourPrimitive._kml_children + (_ChildDef("update"),)
 
     def __init__(
         self,

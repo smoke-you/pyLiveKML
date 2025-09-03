@@ -7,14 +7,14 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.KML.ViewerOption import ViewerOption
 from pyLiveKML.KML.utils import with_ns
-from pyLiveKML.KML.Object import Object, ObjectChild, _ChildDef
+from pyLiveKML.KML.Object import Object, ObjectChild, _ChildDef, _DependentDef
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
 
 
 class AbstractView(Object, ABC):
     """A KML 'AbstractView', per https://developers.google.com/kml/documentation/kmlreference#abstractview."""
 
-    _direct_children = Object._direct_children + (_ChildDef("time_primitive"),)
+    _kml_dependents = Object._kml_dependents + (_DependentDef("time_primitive"),)
 
     def __init__(
         self,
@@ -32,9 +32,14 @@ class AbstractView(Object, ABC):
                 self._viewer_options.extend(viewer_options)
         self.time_primitive = time_primitive
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
+        super().build_kml(root, with_children, with_dependents)
         if self._viewer_options:
             opts = etree.SubElement(root, with_ns("gx:ViewerOptions"))
             for v in self._viewer_options:

@@ -41,7 +41,7 @@ class Overlay(Feature, ABC):
         _FieldDef("color", parser=ColorParse),
         _FieldDef("draw_order", "drawOrder"),
     )
-    _direct_children = Feature._direct_children + (_ChildDef("icon"),)
+    _kml_children = Feature._kml_children + (_ChildDef("icon"),)
 
     def __init__(
         self,

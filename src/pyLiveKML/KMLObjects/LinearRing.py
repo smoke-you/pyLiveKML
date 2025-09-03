@@ -93,13 +93,18 @@ class LinearRing(Geometry):
             raise ValueError("There must be at least three points in the boundary.")
         self.field_changed()
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
 
         def _build() -> Iterable[str]:
             yield from (str(c) for c in self._coordinates)
             yield str(self._coordinates[0])
 
-        super().build_kml(root, with_children)
+        super().build_kml(root, with_children, with_dependents)
         if self._coordinates:
             etree.SubElement(root, "coordinates").text = " ".join(_build())

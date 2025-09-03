@@ -19,7 +19,7 @@ class FlyTo(TourPrimitive):
         _FieldDef("duration"),
         _FieldDef("fly_to_mode", "flyToMode"),
     )
-    _direct_children = TourPrimitive._direct_children + (_ChildDef("abstract_view"),)
+    _kml_children = TourPrimitive._kml_children + (_ChildDef("abstract_view"),)
 
     def __init__(
         self,

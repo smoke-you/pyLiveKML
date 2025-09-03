@@ -3,7 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.KML import StyleStateEnum
-from pyLiveKML.KML.Object import _BaseObject, _FieldDef
+from pyLiveKML.KML.Object import _BaseObject, _FieldDef, _DependentDef
 from pyLiveKML.KML.Object import _ChildDef
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.Style import Style
@@ -17,6 +17,7 @@ class _StyleMap_Pair(_BaseObject):
         _FieldDef("key"),
         _FieldDef("style_url", "styleUrl"),
     )
+    _kml_dependents = _BaseObject._kml_dependents + (_DependentDef("style"),)
 
     def __init__(self, key: StyleStateEnum, style_ref: str | Style):
         """_StyleMap_Pair instance constructor."""
@@ -47,12 +48,6 @@ class _StyleMap_Pair(_BaseObject):
             self.style = value
             self.style_url = None
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
-        if self.style is not None:
-            root.append(self.style.construct_kml())
-
 
 class StyleMap(StyleSelector):
     """A KML 'StyleMap', per https://developers.google.com/kml/documentation/kmlreference#stylemap.
@@ -82,7 +77,7 @@ class StyleMap(StyleSelector):
     """
 
     _kml_tag = "StyleMap"
-    _direct_children = StyleSelector._direct_children + (
+    _kml_children = StyleSelector._kml_children + (
         _ChildDef("_normal"),
         _ChildDef("_highlight"),
     )

@@ -24,9 +24,14 @@ class ViewerOption(_BaseObject):
         self.option = option
         self.enabled = enabled
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-        super().build_kml(root, with_children)
+        super().build_kml(root, with_children, with_dependents)
         etree.SubElement(
             root,
             with_ns(self._kml_tag),

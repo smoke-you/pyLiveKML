@@ -101,7 +101,7 @@ class Track(Geometry):
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("altitude_mode", "gx:altitudeMode"),
     )
-    _direct_children = Geometry._direct_children + (_ChildDef("model"),)
+    _kml_children = Geometry._kml_children + (_ChildDef("model"),)
 
     def __init__(
         self,
@@ -150,7 +150,12 @@ class Track(Geometry):
                         self._schemas[schema] = set[str]()
                     self._schemas[schema].update(fields.keys())
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
         value: str

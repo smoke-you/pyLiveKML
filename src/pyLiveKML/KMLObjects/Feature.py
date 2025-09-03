@@ -8,10 +8,9 @@ from typing import Iterable, Iterator, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.KML.Object import _FieldDef, NoDump
+from pyLiveKML.KML.Object import Object, _FieldDef, NoDump, _ChildDef, _DependentDef
 from pyLiveKML.KML.utils import with_ns
 from pyLiveKML.KMLObjects.AbstractView import AbstractView
-from pyLiveKML.KML.Object import Object, _ChildDef
 from pyLiveKML.KMLObjects.Region import Region
 from pyLiveKML.KMLObjects.StyleSelector import StyleSelector
 from pyLiveKML.KMLObjects.TimePrimitive import TimePrimitive
@@ -42,7 +41,7 @@ class Feature(Object, ABC):
         objects that are local to this :class:`~pyLiveKML.KMLObjects.Feature`.
     """
 
-    _kml_fields: tuple[_FieldDef, ...] = Object._kml_fields + (
+    _kml_fields = Object._kml_fields + (
         _FieldDef("name"),
         _FieldDef("visibility"),
         _FieldDef("is_open", "open"),
@@ -55,11 +54,13 @@ class Feature(Object, ABC):
         _FieldDef("description"),
         _FieldDef("style_url", "styleUrl"),
     )
-    _direct_children: tuple[_ChildDef, ...] = Object._direct_children + (
-        _ChildDef("abstract_view"),
-        _ChildDef("time_primitive"),
-        _ChildDef("region"),
-        _ChildDef("_styles", None, False),
+    _kml_children: tuple[_ChildDef, ...] = Object._kml_children + (
+        _ChildDef("styles"),
+    )
+    _kml_dependents = Object._kml_dependents + (
+        _DependentDef("abstract_view"),
+        _DependentDef("time_primitive"),
+        _DependentDef("region"),
     )
 
     def __init__(
@@ -122,7 +123,12 @@ class Feature(Object, ABC):
             else:
                 self._styles.extend(value)
 
-    def build_kml(self, root: etree.Element, with_children: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
         super().build_kml(root, with_children)
         if self.author_name is not None:
@@ -142,7 +148,7 @@ class Feature(Object, ABC):
     # in an inactive parent Feature is activate, the parent Feature must also be
     # activated in order for GEP synchronization to work correctly.
     def activate(self, value: bool, cascade: bool = False) -> None:
-        """Cascade activation upwards, but do not cascade activation upwards.
+        """Cascade activation upwards, but do not cascade deactivation upwards.
 
         Overrides :func:`~pyLiveKML.KMLObjects.Object.Object.select` to implement upwards cascade of activation.
         That is, if a :class:`~pyLiveKML.KMLObjects.Feature` enclosed in the object tree depending from a

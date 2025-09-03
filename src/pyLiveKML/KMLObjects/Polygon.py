@@ -13,7 +13,7 @@ from pyLiveKML.KML.Object import Object, ObjectChild, _ChildDef
 
 class _OuterBoundary(Object):
     _kml_tag = "outerBoundaryIs"
-    _direct_children = Object._direct_children + (_ChildDef("boundary"),)
+    _kml_children = Object._kml_children + (_ChildDef("boundary"),)
     _suppress_id = True
 
     def __init__(self, boundary: LinearRing) -> None:
@@ -23,7 +23,7 @@ class _OuterBoundary(Object):
 
 class _InnerBoundary(Object):
     _kml_tag = "innerBoundaryIs"
-    _direct_children = Object._direct_children + (_ChildDef("boundary"),)
+    _kml_children = Object._kml_children + (_ChildDef("boundary"),)
     _suppress_id = True
 
     def __init__(self, boundary: LinearRing) -> None:
@@ -57,7 +57,7 @@ class Polygon(Geometry):
         _FieldDef("extrude"),
         _FieldDef("tessellate"),
     )
-    _direct_children = Geometry._direct_children + (
+    _kml_children = Geometry._kml_children + (
         _ChildDef("_outer_boundary"),
         _ChildDef("_inner_boundaries"),
     )

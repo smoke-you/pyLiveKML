@@ -47,7 +47,7 @@ class ListStyle(SubStyle):
         _FieldDef("list_item_type", "listItemType"),
         _FieldDef("bg_color", "bgColor", ColorParse),
     )
-    _direct_children = SubStyle._direct_children + (_ChildDef("icons", None, False),)
+    _kml_children = SubStyle._kml_children + (_ChildDef("icons"),)
 
     def __init__(
         self,
