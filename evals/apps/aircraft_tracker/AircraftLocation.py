@@ -1,15 +1,15 @@
 """AircraftLocation module."""
 
-from typing import Optional, Sequence, cast
+from typing import Optional, Sequence
 
 from lxml import etree  # type: ignore
 from pyLiveKML import (
     IconStyle,
     Point,
     Style,
+    Placemark,
 )
-from pyLiveKML.KML.Object import ObjectState
-from pyLiveKML.KMLObjects.Placemark import Placemark
+from pyLiveKML.objects.Object import ObjectState
 
 from .AircraftData import AircraftData
 from ..helpers import description_builder

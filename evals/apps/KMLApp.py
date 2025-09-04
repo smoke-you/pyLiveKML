@@ -11,7 +11,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, UUID4
 
 from pyLiveKML import NetworkLinkControl
-from pyLiveKML.KMLObjects.Feature import Feature
+from pyLiveKML.objects.Feature import Feature
 
 
 class KMLSelect(BaseModel):

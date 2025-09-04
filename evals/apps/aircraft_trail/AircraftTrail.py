@@ -2,8 +2,8 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML import ListItemTypeEnum, Folder, ListStyle, Style
-from pyLiveKML.KML.Object import ObjectState, _BaseObject
+from pyLiveKML import Folder, ListItemTypeEnum, ListStyle, Style
+from pyLiveKML.objects.Object import ObjectState, _BaseObject
 
 from .AircraftData import AircraftData
 from .AircraftPosition import AircraftPosition

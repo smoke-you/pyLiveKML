@@ -22,7 +22,7 @@ from pyLiveKML import (
     KML_DOCTYPE, 
     KML_HEADERS,
 )
-from pyLiveKML.KMLObjects.Feature import Feature
+from pyLiveKML.objects.Feature import Feature
 from scipy.spatial.transform import Rotation
 
 from .GeoEllipse import GeoEllipse

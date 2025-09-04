@@ -12,7 +12,7 @@ from pyLiveKML import (
     Style,
     TimeStamp,
 )
-from pyLiveKML.KMLObjects.Placemark import Placemark
+from pyLiveKML.objects.Placemark import Placemark
 
 
 class AircraftPosition(Placemark):
