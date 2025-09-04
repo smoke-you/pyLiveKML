@@ -7,10 +7,11 @@ from pathlib import Path
 from typing import cast
 
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.requests import Request
 from fastapi.templating import Jinja2Templates
-from pyLiveKML import Folder, NetworkLinkControl, TimeSpan
+from lxml import etree  # type: ignore
+from pyLiveKML import Document, Folder, NetworkLinkControl, TimeSpan, kml_root_tag, KML_DOCTYPE,  KML_HEADERS
 from pyLiveKML.objects.Feature import Feature
 
 from .AircraftPosition import AircraftPosition
@@ -72,6 +73,22 @@ async def _(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(
         "tracer.html.j2",
         {"request": request, "aircraftlist": tracer_data},
+    )
+
+
+@tracer_app.get("/loadable-tracer.kml")
+async def _(request: Request) -> PlainTextResponse:
+    root = kml_root_tag()
+    doc = Document(
+        "tracer",
+        features=[x for x in tracer_data if x.active],
+    )
+    root.append(doc.construct_kml())
+    return PlainTextResponse(
+        content=etree.tostring(
+            root, doctype=KML_DOCTYPE, encoding="utf-8", pretty_print=True
+        ),
+        headers=KML_HEADERS,
     )
 
 

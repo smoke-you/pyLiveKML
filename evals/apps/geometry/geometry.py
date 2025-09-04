@@ -98,7 +98,7 @@ async def _(request: Request) -> HTMLResponse:
     )
 
 
-@geo_app.get("/loadable.kml")
+@geo_app.get("/loadable-geometry.kml")
 async def _(request: Request) -> PlainTextResponse:
     root = kml_root_tag()
     doc = Document(
