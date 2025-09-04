@@ -2,23 +2,22 @@
 
 from datetime import datetime
 from itertools import islice
-from typing import cast, Iterable
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.errors import NetworkLinkControlUpdateLimited
+from pyLiveKML.objects.AbstractView import AbstractView
+from pyLiveKML.objects.Update import Update
+from pyLiveKML.objects.Container import Container
+from pyLiveKML.objects.Folder import Folder
 from pyLiveKML.objects.Object import (
     _BaseObject,
     _DependentDef,
     _FieldDef,
-    ObjectState,
     ObjectChild,
+    ObjectState,
 )
-from pyLiveKML.objects.Update import Update
-from pyLiveKML.objects.AbstractView import AbstractView
-from pyLiveKML.objects.Container import Container
-from pyLiveKML.objects.Folder import Folder
 
 
 class NetworkLinkControl(_BaseObject):
@@ -116,7 +115,7 @@ class NetworkLinkControl(_BaseObject):
                 ObjectState.DELETE_CREATED,
             ):
                 self.update.deletes.append(d_obj)
-            d_obj.child.update_generated()
+            d_obj.child.synchronized()
             if len(self.update) >= self.update_limit:
                 raise NetworkLinkControlUpdateLimited
             if isinstance(d_obj.child, _BaseObject):
@@ -132,7 +131,7 @@ class NetworkLinkControl(_BaseObject):
                 ObjectState.DELETE_CREATED,
             ):
                 self.update.deletes.append(c_obj)
-            c_obj.child.update_generated()
+            c_obj.child.synchronized()
             if len(self.update) >= self.update_limit:
                 raise NetworkLinkControlUpdateLimited
             if isinstance(c_obj.child, _BaseObject):

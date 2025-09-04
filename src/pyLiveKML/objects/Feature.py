@@ -148,7 +148,7 @@ class Feature(Object, ABC):
     def activate(self, value: bool, cascade: bool = False) -> None:
         """Cascade activation upwards, but do not cascade deactivation upwards.
 
-        Overrides :func:`~pyLiveKML.KMLObjects.Object.Object.select` to implement upwards cascade of activation.
+        Overrides :func:`~pyLiveKML.KMLObjects.Object.Object.activate` to implement upwards cascade of activation.
         That is, if a :class:`~pyLiveKML.KMLObjects.Feature` enclosed in the object tree depending from a
         deactivated  parent :class:`~pyLiveKML.KMLObjects.Feature` is activated, the reverse tree's parents must also
         be activated in order for GEP synchronization to work correctly.

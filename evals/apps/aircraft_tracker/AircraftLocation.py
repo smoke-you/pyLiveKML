@@ -66,7 +66,7 @@ class AircraftLocation(Placemark):
             return None
 
     # This method is overridden so that the instance is always ready to provide a Change tag
-    def update_generated(self) -> None:
+    def synchronized(self) -> None:
         """Record that a KML update has been emitted."""
         if self._state == ObjectState.CREATING or self._state == ObjectState.CHANGING:
             # self._state = State.CREATED

@@ -178,10 +178,8 @@ class _ChildDef:
     def __init__(
         self,
         name: str,
-        tag: str | None = None,
     ) -> None:
         self.name = name
-        self.tag = name if tag is None else tag
 
 
 class _DependentDef:
@@ -189,10 +187,8 @@ class _DependentDef:
     def __init__(
         self,
         name: str,
-        tag: str | None = None,
     ):
         self.name = name
-        self.tag = name if tag is None else tag
 
 
 class ObjectState(Enum):
@@ -221,7 +217,6 @@ class _BaseObject(ABC):
         """Object instance constructor."""
         super().__init__()
         self._id = uuid4()
-        self._selected: bool = False
         self._container: _BaseObject | None = None
         self._state: ObjectState = ObjectState.IDLE
 
@@ -370,28 +365,6 @@ class _BaseObject(ABC):
         self.build_kml(root, with_children, with_dependents)
         return root
 
-    def update_kml(self, parent: "_BaseObject", update: etree.Element) -> None:
-        """Update this :class:`~pyLiveKML.KMLObjects.Object`'s KML representation.
-
-        Retrieve a complete child <Create>, <Change> or <Delete> KML tag as a child of an <Update> tag.
-        The type of child tag retrieved is dependent on the current state of this
-        :class:`~pyLiveKML.KMLObjects.Object`.
-
-        :param Object parent: The immediate parent :class:`~pyLiveKML.KMLObjects.Object` of this
-            :class:`~pyLiveKML.KMLObjects.Object`. The parent is required only for <Create> tags.
-        :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
-        """
-        if self._state == ObjectState.CREATING:
-            self.create_kml(parent, update)
-        elif self._state == ObjectState.CHANGING:
-            self.change_kml(update)
-        elif (
-            self._state == ObjectState.DELETE_CREATED
-            or self._state == ObjectState.DELETE_CHANGED
-        ):
-            self.delete_kml(update)
-        self.update_generated()
-
     def create_kml(self, root: etree.Element, parent: "_BaseObject") -> etree.Element:
         """Construct a complete <Create> element tree as a child of an <Update> tag.
 
@@ -409,11 +382,6 @@ class _BaseObject(ABC):
         )
         self.build_kml(child_element, False)
         return child_element
-
-        # item = self.construct_kml()
-        # parent_element.append(item)
-        # root.append(parent_element)
-        # return item
 
     def change_kml(self, root: etree.Element) -> None:
         """Construct a complete <Change> element tree as a child of an <Update> tag.
@@ -434,54 +402,6 @@ class _BaseObject(ABC):
             root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)}
         )
 
-    def force_idle(self) -> None:
-        """Force this :class:`~pyLiveKML.KMLObjects.Object` and **all of its children** to the IDLE state.
-
-        This is typically done after the object has been deselected, which will cause
-        it to be deleted from GEP at the next synchronization update. When the
-        :class:`~pyLiveKML.KMLObjects.Object` is deleted by GEP, all of its
-        children, and any :class:`~pyLiveKML.KMLObjects.Feature` objects that it
-        encloses, will also be automatically deleted. There is no need to emit <Delete>
-        tags for these deletions, and in fact doing so will likely cause GEP to have
-        conniptions.
-        """
-        self._state = ObjectState.IDLE
-        for d in self.dependents:
-            d.child.force_idle()
-        for c in self.children:
-            c.child.force_idle()
-
-    def field_changed(self) -> None:
-        """Flag that a field or property of this :class:`~pyLiveKML.KMLObjects.Object` has changed.
-
-        If this flag is set, it indicates that re-synchronization with GEP may be required.
-        """
-        if self._state == ObjectState.CREATED:  # or self._state == State.IDLE:
-            self._state = ObjectState.CHANGING
-        elif self._state == ObjectState.DELETE_CREATED:
-            self._state = ObjectState.DELETE_CHANGED
-        elif self._state == ObjectState.IDLE:
-            pass
-
-    def update_generated(self) -> None:
-        """Modify the state of the :class:`~pyLiveKML.KMLObjects.Object` to reflect that a synchronization update has been emitted."""
-        if self._state == ObjectState.CREATING:
-            self._state = ObjectState.CREATED
-            # # if the object is being created, so are all of its descendants, in a single tag; set them created too
-            # for c in self.children:
-            #     c.child.update_generated()
-        elif self._state == ObjectState.CHANGING:
-            # if the object is changing, don't mess with its descendants - they are updated elsewhere if necessary
-            self._state = ObjectState.CREATED
-        elif (
-            self._state == ObjectState.DELETE_CREATED
-            or self._state == ObjectState.DELETE_CHANGED
-        ):
-            self._state = ObjectState.IDLE
-
-        for d in self.dependents:
-            d.child.update_generated()
-
     def activate(self, value: bool, cascade: bool = False) -> None:
         """Activate or deactivate this :class:`~pyLiveKML.KMLObjects.Object` for display in GEP.
 
@@ -500,13 +420,56 @@ class _BaseObject(ABC):
             self._state = ObjectState.CHANGING if value else self._state
         else:  # implies default state is IDLE
             self._state = ObjectState.CREATING if value else self._state
-        # cascade Activate downwards for Children
+        # cascade Activate downwards for children
         if value:
             for c in self.children:
                 c.child.activate(True, cascade)
         else:
             for c in self.children:
                 c.child.force_idle()
+
+    def field_changed(self) -> None:
+        """Flag that a field or property of this :class:`~pyLiveKML.KMLObjects.Object` has changed.
+
+        If this flag is set, it indicates that re-synchronization with GEP may be required.
+        """
+        if self._state == ObjectState.CREATED:
+            self._state = ObjectState.CHANGING
+        elif self._state == ObjectState.DELETE_CREATED:
+            self._state = ObjectState.DELETE_CHANGED
+        # if not already CREATED or DELETE_CREATED, change nothing
+
+    def synchronized(self) -> None:
+        """Modify the state of the :class:`~pyLiveKML.KMLObjects.Object` to reflect that a synchronization update has been emitted."""
+        if self._state == ObjectState.CREATING:
+            self._state = ObjectState.CREATED
+        elif self._state == ObjectState.CHANGING:
+            self._state = ObjectState.CREATED
+        elif (
+            self._state == ObjectState.DELETE_CREATED
+            or self._state == ObjectState.DELETE_CHANGED
+        ):
+            self._state = ObjectState.IDLE
+        for d in self.dependents:
+            d.child.synchronized()
+
+    def force_idle(self) -> None:
+        """Force this :class:`~pyLiveKML.KMLObjects.Object` and **all of its children** to the IDLE state.
+
+        This is typically done after the object has been deactivated, which will cause
+        it to be deleted from GEP at the next synchronization update. When the
+        :class:`~pyLiveKML.KMLObjects.Object` is deleted by GEP, all of its
+        children, and any :class:`~pyLiveKML.KMLObjects.Feature` objects that it
+        encloses, will also be automatically deleted. There is no need to emit <Delete>
+        tags for these deletions, and in fact doing so will likely cause GEP to have
+        conniptions.
+        """
+        self._state = ObjectState.IDLE
+        for d in self.dependents:
+            d.child.force_idle()
+        for c in self.children:
+            c.child.force_idle()
+
 
 
 class Object(_BaseObject, ABC):
