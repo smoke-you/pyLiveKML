@@ -116,6 +116,9 @@ class Update(_BaseObject):
         self.changes.clear()
         self.deletes.clear()
 
+    def __len__(self) -> int:
+        return len(self.creates) + len(self.changes) + len(self.deletes)
+
     def build_kml(
         self,
         root: etree.Element,

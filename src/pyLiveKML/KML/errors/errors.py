@@ -31,3 +31,18 @@ class TrackElementsMismatch(TrackError):
     """
 
     pass
+
+
+class NetworkLinkControlError(Exception):
+    """Wrapper class for errors with :class:`~NetworkLinkControl` classes and subclasses."""
+
+    pass
+
+
+class NetworkLinkControlUpdateLimited(NetworkLinkControlError):
+    """Indicates that the maximum permitted number of entries has been added to an <Update> tag.
+    
+    Primarily intended to be used to break out of a recursive loop in 
+    `NetworkLinkControl.build_kml()` when the maximum update size has been reached.
+    """
+    pass

@@ -7,6 +7,7 @@ from typing import cast, Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
+from pyLiveKML.KML.errors.errors import NetworkLinkControlUpdateLimited
 from pyLiveKML.KML.Object import (
     _BaseObject,
     _FieldDef,
@@ -101,7 +102,10 @@ class NetworkLinkControl(_BaseObject):
         # Walk the tree under the `container`, looking at each object's state, and
         # create, update or delete it as necessary.
 
-        self._sync_child_objects(self.container)
+        try:
+            self._sync_child_objects(self.container)
+        except NetworkLinkControlUpdateLimited:
+            pass
         super().build_kml(root, with_children, with_dependents)
 
     def _sync_child_objects(self, obj: _BaseObject) -> None:
@@ -116,6 +120,8 @@ class NetworkLinkControl(_BaseObject):
             ):
                 self.update.deletes.append(d_obj)
             d_obj.child.update_generated()
+            if len(self.update) >= self.update_limit:
+                raise NetworkLinkControlUpdateLimited
             if isinstance(d_obj.child, _BaseObject):
                 self._sync_child_objects(d_obj.child)
 
@@ -130,27 +136,13 @@ class NetworkLinkControl(_BaseObject):
             ):
                 self.update.deletes.append(c_obj)
             c_obj.child.update_generated()
+            if len(self.update) >= self.update_limit:
+                raise NetworkLinkControlUpdateLimited
             if isinstance(c_obj.child, _BaseObject):
                 self._sync_child_objects(c_obj.child)
 
-        # for dc in obj._kml_children:
-        #     dcobj = getattr(obj, dc.name, None)
-        #     if isinstance(dcobj, _BaseObject):
-        #         if dcobj.state == ObjectState.CREATING:
-        #             self.update.creates.append(ObjectChild(obj, dcobj))
-        #         elif dcobj.state == ObjectState.CHANGING:
-        #             self.update.changes.append(ObjectChild(obj, dcobj))
-        #         elif dcobj.state in (ObjectState.DELETE_CHANGED, ObjectState.DELETE_CREATED):
-        #             self.update.deletes.append(ObjectChild(obj, dcobj))
-        #         dcobj.update_generated()
-        #         self._sync_child_objects(dcobj)
-        #     elif isinstance(dcobj, Iterable):
-        #         for iobj in dcobj:
-        #             if isinstance(iobj, _BaseObject):
-        #                 self._sync_child_objects(iobj)
-        # if isinstance(obj, Container):
-        #     limit = obj.update_limit
-        #     deletes = [ObjectChild(obj, delobj) for delobj in islice(obj._deleted, limit)]
-        #     self.update.deletes.extend(deletes)
-        #     for d in (d.child for d in deletes):
-        #         obj._deleted.remove(cast(Feature, d))
+        if isinstance(obj, Container):
+            limit = self.update_limit - len(self.update)
+            deletes = [ObjectChild(obj, delobj) for delobj in islice(obj._deleted, limit)]
+            self.update.deletes.extend(deletes)
+            obj._deleted = obj._deleted[len(deletes):]
