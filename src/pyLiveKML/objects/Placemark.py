@@ -75,9 +75,20 @@ class Placemark(Feature):
 
     @property
     def dependents(self) -> Iterator[ObjectChild]:
+        """A generator over the dependents of the instance.
+
+        In this context, dependents are child objects that the parent relies upon, rather
+        than contains. For example, the Features stored under a Container are *not*
+        dependents of the Container, but they are children.
+        """
         yield ObjectChild(self, self.geometry)
 
     def activate(self, value: bool, cascade: bool = False) -> None:
+        """Activate or deactivate this instance for display in GEP.
+
+        :param bool value: True for activation, False for deactivation
+        :param bool cascade: True if the activation is to be cascaded to all child Objects.
+        """
         super().activate(value, cascade)
         if cascade:
             self.geometry.activate(value, True)

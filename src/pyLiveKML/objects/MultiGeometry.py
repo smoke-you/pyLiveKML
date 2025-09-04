@@ -29,5 +29,16 @@ class MultiGeometry(_ListObject[Geometry], Geometry):
         with_children: bool = True,
         with_dependents: bool = True,
     ) -> None:
+        """Construct the KML content and append it to the provided etree.Element.
+
+        Generate the KML representation of the internal fields of this instance and
+        append it to the provided root `etree.Element`.
+
+        :param etree.Element root: The root XML element that will be appended to.
+        :param bool with_children: True if the children of this instance should be
+            included in the build.
+        :param bool with_dependents: True if the dependents of this instance should be
+            included in the build.
+        """
         for dd in self:
             root.append(dd.construct_kml(with_children, with_dependents))

@@ -24,7 +24,11 @@ class _UpdateList(_BaseObject, list[ObjectChild], ABC):
                 self.extend(items)
 
 
-class CreateList(_UpdateList):
+class _CreateList(_UpdateList):
+    """A KML <Create> tag. Always a child of an <Update> tag.
+
+    Refer to https://developers.google.com/kml/documentation/kmlreference#example-of-create.
+    """
 
     _kml_tag = "Create"
 
@@ -40,7 +44,11 @@ class CreateList(_UpdateList):
         self.clear()
 
 
-class ChangeList(_UpdateList):
+class _ChangeList(_UpdateList):
+    """A KML <Change> tag. Always a child of an <Update> tag.
+
+    Refer to https://developers.google.com/kml/documentation/kmlreference#example-of-change.
+    """
 
     _kml_tag = "Change"
 
@@ -56,7 +64,11 @@ class ChangeList(_UpdateList):
         self.clear()
 
 
-class DeleteList(_UpdateList):
+class _DeleteList(_UpdateList):
+    """A KML <Delete> tag. Always a child of an <Update> tag.
+
+    Refer to https://developers.google.com/kml/documentation/kmlreference#example-of-delete.
+    """
 
     _kml_tag = "Delete"
 
@@ -107,16 +119,25 @@ class Update(_BaseObject):
         """Update instance constructor."""
         super().__init__()
         self.target_href = target_href
-        self.creates = CreateList(creates)
-        self.changes = ChangeList(changes)
-        self.deletes = DeleteList(deletes)
+        self.creates = _CreateList(creates)
+        self.changes = _ChangeList(changes)
+        self.deletes = _DeleteList(deletes)
 
     def clear(self) -> None:
+        """Clear the instance.
+
+        Discards the current contents of the `creates`, `changes` and `deletes` lists.
+        """
         self.creates.clear()
         self.changes.clear()
         self.deletes.clear()
 
     def __len__(self) -> int:
+        """Take the current length of the instance.
+
+        The returned value is the sum of the lengths of the `creates`, `changes` and
+        `deletes` lists.
+        """
         return len(self.creates) + len(self.changes) + len(self.deletes)
 
     def build_kml(

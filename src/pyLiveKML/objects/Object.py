@@ -249,6 +249,9 @@ class _BaseObject(ABC):
     def __str__(self) -> str:
         return self._kml_tag
 
+    def __repr__(self) -> str:
+        return str(self)
+
     @property
     def id(self) -> UUID:
         """The unique identifier of this :class:`~pyLiveKML.KMLObjects.Object`."""
@@ -306,7 +309,6 @@ class _BaseObject(ABC):
         than contains. For example, the Features stored under a Container are *not*
         dependents of the Container, but they are children.
         """
-
         for d in self._kml_dependents:
             d_obj = getattr(self, d.name, None)
             if d_obj is not None:
@@ -339,6 +341,8 @@ class _BaseObject(ABC):
 
         :param etree.Element root: The root XML element that will be appended to.
         :param bool with_children: True if the children of this instance should be
+            included in the build.
+        :param bool with_dependents: True if the dependents of this instance should be
             included in the build.
         """
         for f in (f for f in self._kml_fields if f.dumper != NoDump):

@@ -51,8 +51,4 @@ def with_ns(tag: str) -> str:
     works.
     """
     parts = tag.split(":", 1)
-    return (
-        tag
-        if len(parts) < 2
-        else f"{{{__root_namespace_map[parts[0]]}}}{parts[1]}"
-    )
+    return tag if len(parts) < 2 else f"{{{__root_namespace_map[parts[0]]}}}{parts[1]}"

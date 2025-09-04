@@ -48,7 +48,7 @@ class Container(_ListObject[Feature], Feature, ABC):
     """
 
     _kml_children: tuple[_ChildDef, ...] = Feature._kml_children + (
-        _ChildDef("contents"),
+        _ChildDef("_contents"),
     )
 
     def __init__(
@@ -93,51 +93,18 @@ class Container(_ListObject[Feature], Feature, ABC):
         _ListObject[Feature].__init__(self)
         ABC.__init__(self)
         self._deleted: list[Feature] = list[Feature]()
-        self.features = features
+        self._contents = features
         self._is_open: bool | None = is_open
         self._update_limit: int = 0
         self.update_limit = update_limit
 
     @property
-    def contents(self) -> Iterator[Feature]:
+    def _contents(self) -> Iterator[Feature]:
+        """Retrieve a generator over the `Features` in this `Container`."""
         yield from self
 
-    @property
-    def containers(self) -> Iterator["ContainedFeature"]:
-        """The children of the instance that are themselves Container instances.
-
-        A generator to retrieve references to any :class:`~pyLiveKML.KMLObjects.Container` objects that are
-        enclosed by this :class:`~pyLiveKML.KMLObjects.Container` object, and the tree that is rooted at it.
-
-        :returns: A generator of :class:`~pyLiveKML.KMLObjects.Container.ContainedFeature` named tuples that
-            describe each enclosed :class:`~pyLiveKML.KMLObjects.Container` as a (container, feature)
-        """
-        for f in self:
-            if isinstance(f, Container):
-                yield ContainedFeature(container=self, feature=f)
-                yield from f.containers
-
-    @property
-    def features(self) -> Iterator["ContainedFeature"]:
-        """The children of the instance that are Features, but are not Containers.
-
-        A generator to retrieve references to the :class:`~pyLiveKML.KMLObjects.Feature` objects that are
-        enclosed by this :class:`~pyLiveKML.KMLObjects.Container` object, and the tree that is rooted at it. Note
-        that :class:`~pyLiveKML.KMLObjects.Container` objects are *not* yielded by this generator, despite being
-        specializations of :class:`~pyLiveKML.KMLObjects.Feature`; use the :attr:`containers` property to retrieve
-        them.
-
-        :returns: A generator of :class:`~pyLiveKML.KMLObjects.Container.ContainedFeature` named tuples that
-            describes each enclosed :class:`~pyLiveKML.KMLObjects.Feature` as a (container, feature)
-        """
-        for f in self:
-            if isinstance(f, Container):
-                yield from f.features
-            elif isinstance(f, Feature):
-                yield ContainedFeature(container=self, feature=f)
-
-    @features.setter
-    def features(self, value: Feature | Iterable[Feature] | None) -> None:
+    @_contents.setter
+    def _contents(self, value: Feature | Iterable[Feature] | None) -> None:
         self._deleted.extend(self)
         self.clear()
         if value is not None:
@@ -234,18 +201,3 @@ class Container(_ListObject[Feature], Feature, ABC):
         ):
             self._deleted.clear()
             self.force_features_idle()
-
-    def __str__(self) -> str:
-        """Return a string representation."""
-        return Feature.__str__(self)
-
-
-ContainedFeature = NamedTuple(
-    "ContainedFeature", [("container", Container), ("feature", Feature)]
-)
-"""Named tuple that describes a container:contained relationship.
-
-The container is a :class:`~pyLiveKML.KMLObjects.Container` 
-instance and the contained is a :class:`~pyLiveKML.KMLObjects.Feature` 
-instance.
-"""

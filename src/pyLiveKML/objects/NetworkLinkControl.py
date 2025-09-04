@@ -95,7 +95,6 @@ class NetworkLinkControl(_BaseObject):
         with_dependents: bool = True,
     ) -> None:
         """Construct the KML content and append it to the provided etree.Element."""
-
         # The real work gets done here.
         # Walk the tree under the `container`, looking at each object's state, and
         # create, update or delete it as necessary.
