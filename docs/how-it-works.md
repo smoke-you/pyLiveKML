@@ -68,6 +68,8 @@ These methods are intended to be used by `Update` instances while building their
 
 * `delete_kml(self, root: etree.Element) -> None`
 
+`NetworkLinkControl` exposes another dynamic KML publishing method, `def construct_sync(self, with_children: bool = True, with_dependents: bool = True) -> etree.Element`. It's operation is discussed [below](#networklinkcontrol). Note that it ultimately calls the above three methods in order to publish the corresponding tags.
+
 ## Synchronization
 
 The purpose of dynamic publishing is to synchronize the state of the Python application hosting the KML object representations with GEP. This section can be ignored for static publishing.
@@ -109,7 +111,9 @@ Several methods are exposed by `_BaseObject` to facilitate state management, rat
 
 A `NetworkLinkControl` object, or "NLC", is the primary means of performing dynamic publishing.
 
-The NLC hosts a `Container` (which may be either a `Document` or `Folder`, in terms of concrete classes), and works to keep that `Container` synchronized with GEP. Each time the NLC's `build_kml` method is executed, it walks the tree of it's `Container`, looking for and noting KML objects with a state that is not IDLE or CREATED. It will record no more than `update_limit` `Create`, `Change` or `Delete` operations before publishing an `<Update>` tag containing all of the synchronization updates that it has gathered. As objects are listed for synchronization, their `synchronized` method is called.
+The NLC hosts a `Container` (which may be either a `Document` or `Folder`, in terms of concrete classes), and works to keep that `Container` synchronized with GEP. Each time the NLC's `construct_sync` method is executed, it walks the tree of it's `Container`, looking for and noting KML objects with a state that is not IDLE or CREATED. It will record no more than `update_limit` `Create`, `Change` or `Delete` operations before publishing an `<Update>` tag containing all of the synchronization updates that it has gathered. As objects are listed for synchronization, their `synchronized` method is called.
+
+It is also possible to statically publish an NLC, using it's conventional `construct_kml` and/or `build_kml` methods. Before calling these methods, the required operations - create, change, and delete - should first be added to the NLC's `update` attribute.
 
 # Constructing a KML File
 
@@ -117,7 +121,7 @@ In order to publish KML data, it must be collected into a properly-constructed K
 
 1. Import some references.
 
-  ```
+  ```python
   from fastapi.responses import PlainTextResponse
   from lxml import etree
   from pyLiveKML import KML_DOCTYPE, KML_HEADERS, kml_root_tag
@@ -125,19 +129,33 @@ In order to publish KML data, it must be collected into a properly-constructed K
 
 2. Use the `kml_root_tag` method to create a tag that will host the content. Note that this method returns a tag that includes all of the namespaces identified by Google.
 
-  `root = kml_root_tag()`
+  ```python
+  root = kml_root_tag()
+  ```
 
 3. Construct the required KML and append it to the root tag.
 
-  `root.append(container_or_nlc.construct_kml())`
+  ```python
+  root.append(networklinkcontrol.construct_sync())
+  # or
+  root.append(networklinkcontrol.construct_kml())
+  # or
+  root.append(networklink.construct_kml())
+  # or
+  root.append(container.construct_kml())
+  ```
 
 4. Create the file contents. Optionally, set `pretty_print=True` to assist with readability.
 
-  `kml_content = etree.tostring(root, doctype=KML_DOCTYPE, encoding="utf-8", pretty_print=True)`
+  ```python
+  kml_content = etree.tostring(root, doctype=KML_DOCTYPE, encoding="utf-8", pretty_print=True)
+  ```
 
 5. (Using FastAPI) return a `PlainTextResponse` containing your KML file.
 
-  `return PlainTextResponse(content=kml_content, headers=KML_HEADERS)`
+  ```python
+  return PlainTextResponse(content=kml_content, headers=KML_HEADERS)
+  ```
 
 # Setting up a Live Feed
 

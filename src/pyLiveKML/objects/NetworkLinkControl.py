@@ -53,6 +53,7 @@ class NetworkLinkControl(_BaseObject):
         _FieldDef("link_expires", "linkExpires"),
     )
     _kml_dependents = _BaseObject._kml_dependents + (_DependentDef("update"),)
+    _suppress_id = True
 
     def __init__(
         self,
@@ -87,23 +88,26 @@ class NetworkLinkControl(_BaseObject):
         self.abstract_view = abstract_view
         self.update = Update(target_href)
 
-    def build_kml(
+    def construct_sync(
         self,
-        root: etree.Element,
         with_children: bool = True,
         with_dependents: bool = True,
-    ) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        # The real work gets done here.
-        # Walk the tree under the `container`, looking at each object's state, and
-        # create, update or delete it as necessary.
+    ) -> etree.Element:
+        """Construct a KML synchronization update.
+        
+        The real work gets done here.
+        Walk the tree under the `container`, looking at each object's state, and create, 
+        update or delete it as necessary.
 
+        """
+        root = etree.Element(self.kml_tag)
         try:
             self._sync_child_objects(self.container)
         except NetworkLinkControlUpdateLimited:
             pass
         super().build_kml(root, with_children, with_dependents)
-
+        return root
+    
     def _sync_child_objects(self, obj: _BaseObject) -> None:
         for d_obj in obj.dependents:
             if d_obj.child.state == ObjectState.CREATING:

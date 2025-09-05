@@ -5,18 +5,9 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Object import _FieldDef
-from pyLiveKML.objects.Update import Update
+from pyLiveKML.objects.Update import Update, UpdateSequent
 from pyLiveKML.objects.Object import _ChildDef, ObjectChild
 from pyLiveKML.objects.TourPrimitive import TourPrimitive
-
-
-# TODO: redesign this class to allow a more abstractly-constructed sequence of updates.
-# The issue as it is currently designed is that it contains a single `Update` instance
-# that delivers its creates, then its changes, then its deletes. This is not desirable -
-# it should be able to deliver any sequence of create, change or delete tags, rather than
-# all of each type at once.
-# Note that this is not the desired behaviour for <Update> tags constructed by
-# `NetworkLinkControl`, so it should only be changed **here**.
 
 
 class AnimatedUpdate(TourPrimitive):
@@ -43,14 +34,11 @@ class AnimatedUpdate(TourPrimitive):
     delayed_start : float, default = 0
         Specifies the number of seconds to wait (after the inline start position) before
         starting the update.
-    target_href: str, default = ""
+    target_href : str, default = ""
         The target href for the enclosed :class:`pyLiveKML.objects.Update` instance.
-    creates: ObjectChild | Iterable[ObjectChild] | None, default = None
-        The objects to be created by the enclosed :class:`pyLiveKML.objects.Update` instance.
-    changes: ObjectChild | Iterable[ObjectChild] | None, default = None
-        The objects to be changed by the enclosed :class:`pyLiveKML.objects.Update` instance.
-    deletes: ObjectChild | Iterable[ObjectChild] | None, default = None
-        The objects to be deleted by the enclosed :class:`pyLiveKML.objects.Update` instance.
+    sequence : UpdateSequent | Iterable[UpdateSequent] | None, default = None
+        The sequence of create, change and delete operations to be constructed by the 
+        enclosed :class:`pyLiveKML.objects.Update` instance.
 
     Attributes
     ----------
@@ -77,12 +65,10 @@ class AnimatedUpdate(TourPrimitive):
         duration: float = 0,
         delayed_start: float = 0,
         target_href: str = "",
-        creates: ObjectChild | Iterable[ObjectChild] | None = None,
-        changes: ObjectChild | Iterable[ObjectChild] | None = None,
-        deletes: ObjectChild | Iterable[ObjectChild] | None = None,
+        sequence: UpdateSequent | Iterable[UpdateSequent] | None = None,
     ) -> None:
         """GxAnimatedUpdate instance constructor."""
         TourPrimitive.__init__(self)
         self.delayed_start = delayed_start
         self.duration = duration
-        self.update = Update(target_href, creates, changes, deletes)
+        self.update = Update(target_href, sequence=sequence)

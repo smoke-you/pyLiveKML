@@ -487,11 +487,22 @@ class Object(_BaseObject, ABC):
         super().__init__()
 
 
-ObjectChild = NamedTuple(
-    "ObjectChild", [("parent", _BaseObject), ("child", _BaseObject)]
-)
-"""Named tuple that describes a parent:child relationship between two :class:`~pyLiveKML.KMLObjects.Object` instances.
-"""
+class ObjectChild:
+
+    def __init__(
+        self,
+        parent: _BaseObject,
+        child: _BaseObject,
+    ) -> None:
+        self.parent = parent
+        self.child = child
+
+
+# ObjectChild = NamedTuple(
+#     "ObjectChild", [("parent", _BaseObject), ("child", _BaseObject)]
+# )
+# """Named tuple that describes a parent:child relationship between two :class:`~pyLiveKML.KMLObjects.Object` instances.
+# """
 
 
 _LOB = TypeVar("_LOB", bound="_BaseObject")
