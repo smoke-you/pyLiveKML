@@ -2,16 +2,28 @@
 
 
 class GeoColor:
-    """The GeoColor type describes an ABGR color, as used throughout GEP.
+    """The GeoColor type describes an ABGR-format color, as used throughout GEP.
 
-    :note: The GeoColor type is *not* explicitly referenced by the KML specification;
-    rather, it is a construct of convenience for the pyLiveKML package.
+    Notes
+    -----
+    * The GeoColor type is *not* explicitly referenced by the KML specification; rather, it
+    is a construct of convenience for the pyLiveKML package.
+    * When constructing a GeoColor instance, either the value or _all_ of r, g, b, a
+    _must_ be supplied or a `ValueError` will be raised.
 
-    :param int|None value: The integral (32-bit) numeric value of the color.
-    :param int|None r: The integral (8-bit) numeric value of the red component of the color.
-    :param int|None g: The integral (8-bit) numeric value of the green component of the color.
-    :param int|None b: The integral (8-bit) numeric value of the blue component of the color.
-    :param int|None a: The integral (8-bit) numeric value of the alpha component of the color.
+    Parameters
+    ----------
+    value : int | None
+        The integral (32-bit) numeric value of the color.
+    r : int | None
+        The integral (8-bit) numeric value of the red component of the color.
+    g : int | None
+        The integral (8-bit) numeric value of the green component of the color.
+    b : int | None
+        The integral (8-bit) numeric value of the blue component of the color.
+    a : int | None
+        The integral (8-bit) numeric value of the alpha component of the color.
+
     """
 
     def __init__(
@@ -39,7 +51,7 @@ class GeoColor:
 
     @property
     def value(self) -> int:
-        """Merged ABGR components (in that order, MSB to LSB)."""
+        """Combined ABGR components (32 bits, in that order, MSB to LSB)."""
         return self._r | (self._g << 8) | (self._b << 16) | (self._a << 24)
 
     @value.setter
@@ -54,7 +66,7 @@ class GeoColor:
 
     @property
     def bgr(self) -> int:
-        """BGR portion."""
+        """BGR portion (24 bits)."""
         return self._r + (self._g << 8) + (self._b << 16)
 
     @bgr.setter
@@ -67,7 +79,7 @@ class GeoColor:
 
     @property
     def rgb(self) -> int:
-        """RGB (reversed from GEP format!) portion."""
+        """RGB (24 bits, reversed from GEP format!) portion."""
         return self._b + (self._g << 8) + (self._r << 16)
 
     @rgb.setter
@@ -80,7 +92,7 @@ class GeoColor:
 
     @property
     def r(self) -> int:
-        """Red component."""
+        """Red component (8 bits)."""
         return self._r
 
     @r.setter
@@ -91,7 +103,7 @@ class GeoColor:
 
     @property
     def g(self) -> int:
-        """Green component."""
+        """Green component (8 bits)."""
         return self._g
 
     @g.setter
@@ -102,7 +114,7 @@ class GeoColor:
 
     @property
     def b(self) -> int:
-        """Blue component."""
+        """Blue component (8 bits)."""
         return self._b
 
     @b.setter
@@ -113,7 +125,7 @@ class GeoColor:
 
     @property
     def a(self) -> int:
-        """Alpha component."""
+        """Alpha component (8 bits)."""
         return self._a
 
     @a.setter

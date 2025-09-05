@@ -8,17 +8,29 @@ from pyLiveKML.objects.Object import Angle90, Angle180
 class GeoCoordinates:
     """The GeoCoordinates type describes a single instance of a Lon-Lat-Alt (LLA) position.
 
-    These objects are used in
-    :class:`~pyLiveKML.KMLObjects.Point`, :class:`~pyLiveKML.KMLObjects.LineString` and
-    :class:`~pyLiveKML.KMLObjects.LinearRing` objects. Note that the GeoCoordinates type is *not* explicitly
-    referenced by the KML specification; rather, it is a construct of convenience for the pyLiveKML package.
+    Notes
+    -----
+    The GeoCoordinates type is *not* explicitly referenced by the KML specification;
+    rather, it is a construct of convenience for the pyLiveKML package.
 
-    :param float lon: The longitude.
-    :param float lat: The latitude.
-    :param Optional[float] alt: The (optional) altitude.
-    :var float lon: The longitude, in decimal degrees.
-    :var float lat: The latitude, in decimal degrees.
-    :var float|None alt: The (optional) altitude, in metres.
+    Parameters
+    ----------
+    lon : float
+        The longitude, in decimal degrees
+    lat : float
+        The latitude, in decimal degrees
+    alt : float | None, default = None
+        The altitude, in metres
+
+    Attributes
+    ----------
+    lon : float
+        The longitude, in decimal degrees
+    lat : float
+        The latitude, in decimal degrees
+    alt : float | None, default = None
+        The altitude, in metres
+
     """
 
     def __init__(

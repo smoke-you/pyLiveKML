@@ -471,7 +471,6 @@ class _BaseObject(ABC):
             c.child.force_idle()
 
 
-
 class Object(_BaseObject, ABC):
     """A KML 'Object', per https://developers.google.com/kml/documentation/kmlreference#object.
 

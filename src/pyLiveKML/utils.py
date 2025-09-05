@@ -6,9 +6,9 @@ from lxml import etree  # type: ignore
 KML_UPDATE_CONTAINER_LIMIT_DEFAULT: int = 100
 """The default value for the container update limit.
 
-The default maximum number of :class:`~pyLiveKML.KMLObjects.Feature` objects that 
+The default maximum number of :class:`pyLiveKML.objects.Feature` objects that 
 will be included in each synchronization update emitted by a 
-:class:`~pyLiveKML.NetworkLinkControl` object.
+:class:`pyLiveKML.objects.NetworkLinkControl` object.
 """
 
 
@@ -49,6 +49,9 @@ def with_ns(tag: str) -> str:
     For example, "gx:Track" would return "{http://www.google.com/kml/ext/2.2}Track".
     lxml publishes this as a <gx:Track> tag. Ridiculous double-entry nonsense, but it
     works.
+
+    :return: The transformed input.
+    :rtype: str
     """
     parts = tag.split(":", 1)
     return tag if len(parts) < 2 else f"{{{__root_namespace_map[parts[0]]}}}{parts[1]}"

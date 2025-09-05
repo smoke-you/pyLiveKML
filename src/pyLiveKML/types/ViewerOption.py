@@ -8,12 +8,25 @@ from pyLiveKML.objects.Object import _BaseObject
 
 
 class ViewerOption(_BaseObject):
-    """Enables special viewing modes in Google Earth 6.0 and later.
+    """Enables or disables special viewing modes.
 
-    Refer https://developers.google.com/kml/documentation/kmlreference#elements-specific-to-abstractview.
+    Used only in conjunction with subclasses of :class:`pyLiveKML.objects.AbstractView`.
 
-    :param GxViewerOptionEnum option: The view option to be configured.
-    :param bool enabled: Whether the view option is to be enabled.
+    Notes
+    -----
+    * Applies only to Google Earth 6.0 and later.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#elements-specific-to-abstractview.
+
+    Parameters
+    ----------
+    option : ViewerOptionEnum
+        The view option to be configured.
+    enabled : bool
+        Whether the view option is to be enabled or disabled.
+
     """
 
     _kml_tag = "gx:option"
