@@ -30,6 +30,7 @@ class NetworkLink(Feature):
 
     _kml_tag = "NetworkLink"
     _kml_fields = Feature._kml_fields + (
+        _FieldDef("is_open", "open"),
         _FieldDef("fly_to_view", "flyToView"),
         _FieldDef("refresh_visibility", "refreshVisibility"),
     )
@@ -54,11 +55,11 @@ class NetworkLink(Feature):
             self,
             name=name,
             visibility=visibility,
-            is_open=is_open,
             description=description,
             style_url=style_url,
             styles=styles,
         )
+        self.is_open = is_open
         self.link = Link(href, refresh_mode, refresh_interval)
         self.fly_to_view = fly_to_view
         self.refresh_visibility = refresh_visibility

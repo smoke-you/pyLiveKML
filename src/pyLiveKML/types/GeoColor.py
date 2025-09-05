@@ -6,33 +6,30 @@ class GeoColor:
 
     Notes
     -----
-    * The GeoColor type is *not* explicitly referenced by the KML specification; rather, it
-    is a construct of convenience for the pyLiveKML package.
-    * When constructing a GeoColor instance, either the value or _all_ of r, g, b, a
-    _must_ be supplied or a `ValueError` will be raised.
+    * The GeoColor type is *not* explicitly referenced by the KML specification; rather,
+    it is a construct of convenience for the pyLiveKML package.
+    * When constructing a GeoColor instance, at least *one* of the parameters must be
+    supplied.
+    * Parameter values less than the lower bound (0) of the target component (r, g, b, a)
+    will be set to the lower bound. Any positive value will be bit-masked with 0xff to
+    constrain it to an 8-bit range (0-255).
 
     Parameters
     ----------
-    value : int | None
+    value : int | None, default = None
         The integral (32-bit) numeric value of the color.
-    r : int | None
-        The integral (8-bit) numeric value of the red component of the color.
-    g : int | None
-        The integral (8-bit) numeric value of the green component of the color.
-    b : int | None
-        The integral (8-bit) numeric value of the blue component of the color.
-    a : int | None
-        The integral (8-bit) numeric value of the alpha component of the color.
+    abgr : tuple[int, int, int, int] | None, default = None
+        The color as a 4-tuple of integers, in ABGR order.
+    rgba : tuple[int, int, int, int] | None, default = None
+        The color as a 4-tuple of integers, in RGBA order.
 
     """
 
     def __init__(
         self,
         value: int | None = None,
-        r: int | None = None,
-        g: int | None = None,
-        b: int | None = None,
-        a: int | None = None,
+        abgr: tuple[int, int, int, int] | None = None,
+        rgba: tuple[int, int, int, int] | None = None,
     ):
         """GeoColor instance constructor."""
         self._r: int = 0
@@ -41,13 +38,12 @@ class GeoColor:
         self._a: int = 0
         if value is not None:
             self.value = value
-        elif not all(map(lambda x: x is not None, (r, g, b, a))):
-            raise ValueError("Either value, or all of (r,g,b,a), must be non-None.")
+        elif abgr is not None:
+            self.a, self.b, self.g, self.r = abgr
+        elif rgba is not None:
+            self.r, self.g, self.b, self.a = rgba
         else:
-            self.r = r
-            self.g = g
-            self.b = b
-            self.a = a
+            raise ValueError("At least one of the parameters must not be `None`")
 
     @property
     def value(self) -> int:

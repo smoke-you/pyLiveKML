@@ -17,10 +17,10 @@ class Vec2(_BaseObject, ABC):
 
     Parameters
     ----------
-    x : float
-    y : float
-    x_units : UnitsEnum
-    y_units : UnitsEnum
+    x : float, default = 0.5
+    y : float, default = 0.5
+    x_units : UnitsEnum, default = UnitsEnum.FRACTION
+    y_units : UnitsEnum, default = UnitsEnum.FRACTION
 
     """
 
@@ -82,15 +82,15 @@ class HotSpot(Vec2):
 
     Parameters
     ----------
-    x : float
+    x : float, default = 0.5
         Either the number of pixels, a fractional component of the icon, or a pixel inset
         indicating the x component of a point on the icon.
-    y : float
+    y : float, default = 0.5
         Either the number of pixels, a fractional component of the icon, or a pixel inset
         indicating the y component of a point on the icon.
-    x_units : UnitsEnum
+    x_units : UnitsEnum, default = UnitsEnum.FRACTION
         Units in which the x value is specified.
-    y_units : UnitsEnum
+    y_units : UnitsEnum, default = UnitsEnum.FRACTION
         Units in which the y value is specified.
 
     """
@@ -117,15 +117,15 @@ class OverlayXY(Vec2):
 
     Parameters
     ----------
-    x : float
+    x : float, default = 0.5
         Either the number of pixels, a fractional component of the image, or a pixel inset
         indicating the x component of a point on the image.
-    y : float
+    y : float, default = 0.5
         Either the number of pixels, a fractional component of the image, or a pixel inset
         indicating the y component of a point on the image.
-    x_units : UnitsEnum
+    x_units : UnitsEnum, default = UnitsEnum.FRACTION
         Units in which the x value is specified.
-    y_units : UnitsEnum
+    y_units : UnitsEnum, default = UnitsEnum.FRACTION
         Units in which the y value is specified.
 
     """
@@ -151,15 +151,15 @@ class ScreenXY(Vec2):
 
     Parameters
     ----------
-    x : float
+    x : float, default = 0.5
         Either the number of pixels, a fractional component of the screen, or a pixel inset
         indicating the x component of a point on the screen.
-    y : float
+    y : float, default = 0.5
         Either the number of pixels, a fractional component of the screen, or a pixel inset
         indicating the y component of a point on the screen.
-    x_units : UnitsEnum
+    x_units : UnitsEnum, default = UnitsEnum.FRACTION
         Units in which the x value is specified.
-    y_units : UnitsEnum
+    y_units : UnitsEnum, default = UnitsEnum.FRACTION
         Units in which the y value is specified.
 
     """
@@ -185,15 +185,15 @@ class RotationXY(Vec2):
 
     Parameters
     ----------
-    x : float
+    x : float, default = 0.5
         Either the number of pixels, a fractional component of the screen, or a pixel inset
         indicating the x component of a point on the screen.
-    y : float
+    y : float, default = 0.5
         Either the number of pixels, a fractional component of the screen, or a pixel inset
         indicating the y component of a point on the screen.
-    x_units : UnitsEnum
+    x_units : UnitsEnum, default = UnitsEnum.FRACTION
         Units in which the x value is specified.
-    y_units : UnitsEnum
+    y_units : UnitsEnum, default = UnitsEnum.FRACTION
         Units in which the y value is specified.
 
     """
@@ -223,15 +223,15 @@ class Size(Vec2):
 
     Parameters
     ----------
-    x : float
+    x : float, default = 0.5
         Either the number of pixels, a fractional component of the screen, or a pixel inset
         indicating the x component of a point on the screen.
-    y : float
+    y : float, default = 0.5
         Either the number of pixels, a fractional component of the screen, or a pixel inset
         indicating the y component of a point on the screen.
-    x_units : UnitsEnum
+    x_units : UnitsEnum, default = UnitsEnum.FRACTION
         Units in which the x value is specified.
-    y_units : UnitsEnum
+    y_units : UnitsEnum, default = UnitsEnum.FRACTION
         Units in which the y value is specified.
 
     """

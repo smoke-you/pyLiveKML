@@ -8,22 +8,24 @@ from pyLiveKML.objects.SubStyle import SubStyle
 
 
 class ColorStyle(SubStyle, ABC):
-    """A KML 'ColorStyle', per https://developers.google.com/kml/documentation/kmlreference#colorstyle.
+    """A KML `<ColorStyle>` tag constructor.
 
-    ColorStyle is the abstract base class for a subset of the specific sub-styles that
-    are optionally included in :class:`~pyLiveKML.KMLObjects.Style` objects, and
-    that act to apply a color, typically (but not exclusively) to
-    :class:`~pyLiveKML.KMLObjects.Feature` objects.
+    This is an abstract element and cannot be used directly in a KML file. It provides
+    elements for specifying the color and color mode of extended style types.
 
-    :param int|None color: The (optional) color, in ABGR format, that will be applied by GEP if the
-        :attr:`color_mode` is :attr:`~pyLiveKML.KML.ColorMode.NORMAL`.
-    :param ColorMode|None color_mode: The (optional) :class:`~pyLiveKML.KML.ColorMode` that will be used by
-        GEP to determine the displayed color.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#colorstyle
 
-    :var int|None color: The (optional) color, in ABGR format, that will be applied by GEP if the
-        :attr:`color_mode` is :attr:`~pyLiveKML.KML.ColorMode.NORMAL`.
-    :var ColorMode|None color_mode: The (optional) :class:`~pyLiveKML.KML.ColorMode` that will be used by GEP
-        to determine the displayed color.
+    Parameters
+    ----------
+    color: GeoColor | int | None, default = None
+    color_mode: ColorModeEnum | None, default = None
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_fields: tuple[_FieldDef, ...] = SubStyle._kml_fields + (

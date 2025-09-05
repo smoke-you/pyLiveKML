@@ -12,7 +12,25 @@ from pyLiveKML.objects.TimePrimitive import TimePrimitive
 
 
 class AbstractView(Object, ABC):
-    """A KML 'AbstractView', per https://developers.google.com/kml/documentation/kmlreference#abstractview."""
+    """A KML `<AbstractView>` tag constructor.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#abstractview
+
+    Parameters
+    ----------
+    viewer_options : ViewerOption | Iterable[ViewerOption] | None, default = None
+        Enable or disable one or more Google Earth view modes.
+    time_primitive : TimePrimitive | None, default = None
+        Timestamp or timespan assigned to the object.
+
+    Attributes
+    ----------
+    viewer_options : list[ViewerOption]
+    time_primitive : TimePrimitive | None
+
+    """
 
     _kml_dependents = Object._kml_dependents + (_DependentDef("time_primitive"),)
 

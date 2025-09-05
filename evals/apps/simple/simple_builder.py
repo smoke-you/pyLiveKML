@@ -28,9 +28,7 @@ from pyLiveKML import (
 
 # global styles
 root_style = Style(
-    balloon_style=BalloonStyle(
-        text="Some text goes here", text_color=0xFF0000FF, bg_color=0x40400000
-    )
+    balloon_style=BalloonStyle(0x40400000, 0xFF0000FF, "Some text goes here")
 )
 ground_point_style = Style(
     icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/red-diamond.png")

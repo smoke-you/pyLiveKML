@@ -142,7 +142,7 @@ async def _(filename: str, request: Request) -> Any:
             "request": request,
             "applist": applist,
             "updateSz": {
-                "value": gep_sync.container.update_limit,
+                "value": gep_sync.update_limit,
                 "min": MIN_UPDATE_SZ,
                 "max": MAX_UPDATE_SZ,
             },
@@ -179,7 +179,7 @@ async def _(ctrl: KMLControlRequest) -> KMLControlResponse:
         if updatesz:
             if updatesz < 1 or updatesz > 200:
                 raise Exception("updateSz is out of range")
-            gep_sync.container.update_limit = updatesz
+            gep_sync.update_limit = updatesz
             return KMLControlResponse(rsp={"updateSz": gep_sync.update_limit})
     except ValueError:
         raise HTTPException(404, "updateSz is not an integer")

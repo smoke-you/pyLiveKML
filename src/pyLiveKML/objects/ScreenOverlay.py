@@ -44,7 +44,6 @@ class ScreenOverlay(Overlay):
         # Feature parameters
         name: str | None = None,
         visibility: bool | None = None,
-        is_open: bool | None = None,
         author_name: str | None = None,
         author_link: str | None = None,
         address: str | None = None,
@@ -66,7 +65,6 @@ class ScreenOverlay(Overlay):
             color=color,
             name=name,
             visibility=visibility,
-            is_open=is_open,
             author_name=author_name,
             author_link=author_link,
             address=address,

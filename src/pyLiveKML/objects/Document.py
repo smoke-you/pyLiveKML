@@ -57,7 +57,6 @@ class Document(Container):
         time_primitive: TimePrimitive | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
-        update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
         features: Feature | Iterable[Feature] | None = None,
         schemas: Schema | Iterable[Schema] | None = None,
     ):
@@ -77,7 +76,6 @@ class Document(Container):
             time_primitive=time_primitive,
             style_url=style_url,
             styles=styles,
-            update_limit=update_limit,
             features=features,
         )
         self._schemas = list[Schema]()

@@ -1,54 +1,99 @@
-"""Feature module.
-
-:note: Includes the `Container` class definition as well, to avoid a circular import.
-"""
+"""Container module."""
 
 from abc import ABC
-from typing import Iterable, NamedTuple, Iterator
+from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.Feature import Feature
-from pyLiveKML.objects.Object import ObjectState, _ChildDef, ObjectChild, _ListObject
+from pyLiveKML.objects.Object import ObjectState, _ChildDef, _ListObject
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 
 
 class Container(_ListObject[Feature], Feature, ABC):
-    """A KML 'Container', per https://developers.google.com/kml/documentation/kmlreference#container.
+    """A KML `<Container>` tag constructor.
 
-    :note: While Containers are explicitly abstract,
-    :class:`~pyLiveKML.KMLObjects.Container` is the base class for KML
-    :class:`~pyLiveKML.KMLObjects.Folder` and
-    :class:`~pyLiveKML.KMLObjects.Document` that have an "existence" in GEP, i.e.
-    that are (potentially) user-editable because they appear in the GEP user List View,
-    and that may 'contain' other :class:`~pyLiveKML.KMLObjects.Feature` objects,
-    including other concrete :class:`~pyLiveKML.KMLObjects.Container` objects.
+    This is an abstract element and cannot be used directly in a KML file. A `Container`
+    element holds one or more `Feature` elements, which may themselves be `Container`
+    instances, so allows the creation of nested hierarchies.
 
-    :param str|None name: The (optional) name for this :class:`~pyLiveKML.KMLObjects.Container` that will
-        be displayed in GEP.
-    :param bool|None visibility: The (optional) initial visibility for this
-        :class:`~pyLiveKML.KMLObjects.Container` in GEP.
-    :param bool|None is_open: Optional boolean flag to indicate whether the
-        :class:`~pyLiveKML.KMLObjects.Container` will be displayed as 'open' in the GEP user List View.
-    :param int|None update_limit: Only applies to the root of a :class:`~pyLiveKML.KMLObjects.Feature` tree.
-        The (approximate) maximum number of contained :class:`~pyLiveKML.KMLObjects.Feature` instances that will be
-        synchronized from this :class:`~pyLiveKML.KMLObjects.Container` during any one synchronization update.
-    :param str|None style_url: An (optional) style URL, generally a reference to a global
-        :class:`~pyLiveKML.KMLObjects.StyleSelector` in a parent of this
-        :class:`~pyLiveKML.KMLObjects.Container`.
-    :param Iterable[StyleSelector]|None styles: An (optional) Iterable of
-        :class:`~pyLiveKML.KMLObjects.StyleSelector` objects that will be local to this
-        :class:`~pyLiveKML.KMLObjects.Container`.
-    :param Iterable[Feature]|None features: An (optional) Iterable of :class:`~pyLiveKML.KMLObjects.Feature`
-        objects to be enclosed by this :class:`~pyLiveKML.KMLObjects.Container`.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#container
+
+    Parameters
+    ----------
+    name : str|None, default = None
+        User-defined text displayed in the 3D viewer as the label for the object.
+    visibility : bool | None, default = None
+        Specifies whether the `Feature` is drawn in the 3D viewer when it is initially
+        loaded. In order for a `Feature` to be visible, the `<visibility>` tag of all
+        its ancestors must also be set `True`.
+    is_open : bool | None, default = None
+        Specifies whether a `Document` or `Folder` appears closed or open when first
+        loaded into the "Places" panel. `False` or `None` is collapsed (the default),
+        `True` is expanded. This element applies only to `Document`, `Folder`, and
+        `NetworkLink`.
+    author_name : str | None, default = None
+        The name of the author of the `Feature`.
+    author_link : str | None, default = None
+        URL of the web page containing the KML file.
+    address : str | None, default = None
+        A string value representing an unstructured address written as a standard street,
+        city, state address, and/or as a postal code.
+    phone_number : str | None, default = None
+        A string value representing a telephone number. This element is used by Google
+        Maps Mobile only. The industry standard for Java-enabled cellular phones is
+        RFC2806.
+    snippet : str | None, default = None
+        A short description of the `Feature`. In Google Earth, this description is
+        displayed in the "Places" panel under the name of the `Feature`. If a `<Snippet>`
+        is not supplied, the first two lines of the `<description>` are used. In Google
+        Earth, if a `Placemark` contains both a `<description>` and a `<Snippet>`, the
+        `<Snippet>` appears beneath the `Placemark` in the "Places" panel, and the
+        `<description>` appears in the `Placemark`'s description balloon. This tag does
+        not support HTML markup.
+    snippet_max_lines : int | None, default = None
+    description : str | None, default = None
+        User-supplied content that appears in the description balloon. HTML *is*
+        supported, but it is **highly** recommended to read the detailed documentation
+        at
+        https://developers.google.com/kml/documentation/kmlreference#elements-specific-to-feature
+    abstract_view : AbstractView | None, default = None
+        Any concrete subclass of :class:`pyLiveKML.objects.AbstractView`, i.e. either a
+        :class:`pyLiveKML.objects.Camera` or :class:`pyLiveKML.objects.LookAt`
+    time_primitive : TimePrimitive | None, default = None
+        Any concrete subclass of :class:`pyLiveKML.objects.TimePrimitive`, i.e. either a
+        :class:`pyLiveKML.objects.TimeStamp` or :class:`pyLiveKML.objects.TimeSpan`
+    style_url : str | None = None
+        URL of a `<Style>` or `<StyleMap>` defined in a `<Document>`. If the style is in
+        the same file, use a # reference. If the style is defined in an external file,
+        use a full URL along with # referencing.
+    styles : StyleSelector | Iterable[StyleSelector] | None, default = None
+        One or more `Style`s and `StyleMap`s can be defined to customize the appearance
+        of any element derived from `Feature` or of the `Geometry` in a `Placemark`. A
+        style defined within a `Feature` is called an "inline style" and applies only to
+        the `Feature` that contains it. A style defined as the child of a `<Document>` is
+        called a "shared style." A shared style must have an id defined for it. This id
+        is referenced by one or more `Features` within the `<Document>`. In cases where
+        a style element is defined both in a shared style and in an inline style for a
+        `Feature` — that is, a `Folder`, `GroundOverlay`, `NetworkLink`, `Placemark`, or
+        `ScreenOverlay` — the value for the `Feature`'s inline style takes precedence over
+        the value for the shared style.
+    region : Region | None, default = None
+        `Feature`s and `Geometry`'s associated with a `Region` are drawn only when the
+        `Region` is active.
+    features : Feature | Iterable[Feature] | None, default = None
+        The `Feature`'s contained by this `Container`.
+
     """
 
     _kml_children: tuple[_ChildDef, ...] = Feature._kml_children + (
-        _ChildDef("_contents"),
+        _ChildDef("features"),
     )
 
     def __init__(
@@ -68,7 +113,6 @@ class Container(_ListObject[Feature], Feature, ABC):
         style_url: str | None = None,
         styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
-        update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
         features: Feature | Iterable[Feature] | None = None,
     ):
         """Feature instance constructor."""
@@ -76,7 +120,6 @@ class Container(_ListObject[Feature], Feature, ABC):
             self,
             name=name,
             visibility=visibility,
-            is_open=is_open,
             author_name=author_name,
             author_link=author_link,
             address=address,
@@ -93,18 +136,29 @@ class Container(_ListObject[Feature], Feature, ABC):
         _ListObject[Feature].__init__(self)
         ABC.__init__(self)
         self._deleted: list[Feature] = list[Feature]()
-        self._contents = features
+        self.features = features
         self._is_open: bool | None = is_open
         self._update_limit: int = 0
-        self.update_limit = update_limit
 
     @property
-    def _contents(self) -> Iterator[Feature]:
-        """Retrieve a generator over the `Features` in this `Container`."""
+    def features(self) -> Iterator[Feature]:
+        """Retrieve a generator over the `Features` in this `Container`.
+        
+        If the property setter is called, replaces the current list of contained 
+        `Feature`'s with those provided.
+
+        Parameters
+        ----------
+        value : Feature | Iterable[Feature] | None
+            The new `Feature` elements for the `Container`.
+
+        :returns: A generator over the `Features` in the `Container`.
+        :rtype: Iterator[Feature]
+        """
         yield from self
 
-    @_contents.setter
-    def _contents(self, value: Feature | Iterable[Feature] | None) -> None:
+    @features.setter
+    def features(self, value: Feature | Iterable[Feature] | None) -> None:
         self._deleted.extend(self)
         self.clear()
         if value is not None:
@@ -113,21 +167,16 @@ class Container(_ListObject[Feature], Feature, ABC):
             else:
                 self.extend(value)
 
-    @property
-    def update_limit(self) -> int:
-        """The maximum size of a synchronization update.
+    def clear(self) -> None:
+        """Remove all of the `Feature`'s enclosed in this `Container`."""
+        self._deleted.extend(self.features)
+        super().clear()
 
-        The (approximate) maximum number of KML objects that will be synchronized by any single
-        synchronization update that is rooted in this :class:`~pyLiveKML.KMLObjects.Container`.
-        """
-        return self._update_limit
-
-    @update_limit.setter
-    def update_limit(self, value: int) -> None:
-        # note that because this is not a KML field, i.e. that is displayed by GEP,
-        # there is no need to call self.field_changed() if the value is updated
-        if value != self._update_limit and value > 0:
-            self._update_limit = value
+    def remove(self, value: Feature) -> None:
+        """Remove a single `Feature` from this `Container."""
+        if value.active:
+            self._deleted.append(value)
+        super().remove(value)
 
     @property
     def flush(self) -> Iterator[Feature]:
@@ -144,18 +193,6 @@ class Container(_ListObject[Feature], Feature, ABC):
             f = self._deleted[0]
             self._deleted.remove(f)
             yield f
-
-    def remove(self, value: Feature) -> None:
-        """Remove a :class:`~pyLiveKML.KMLObjects.Feature` from this :class:`~pyLiveKML.KMLObjects.Container`.
-
-        Of course, the :class:`~pyLiveKML.KMLObjects.Feature` must be enclosed in this
-        :class:`~pyLiveKML.KMLObjects.Container` to be able to be removed.
-
-        :param Feature __value: The :class:`~pyLiveKML.KMLObjects.Feature` to be removed.
-        """
-        if value.active:
-            self._deleted.append(value)
-        _ListObject[Feature].remove(self, value)
 
     def force_idle(self, cascade: bool = False) -> None:
         """Force this instance, and _optionally_ its children, to the IDLE state.
