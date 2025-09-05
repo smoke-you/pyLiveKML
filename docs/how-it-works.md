@@ -8,17 +8,13 @@ As noted in the readme, pyLiveKML is an implementation of Google's
 
 # Static -vs- Dynamic Publishing
 
-Static publishing produces a KML file that can be loaded directly into GEP, but that (as a general rule) cannot be updated via pyLiveKML once it has been opened in GEP.  The top-layer object in a static KML file will typically be a `Document` or `Folder`, or may be a `NetworkLink`.
+Static publishing produces a KML file that can be loaded directly into GEP, but that (as a general rule) cannot be updated via pyLiveKML once it has been opened in GEP.  The top-layer object in a static KML file will typically be a `<Document>` or `<Folder>`, or may also be a `<NetworkLink>`.
 
-Dynamic publishing produces a KML file that can be retrieved by GEP and used to modify GEP's state.  As a general rule, in order to perform dynamic publishing, two (or more) `NetworkLink` objects must be loaded into GEP using static publishing. One of the `NetworkLink` objects hosts the other dynamically published KML objects, and the other `NetworkLink` periodically retrieves a dynamically published `NetworkLinkControl` object that describes how the first `NetworkLink` object's contents should be manipulated.
+Dynamic publishing produces a KML file that can be retrieved by GEP and used to modify GEP's state.  As a general rule, in order to perform dynamic publishing, two (or more) `NetworkLink` objects must be loaded into GEP using static publishing to construct their tags. One of the `<NetworkLink>` tags hosts the other dynamically published KML objects, and the other `<NetworkLink>` tag periodically accesses a `NetworkLinkControl` object that publishes `<Update>` tags that describe how the first `<NetworkLink>` tag's contents should be manipulated.
 
 # KML Objects
 
 Python representations of KML objects derive from the abstract `Object` class, which in turn derives from `_BaseObject`. All of the functionality of the `Object` class is actually contained in `_BaseObject`; the only difference between the classes is that `Object` changes the value of the class variable `_suppress_id` from `False` to `True`. The class variables of `_BaseObject` are:
-
-* `_suppress_id` : `bool`
-
-  Controls whether the instance's tag will be published with an `id` attribute.
 
 * `_kml_tag` : `str`
 
@@ -36,13 +32,17 @@ Python representations of KML objects derive from the abstract `Object` class, w
 
   Specifies which properties of the object should be published as dependent children of the object's tag. It is a tuple of `_DependentDef` objects, each of which contains the Python name of the field to be treated as a dependent. Note the distinction between **children** and **dependents**, discussed below.
 
+* `_suppress_id` : `bool`
+
+  Controls whether the instance's tag will be published with an `id` attribute.
+
 ## Children -vs- Dependents
 
 Children and dependents are treated identically during static publishing, but differently during dynamic publishing.
 
-During dynamic publishing, descendants are created and published at the same time as, and as child tags of, the parent; while children are published in (and as children of) `Update` tags that describe how the child should be created, modified or deleted.
+During dynamic publishing, descendants are created and published at the same time as, and as child tags of, the parent; while children are published in (and as children of) `<Update>` tags that describe how the child should be created, modified or deleted.
 
-Note that in order for children to be manipulated by `Update` tags, it is necessary that both the parent and child object publish their `id`.
+Note that in order for KML tags to be manipulated using `<Update>` tags, it is necessary that both the parent and child tags include their `id` as an attribute.
 
 ## Publishing Methods
 
@@ -52,15 +52,15 @@ There are two methods of `_BaseObject` that are routinely used to publish KML ob
 
 * `construct_kml(self, with_children: bool = True, with_dependents: bool = True) -> etree.Element`
 
-  Publishes a complete object as a tag, optionally with children and/or dependents.
+  Publishes a KML object as a tag, optionally with children and/or dependents.
 
 * `build_kml(self, root: etree.Element, with_children: bool = True, with_dependents: bool = True,) -> None`
 
-  Publishes only the child tags into an existing tag. In order to publish child tags, `construct_kml` calls `build_kml`.
+  Publishes only child objects into an existing tag. When publishing child objects, `construct_kml` calls `build_kml`.
 
 ### Dynamic only
 
-These methods are specific to `Change` tags. They are accessible to be overridden by subclasses of `_BaseObject` specifically to make it possible to customize dynamic behaviours, as demonstrated in the [aircraft_tracker](/evals/apps/aircraft_tracker/) evaluation app.
+These methods are intended to be used by `Update` instances while building their KML content. They are accessible to be overridden by subclasses of `_BaseObject` specifically to make it possible to customize dynamic `Update` behaviours, as demonstrated in the [aircraft_tracker](/evals/apps/aircraft_tracker/) evaluation app.
 
 * `create_kml(self, root: etree.Element, parent: "_BaseObject") -> etree.Element`
 
@@ -76,12 +76,14 @@ The purpose of dynamic publishing is to synchronize the state of the Python appl
 
 In order to facilitate synchronization, each object maintains a state property `_state`, of type `ObjectState`, which enumerates possible synchronization states:
 
-* IDLE - Not synchronized
-* CREATING - Creation of the object has been requested, but not yet published.
-* CREATED - The object has been published.
-* CHANGING - A change to the object has been requested, but not yet published.
-* DELETE_CREATED - Deletion of an object in CREATING or CREATED state has been requested, but not yet published.
-* DELETE_CHANGED - An object was changed after it's deletion was requested, but not yet published.
+* `IDLE` - Not synchronized
+* `CREATING` - Creation of the object has been requested, but not yet published.
+* `CREATED` - The object has been published.
+* `CHANGING` - A change to the object has been requested, but not yet published.
+* `DELETE_CREATED` - Deletion of an object in CREATING or CREATED state has been requested, but not yet published.
+* `DELETE_CHANGED` - An object was changed after it's deletion was requested, but not yet published.
+
+Note that, while it is possible to directly manipulate `_state`, it is not recommended to do so - see below.
 
 ### State Management
 
@@ -107,7 +109,7 @@ Several methods are exposed by `_BaseObject` to facilitate state management, rat
 
 A `NetworkLinkControl` object, or "NLC", is the primary means of performing dynamic publishing.
 
-The NLC hosts a `Container` (which may be either a `Document` or `Folder`, in terms of concrete classes), and works to keep that `Container` synchronized with GEP. Each time the NLC's `build_kml` method is executed, it walks the tree of it's `Container`, looking for and noting KML objects with a state that is not IDLE or CREATED. It will record no more than `update_limit` <Create>, <Change> or <Delete> operations before publishing an <Update> tag containing all of the synchronization updates that it has gathered. As objects are listed for synchronization, their `synchronized` method is called.
+The NLC hosts a `Container` (which may be either a `Document` or `Folder`, in terms of concrete classes), and works to keep that `Container` synchronized with GEP. Each time the NLC's `build_kml` method is executed, it walks the tree of it's `Container`, looking for and noting KML objects with a state that is not IDLE or CREATED. It will record no more than `update_limit` `Create`, `Change` or `Delete` operations before publishing an `<Update>` tag containing all of the synchronization updates that it has gathered. As objects are listed for synchronization, their `synchronized` method is called.
 
 # Constructing a KML File
 
@@ -136,3 +138,19 @@ In order to publish KML data, it must be collected into a properly-constructed K
 5. (Using FastAPI) return a `PlainTextResponse` containing your KML file.
 
   `return PlainTextResponse(content=kml_content, headers=KML_HEADERS)`
+
+# Setting up a Live Feed
+
+In order to set up a live feed, it is necessary to load (at least) two `<NetworkLink>` tags into GEP: one tag to host live content, and the other to retrieve that content. This mechanism is detailed well in [Google's documentation](https://developers.google.com/kml/documentation/updates). It is also implemented in [the evaluation application](/evals/main.py), where the various file endpoints /loader.kml, /elements.kml and /update.kml return files that perform distinct functions.
+
+* /loader.kml
+
+  Delivers a KML file containing the two `<NetworkLink>` tags, named "Elements" and "Update". The "Elements" link retrieves /elements.kml once only, while the "Update" link periodically retrieves /update.kml.
+
+* /elements.kml
+
+  Delivers a KML file that must use a `<Container>` (a `<Document>` or `<Folder>`, as concrete subclasses) tag as it's root element. The /update.kml file will target this `<Container>` (or a child `<Container>` under it), creating new tags under the target. As discussed [above](#networklinkcontrol), the target `Container` is referenced in the Python implementation of `<NetworkLinkControl>` as the object that it is to monitor and synchronize with GEP.
+
+* / update.kml
+
+  Delivers a KML file containing a `<NetworkLinkControl>` tag, with it's child `<Update>` tag and a hierarchy of `<Create>`, `<Change>` and `<Delete>` tags that describe the next synchronization update.
