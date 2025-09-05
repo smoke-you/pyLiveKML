@@ -1,7 +1,4 @@
-"""Feature module.
-
-:note: Includes the `Container` class definition as well, to avoid a circular import.
-"""
+"""Feature module."""
 
 from abc import ABC
 from typing import Iterable, Iterator
@@ -83,6 +80,10 @@ class Feature(Object, ABC):
         `Feature`s and `Geometry`'s associated with a `Region` are drawn only when the
         `Region` is active.
 
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_fields = Object._kml_fields + (
@@ -142,13 +143,18 @@ class Feature(Object, ABC):
 
     @property
     def styles(self) -> Iterator[StyleSelector]:
-        """The Style objects that are direct children of this instance.
+        """Retrieve a generator over the `StyleSelector` instances in this `Feature`.
+        
+        If the property setter is called, replaces the current list of contained 
+        `StyleSelector`'s with those provided.
 
-        A generator to retrieve references to any :class:`~pyLiveKML.KMLObjects.Style` or
-        :class:`~pyLiveKML.KMLObjects.StyleMap` objects that are children of this
-        :class:`~pyLiveKML.KMLObjects.Feature`.
+        Parameters
+        ----------
+        value : StyleSelector | Iterable[StyleSelector] | None
+            The new `StyleSelector` elements for the `Feature`.
 
-        :returns: A generator of :class:`~pyLiveKML.KMLObjects.StyleSelector` objects.
+        :returns: A generator over the `StyleSelector`s in the `Feature`.
+        :rtype: Iterator[StyleSelector]
         """
         for s in self._styles:
             yield s
@@ -168,7 +174,21 @@ class Feature(Object, ABC):
         with_children: bool = True,
         with_dependents: bool = True,
     ) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
+        """Build the KML sub-tags for this `Feature` and append it to the provided `etree.Element`.
+
+        Overridden from :class:`pyLiveKML.objects.Object.Object` to perform some 
+        additional build steps.
+
+        Parameters
+        ----------
+        root : etree.Element
+            The tag into which the sub-tags are to be inserted.
+        with_children : bool, default = True
+            Whether the `children` of the `Feature` should be constructed as sub-tags.
+        with_dependents : bool, default = True
+            Whether the `dependents` of the `Feature` should be constructed as sub-tags.
+
+        """
         super().build_kml(root, with_children)
         if self.author_name is not None:
             author = etree.SubElement(root, with_ns("atom:author"))
@@ -182,22 +202,6 @@ class Feature(Object, ABC):
             if self.snippet_max_lines is not None:
                 attribs["maxLines"] = str(self.snippet_max_lines)
             etree.SubElement(root, "Snippet", attribs).text = self.snippet
-
-    # override Object.activate() to enable upwards cascade, i.e. if a Feature contained
-    # in an inactive parent Feature is activate, the parent Feature must also be
-    # activated in order for GEP synchronization to work correctly.
-    def activate(self, value: bool, cascade: bool = False) -> None:
-        """Cascade activation upwards, but do not cascade deactivation upwards.
-
-        Overrides :func:`~pyLiveKML.KMLObjects.Object.Object.activate` to implement upwards cascade of activation.
-        That is, if a :class:`~pyLiveKML.KMLObjects.Feature` enclosed in the object tree depending from a
-        deactivated  parent :class:`~pyLiveKML.KMLObjects.Feature` is activated, the reverse tree's parents must also
-        be activated in order for GEP synchronization to work correctly.
-        """
-        Object.activate(self, value, cascade)
-        # Cascade activation *upwards* for Features, but *do not* cascade deactivation upwards
-        if value and self._container:
-            self._container.activate(True, False)
 
     def __str__(self) -> str:
         """Return a string representation."""

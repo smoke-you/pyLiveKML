@@ -5,10 +5,9 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.Feature import Feature
-from pyLiveKML.objects.Object import ObjectState, _ChildDef, _ListObject
+from pyLiveKML.objects.Object import _ChildDef, _ListObject, ObjectState
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
@@ -90,6 +89,10 @@ class Container(_ListObject[Feature], Feature, ABC):
     features : Feature | Iterable[Feature] | None, default = None
         The `Feature`'s contained by this `Container`.
 
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_children: tuple[_ChildDef, ...] = Feature._kml_children + (
@@ -168,50 +171,50 @@ class Container(_ListObject[Feature], Feature, ABC):
                 self.extend(value)
 
     def clear(self) -> None:
-        """Remove all of the `Feature`'s enclosed in this `Container`."""
+        """Remove all of the `Feature`'s enclosed in this `Container`.
+        
+        Effectively, moves them to the `_deleted` list.
+        """
         self._deleted.extend(self.features)
         super().clear()
 
     def remove(self, value: Feature) -> None:
-        """Remove a single `Feature` from this `Container."""
+        """Remove a single `Feature` from this `Container.
+        
+        Effectively, moves it to the `_deleted` list.
+
+        Parameters
+        ----------
+        value : Feature
+            The feature to be removed/moved.
+        """
         if value.active:
             self._deleted.append(value)
         super().remove(value)
 
-    @property
-    def flush(self) -> Iterator[Feature]:
-        """Flush objects flagged as deleted out of the UI.
-
-        A generator to retrieve instances of :class:`~pyLiveKML.KMLObjects.Feature` objects that have been
-        deleted from this :class:`~pyLiveKML.KMLObjects.Container` but for which those deletions **have not** yet
-        been synchronized with GEP. As the generator retrieves a deleted :class:`~pyLiveKML.KMLObjects.Feature`, it
-        also completes the deletion process.
-
-        :returns: A generator of :class:`~pyLiveKML.KMLObjects.Feature` objects.
-        """
-        while len(self._deleted) > 0:
-            f = self._deleted[0]
-            self._deleted.remove(f)
-            yield f
-
     def force_idle(self, cascade: bool = False) -> None:
-        """Force this instance, and _optionally_ its children, to the IDLE state.
+        """Force this instance, and _optionally_ its children, to the `IDLE` state.
 
-        Overridden from :func:`~pyLiveKML.KMLObjects.Object.Object.force_idle` to enable the entire tree of
-        enclosed :class:`~pyLiveKML.KMLObjects.Feature` (and :class:`~pyLiveKML.KMLObjects.Container`)
-        instances, and child :class:`~pyLiveKML.KMLObjects.Object` instances, that is rooted in this
-        :class:`~pyLiveKML.KMLObjects.Container` to be forced to the IDLE state.
+        Overridden from :func:`pyLiveKML.objects.Object.Object.force_idle` to enable the 
+        entire tree of enclosed `Feature` instances, and child objects, that is rooted in 
+        this `Container` to be forced to the `IDLE` state.
+
+        Parameters
+        ----------
+        cascade : bool, default = False
+            If cascade is `True`, the entire tree under this `Container` is forced 
+            `IDLE`. If `False`, only the `Container` itself is forced `IDLE`.
+
         """
         super().force_idle()
         if cascade:
             self.force_features_idle()
 
     def force_features_idle(self) -> None:
-        """Force this instance, and _all_ of its children, to the IDLE state.
+        """Force this instance, and _all_ of its children, to the `IDLE` state.
 
-        Force the entire tree of enclosed :class:`~pyLiveKML.KMLObjects.Feature` (and
-        :class:`~pyLiveKML.KMLObjects.Container`) instances to be forced to the IDLE state. Typically called as a
-        result of the target :class:`~pyLiveKML.KMLObjects.Container` being deleted from GEP.
+        Force the entire tree of enclosed `Feature` instances to the `IDLE` state. 
+        Typically called as a result of the target `Container` being deactivated.
         """
         for f in self:
             if isinstance(f, Container):
@@ -221,12 +224,25 @@ class Container(_ListObject[Feature], Feature, ABC):
                 f.force_idle()
 
     def activate(self, value: bool, cascade: bool = False) -> None:
-        """Cascade activate upwards, but do not cascade deactivate upwards.
+        """Activate the `Container`, i.e. make it appear in GEP.
 
-        Overrides :func:`~pyLiveKML.KMLObjects.Feature.Feature.activate` to implement activate/deactivate cascade to
-        enclosed :class:`~pyLiveKML.KMLObjects.Feature` objects, and to ensure that if a
-        :class:`~pyLiveKML.KMLObjects.Container` is deleted from GEP, its' enclosed
-        :class:`~pyLiveKML.KMLObjects.Feature` objects are forced IDLE to maintain synchronization.
+        Overrides :func:`pyLiveKML.objects.Feature.Feature.activate` to implement 
+        activate/deactivate cascade to enclosed `Feature` instances, and to ensure that 
+        if a `Container` is deleted from GEP, its' enclosed `Feature` objects are forced 
+        `IDLE` to maintain synchronization.
+
+        Notes
+        -----        
+        * Cascade activate upwards, but do not cascade deactivate upwards.
+
+        Parameters
+        ----------
+        value : bool
+            `True` to activate; `False` to deactivate.
+        cascade : bool, default = False
+            If cascade is `True`, the entire tree under this `Container` is activated. If 
+            `False`, only the `Container` itself is activated.
+
         """
         Feature.activate(self, value, cascade)
         if cascade:
