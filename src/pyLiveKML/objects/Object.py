@@ -488,21 +488,27 @@ class Object(_BaseObject, ABC):
 
 
 class ObjectChild:
+    """Describes a parent:child relationship between two :class:`~pyLiveKML.KMLObjects.Object` instances.
+
+    Parameters
+    ----------
+    parent: _BaseObject
+    child: _BaseObject
+
+    Attributes
+    ----------
+    Same as parameters.
+
+    """
 
     def __init__(
         self,
         parent: _BaseObject,
         child: _BaseObject,
     ) -> None:
+        """ObjectChild instance constructor."""
         self.parent = parent
         self.child = child
-
-
-# ObjectChild = NamedTuple(
-#     "ObjectChild", [("parent", _BaseObject), ("child", _BaseObject)]
-# )
-# """Named tuple that describes a parent:child relationship between two :class:`~pyLiveKML.KMLObjects.Object` instances.
-# """
 
 
 _LOB = TypeVar("_LOB", bound="_BaseObject")

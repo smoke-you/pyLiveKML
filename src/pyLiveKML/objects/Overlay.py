@@ -45,7 +45,7 @@ class Overlay(Feature, ABC):
 
     def __init__(
         self,
-        icon: str,
+        icon: str | None = None,
         draw_order: int | None = None,
         color: GeoColor | int | None = None,
         name: str | None = None,
@@ -82,6 +82,6 @@ class Overlay(Feature, ABC):
             region=region,
         )
         ABC.__init__(self)
-        self.icon = _Overlay_Icon(icon)
+        self.icon = _Overlay_Icon(icon) if icon else None
         self.draw_order = draw_order
         self.color = cast(GeoColor | None, color)

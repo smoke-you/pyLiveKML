@@ -6,12 +6,23 @@ from pyLiveKML.objects.Object import Object
 
 
 class Geometry(Object, ABC):
-    """A KML 'Geometry', per https://developers.google.com/kml/documentation/kmlreference#geometry.
+    """A KML `<Geometry>` tag constructor.
 
-    The :class:`~pyLiveKML.KMLObjects.Geometry` class is the abstract base class
-    for KML :class:`~pyLiveKML.KMLObjects.Object` instances that have an existence
-    as geospatial objects in GEP and that are children of
-    :class:`~pyLiveKML.KMLObjects.Placemark` instances.
+    This is an abstract element and cannot be used directly in a KML file. It provides a
+    placeholder object for all derived `<Geometry>` objects.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#geometry.
+
+    Parameters
+    ----------
+    Nil
+
+    Attributes
+    ----------
+    Nil
+
     """
 
     def __init__(self) -> None:

@@ -5,12 +5,12 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import Object, _FieldDef, NoDump, _ChildDef, _DependentDef
-from pyLiveKML.utils import with_ns
+from pyLiveKML.objects.Object import _ChildDef, _DependentDef, _FieldDef, Object, NoDump
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
+from pyLiveKML.utils import with_ns
 
 
 class Feature(Object, ABC):
@@ -144,8 +144,8 @@ class Feature(Object, ABC):
     @property
     def styles(self) -> Iterator[StyleSelector]:
         """Retrieve a generator over the `StyleSelector` instances in this `Feature`.
-        
-        If the property setter is called, replaces the current list of contained 
+
+        If the property setter is called, replaces the current list of contained
         `StyleSelector`'s with those provided.
 
         Parameters
@@ -155,6 +155,7 @@ class Feature(Object, ABC):
 
         :returns: A generator over the `StyleSelector`s in the `Feature`.
         :rtype: Iterator[StyleSelector]
+
         """
         for s in self._styles:
             yield s
@@ -176,7 +177,7 @@ class Feature(Object, ABC):
     ) -> None:
         """Build the KML sub-tags for this `Feature` and append it to the provided `etree.Element`.
 
-        Overridden from :class:`pyLiveKML.objects.Object.Object` to perform some 
+        Overridden from :class:`pyLiveKML.objects.Object.Object` to perform some
         additional build steps.
 
         Parameters

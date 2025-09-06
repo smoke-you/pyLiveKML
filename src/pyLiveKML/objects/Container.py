@@ -146,8 +146,8 @@ class Container(_ListObject[Feature], Feature, ABC):
     @property
     def features(self) -> Iterator[Feature]:
         """Retrieve a generator over the `Features` in this `Container`.
-        
-        If the property setter is called, replaces the current list of contained 
+
+        If the property setter is called, replaces the current list of contained
         `Feature`'s with those provided.
 
         Parameters
@@ -157,6 +157,7 @@ class Container(_ListObject[Feature], Feature, ABC):
 
         :returns: A generator over the `Features` in the `Container`.
         :rtype: Iterator[Feature]
+
         """
         yield from self
 
@@ -172,7 +173,7 @@ class Container(_ListObject[Feature], Feature, ABC):
 
     def clear(self) -> None:
         """Remove all of the `Feature`'s enclosed in this `Container`.
-        
+
         Effectively, moves them to the `_deleted` list.
         """
         self._deleted.extend(self.features)
@@ -180,13 +181,14 @@ class Container(_ListObject[Feature], Feature, ABC):
 
     def remove(self, value: Feature) -> None:
         """Remove a single `Feature` from this `Container.
-        
+
         Effectively, moves it to the `_deleted` list.
 
         Parameters
         ----------
         value : Feature
             The feature to be removed/moved.
+
         """
         if value.active:
             self._deleted.append(value)
@@ -195,14 +197,14 @@ class Container(_ListObject[Feature], Feature, ABC):
     def force_idle(self, cascade: bool = False) -> None:
         """Force this instance, and _optionally_ its children, to the `IDLE` state.
 
-        Overridden from :func:`pyLiveKML.objects.Object.Object.force_idle` to enable the 
-        entire tree of enclosed `Feature` instances, and child objects, that is rooted in 
+        Overridden from :func:`pyLiveKML.objects.Object.Object.force_idle` to enable the
+        entire tree of enclosed `Feature` instances, and child objects, that is rooted in
         this `Container` to be forced to the `IDLE` state.
 
         Parameters
         ----------
         cascade : bool, default = False
-            If cascade is `True`, the entire tree under this `Container` is forced 
+            If cascade is `True`, the entire tree under this `Container` is forced
             `IDLE`. If `False`, only the `Container` itself is forced `IDLE`.
 
         """
@@ -213,7 +215,7 @@ class Container(_ListObject[Feature], Feature, ABC):
     def force_features_idle(self) -> None:
         """Force this instance, and _all_ of its children, to the `IDLE` state.
 
-        Force the entire tree of enclosed `Feature` instances to the `IDLE` state. 
+        Force the entire tree of enclosed `Feature` instances to the `IDLE` state.
         Typically called as a result of the target `Container` being deactivated.
         """
         for f in self:
@@ -226,13 +228,13 @@ class Container(_ListObject[Feature], Feature, ABC):
     def activate(self, value: bool, cascade: bool = False) -> None:
         """Activate the `Container`, i.e. make it appear in GEP.
 
-        Overrides :func:`pyLiveKML.objects.Feature.Feature.activate` to implement 
-        activate/deactivate cascade to enclosed `Feature` instances, and to ensure that 
-        if a `Container` is deleted from GEP, its' enclosed `Feature` objects are forced 
+        Overrides :func:`pyLiveKML.objects.Feature.Feature.activate` to implement
+        activate/deactivate cascade to enclosed `Feature` instances, and to ensure that
+        if a `Container` is deleted from GEP, its' enclosed `Feature` objects are forced
         `IDLE` to maintain synchronization.
 
         Notes
-        -----        
+        -----
         * Cascade activate upwards, but do not cascade deactivate upwards.
 
         Parameters
@@ -240,7 +242,7 @@ class Container(_ListObject[Feature], Feature, ABC):
         value : bool
             `True` to activate; `False` to deactivate.
         cascade : bool, default = False
-            If cascade is `True`, the entire tree under this `Container` is activated. If 
+            If cascade is `True`, the entire tree under this `Container` is activated. If
             `False`, only the `Container` itself is activated.
 
         """

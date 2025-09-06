@@ -17,7 +17,7 @@ from pyLiveKML.objects.TimePrimitive import TimePrimitive
 class Document(Container):
     """A KML `<Document>` tag constructor.
 
-    A `<Document>` is a container for `<Feature>`, `<Style>` and `<Schema>` objects. This 
+    A `<Document>` is a container for `<Feature>`, `<Style>` and `<Schema>` objects. This
     element is required if your KML file uses shared styles, or schemas.
 
     References
@@ -29,13 +29,13 @@ class Document(Container):
     name : str|None, default = None
         User-defined text displayed in the 3D viewer as the label for the object.
     visibility : bool | None, default = None
-        Specifies whether the `Document` is enabled (checked) in the "Places" panel when 
-        it is initially loaded. In order for any child `Feature`s to be visible, the 
-        `<visibility>` tag of all its ancestors (`Document` or `Folder` instances) must 
+        Specifies whether the `Document` is enabled (checked) in the "Places" panel when
+        it is initially loaded. In order for any child `Feature`s to be visible, the
+        `<visibility>` tag of all its ancestors (`Document` or `Folder` instances) must
         also be set `True`.
     is_open : bool | None, default = None
-        Specifies whether the `Document` appears closed or open when first loaded into 
-        the "Places" panel. `False` or `None` is collapsed (the default), `True` is 
+        Specifies whether the `Document` appears closed or open when first loaded into
+        the "Places" panel. `False` or `None` is collapsed (the default), `True` is
         expanded.
     author_name : str | None, default = None
         The name of the author of the `Feature`.
@@ -143,8 +143,8 @@ class Document(Container):
     @property
     def schemas(self) -> Iterable[Schema]:
         """Retrieve a generator over the `Schema` instances in this `Document`.
-        
-        If the property setter is called, replaces the current list of contained 
+
+        If the property setter is called, replaces the current list of contained
         `Schema`'s with those provided.
 
         Parameters
@@ -154,6 +154,7 @@ class Document(Container):
 
         :returns: A generator over the `Schema`s in the `Document`.
         :rtype: Iterator[Schema]
+
         """
         yield from self._schemas
 

@@ -37,7 +37,7 @@ class AnimatedUpdate(TourPrimitive):
     target_href : str, default = ""
         The target href for the enclosed :class:`pyLiveKML.objects.Update` instance.
     sequence : UpdateSequent | Iterable[UpdateSequent] | None, default = None
-        The sequence of create, change and delete operations to be constructed by the 
+        The sequence of create, change and delete operations to be constructed by the
         enclosed :class:`pyLiveKML.objects.Update` instance.
 
     Attributes

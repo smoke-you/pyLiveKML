@@ -11,13 +11,15 @@ from pyLiveKML.objects.Object import _BaseObject, _FieldDef, ObjectChild
 
 class UpdateType(Enum):
     """Enumeration of the tags that may be contained in an `<Update>` tag."""
+
     CREATE = "Create"
     CHANGE = "Change"
     DELETE = "Delete"
 
+
 class UpdateSequent(ObjectChild):
     """An element in an Update sequence.
-    
+
     Parameters
     ----------
     tag : UpdateType
@@ -26,18 +28,17 @@ class UpdateSequent(ObjectChild):
         The parent object for any `<Create>` tags. Required for the `id` field.
     child : _BaseObject
         The target object that will be created, changed or deleted.
-    
+
     Attributes
     ----------
     Same as parameters.
 
     """
+
     def __init__(
-        self, 
-        tag: UpdateType,
-        parent: _BaseObject, 
-        child: _BaseObject
+        self, tag: UpdateType, parent: _BaseObject, child: _BaseObject
     ) -> None:
+        """UpdateSequent instance constructor."""
         super().__init__(parent, child)
         self.tag = tag
 
@@ -45,9 +46,9 @@ class UpdateSequent(ObjectChild):
 class _UpdateSequence(_BaseObject, list[UpdateSequent]):
     """A sequence of create, change and delete operations to be executed.
 
-    This sequence will be executed in the order in which it is stored. The primary 
+    This sequence will be executed in the order in which it is stored. The primary
     purpose, compared to the :class:`pyLiveKML.objects.Update._UpdateList` subclasses,
-    below, is to allow a completely arbitrary sub-tag order for `<Update>` tags. This is 
+    below, is to allow a completely arbitrary sub-tag order for `<Update>` tags. This is
     relevant to :class:`pyLiveKML.objects.AnimatedUpdate`.
 
     References
@@ -78,7 +79,12 @@ class _UpdateSequence(_BaseObject, list[UpdateSequent]):
             else:
                 self.extend(items)
 
-    def build_kml(self, root: etree.Element, with_children: bool = True, with_dependents: bool = True) -> None:
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
         for s in self:
             if s.tag == UpdateType.CREATE:
                 if not s.parent._suppress_id:
@@ -97,7 +103,8 @@ class _UpdateSequence(_BaseObject, list[UpdateSequent]):
 class _UpdateList(_BaseObject, list[ObjectChild], ABC):
 
     def __init__(
-        self, items: ObjectChild | Iterable[ObjectChild] | None = None,
+        self,
+        items: ObjectChild | Iterable[ObjectChild] | None = None,
     ) -> None:
         _BaseObject.__init__(self)
         list[ObjectChild].__init__(self)
@@ -243,4 +250,4 @@ class Update(_BaseObject):
         if self.deletes:
             root.append(self.deletes.construct_kml(with_children, with_dependents))
         if self.sequence:
-            root.append(self.sequence.build_kml(root, with_children, with_dependents))
+            self.sequence.build_kml(root, with_children, with_dependents)

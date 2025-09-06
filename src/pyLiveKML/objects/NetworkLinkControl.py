@@ -94,9 +94,9 @@ class NetworkLinkControl(_BaseObject):
         with_dependents: bool = True,
     ) -> etree.Element:
         """Construct a KML synchronization update.
-        
+
         The real work gets done here.
-        Walk the tree under the `container`, looking at each object's state, and create, 
+        Walk the tree under the `container`, looking at each object's state, and create,
         update or delete it as necessary.
 
         """
@@ -107,7 +107,7 @@ class NetworkLinkControl(_BaseObject):
             pass
         super().build_kml(root, with_children, with_dependents)
         return root
-    
+
     def _sync_child_objects(self, obj: _BaseObject) -> None:
         for d_obj in obj.dependents:
             if d_obj.child.state == ObjectState.CREATING:
