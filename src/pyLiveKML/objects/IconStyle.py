@@ -41,9 +41,7 @@ class IconStyle(ColorStyle):
         Direction in decimal degrees. If not specified, defaults to 0. Values range from
         0 to 360 degrees.
     color: GeoColor | int | None, default = None
-        The color of the icon.
     color_mode: ColorModeEnum | None, default = None
-        Whether the color is to be randomized.
     hot_spot: HotSpot | None, default = None
         Specifies the position within the icon that is "anchored" to the `Point` to which
         the style is applied.

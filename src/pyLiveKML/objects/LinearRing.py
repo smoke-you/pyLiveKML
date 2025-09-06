@@ -1,41 +1,95 @@
 """LinearRing module."""
 
-from typing import Iterable, Iterator, cast
+from typing import Any, Iterable, Iterator, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
-from pyLiveKML.objects.Object import _FieldDef
+from pyLiveKML.errors import LinearRingCoordsError
+from pyLiveKML.objects.Object import _FieldDef, _KMLDump, _KMLParser
 from pyLiveKML.objects.Geometry import Geometry
+from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
+
+
+class _CoordsParser(_KMLParser):
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        if isinstance(next(iter(value)), GeoCoordinates):
+            result = value
+        else:
+            result = tuple((GeoCoordinates(*c) for c in value))
+        if len(result) < 3:
+            raise LinearRingCoordsError(
+                "There must be at least three points in the boundary."
+            )
+        return result
+
+
+class _CoordsDumper(_KMLDump):
+
+    @classmethod
+    def dump(cls, value: Any) -> Any:
+        def _build() -> Iterable[str]:
+            v = cast(Iterable[GeoCoordinates], value)
+            v0 = str(next(iter(v)))
+            yield v0
+            yield from (str(c) for c in v)
+            yield v0
+
+        return " ".join(_build())
 
 
 class LinearRing(Geometry):
-    """A LinearRing geometry, as per https://developers.google.com/kml/documentation/kmlreference#linearring.
+    """A KML `<LinearRing>` geometry tag constructor.
 
-    :class:`~pyLiveKML.KMLObjects.LinearRing` objects describe a geospatial boundary that is defined by a closed
-    sequence of points, where points map to :class:`~pyLiveKML.GeoCoordinates` instances.
+    Defines a closed line string, typically the outer boundary of a `Polygon`.
+    Optionally, a `LinearRing` can also be used as the inner boundary of a `Polygon` to
+    create holes in the `Polygon`. A `Polygon` can contain multiple `<LinearRing>`
+    elements used as inner boundaries.
 
-    :param Iterable[GeoCoordinates] coordinates: An iterable of :class:`~pyLiveKML.GeoCoordinates` objects, or
-        points, that define the boundary of the :class:`~pyLiveKML.KMLObjects.LinearRing`. There should be at
-        least three points.
-    :param AltitudeMode|None altitude_mode: The (optional) :class:`~pyLiveKML.KML.AltitudeMode` that will
-        be applied by GEP to all the points that make up the boundary of the
-        :class:`~pyLiveKML.KMLObjects.LinearRing`.
-    :param bool|None extrude: An (optional) flag to indicate whether the points that make up the
-        boundary of the :class:`~pyLiveKML.KMLObjects.LinearRing` should be shown in GEP connected to the
-        ground with vertical lines.
-    :param bool|None tessellate: An (optional) flag to indicate whether the
-        :class:`~pyLiveKML.KMLObjects.LinearRing` should follow the terrain.
-    :param float|None gx_altitude_offset: An (optional) altitude offset, in metres, to be applied to every
-        point that makes up the boundary of the :class:`~pyLiveKML.KMLObjects.LinearRing`.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#linearring.
+
+    Parameters
+    ----------
+    coordinates : Iterable[GeoCoordinates] | Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]]
+        The coordinates of the vertices of the `LinearRing`. Note that there is no need
+        to append a final joining coordinate, such that c[0] == c[-1]; c[0] will be
+        appended automatically when the coordinates are published.
+    altitude_mode : AltitudeModeEnum | None, default = None
+        Specifies how altitude components in the `coordinates` attribute are interpreted.
+    extrude : bool | None, default = None
+        Specifies whether to connect the `LinearRing` to the ground. To extrude this
+        geometry, `altitude_mode` must be one of RELATIVE_TO_GROUND,
+        RELATIVE_TO_SEAFLOOR or ABSOLUTE. Only the vertices of the `LinearRing` are
+        extruded, not the center of the geometry. The vertices are extruded toward
+        the center of the Earth's geoid.
+    tessellate : bool | None, default = None
+        Specifies whether to allow the `LinearRing` to follow the terrain. To enable
+        tessellation, `altitude_mode` must be CLAMP_TO_GROUND or CLAMP_TO_SEAFLOOR.
+        Very large `LinearRing`s should enable tessellation so that they follow the
+        curvature of the earth; otherwise, they may go underground and be hidden.
+    altitude_offset : float | None, default = None
+        Modifies how the altitude values are rendered. This offset allows you to move an
+        entire `LinearRing` up or down as a unit without modifying all the individual
+        coordinate values that make up the `LinearRing`. (Although the `LinearRing` is
+        displayed using the altitude offset value, the original altitude values are
+        preserved in the KML file). Units are in meters.
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "LinearRing"
     _kml_fields = Geometry._kml_fields + (
         _FieldDef("altitude_mode", "gx:altitudeMode"),
+        _FieldDef("coordinates", parser=_CoordsParser, dumper=_CoordsDumper),
         _FieldDef("extrude"),
         _FieldDef("tessellate"),
-        _FieldDef("gx_altitude_offset", "gx:altitudeOffset"),
+        _FieldDef("altitude_offset", "gx:altitudeOffset"),
     )
 
     def __init__(
@@ -48,11 +102,11 @@ class LinearRing(Geometry):
         altitude_mode: AltitudeModeEnum | None = None,
         extrude: bool | None = None,
         tessellate: bool | None = None,
-        gx_altitude_offset: float | None = None,
+        altitude_offset: float | None = None,
     ):
         """LinearRing instance constructor."""
         Geometry.__init__(self)
-        self.gx_altitude_offset = gx_altitude_offset
+        self.altitude_offset = altitude_offset
         self.extrude = extrude
         self.tessellate = tessellate
         self.altitude_mode = altitude_mode
@@ -61,12 +115,21 @@ class LinearRing(Geometry):
 
     @property
     def coordinates(self) -> Iterator[GeoCoordinates]:
-        """The LLA coordinates of the vertices of the instance.
+        """Retrieve a generator over the `GeoCoordinates` of this `LinearRing`.
 
-        A generator to retrieve the :class:`~pyLiveKML.GeoCoordinates` objects that define the boundary of the
-        :class:`~pyLiveKML.KMLObjects.LinearRing` object.
+        If the property setter is called, replaces the current list of coordinates with
+        those provided.
 
-        :returns: A generator of :class:`~pyLiveKML.GeoCoordinates` objects.
+        Parameters
+        ----------
+        value : Iterable[GeoCoordinates] | Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]]
+            The new coordinates for the `LinearRing`.
+
+        :returns: A generator over the `GeoCoordinates` of the `LinearRing`.
+        :rtype: Iterator[GeoCoordinate]
+        :raises: LinearRingCoordsError
+            If less than 3 coordinate values are supplied.
+
         """
         yield from self._coordinates
 
@@ -80,30 +143,4 @@ class LinearRing(Geometry):
         ),
     ) -> None:
         self._coordinates.clear()
-        if isinstance(next(iter(value)), GeoCoordinates):
-            self._coordinates.extend(cast(Iterable[GeoCoordinates], value))
-        else:
-            vc = cast(
-                Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]],
-                value,
-            )
-            self._coordinates.extend((GeoCoordinates(*c) for c in vc))
-        if len(self._coordinates) < 3:
-            raise ValueError("There must be at least three points in the boundary.")
-        self.field_changed()
-
-    def build_kml(
-        self,
-        root: etree.Element,
-        with_children: bool = True,
-        with_dependents: bool = True,
-    ) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-
-        def _build() -> Iterable[str]:
-            yield from (str(c) for c in self._coordinates)
-            yield str(self._coordinates[0])
-
-        super().build_kml(root, with_children, with_dependents)
-        if self._coordinates:
-            etree.SubElement(root, "coordinates").text = " ".join(_build())
+        self._coordinates.extend(cast(Iterable[GeoCoordinates], value))

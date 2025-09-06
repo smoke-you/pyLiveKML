@@ -53,22 +53,6 @@ with_cutout_poly_style = StyleMap(
     f"#{with_cutout_poly_style_normal.id}", f"#{with_cutout_poly_style_highlight.id}"
 )
 
-# multigeo_style_normal = Style(
-#     icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/red-diamond.png"),
-#     line_style=LineStyle(1, 0xFF0080FF),
-#     poly_style=PolyStyle(0x6000FF00, fill=True, outline=True),
-#     label_style=LabelStyle(0),
-# )
-# multigeo_style_highlight = Style(
-#     icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/wht-stars.png", 2),
-#     line_style=LineStyle(2, 0xFFFF8000),
-#     poly_style=PolyStyle(0xFFFF0000, fill=True, outline=True),
-#     label_style=LabelStyle(0),
-# )
-# multigeo_style = StyleMap(
-#     f"#{multigeo_style_normal.id}", f"#{multigeo_style_highlight.id}"
-# )
-
 # root Document, contains the various Folders for the Placemarks
 # Global Styles are stored here
 build_data = Document(
@@ -90,9 +74,6 @@ build_data = Document(
         with_cutout_poly_style_normal,
         with_cutout_poly_style_highlight,
         with_cutout_poly_style,
-        # multigeo_style_normal,
-        # multigeo_style_highlight,
-        # multigeo_style,
     ],
 )
 
@@ -166,7 +147,7 @@ linestr_folder = Folder(
 )
 
 linring_folder = Folder(
-    "LineStrings",
+    "LinearRings",
     is_open=True,
     description="Contains several Placemarks hosting LinearRing geometries. Note that while Polygons are constructed from LinearRings, LinearRings may be created independent of Polygons.",
     snippet="",
@@ -178,7 +159,6 @@ linring_folder = Folder(
                     (151.18343, -33.88354),
                     (151.19343, -33.88354),
                     (151.19343, -33.89354),
-                    (151.18343, -33.89354),
                 ),
                 altitude_mode=AltitudeModeEnum.CLAMP_TO_GROUND,
             ),
@@ -194,7 +174,6 @@ linring_folder = Folder(
                     (151.18343, -33.88354, 1000),
                     (151.19343, -33.88354, 1000),
                     (151.19343, -33.89354, 1000),
-                    (151.18343, -33.89354, 1000),
                 ),
                 altitude_mode=AltitudeModeEnum.ABSOLUTE,
                 extrude=True,
@@ -212,7 +191,6 @@ linring_folder = Folder(
                     (151.18343, -33.88354, 2000),
                     (151.19343, -33.88354, 2000),
                     (151.19343, -33.89354, 2000),
-                    (151.18343, -33.89354, 2000),
                 ),
                 altitude_mode=AltitudeModeEnum.ABSOLUTE,
             ),
@@ -238,7 +216,6 @@ poly_folder = Folder(
                         (151.20343, -33.88354),
                         (151.21343, -33.88354),
                         (151.21343, -33.89354),
-                        (151.20343, -33.89354),
                     ),
                     altitude_mode=AltitudeModeEnum.CLAMP_TO_GROUND,
                 ),
@@ -256,7 +233,6 @@ poly_folder = Folder(
                         (151.22343, -33.88354, 200),
                         (151.23343, -33.88354, 200),
                         (151.23343, -33.89354, 200),
-                        (151.22343, -33.89354, 200),
                     ),
                 ),
                 [
@@ -266,7 +242,6 @@ poly_folder = Folder(
                             (151.22443, -33.89154, 200),
                             (151.22543, -33.89154, 200),
                             (151.22543, -33.89254, 200),
-                            (151.22443, -33.89254, 200),
                         ),
                     ),
                     LinearRing(
@@ -275,7 +250,6 @@ poly_folder = Folder(
                             (151.22443, -33.88854, 200),
                             (151.22543, -33.88854, 200),
                             (151.22543, -33.88954, 200),
-                            (151.22443, -33.88954, 200),
                         ),
                     ),
                 ],
@@ -306,7 +280,6 @@ multigeo_folder = Folder(
                                 (151.18643, -33.90154),
                                 (151.19043, -33.90154),
                                 (151.19043, -33.90554),
-                                (151.18643, -33.90554),
                             ),
                         ),
                         altitude_mode=AltitudeModeEnum.CLAMP_TO_GROUND,

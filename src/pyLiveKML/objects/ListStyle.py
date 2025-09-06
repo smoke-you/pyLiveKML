@@ -10,7 +10,27 @@ from pyLiveKML.objects.SubStyle import SubStyle
 
 
 class ItemIcon(_BaseObject):
-    """ItemIcon class definition."""
+    """A KML `<ItemIcon>` tag constructor.
+
+    Icon used in the List view that reflects the state of a `Folder` or `Link` fetch.
+    Icons associated with the open and closed modes are used for `Folder`s and
+    `NetworkLink`s. Icons associated with the error and fetching0, fetching1, and
+    fetching2 modes are used for `NetworkLink`s.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#elements-specific-to-liststyle
+
+    Parameters
+    ----------
+    icon_state : ItemIconModeEnum | None, default = None
+    href : str | None, default = None
+
+    Attributes
+    ----------
+    Same as parameters.
+
+    """
 
     _kml_tag = "ItemIcon"
     _kml_fields = _BaseObject._kml_fields + (
@@ -30,14 +50,29 @@ class ItemIcon(_BaseObject):
 
 
 class ListStyle(SubStyle):
-    """A KML 'ListStyle', per https://developers.google.com/kml/documentation/kmlreference#liststyle.
+    """A KML `<ListStyle>` tag constructor.
 
-    Specifies how a :class:`~pyLiveKML.KMLObjects.Feature` is displayed in GEP's user List View.
+    Specifies how a `Feature` is displayed in the list view. The list view is a hierarchy
+    of containers and children; in Google Earth, this is the "Places" panel.
 
-    :param ListItemType|None list_item_type: The (optional) behaviour model for the list item.
-    :param int|None bg_color: The (optional) background color for the list item.
-    :param ItemIconMode|None item_icon_state: The (optional) icon state that will be displayed for the list item.
-    :param str|None item_icon_href: The (optional) URI for the image will be displayed for the list item.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#liststyle
+
+    Parameters
+    ----------
+    list_item_type: ListItemTypeEnum | None, default = None
+        Specifies how a Feature is displayed in the list view.
+    bg_color: GeoColor | int | None, default = None
+        Background color for the `Feature`'s `snippet`.
+    icons: ItemIcon | Iterable[ItemIcon] | None, default = None
+        Mappings between the state of the list item, and the icon to be displayed in the
+        "Places" panel.
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "ListStyle"
@@ -62,7 +97,20 @@ class ListStyle(SubStyle):
 
     @property
     def icons(self) -> Iterable[ItemIcon]:
-        """Generator across icon instances."""
+        """Retrieve a generator over the `icons` of this `ListStyle`.
+
+        If the property setter is called, replaces the current list of icons with
+        those provided.
+
+        Parameters
+        ----------
+        value : ItemIcon | Iterable[ItemIcon] | None
+            The new icons for the `ListStyle`.
+
+        :returns: A generator over the `icons` of the `ListStyle`.
+        :rtype: Iterator[ItemIcon]
+
+        """
         yield from self._icons
 
     @icons.setter

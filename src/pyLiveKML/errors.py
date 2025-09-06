@@ -1,7 +1,24 @@
 """Definitions of exceptions and/or errors."""
 
+##########################
+#
+# pyLiveKML base error class
+#
+##########################
 
-class FeatureError(Exception):
+
+class KMLError(Exception):
+    """Wrapper class for all pyLiveKML errors."""
+
+
+##########################
+#
+# Feature errors
+#
+##########################
+
+
+class FeatureError(KMLError):
     """Wrapper class for errors with :class:`pyLiveKML.objects.Feature` classes and subclasses."""
 
     pass
@@ -17,23 +34,54 @@ class FeatureInaccessibleError(FeatureError):
     pass
 
 
-class TrackError(FeatureError):
-    """Wrapper class for errors with :class:`pyLiveKML.objects.Track` classes and subclasses."""
+##########################
+#
+# LinearRing errors
+#
+##########################
+
+
+class LinearRingError(KMLError):
+    """Wrapper class for errors with :class:`pyLiveKML.objects.LinearRing`."""
 
     pass
 
 
-class TrackElementsMismatch(TrackError):
-    """Indicates that there was a problem with the `elements` data passed to a :class:`pyLiveKML.objects.Track`.
+class LinearRingCoordsError(LinearRingError):
+    """Indicates that the :attr:`pyLiveKML.objects.LinearRing.coordinates` parameter was invalid.
 
-    This typically occurs when the `elements` data has mismatched lengths for the
-    elements of its `extended_data` fields.
+    This is typically because less than the minimum of 3 coordinates were supplied.
     """
 
+
+##########################
+#
+# LineString errors
+#
+##########################
+
+
+class LineStringError(KMLError):
+    """Wrapper class for errors with :class:`pyLiveKML.objects.LineString`."""
+
     pass
 
 
-class NetworkLinkControlError(Exception):
+class LineStringCoordsError(LineStringError):
+    """Indicates that the :attr:`pyLiveKML.objects.LineString.coordinates` parameter was invalid.
+
+    This is typically because less than the minimum of 2 coordinates were supplied.
+    """
+
+
+##########################
+#
+# NetworkLinkControl errors
+#
+##########################
+
+
+class NetworkLinkControlError(KMLError):
     """Wrapper class for errors with :class:`pyLiveKML.objects.NetworkLinkControl` classes and subclasses."""
 
     pass
@@ -45,6 +93,29 @@ class NetworkLinkControlUpdateLimited(NetworkLinkControlError):
     Primarily intended to be used to break out of a recursive loop in
     :function:`pyLiveKML.objects.NetworkLinkControl.build_kml()` when the maximum update
     size has been reached.
+    """
+
+    pass
+
+
+##########################
+#
+# Track errors
+#
+##########################
+
+
+class TrackError(FeatureError):
+    """Wrapper class for errors with :class:`pyLiveKML.objects.Track` classes and subclasses."""
+
+    pass
+
+
+class TrackElementsMismatch(TrackError):
+    """Indicates that there was a problem with the `elements` data passed to a :class:`pyLiveKML.objects.Track`.
+
+    This typically occurs when the `elements` data has mismatched lengths for the
+    elements of its `extended_data` fields.
     """
 
     pass

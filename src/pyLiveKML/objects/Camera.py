@@ -74,8 +74,6 @@ class Camera(AbstractView):
     roll : float
         The roll of the camera facing, in decimal degrees.
     altitude_mode : AltitudeModeEnum | None
-        How `altitude` should be treated. `None` is effectively
-        `AltitudeModeEnum.CLAMP_TO_GROUND`.
 
     """
 
@@ -94,19 +92,11 @@ class Camera(AbstractView):
         self,
         viewer_options: Iterable[ViewerOption] | ViewerOption | None = None,
         time_primitive: TimePrimitive | None = None,
-        lla: tuple[float, float, float] = (
-            0,
-            0,
-            0,
-        ),
-        angles: tuple[float, float, float] = (
-            0,
-            0,
-            0,
-        ),
+        lla: tuple[float, float, float] = (0, 0, 0),
+        angles: tuple[float, float, float] = (0, 0, 0),
         altitude_mode: AltitudeModeEnum | None = None,
     ):
-        """LookAt instance constructor."""
+        """Camera instance constructor."""
         AbstractView.__init__(self, viewer_options, time_primitive)
         self.longitude, self.latitude, self.altitude = lla
         self.heading, self.tilt, self.roll = angles

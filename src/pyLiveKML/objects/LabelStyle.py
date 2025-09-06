@@ -8,15 +8,25 @@ from pyLiveKML.objects.ColorStyle import ColorStyle
 
 
 class LabelStyle(ColorStyle):
-    """A KML 'LabelStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.
+    """A KML `<LabelStyle>` tag constructor.
 
-    Specifies various properties that define how the name of a
-    :class:`~pyLiveKML.KMLObjects.Feature` is drawn in GEP.
+    Specifies how the `name` of a `Feature` is drawn in the 3D viewer.
 
-    :param float|None scale: The (optional) relative scale of the text.
-    :param int|None color: The (optional) color of the text, as a 32-bit ABGR value.
-    :param ColorMode|None color_mode: The (optional) :class:`~pyLiveKML.KML.ColorMode` used to color the text;
-        either 'NORMAL' or 'RANDOM'.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#labelstyle
+
+    Parameters
+    ----------
+    scale: float, default = 1.0
+        Resizes the label.
+    color: GeoColor | int | None, default = None
+    color_mode: ColorModeEnum | None, default = None
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "LabelStyle"
