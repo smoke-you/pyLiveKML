@@ -20,18 +20,38 @@ class _IconStyle_Icon(_BaseObject):
 
 
 class IconStyle(ColorStyle):
-    """A KML 'IconStyle', per https://developers.google.com/kml/documentation/kmlreference#iconstyle.
+    """A KML `<IconStyle>` tag constructor.
 
-    Specifies various properties that define how a
-    :class:`~pyLiveKML.KMLObjects.Icon` is drawn.  Applies to
-    :class:`~pyLiveKML.KMLObjects.Point` geometries.
+    Specifies how icons for `Point` placemarks are drawn, both in the "Places" panel and
+    in the 3D viewer of Google Earth. The `icon` attribute specifies the icon image. The
+    `scale` attribute specifies the x, y scaling of the icon. The color specified in the
+    `color` attribute of `IconStyle` is blended with the color of the `Icon`.
 
-    :param str icon: A URI for an image or icon file.
-    :param float scale: The (optional) relative scale of the icon.
-    :param float heading: The (optional) heading, in degrees, that the icon will be rotated to point towards.
-    :param int|None color: The (optional) color of the icon, as a 32-bit ABGR value.
-    :param ColorMode|None color_mode: The (optional) :class:`~pyLiveKML.KML.ColorMode` used to color the icon;
-        either 'NORMAL' or 'RANDOM'.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#iconstyle
+
+    Parameters
+    ----------
+    icon: str
+        An HTTP address or a local file specification used to load an icon.
+    scale: float, default = 1.0
+        Resizes the icon.
+    heading: float | None, default = None
+        Direction in decimal degrees. If not specified, defaults to 0. Values range from
+        0 to 360 degrees.
+    color: GeoColor | int | None, default = None
+        The color of the icon.
+    color_mode: ColorModeEnum | None, default = None
+        Whether the color is to be randomized.
+    hot_spot: HotSpot | None, default = None
+        Specifies the position within the icon that is "anchored" to the `Point` to which
+        the style is applied.
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "IconStyle"

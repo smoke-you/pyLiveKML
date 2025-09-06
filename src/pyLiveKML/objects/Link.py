@@ -7,26 +7,72 @@ from pyLiveKML.objects.Object import _FieldDef, Object
 
 
 class Link(Object):
-    """A KML 'Link', per https://developers.google.com/kml/documentation/kmlreference#link.
+    """A KML `<Link>` tag constructor.
 
-    :class:`~pyLiveKML.KMLObjects.Link` objects are used to specify a KML file to be fetched with a
-    :class:`~pyLiveKML.KMLObjects.NetworkLink`; or an image file to be used in a GEP overlay, using the
-    :class:`~pyLiveKML.KMLObjects.Icon` class that inherits from :class:`~pyLiveKML.KMLObjects.Link`.  The KML
-    specification also uses :class:`~pyLiveKML.KMLObjects.Link` objects to specify the location of Models, but
-    Models are not currently implemented in pyLiveKML.
+    Specifies the location of any of the following:
+    * KML files fetched by network links.
+    * Image files used in any `Overlay`.
+    * Model files used in `Model`.
 
-    :note: Only time-based refresh is currently supported by pyLiveKML.
+    The file is conditionally loaded and refreshed, depending on the refresh parameters
+    supplied here. Two different sets of refresh parameters can be specified: one set is
+    based on time (`refresh_mode` and `refresh_interval`) and one is based on the current
+    "camera" view (`view_refresh_mode` and `view_refresh_time`). In addition, `Link`
+    specifies whether to scale the bounding box parameters that are sent to the server
+    (`view_bound_scale`) and provides a set of optional viewing parameters that can be
+    sent to the server (`view_format`) as well as a set of optional parameters containing
+    version and language information.
 
-    :param str|None href: An (optional) href for the file that is referenced by the
-        :class:`~pyLiveKML.KMLObjects.Link`.
-    :param RefreshMode|None refresh_mode: The (optional) refresh mode that will be used for file loading.
-    :param float|None refresh_interval: The (optional) refresh interval, in seconds, that will be used for file
-        loading.
-    :param ViewRefreshMode|Node view_refresh_mode: The (optional) view refresh mode.
-    :param float|None view_refresh_time: The (optional) view refresh time in seconds.
-    :param float|None view_bound_scale: The (optional) scaling of the view bounds.
-    :param str|None view_format: An (optional) string to describe how the view should be formatted.
-    :param str|None http_query: An (optional) set of parameters for the href.
+    When a file is fetched, the URL that is sent to the server is composed of three
+    pieces of information:
+
+    * The href that specifies the file to load.
+    * An arbitrary format string that is created from:
+        * parameters that you specify in the `view_format` attribute, or
+        * bounding box parameters (this is the default and is used if no `view_format`
+        attribute is set)
+    * A second format string that is specified in the `http_query` attribute.
+
+    If the file specified in `href` is a local file, the `view_format` and `http_query`
+    attributes are not used.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#icon
+
+    Parameters
+    ----------
+    href: str | None, default = None
+        An HTTP address or a local file specification used to load an icon.
+    refresh_mode: RefreshModeEnum | None, default = None,
+        Specifies a time-based refresh mode.
+    refresh_interval: float | None, default = None
+        Indicates to refresh the file every n seconds.
+    view_refresh_mode: ViewRefreshModeEnum, default | None = None
+        Specifies how the link is refreshed when the "camera" changes.
+    view_refresh_time: float | None, default = None
+        After camera movement stops, specifies the number of seconds to wait before
+        refreshing the view.
+    view_bound_scale: float | None, default = None
+        Scales the BBOX parameters before sending them to the server. A value less than 1
+        specifies to use less than the full view (screen). A value greater than 1
+        specifies to fetch an area that extends beyond the edges of the current view.
+    view_format: str | None, default = None
+        Specifies the format of the query string that is appended to `href` before the
+        file is fetched.
+    http_query: str | None, default = None
+        Appends information to the query string, based on the parameters specified.
+        (Google Earth substitutes the appropriate current value at the time it creates
+        the query string.) The following parameters are supported:
+        * [clientVersion]
+        * [kmlVersion]
+        * [clientName]
+        * [language]
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "Link"

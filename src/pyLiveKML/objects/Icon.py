@@ -8,25 +8,67 @@ from pyLiveKML.objects.Link import Link
 
 
 class Icon(Link):
-    """A KML 'Icon', per https://developers.google.com/kml/documentation/kmlreference#icon.
+    """A KML `<Icon>` tag constructor.
 
-    :class:`~pyLiveKML.KMLObjects.Icon` instances are used to specify an image file that will be displayed in a GEP
-    overlay.  Note that only time-based refresh of :class:`~pyLiveKML.KMLObjects.Icon` instances is currently
-    supported by pyLiveKML.
+    Defines an image associated with an `IconStyle` or `Overlay`. The `href` attribute
+    defines the location of the image to be used as the overlay or as the icon for the
+    placemark. This location can either be on a local file system or a remote web server.
+    The `x`, `y`, `w`, and `h` attributes are used to select one icon from an image that
+    contains multiple icons (often referred to as an icon palette).
 
-    :param str|None href: An (optional) href for the file that is referenced by the
-        :class:`~pyLiveKML.KMLObjects.Icon`.
-    :param RefreshMode|None refresh_mode: The (optional) :class:`~pyLiveKML.KML.RefreshMode` that will be used
-        for file loading.
-    :param float|None refresh_interval: The (optional) refresh interval, in seconds, that will be used for file
-        loading.
-    :param ViewRefreshMode|Node view_refresh_mode: The (optional) view refresh mode.
-    :param float|None view_refresh_time: The (optional) view refresh time in seconds.
-    :param float|None view_bound_scale: The (optional) scaling of the view bounds.
-    :param str|None view_format: An (optional) string to describe how the view should be formatted.
-    :param str|None http_query: An (optional) set of parameters for the href.
-    :param GxParams|None gx_params: Optional :class:`GxParams` instance that defines how GEP will treat the icon
-        image.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#icon
+
+    Parameters
+    ----------
+    href: str | None, default = None
+        An HTTP address or a local file specification used to load an icon.
+    refresh_mode: RefreshModeEnum | None, default = None,
+        Specifies a time-based refresh mode.
+    refresh_interval: float | None, default = None
+        Indicates to refresh the file every n seconds.
+    view_refresh_mode: ViewRefreshModeEnum, default | None = None
+        Specifies how the link is refreshed when the "camera" changes.
+    view_refresh_time: float | None, default = None
+        After camera movement stops, specifies the number of seconds to wait before
+        refreshing the view.
+    view_bound_scale: float | None, default = None
+        Scales the BBOX parameters before sending them to the server. A value less than 1
+        specifies to use less than the full view (screen). A value greater than 1
+        specifies to fetch an area that extends beyond the edges of the current view.
+    view_format: str | None, default = None
+        Specifies the format of the query string that is appended to `href` before the
+        file is fetched.
+    http_query: str | None, default = None
+        Appends information to the query string, based on the parameters specified.
+        (Google Earth substitutes the appropriate current value at the time it creates
+        the query string.) The following parameters are supported:
+        * [clientVersion]
+        * [kmlVersion]
+        * [clientName]
+        * [language]
+    x: int, default = 0
+        If `href` specifies an icon palette, `x` and `y` identify the offsets, in
+        pixels, from the lower-left corner of the icon palette. If no values are
+        specified for `x` and `y`, the lower left corner of the icon palette is assumed
+        to be the lower-left corner of the icon to use.
+    y: int, default = 0
+        If `href` specifies an icon palette, `x` and `y` identify the offsets, in
+        pixels, from the lower-left corner of the icon palette. If no values are
+        specified for `x` and `y`, the lower left corner of the icon palette is assumed
+        to be the lower-left corner of the icon to use.
+    w: int, default = -1
+        If `href` specifies an icon palette, `w` and `h` specify the width and height, in
+        pixels, of the icon to use.
+    h: int, default = -1
+        If `href` specifies an icon palette, `w` and `h` specify the width and height, in
+        pixels, of the icon to use.
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "Icon"
