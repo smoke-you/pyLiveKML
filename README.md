@@ -33,7 +33,7 @@ Several simple evaluation apps are included with the pyLiveKML source.  These pr
 
 # How does pyLiveKML work?
 
-See [how-it-works](/docs/how-it-works.md) for a reasonably detailed explanation.
+See [how-it-works](https://github.com/smoke-you/pyLiveKML/blob/main/docs/how-it-works.md) for a reasonably detailed explanation.
 
 # Has the entire KML specification been implemented?
 
@@ -53,26 +53,26 @@ It is possible, even probable, that pyLiveKML will work with other KML-compliant
 
 # Evaluation Applications
 
-* [Aircraft Tracer](evals/apps/aircraft_tracer/README.md)
+* [Aircraft Tracer](https://github.com/smoke-you/pyLiveKML/blob/main/evals/apps/aircraft_tracer/README.md)
 
-* [Aircraft Tracker](evals/apps/aircraft_tracker/README.md)
+* [Aircraft Tracker](https://github.com/smoke-you/pyLiveKML/blob/main/evals/apps/aircraft_tracker/README.md)
 
-* [Aircraft Trail](evals/apps/aircraft_trail/README.md)
+* [Aircraft Trail](https://github.com/smoke-you/pyLiveKML/blob/main/evals/apps/aircraft_trail/README.md)
 
-* [Geometry](evals/apps/geometry/README.md)
+* [Geometry](https://github.com/smoke-you/pyLiveKML/blob/main/evals/apps/geometry/README.md)
 
-* [Simple](evals/apps/simple/README.md)
+* [Simple](https://github.com/smoke-you/pyLiveKML/blob/main/evals/apps/simple/README.md)
 
 If GEP is started without any arguments, you will need to add a new NetworkLink object to "Temporary Places", with the link address set to the URI of the loader.kml file, e.g. http(s)://addr:port/loader.kml. GEP will not load loader.kml from the URI using File->Open.  However, if you start GEP with the URI of loader.kml as an argument, then it will load loader.kml on startup.
 
 # Documentation
 
-Pending
+The code is reasonably thoroughly documented via docstrings.
 
-# [Licence](LICENCE)
+# Licence
 
-Gnu Affero GPL v3
+[Gnu Affero GPL v3](https://github.com/smoke-you/pyLiveKML/blob/main/LICENCE)
 
 # Contributions
 
-While I've done a fair bit of testing, particularly with the revision from 0.0.4 to 1.0.0, I have no doubt that there are bugs. If you encounter something that needs to be fixed, please let me know via a Discussion topic and/or a PR.
+While I've done a fair bit of testing, particularly with the revision from 0.0.4 to 1.0.0, I have no doubt that there are bugs. If you encounter something that needs to be fixed, please let me know via a [Github](https://github.com/smoke-you/pyLiveKML) Discussion topic and/or a PR.

@@ -60,7 +60,7 @@ There are two methods of `_BaseObject` that are routinely used to publish KML ob
 
 ### Dynamic only
 
-These methods are intended to be used by `Update` instances while building their KML content. They are accessible to be overridden by subclasses of `_BaseObject` specifically to make it possible to customize dynamic `Update` behaviours, as demonstrated in the [aircraft_tracker](/evals/apps/aircraft_tracker/) evaluation app.
+These methods are intended to be used by `Update` instances while building their KML content. They are accessible to be overridden by subclasses of `_BaseObject` specifically to make it possible to customize dynamic `Update` behaviours, as demonstrated in the [aircraft_tracker](https://github.com/smoke-you/pyLiveKML/blob/main/evals/apps/aircraft_tracker) evaluation app.
 
 * `create_kml(self, root: etree.Element, parent: "_BaseObject") -> etree.Element`
 
@@ -68,7 +68,7 @@ These methods are intended to be used by `Update` instances while building their
 
 * `delete_kml(self, root: etree.Element) -> None`
 
-`NetworkLinkControl` exposes another dynamic KML publishing method, `def construct_sync(self, with_children: bool = True, with_dependents: bool = True) -> etree.Element`. It's operation is discussed [below](#networklinkcontrol). Note that it ultimately calls the above three methods in order to publish the corresponding tags.
+`NetworkLinkControl` exposes another dynamic KML publishing method, `def construct_sync(self, with_children: bool = True, with_dependents: bool = True) -> etree.Element`. It's operation is discussed [below](https://github.com/smoke-you/pyLiveKML/blob/main/docs/how-it-works.md#networklinkcontrol). Note that it ultimately calls the above three methods in order to publish the corresponding tags.
 
 ## Synchronization
 
@@ -159,7 +159,7 @@ In order to publish KML data, it must be collected into a properly-constructed K
 
 # Setting up a Live Feed
 
-In order to set up a live feed, it is necessary to load (at least) two `<NetworkLink>` tags into GEP: one tag to host live content, and the other to retrieve that content. This mechanism is detailed well in [Google's documentation](https://developers.google.com/kml/documentation/updates). It is also implemented in [the evaluation application](/evals/main.py), where the various file endpoints /loader.kml, /elements.kml and /update.kml return files that perform distinct functions.
+In order to set up a live feed, it is necessary to load (at least) two `<NetworkLink>` tags into GEP: one tag to host live content, and the other to retrieve that content. This mechanism is detailed well in [Google's documentation](https://developers.google.com/kml/documentation/updates). It is also implemented in [the evaluation application](https://github.com/smoke-you/pyLiveKML/blob/main/evals/main.py), where the various file endpoints /loader.kml, /elements.kml and /update.kml return files that perform distinct functions.
 
 * /loader.kml
 
@@ -167,7 +167,7 @@ In order to set up a live feed, it is necessary to load (at least) two `<Network
 
 * /elements.kml
 
-  Delivers a KML file that must use a `<Container>` (a `<Document>` or `<Folder>`, as concrete subclasses) tag as it's root element. The /update.kml file will target this `<Container>` (or a child `<Container>` under it), creating new tags under the target. As discussed [above](#networklinkcontrol), the target `Container` is referenced in the Python implementation of `<NetworkLinkControl>` as the object that it is to monitor and synchronize with GEP.
+  Delivers a KML file that must use a `<Container>` (a `<Document>` or `<Folder>`, as concrete subclasses) tag as it's root element. The /update.kml file will target this `<Container>` (or a child `<Container>` under it), creating new tags under the target. As discussed [above](https://github.com/smoke-you/pyLiveKML/blob/main/docs/how-it-works.md#networklinkcontrol), the target `Container` is referenced in the Python implementation of `<NetworkLinkControl>` as the object that it is to monitor and synchronize with GEP.
 
 * / update.kml
 
