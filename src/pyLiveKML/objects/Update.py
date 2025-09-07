@@ -86,12 +86,12 @@ class _UpdateSequence(_BaseObject, list[UpdateSequent]):
         with_dependents: bool = True,
     ) -> None:
         """Construct the KML content and append it to the provided etree.Element.
-        
+
         Overridden from `_ObjectBase` to ensure specific behaviour.
 
         Notes
         -----
-        * Unlike the other update list types, **does not** clear the list after 
+        * Unlike the other update list types, **does not** clear the list after
         publishing it.
 
         """
@@ -155,8 +155,8 @@ class _CreateList(_UpdateList):
         with_dependents: bool = True,
     ) -> None:
         """Construct the KML content and append it to the provided etree.Element.
-        
-        Overridden from `_ObjectBase` to ensure specific behaviour, including clearing 
+
+        Overridden from `_ObjectBase` to ensure specific behaviour, including clearing
         the list after publishing the KML.
         """
         for c in (c for c in self if not c.parent._suppress_id):
@@ -192,8 +192,8 @@ class _ChangeList(_UpdateList):
         with_dependents: bool = True,
     ) -> None:
         """Construct the KML content and append it to the provided etree.Element.
-        
-        Overridden from `_ObjectBase` to ensure specific behaviour, including clearing 
+
+        Overridden from `_ObjectBase` to ensure specific behaviour, including clearing
         the list after publishing the KML.
         """
         for c in (c for c in self if not c.child._suppress_id):
@@ -229,8 +229,8 @@ class _DeleteList(_UpdateList):
         with_dependents: bool = True,
     ) -> None:
         """Construct the KML content and append it to the provided etree.Element.
-        
-        Overridden from `_ObjectBase` to ensure specific behaviour, including clearing 
+
+        Overridden from `_ObjectBase` to ensure specific behaviour, including clearing
         the list after publishing the KML.
         """
         for c in (c for c in self if not c.child._suppress_id):
@@ -241,23 +241,23 @@ class _DeleteList(_UpdateList):
 class Update(_BaseObject):
     """A KML `<Update>` tag constructor.
 
-    Specifies additions, changes, or deletions to KML data that has already been loaded 
-    using the specified URL. `target_href` specifies the .kml or .kmz file whose data 
-    (within Google Earth) is to be modified. `Update` is always* contained in a 
-    `NetworkLinkControl`. Furthermore, the file containing the `NetworkLinkControl` must 
+    Specifies additions, changes, or deletions to KML data that has already been loaded
+    using the specified URL. `target_href` specifies the .kml or .kmz file whose data
+    (within Google Earth) is to be modified. `Update` is always* contained in a
+    `NetworkLinkControl`. Furthermore, the file containing the `NetworkLinkControl` must
     have been loaded by a `NetworkLink`.
 
     Notes
     -----
     * `AnimatedUpdate` may also contain an `Update` tag.
-    * The `creates`, `changes` and `deletes` attributes each construct and populate a 
+    * The `creates`, `changes` and `deletes` attributes each construct and populate a
     single child tag of the appropriate type, **in that order**. That is, **all** creates
-    are emitted, then **all** changes, then **all** deletes. This is optimal for 
+    are emitted, then **all** changes, then **all** deletes. This is optimal for
     pyLiveKML synchronization purposes, but can be problematic for e.g. `AnimatedUpdate`.
-    The `sequence` attribute allows an arbitrary ordering of child tags, suitable for 
-    `AnimatedUpdate`, or any other situation in which a specific ordering of child tags 
+    The `sequence` attribute allows an arbitrary ordering of child tags, suitable for
+    `AnimatedUpdate`, or any other situation in which a specific ordering of child tags
     is required.
-    
+
     References
     ----------
     * https://developers.google.com/kml/documentation/kmlreference#syntax_50
@@ -302,7 +302,7 @@ class Update(_BaseObject):
     def clear(self) -> None:
         """Clear the instance.
 
-        Discards the current contents of the `creates`, `changes`, `deletes` and 
+        Discards the current contents of the `creates`, `changes`, `deletes` and
         `sequence` lists.
         """
         self.creates.clear()
@@ -325,7 +325,7 @@ class Update(_BaseObject):
         with_dependents: bool = True,
     ) -> None:
         """Construct the KML content and append it to the provided etree.Element.
-        
+
         Overriden from `_BaseObject` to enforce some specific publishing behaviour.
         """
         super().build_kml(root, with_children, with_dependents)

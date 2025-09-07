@@ -11,7 +11,15 @@ from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.requests import Request
 from fastapi.templating import Jinja2Templates
 from lxml import etree  # type: ignore
-from pyLiveKML import Document, Folder, NetworkLinkControl, TimeSpan, kml_root_tag, KML_DOCTYPE,  KML_HEADERS
+from pyLiveKML import (
+    Document,
+    Folder,
+    NetworkLinkControl,
+    TimeSpan,
+    kml_root_tag,
+    KML_DOCTYPE,
+    KML_HEADERS,
+)
 from pyLiveKML.objects.Feature import Feature
 
 from .AircraftPosition import AircraftPosition

@@ -22,13 +22,22 @@ from fastapi.templating import Jinja2Templates
 from lxml import etree  # type: ignore
 
 from apps.KMLApp import find_apps, KMLControlRequest, KMLControlResponse
-from pyLiveKML import *
+from pyLiveKML import (
+    Folder,
+    KML_DOCTYPE,
+    KML_HEADERS,
+    Link,
+    NetworkLink,
+    NetworkLinkControl,
+    RefreshModeEnum,
+    kml_root_tag,
+)
 
 # the host address needs to be set to your local IP address, not (generally) a public one
 # note that if you are running all the components (GEP, webserver, browser) from a single
 # machine, 127.0.0.1 is probably the optimal choice
 # note also that if you set the host address to 0.0.0.0 then the GEP interface will likely
-# fail because GEP will try to access e.g. 0.0.0.0/update.kml, which is not reachable
+# fail because GEP will try to access e.g. 0.0.0.0/update.kml, which may not be reachable
 HOST_ADDR = "192.168.56.102"
 HOST_PORT = 8111
 
@@ -72,9 +81,9 @@ gep_loader = Folder(
         NetworkLink(
             name="Update",
             link=Link(
-                href=UPDATE_HREF, 
-                refresh_mode=RefreshModeEnum.ON_INTERVAL, 
-                refresh_interval=REFRESH_INTERVAL
+                href=UPDATE_HREF,
+                refresh_mode=RefreshModeEnum.ON_INTERVAL,
+                refresh_interval=REFRESH_INTERVAL,
             ),
         ),
     ],
@@ -143,7 +152,9 @@ async def _(filename: str, request: Request) -> Any:
         }
         return templates.TemplateResponse("index.html.j2", context)
     elif filename == ELEMENTS_FILE:
-        elems = etree.SubElement(root, gep_sync.container._kml_tag, attrib={"id": str(gep_sync.container.id)})
+        elems = etree.SubElement(
+            root, gep_sync.container._kml_tag, attrib={"id": str(gep_sync.container.id)}
+        )
         gep_sync.container.build_kml(elems, False)
     elif filename == UPDATE_FILE:
         root.append(gep_sync.construct_sync())

@@ -19,7 +19,7 @@ from pyLiveKML import (
     NetworkLinkControl,
     Style,
     kml_root_tag,
-    KML_DOCTYPE, 
+    KML_DOCTYPE,
     KML_HEADERS,
 )
 from pyLiveKML.objects.Feature import Feature
@@ -51,9 +51,7 @@ gpr.description = "This is a polygon with an internal cutout.\nYou can change th
 #     east=origin.lon + 0.05,
 #     west=origin.lon - 0.05,
 # )
-cast(Style, gpr._styles[0]).balloon_style = BalloonStyle(
-    0xFF400000, 0xFF0000FF
-)
+cast(Style, gpr._styles[0]).balloon_style = BalloonStyle(0xFF400000, 0xFF0000FF)
 gpe = GeoEllipse(
     name="ellipse",
     origin=GeoCoordinates(lon=origin.lon, lat=origin.lat, alt=origin.alt),

@@ -4,7 +4,13 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _BaseObject, _DependentDef, _FieldDef, _ListObject, Object
+from pyLiveKML.objects.Object import (
+    _BaseObject,
+    _DependentDef,
+    _FieldDef,
+    _ListObject,
+    Object,
+)
 from pyLiveKML.objects.TourPrimitive import TourPrimitive
 
 
@@ -44,8 +50,8 @@ class Playlist(_ListObject[TourPrimitive], _BaseObject):
 
 class Tour(Object):
     """A KML `<gx:Tour>` tag constructor.
-    
-    A `Tour` contains a single `PlayList`, which in turn contains an ordered list of 
+
+    A `Tour` contains a single `PlayList`, which in turn contains an ordered list of
     `TourPrimitive` elements that define a tour in any KML browser.
 
     References
@@ -54,11 +60,11 @@ class Tour(Object):
     * https://developers.google.com/kml/documentation/touring
 
     Parameters
-    ----------    
+    ----------
     name: str | None, default = None
     description: str | None, default = None
     playlist: TourPrimitive | list[TourPrimitive] | None, default = None
-    
+
     Attributes
     ----------
     Same as parameters.
@@ -70,9 +76,7 @@ class Tour(Object):
         _FieldDef("name"),
         _FieldDef("description"),
     )
-    _kml_dependents = Object._kml_dependents + (
-        _DependentDef("playlist"),
-    )
+    _kml_dependents = Object._kml_dependents + (_DependentDef("playlist"),)
 
     def __init__(
         self,

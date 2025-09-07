@@ -8,19 +8,19 @@ from pyLiveKML.objects.TourPrimitive import TourPrimitive
 
 class Wait(TourPrimitive):
     """A KML `<gx:Wait>` tag constructor.
-    
-    The camera remains still, at the last-defined `AbstractView`, for the number of 
+
+    The camera remains still, at the last-defined `AbstractView`, for the number of
     seconds specified before playing the next `TourPrimitive`.
-    
+
     Notes
     -----
-    * A `Wait` does not pause the tour timeline - currently-playing sound files and 
+    * A `Wait` does not pause the tour timeline - currently-playing sound files and
     animated updates will continue to play while the camera is waiting.
 
     References
     ----------
     * https://developers.google.com/kml/documentation/kmlreference#gxwait
-    
+
     Parameters
     ----------
     duration : float, default = 0
@@ -29,7 +29,7 @@ class Wait(TourPrimitive):
     Attributes
     ----------
     Same as parameters.
-    
+
     """
 
     _kml_tag = "gx:Wait"

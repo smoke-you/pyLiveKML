@@ -38,6 +38,7 @@ class AircraftTrail(Folder):
         self.__idx: int = -1
 
     def activate(self, value: bool, cascade: bool = False) -> None:
+        """Activate the instance."""
         if value:
             self.clear()
             self._deleted.clear()
@@ -45,11 +46,13 @@ class AircraftTrail(Folder):
         return super().activate(value, cascade)
 
     def create_kml(self, root: etree.Element, parent: _BaseObject) -> etree.Element:
+        """Publish create."""
         elem = super().create_kml(root, parent)
         self.trail()
         return elem
 
     def change_kml(self, root: etree.Element) -> None:
+        """Publish change."""
         self.trail()
         super().change_kml(root)
 

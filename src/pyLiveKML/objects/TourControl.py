@@ -9,7 +9,7 @@ from pyLiveKML.objects.TourPrimitive import TourPrimitive
 
 class TourControl(TourPrimitive):
     """A KML `<gx:TourControl>` tag constructor.
-    
+
     Allows a `Tour` to be paused, until the user takes action to continue the `Tour`.
 
     References
