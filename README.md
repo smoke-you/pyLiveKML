@@ -75,4 +75,4 @@ The code is reasonably thoroughly documented via docstrings.
 
 # Contributions
 
-While I've done a fair bit of testing, particularly with the revision from 0.0.4 to 1.0.0, I have no doubt that there are bugs. If you encounter something that needs to be fixed, please let me know via a [Github](https://github.com/smoke-you/pyLiveKML) Discussion topic and/or a PR.
+While I've done a fair bit of testing, particularly with the revision from 0.0.4 to 1.0.0, I have no doubt that there are bugs. If you encounter something that needs to be fixed, please let me know via a [Github](https://github.com/smoke-you/pyLiveKML) Issue, Discussion topic and/or PR.
