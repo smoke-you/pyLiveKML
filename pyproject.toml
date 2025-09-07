@@ -1,6 +1,6 @@
 [project]
 name = "pyLiveKML"
-version = "1.0.0"
+version = "1.0.1"
 authors = [{ name="smoke-you", email="smoke-you@nonexistent.com" }]
 description = "A pure-Python library for live-streaming KML content to Google Earth Pro."
 readme = "README.md"
