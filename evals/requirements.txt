@@ -3,3 +3,4 @@ uvicorn
 jinja2
 pyproj
 pyLiveKML
+scipy
