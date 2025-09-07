@@ -8,17 +8,35 @@ from pyLiveKML.objects.Geometry import Geometry
 
 
 class Point(Geometry):
-    """A Point geometry, as per https://developers.google.com/kml/documentation/kmlreference#point.
+    """A KML `<Point>` tag constructor.
 
-    :class:`~pyLiveKML.KMLObjects.Point` objects define a simple geographic location, described a longitude,
-    latitude and optional altitude.
+    A geographic location defined by longitude, latitude, and (optional) altitude. When a
+    `Point` is contained by a `Placemark`, the point itself determines the position of
+    the `Placemark`'s name and icon. When a `Point` is extruded, it is connected to the
+    ground with a line. This "tether" uses the current `LineStyle`.
 
-    :param GeoCoordinates coordinates: A :class:`~pyLiveKML.GeoCoordinates` object that defines the longitude,
-        latitude and optional altitude of the :class:`~pyLiveKML.KMLObjects.Point`.
-    :param bool|None extrude: An (optional) flag to indicate whether the :class:`~pyLiveKML.KMLObjects.Point`
-        should be shown in GEP connected to the ground with a vertical line.
-    :param bool|None altitude_mode: The (optional) :class:`~pyLiveKML.KML.AltitudeMode` that will be applied
-        to the :class:`~pyLiveKML.KMLObjects.Point` by GEP.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#point
+
+    Parameters
+    ----------
+    coordinates : GeoCoordinates | tuple[float, float, float] | tuple[float, float]
+        A single tuple consisting of floating point values for longitude, latitude, and
+        altitude (in that order). Longitude and latitude values are in decimal degrees
+        and are constrained to their circular or half-circular limit respectively.
+    altitude_mode : AltitudeModeEnum | None, default = None
+        Specifies how altitude components in `coordinates` are interpreted.
+    extrude : bool | None, default = None
+        Specifies whether to connect the `Point` to the ground with a line. To extrude a
+        `Point`, the value for `altitude_mode` must be one of `RELATIVE_TO_GROUND`,
+        `RELATIVE_TO_SEAFLOOR` or `ABSOLUTE`. The point is extruded toward the center of
+        the Earth's geoid.
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "Point"

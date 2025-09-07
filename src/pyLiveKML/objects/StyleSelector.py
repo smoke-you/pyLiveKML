@@ -6,11 +6,24 @@ from pyLiveKML.objects.Object import Object
 
 
 class StyleSelector(Object, ABC):
-    """A KML 'StyleSelector', per https://developers.google.com/kml/documentation/kmlreference#styleselector.
+    """A KML `<StyleSelector>` tag constructor.
 
-    The :class:`~pyLiveKML.KMLObjects.StyleSelector` class is the abstract base class
-    for KML :class:`~pyLiveKML.KMLObjects.Object` instances that represent display
-    styles for :class:`~pyLiveKML.KMLObjects.Feature` instances.
+    This is an abstract element and cannot be used directly in a KML file. It is the base
+    type for `Style` and `StyleMap`. An object derived from `StyleSelector` is uniquely
+    identified by its id and its url.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#styleselector.
+
+    Parameters
+    ----------
+    Nil
+
+    Attributes
+    ----------
+    Nil
+
     """
 
     def __init__(self) -> None:

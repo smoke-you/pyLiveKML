@@ -14,21 +14,93 @@ from pyLiveKML.objects.TimePrimitive import TimePrimitive
 
 
 class Placemark(Feature):
-    """A KML 'Placemark', per https://developers.google.com/kml/documentation/kmlreference#placemark.
+    """A KML `<Placemark>` tag constructor.
 
-    :class:`~pyLiveKML.KMLObjects.Placemark` objects are containers for a geospatial element to be displayed in GEP.
+    A `Placemark` is a `Feature` with associated `Geometry`. In Google Earth, a
+    `Placemark` appears as a list item in the "Places" panel. A `Placemark` with a
+    `Point` has an icon associated with it that marks a point on the Earth in the 3D
+    viewer.
 
-    :param Geometry geometry: A concrete :class:`~pyLiveKML.KMLObjects.Geometry` instance that will be displayed
-        in GEP for this :class:`~pyLiveKML.KMLObjects.Placemark`.
-    :param str|None name: The (optional) name that will be displayed in GEP for this
-        :class:`~pyLiveKML.KMLObjects.Placemark`.
-    :param bool|None visibility: The (optional) initial visibility for this
-        :class:`~pyLiveKML.KMLObjects.Placemark` in GEP.
-    :param StyleSelector|None inline_style: An (optional) :class:`~pyLiveKML.KMLObjects.StyleSelector` that
-        will be applied to this :class:`~pyLiveKML.KMLObjects.Placemark` (only).
-    :param str|None style_url: An (optional) style URL, generally a reference to a global
-        :class:`~pyLiveKML.KMLObjects.StyleSelector` in a parent of this
-        :class:`~pyLiveKML.KMLObjects.Placemark`.
+    Notes
+    -----
+    In the Google Earth 3D viewer, a `Point` `Placemark` is the only object you can click
+    or roll over. Other `Geometry` objects do not have an icon in the 3D viewer. To give
+    the user something to click in the 3D viewer, you would need to create a
+    `MultiGeometry` object that contains both a `Point` and the other `Geometry` object.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#placemark
+
+    Parameters
+    ----------
+    geometry : Geometry
+        The Geometry to be displayed.
+    name : str|None, default = None
+        User-defined text displayed in the 3D viewer as the label for the object.
+    visibility : bool | None, default = None
+        Specifies whether the `Feature` is drawn in the 3D viewer when it is initially
+        loaded. In order for a `Feature` to be visible, the `<visibility>` tag of all
+        its ancestors must also be set `True`.
+    is_open : bool | None, default = None
+        Specifies whether a `Document` or `Folder` appears closed or open when first
+        loaded into the "Places" panel. `False` or `None` is collapsed (the default),
+        `True` is expanded. This element applies only to `Document`, `Folder`, and
+        `NetworkLink`.
+    author_name : str | None, default = None
+        The name of the author of the `Feature`.
+    author_link : str | None, default = None
+        URL of the web page containing the KML file.
+    address : str | None, default = None
+        A string value representing an unstructured address written as a standard street,
+        city, state address, and/or as a postal code.
+    phone_number : str | None, default = None
+        A string value representing a telephone number. This element is used by Google
+        Maps Mobile only. The industry standard for Java-enabled cellular phones is
+        RFC2806.
+    snippet : str | None, default = None
+        A short description of the `Feature`. In Google Earth, this description is
+        displayed in the "Places" panel under the name of the `Feature`. If a `<Snippet>`
+        is not supplied, the first two lines of the `<description>` are used. In Google
+        Earth, if a `Placemark` contains both a `<description>` and a `<Snippet>`, the
+        `<Snippet>` appears beneath the `Placemark` in the "Places" panel, and the
+        `<description>` appears in the `Placemark`'s description balloon. This tag does
+        not support HTML markup.
+    snippet_max_lines : int | None, default = None
+    description : str | None, default = None
+        User-supplied content that appears in the description balloon. HTML *is*
+        supported, but it is **highly** recommended to read the detailed documentation
+        at
+        https://developers.google.com/kml/documentation/kmlreference#elements-specific-to-feature
+    abstract_view : AbstractView | None, default = None
+        Any concrete subclass of :class:`pyLiveKML.objects.AbstractView`, i.e. either a
+        :class:`pyLiveKML.objects.Camera` or :class:`pyLiveKML.objects.LookAt`
+    time_primitive : TimePrimitive | None, default = None
+        Any concrete subclass of :class:`pyLiveKML.objects.TimePrimitive`, i.e. either a
+        :class:`pyLiveKML.objects.TimeStamp` or :class:`pyLiveKML.objects.TimeSpan`
+    style_url : str | None = None
+        URL of a `<Style>` or `<StyleMap>` defined in a `<Document>`. If the style is in
+        the same file, use a # reference. If the style is defined in an external file,
+        use a full URL along with # referencing.
+    styles : StyleSelector | Iterable[StyleSelector] | None, default = None
+        One or more `Style`s and `StyleMap`s can be defined to customize the appearance
+        of any element derived from `Feature` or of the `Geometry` in a `Placemark`. A
+        style defined within a `Feature` is called an "inline style" and applies only to
+        the `Feature` that contains it. A style defined as the child of a `<Document>` is
+        called a "shared style." A shared style must have an id defined for it. This id
+        is referenced by one or more `Features` within the `<Document>`. In cases where
+        a style element is defined both in a shared style and in an inline style for a
+        `Feature` — that is, a `Folder`, `GroundOverlay`, `NetworkLink`, `Placemark`, or
+        `ScreenOverlay` — the value for the `Feature`'s inline style takes precedence over
+        the value for the shared style.
+    region : Region | None, default = None
+        `Feature`s and `Geometry`'s associated with a `Region` are drawn only when the
+        `Region` is active.
+
+    Attributes
+    ----------
+    Same as parameters
+
     """
 
     _kml_tag = "Placemark"
@@ -77,17 +149,29 @@ class Placemark(Feature):
     def dependents(self) -> Iterator[ObjectChild]:
         """A generator over the dependents of the instance.
 
-        In this context, dependents are child objects that the parent relies upon, rather
-        than contains. For example, the Features stored under a Container are *not*
-        dependents of the Container, but they are children.
+        Overridden from `_BaseObject` because when using the default behaviour, if
+        `geometry` is a `MultiGeometry`, then the `MultiGeometry` itself is never
+        yielded.
+
+        :return: A generator over the dependents of the instance.
+        :rtype: Iterator[ObjectChild]
         """
         yield ObjectChild(self, self.geometry)
 
     def activate(self, value: bool, cascade: bool = False) -> None:
         """Activate or deactivate this instance for display in GEP.
 
-        :param bool value: True for activation, False for deactivation
-        :param bool cascade: True if the activation is to be cascaded to all child Objects.
+        Overridden from `_BaseObject` because when using the default behaviour, the
+        superclass method is unaware of `geometry` because it is not flagged as a
+        `child`.
+
+        Parameters
+        ----------
+        value : bool
+            `True` for activation, `False` for deactivation.
+        cascade : bool, default = False
+            `True` if the activation is to be cascaded to all child objects.
+
         """
         super().activate(value, cascade)
         if cascade:

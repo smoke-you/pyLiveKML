@@ -10,7 +10,7 @@ from pyLiveKML.objects.Object import _BaseObject, _FieldDef, ObjectChild
 
 
 class UpdateType(Enum):
-    """Enumeration of the tags that may be contained in an `<Update>` tag."""
+    """Enumeration of the child tags that may be contained in an `<Update>` tag."""
 
     CREATE = "Create"
     CHANGE = "Change"
@@ -85,6 +85,16 @@ class _UpdateSequence(_BaseObject, list[UpdateSequent]):
         with_children: bool = True,
         with_dependents: bool = True,
     ) -> None:
+        """Construct the KML content and append it to the provided etree.Element.
+        
+        Overridden from `_ObjectBase` to ensure specific behaviour.
+
+        Notes
+        -----
+        * Unlike the other update list types, **does not** clear the list after 
+        publishing it.
+
+        """
         for s in self:
             if s.tag == UpdateType.CREATE:
                 if not s.parent._suppress_id:
@@ -101,6 +111,7 @@ class _UpdateSequence(_BaseObject, list[UpdateSequent]):
 
 
 class _UpdateList(_BaseObject, list[ObjectChild], ABC):
+    """Abstract base for `_CreateList`, `_ChangeList` and `_DeleteList`."""
 
     def __init__(
         self,
@@ -117,9 +128,22 @@ class _UpdateList(_BaseObject, list[ObjectChild], ABC):
 
 
 class _CreateList(_UpdateList):
-    """A KML <Create> tag. Always a child of an <Update> tag.
+    """A KML `<Create>` tag constructor.
 
-    Refer to https://developers.google.com/kml/documentation/kmlreference#example-of-create.
+    Always a child of an `Update` instance.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#example-of-create
+
+    Parameters
+    ----------
+    Nil
+
+    Attributes
+    ----------
+    Nil
+
     """
 
     _kml_tag = "Create"
@@ -130,16 +154,33 @@ class _CreateList(_UpdateList):
         with_children: bool = True,
         with_dependents: bool = True,
     ) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
+        """Construct the KML content and append it to the provided etree.Element.
+        
+        Overridden from `_ObjectBase` to ensure specific behaviour, including clearing 
+        the list after publishing the KML.
+        """
         for c in (c for c in self if not c.parent._suppress_id):
             c.child.create_kml(root, c.parent)
         self.clear()
 
 
 class _ChangeList(_UpdateList):
-    """A KML <Change> tag. Always a child of an <Update> tag.
+    """A KML `<Change>` tag constructor.
 
-    Refer to https://developers.google.com/kml/documentation/kmlreference#example-of-change.
+    Always a child of an `Update` instance.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#example-of-change
+
+    Parameters
+    ----------
+    Nil
+
+    Attributes
+    ----------
+    Nil
+
     """
 
     _kml_tag = "Change"
@@ -150,16 +191,33 @@ class _ChangeList(_UpdateList):
         with_children: bool = True,
         with_dependents: bool = True,
     ) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
+        """Construct the KML content and append it to the provided etree.Element.
+        
+        Overridden from `_ObjectBase` to ensure specific behaviour, including clearing 
+        the list after publishing the KML.
+        """
         for c in (c for c in self if not c.child._suppress_id):
             c.child.change_kml(root)
         self.clear()
 
 
 class _DeleteList(_UpdateList):
-    """A KML <Delete> tag. Always a child of an <Update> tag.
+    """A KML `<Delete>` tag constructor.
 
-    Refer to https://developers.google.com/kml/documentation/kmlreference#example-of-delete.
+    Always a child of an `Update` instance.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#example-of-delete
+
+    Parameters
+    ----------
+    Nil
+
+    Attributes
+    ----------
+    Nil
+
     """
 
     _kml_tag = "Delete"
@@ -170,32 +228,56 @@ class _DeleteList(_UpdateList):
         with_children: bool = True,
         with_dependents: bool = True,
     ) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
+        """Construct the KML content and append it to the provided etree.Element.
+        
+        Overridden from `_ObjectBase` to ensure specific behaviour, including clearing 
+        the list after publishing the KML.
+        """
         for c in (c for c in self if not c.child._suppress_id):
             c.child.delete_kml(root)
         self.clear()
 
 
 class Update(_BaseObject):
-    """Update tag class.
+    """A KML `<Update>` tag constructor.
 
-    Refer https://developers.google.com/kml/documentation/kmlreference#update.
+    Specifies additions, changes, or deletions to KML data that has already been loaded 
+    using the specified URL. `target_href` specifies the .kml or .kmz file whose data 
+    (within Google Earth) is to be modified. `Update` is always* contained in a 
+    `NetworkLinkControl`. Furthermore, the file containing the `NetworkLinkControl` must 
+    have been loaded by a `NetworkLink`.
 
-    Specifies an addition, change, or deletion to KML data that has already been loaded
-    using the specified URL. The <targetHref> specifies the .kml or .kmz file whose data
-    (within Google Earth) is to be modified. <Update> is always contained in a
-    <NetworkLinkControl> (N.B. or a <gx:AnimatedUpdate>). Furthermore, the file
-    containing the <NetworkLinkControl> must have been loaded by a <NetworkLink>. See the
-    "Topics in KML" page on Updates for a detailed example of how <Update> works.
+    Notes
+    -----
+    * `AnimatedUpdate` may also contain an `Update` tag.
+    * The `creates`, `changes` and `deletes` attributes each construct and populate a 
+    single child tag of the appropriate type, **in that order**. That is, **all** creates
+    are emitted, then **all** changes, then **all** deletes. This is optimal for 
+    pyLiveKML synchronization purposes, but can be problematic for e.g. `AnimatedUpdate`.
+    The `sequence` attribute allows an arbitrary ordering of child tags, suitable for 
+    `AnimatedUpdate`, or any other situation in which a specific ordering of child tags 
+    is required.
+    
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#syntax_50
 
-    :param str target_href: Specifies the .kml or .kmz file whose data (within Google
-        Earth) is to be modified
-    :param etree.Element|Iterable[etree.Element]|None creates: An optional KML
-        element, or iterable of KML elements, to be inserted under a child <Create> tag.
-    :param etree.Element|Iterable[etree.Element]|None changes: An optional KML
-        element, or iterable of KML elements, to be inserted under a child <Change> tag.
-    :param etree.Element|Iterable[etree.Element]|None changes: An optional KML
-        element, or iterable of KML elements, to be inserted under a child <Delete> tag.
+    Parameters
+    ----------
+    target_href : str
+    creates : ObjectChild | Iterable[ObjectChild] | None, default = None
+        A collection of ObjectChild instances to be created.
+    changes : ObjectChild | Iterable[ObjectChild] | None, default = None
+        A collection of ObjectChild instances to be changed.
+    deletes : ObjectChild | Iterable[ObjectChild] | None, default = None
+        A collection of ObjectChild instances to be deleted.
+    sequence : UpdateSequent | Iterable[UpdateSequent] | None, default = None
+        An ordered list of update operations.
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "Update"
@@ -220,7 +302,8 @@ class Update(_BaseObject):
     def clear(self) -> None:
         """Clear the instance.
 
-        Discards the current contents of the `creates`, `changes` and `deletes` lists.
+        Discards the current contents of the `creates`, `changes`, `deletes` and 
+        `sequence` lists.
         """
         self.creates.clear()
         self.changes.clear()
@@ -231,7 +314,7 @@ class Update(_BaseObject):
         """Take the current length of the instance.
 
         The returned value is the sum of the lengths of the `creates`, `changes` and
-        `deletes` lists.
+        `deletes` lists; it **does not** include the length of the `sequence` list.
         """
         return len(self.creates) + len(self.changes) + len(self.deletes)
 
@@ -241,7 +324,10 @@ class Update(_BaseObject):
         with_children: bool = True,
         with_dependents: bool = True,
     ) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
+        """Construct the KML content and append it to the provided etree.Element.
+        
+        Overriden from `_BaseObject` to enforce some specific publishing behaviour.
+        """
         super().build_kml(root, with_children, with_dependents)
         if self.creates:
             root.append(self.creates.construct_kml(with_children, with_dependents))

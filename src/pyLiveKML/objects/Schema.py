@@ -1,11 +1,16 @@
 """Schema module."""
 
-from typing import Iterable
+from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Object import _BaseObject
 from pyLiveKML.objects.Object import Object, _ListObject
+
+
+# TODO: This needs some work. There are issues around how `SimpleField` works.
+# Also need to consider the `<ExtendedData>` tag/class, and `SimpleArrayData` in `Track.`
+# Too much complexity to deal with at this point.
 
 
 class SimpleField(_BaseObject):
@@ -54,20 +59,51 @@ class SimpleField(_BaseObject):
 
 
 class Schema(_ListObject[SimpleField], Object):
-    """A KML 'Schema', per https://developers.google.com/kml/documentation/kmlreference#schema."""
+    """A KML `<Schema>` tag constructor.
+
+    Specifies a custom KML schema that is used to add custom data to KML `Feature`s.
+    `Schema` is always a child of `Document`.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#schema
+
+    Parameters
+    ----------
+    name : str
+        The name of the `Schema`.
+    schema_fields : SimpleField | Iterable[SimpleField] | None, default = None
+        The fields of the `Schema`.
+
+    Attributes
+    ----------
+    Same as parameters
+
+    """
 
     _kml_tag = "Schema"
 
     def __init__(
         self,
         name: str,
-        fields: SimpleField | Iterable[SimpleField],
+        schema_fields: SimpleField | Iterable[SimpleField] | None = None,
     ) -> None:
         """Construct Schema instances."""
         Object.__init__(self)
         _ListObject[SimpleField].__init__(self)
         self.name = name
-        if isinstance(fields, SimpleField):
-            self.append(fields)
-        else:
-            self.extend(fields)
+        self.schema_fields = schema_fields
+
+    @property
+    def schema_fields(self) -> Iterator[SimpleField]:
+        """Generator over schema_fields."""
+        yield from self
+
+    @schema_fields.setter
+    def schema_fields(self, value: SimpleField | Iterable[SimpleField] | None) -> None:
+        self.clear()
+        if value is not None:
+            if isinstance(value, SimpleField):
+                self.append(value)
+            else:
+                self.extend(value)

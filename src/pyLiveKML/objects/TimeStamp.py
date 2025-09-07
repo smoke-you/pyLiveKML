@@ -10,12 +10,34 @@ from pyLiveKML.objects.TimePrimitive import TimePrimitive
 
 
 class TimeStamp(TimePrimitive):
-    """A KML 'TimeStamp', per https://developers.google.com/kml/documentation/kmlreference#style."""
+    """A KML `<TimeStamp>` tag constructor.
+
+    Represents a single moment in time. This is a simple element and contains no
+    children. Its value is a `datetime`, specified in XML time. The precision of the
+    `TimeStamp` is dictated by the value of `when`.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#style
+    * http://www.w3.org/TR/xmlschema-2/#isoformats
+
+    Parameters
+    ----------
+    when : datetime | str
+
+    Attributes
+    ----------
+    when : datetime
+
+    """
 
     _kml_tag = "TimeStamp"
     _kml_fields = TimePrimitive._kml_fields + (_FieldDef("when"),)
 
-    def __init__(self, when: datetime | str):
+    def __init__(
+        self,
+        when: datetime | str,
+    ):
         """TimeStamp instance constructor."""
         TimePrimitive.__init__(self)
         self.when: datetime
@@ -28,8 +50,12 @@ class TimeStamp(TimePrimitive):
 class GxTimeStamp(TimeStamp):
     """Version of `TimeStamp` under the `gx` namespace.
 
-    Available for use by `AbstractView` subclasses. Refer to Google KML documentation at
-    https://developers.google.com/kml/documentation/kmlreference#gx:timespan-and-gx:timestamp.
+    Available for use by `AbstractView` subclasses.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#gx:timespan-and-gx:timestamp
+
     """
 
     _kml_tag = "gx:TimeStamp"

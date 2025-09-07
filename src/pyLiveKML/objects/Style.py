@@ -15,23 +15,31 @@ from pyLiveKML.objects.StyleSelector import StyleSelector
 
 
 class Style(StyleSelector):
-    """A KML 'Style', per https://developers.google.com/kml/documentation/kmlreference#style.
+    """A KML `<Style>` tag constructor.
 
-    A group of :class:`~pyLiveKML.KMLObjects.SubStyle` objects that can be referenced
-    by its :attr:`id` or inserted in-line into a :class:`~pyLiveKML.KMLObjects.Feature`.
+    A `Style` defines an addressable style group that can be referenced by `StyleMap`s
+    and `Feature`s. `Style`s affect how `Geometry` is presented in the 3D viewer and how
+    `Feature`s appear in the "Places" panel of the List view. Shared styles are collected
+    in a `Document` and must have an `id` defined for them so that they can be referenced
+    by the individual `Feature`s that use them.
 
-    :param BalloonStyle|None balloon_style: An (optional) :class:`~pyLiveKML.KMLObjects.BalloonStyle` to be
-        embedded in this :class:`~pyLiveKML.KMLObjects.Style`.
-    :param IconStyle|None icon_style: An (optional) :class:`~pyLiveKML.KMLObjects.IconStyle` to be
-        embedded in this :class:`~pyLiveKML.KMLObjects.Style`.
-    :param LabelStyle|None label_style: An (optional) :class:`~pyLiveKML.KMLObjects.LabelStyle` to be
-        embedded in this :class:`~pyLiveKML.KMLObjects.Style`.
-    :param LineStyle|None line_style: An (optional) :class:`~pyLiveKML.KMLObjects.LineStyle` to be
-        embedded in this :class:`~pyLiveKML.KMLObjects.Style`.
-    :param ListStyle|None list_style: An (optional) :class:`~pyLiveKML.KMLObjects.ListStyle` to be
-        embedded in this :class:`~pyLiveKML.KMLObjects.Style`.
-    :param PolyStyle|None poly_style: An (optional) :class:`~pyLiveKML.KMLObjects.PolyStyle` to be
-        embedded in this :class:`~pyLiveKML.KMLObjects.Style`.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#style
+
+    Parameters
+    ----------
+    balloon_style : BalloonStyle | None, default = None
+    icon_style : IconStyle | None, default = None
+    label_style : LabelStyle | None, default = None
+    line_style : LineStyle | None, default = None
+    list_style : ListStyle | None, default = None
+    poly_style : PolyStyle | None, default = None
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "Style"

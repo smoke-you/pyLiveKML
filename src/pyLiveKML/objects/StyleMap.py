@@ -32,15 +32,12 @@ class _StyleMap_Pair(_BaseObject):
             self.style_url = style_ref
 
     @property
-    def value(self) -> str | Style | None:
-        return self.style_url if self.style_url else self.style
+    def value(self) -> str | Style:
+        return self.style_url if self.style_url else self.style if self.style else ""
 
     @value.setter
-    def value(self, value: str | Style | None) -> None:
-        if value is None:
-            self.style = None
-            self.style_url = None
-        elif isinstance(value, str):
+    def value(self, value: str | Style) -> None:
+        if isinstance(value, str):
             self.style = None
             self.style_url = value
         else:
@@ -49,30 +46,29 @@ class _StyleMap_Pair(_BaseObject):
 
 
 class StyleMap(StyleSelector):
-    """A KML 'StyleMap', per https://developers.google.com/kml/documentation/kmlreference#stylemap.
+    """A KML `<StyleMap>` tag constructor.
 
-    Maps between two different :class:`~pyLiveKML.KMLObjects.Style` objects for the
-    :attr:`~pyLiveKML.KML.StyleState.NORMAL` and :attr:`~pyLiveKML.KML.StyleState.HIGHLIGHT`
-    states of a :class:`~pyLiveKML.KMLObjects.Feature` when it is displayed in GEP. The child
-    :class:`~pyLiveKML.KMLObjects.Style` objects may be referenced by URI, or in-line in the
-    :class:`~pyLiveKML.KMLObjects.StyleMap`.
+    A `StyleMap` maps between two different `Style`s. Typically a `StyleMap` is used to
+    provide separate normal and highlighted styles for a `Placemark`, so that the
+    highlighted version appears when the user mouses over the icon in Google Earth.
 
-    :param str|None normal_style_url: An (optional) URI reference for a :class:`~pyLiveKML.KMLObjects.Style`
-        to be employed in :attr:`~pyLiveKML.KML.StyleState.NORMAL` display mode.
-    :param Style|None normal_style: An (optional) inline :class:`~pyLiveKML.KMLObjects.Style` to be employed
-        in :attr:`~pyLiveKML.KML.StyleState.NORMAL` display mode.
-    :param str|None highlight_style_url: An (optional) URI reference for a
-        :class:`~pyLiveKML.KMLObjects.Style` to be employed in :attr:`~pyLiveKML.KML.StyleState.HIGHLIGHT`
-        display mode.
-    :param Style|None highlight_style: An (optional) inline :class:`~pyLiveKML.KMLObjects.Style` to be
-        employed in :attr:`~pyLiveKML.KML.StyleState.HIGHLIGHT` display mode.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#stylemap
 
-    :note: It is both possible and reasonable to assign both a :attr:`styleUrl` and a
-        :class:`~pyLiveKML.KMLObjects.Style` to either or both of the :attr:`~pyLiveKML.KML.StyleState.NORMAL`
-        and :attr:`~pyLiveKML.KML.StyleState.HIGHLIGHT` states. Per the rules discussed at
-        https://developers.google.com/kml/documentation/kmlreference#feature, an inline
-        :class:`~pyLiveKML.KMLObjects.Style` will override a URI-referenced
-        :class:`~pyLiveKML.KMLObjects.Style`.
+    Parameters
+    ----------
+    normal_style_ref : str | Style
+        The "normal" style, displayed when the mouse **is not** hovering over the
+        `Feature`.
+    highlight_style_ref : str | Style
+        The "highlighted" style, displayed when the mouse **is** hovering over the
+        `Feature`.
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "StyleMap"
@@ -92,19 +88,39 @@ class StyleMap(StyleSelector):
         self._highlight = _StyleMap_Pair(StyleStateEnum.HIGHLIGHT, highlight_style_ref)
 
     @property
-    def normal(self) -> str | Style | None:
-        """Normal style reference or instance."""
+    def normal(self) -> str | Style:
+        """Normal style reference or instance.
+
+        Parameters
+        ----------
+        value : str | Style
+
+        Returns
+        -------
+        str | Style
+
+        """
         return self._normal.value
 
     @normal.setter
-    def normal(self, value: str | Style | None) -> None:
+    def normal(self, value: str | Style) -> None:
         self._normal.value = value
 
     @property
-    def highlight(self) -> str | Style | None:
-        """Highlight style reference or instance."""
+    def highlight(self) -> str | Style:
+        """Highlight style reference or instance.
+
+        Parameters
+        ----------
+        value : str | Style
+
+        Returns
+        -------
+        str | Style
+
+        """
         return self._highlight.value
 
     @highlight.setter
-    def highlight(self, value: str | Style | None) -> None:
+    def highlight(self, value: str | Style) -> None:
         self._highlight.value = value

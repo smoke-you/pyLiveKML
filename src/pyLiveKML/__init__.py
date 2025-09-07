@@ -54,7 +54,7 @@ from pyLiveKML.objects.Placemark import Placemark
 from pyLiveKML.objects.Point import Point
 from pyLiveKML.objects.PolyStyle import PolyStyle
 from pyLiveKML.objects.Polygon import Polygon
-from pyLiveKML.objects.Region import Region
+from pyLiveKML.objects.Region import LatLonAltBox, LevelOfDetail, Region
 from pyLiveKML.objects.Schema import Schema, SimpleField
 from pyLiveKML.objects.ScreenOverlay import ScreenOverlay
 from pyLiveKML.objects.SoundCue import SoundCue
@@ -65,6 +65,7 @@ from pyLiveKML.objects.TimeStamp import TimeStamp, GxTimeStamp
 from pyLiveKML.objects.Tour import Tour, Playlist
 from pyLiveKML.objects.TourControl import TourControl
 from pyLiveKML.objects.Track import Track, TrackAngles, TrackCoord, TrackElement
+from pyLiveKML.objects.Update import Update, UpdateSequent, UpdateType
 from pyLiveKML.objects.Wait import Wait
 
 # global imports wrapper
@@ -95,6 +96,8 @@ __all__ = [
     "KML_HEADERS",
     "KML_UPDATE_CONTAINER_LIMIT_DEFAULT",
     "LabelStyle",
+    "LatLonAltBox",
+    "LevelOfDetail",
     "LineString",
     "LineStyle",
     "LinearRing",
@@ -137,6 +140,9 @@ __all__ = [
     "TrackCoord",
     "TrackElement",
     "UnitsEnum",
+    "Update",
+    "UpdateSequent",
+    "UpdateType",
     "ViewRefreshModeEnum",
     "ViewerOption",
     "ViewerOptionEnum",

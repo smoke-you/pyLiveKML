@@ -8,16 +8,29 @@ from pyLiveKML.objects.ColorStyle import ColorStyle
 
 
 class PolyStyle(ColorStyle):
-    """A KML 'PolyStyle', per https://developers.google.com/kml/documentation/kmlreference#polystyle.
+    """A KML `<PolyStyle>` tag constructor.
 
-    Specifies various properties that define how a :class:`~pyLiveKML.KMLObjects.Polygon` is drawn.
+    Specifies the drawing style for all polygons, including polygon extrusions (which
+    look like the walls of buildings) and line extrusions (which look like solid fences).
 
-    :param int|None color: The (optional) color, as a 32-bit ABGR value, that will be used to :attr:`fill` the
-        polygon's area in GEP.
-    :param ColorMode|None color_mode: An (optional) :class:`~pyLiveKML.KML.ColorMode` that determines how GEP
-        chooses the polygon :attr:`fill` color.
-    :param bool|None fill: Optional flag to indicate whether GEP should fill in the polygon with a color.
-    :param bool|None outline: Optional flag to indicate whether GEP should draw the polygon's outline.
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#polystyle
+
+    Parameters
+    ----------
+    color: GeoColor | int | None, default = None
+    color_mode: ColorModeEnum | None, default = None
+    fill: bool | None, default = None
+        Specifies whether to fill the polygon.
+    outline: bool | None, default = None
+        Specifies whether to outline the polygon. `Polygon` outlines use the current
+        `LineStyle`.
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "PolyStyle"
