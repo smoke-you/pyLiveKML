@@ -12,6 +12,12 @@ from pyLiveKML.utils import with_ns
 
 
 class _KMLDump(ABC):
+    """Abstract base for various "Dump" implementations.
+
+    "Dump" classes are used to convert a Python object into something suitable for
+    publishing as a KML tag value.
+
+    """
 
     @classmethod
     @abstractmethod
@@ -20,7 +26,7 @@ class _KMLDump(ABC):
 
 
 class NoDump(_KMLDump):
-    """Dump nothing."""
+    """Dump nothing, i.e. an empty string."""
 
     @classmethod
     def dump(cls, value: Any) -> Any:
@@ -44,6 +50,12 @@ class DumpDirect(_KMLDump):
 
 
 class _KMLParser(ABC):
+    """Abstract base for various "Parser" implementations.
+
+    "Parser" classes are used to constrain or otherwise manipulate a parameter passed to
+    a `_BaseObject`.
+
+    """
 
     @classmethod
     @abstractmethod
@@ -61,9 +73,12 @@ class NoParse(_KMLParser):
 
 
 class Angle90(_KMLParser):
-    """A value ≥−90 and ≤90.
+    """A value in the range -90 to +90.
 
-    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    References
+    ----------
+    https://developers.google.com/kml/documentation/kmlreference#kml-fields
+
     """
 
     @classmethod
@@ -74,9 +89,12 @@ class Angle90(_KMLParser):
 
 
 class AnglePos90(_KMLParser):
-    """A value ≥0 and ≤90.
+    """A value in the range 0 to +90.
 
-    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    References
+    ----------
+    https://developers.google.com/kml/documentation/kmlreference#kml-fields
+
     """
 
     @classmethod
@@ -87,9 +105,12 @@ class AnglePos90(_KMLParser):
 
 
 class Angle180(_KMLParser):
-    """A value ≥−180 and ≤180.
+    """A value in the range -180 to +180.
 
-    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    References
+    ----------
+    https://developers.google.com/kml/documentation/kmlreference#kml-fields
+
     """
 
     @classmethod
@@ -104,9 +125,12 @@ class Angle180(_KMLParser):
 
 
 class AnglePos180(_KMLParser):
-    """A value ≥0 and ≤180.
+    """A value in the range 0 to +180.
 
-    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    References
+    ----------
+    https://developers.google.com/kml/documentation/kmlreference#kml-fields
+
     """
 
     @classmethod
@@ -117,9 +141,12 @@ class AnglePos180(_KMLParser):
 
 
 class Angle360(_KMLParser):
-    """A value ≥−360 and ≤360.
+    """A value in the range -360 to +360.
 
-    See https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    References
+    ----------
+    https://developers.google.com/kml/documentation/kmlreference#kml-fields
+
     """
 
     @classmethod
@@ -132,7 +159,11 @@ class Angle360(_KMLParser):
 
 
 class ColorParse(_KMLParser):
-    """A color, typically as a 32-bit ABGR value."""
+    """Ensures that the output is a `GeoColor`, or `None`.
+
+    Primarily intended to convert an `int` to a `GeoColor`.
+
+    """
 
     @classmethod
     def parse(cls, value: Any) -> Any:
@@ -145,18 +176,27 @@ class ColorParse(_KMLParser):
 class _FieldDef:
     """Describes how a field of a KML object is to be published.
 
-    KML object class definitions specify a tuple of _FieldDef instances as the `_kml_fields`
-    class variable.
+    KML object class definitions (may) specify a tuple of `_FieldDef` instances as the
+    `_kml_fields` class variable.
 
-    :param str name: The name of the field, from the perspective of the Python object.
-    :param Type[_KMLParser] parser: The parser class that will be used to transform any value
-        assigned to the field. This allows e.g. floats to be constrained to an appropriate
-        range.
-    :param str tag: The text that will be assigned to the KML tag for the field when it
-        is published. May include a prefixed and colon-separated namespace, e.g. "gx:option"
-        is valid.
-    :param Type[_KMLDump] dumper: The dumper class that will be used to convert and publish
-        the field's value to KML.
+    Parameters
+    ----------
+    name : str
+        The name of the field, from the perspective of the Python object.
+    tag : str | None, default = None
+        The text that will be assigned to the KML tag for the field when it is published.
+        May include a prefixed and colon-separated namespace, e.g. "gx:option" is valid.
+    parser : Type[_KMLParser], default = NoParse
+        The parser class that will be used to transform any value assigned to the field.
+        This allows e.g. floats to be constrained to an appropriate range.
+    dumper : Type[_KMLDump], default = DumpDirect
+        The dumper class that will be used to convert and publish the field's value to
+        KML.
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     def __init__(
@@ -174,6 +214,21 @@ class _FieldDef:
 
 
 class _ChildDef:
+    """Describes how a child of a KML object is to be published.
+
+    KML object class definitions (may) specify a tuple of `_ChildDef` instances as the
+    `_kml_children` class variable.
+
+    Parameters
+    ----------
+    name : str
+        The name of the field, from the perspective of the Python object.
+
+    Attributes
+    ----------
+    Same as parameters.
+
+    """
 
     def __init__(
         self,
@@ -183,6 +238,21 @@ class _ChildDef:
 
 
 class _DependentDef:
+    """Describes how a dependent object of a KML object is to be published.
+
+    KML object class definitions (may) specify a tuple of `_DependentDef` instances as
+    the `_kml_dependents` class variable.
+
+    Parameters
+    ----------
+    name : str
+        The name of the field, from the perspective of the Python object.
+
+    Attributes
+    ----------
+    Same as parameters.
+
+    """
 
     def __init__(
         self,
@@ -194,7 +264,9 @@ class _DependentDef:
 class ObjectState(Enum):
     """Enumeration of possible states that objects derived from KML :class:`~pyLiveKML.KMLObjects.Object` may hold.
 
-    The 'State' enumeration is specific to the :mod:`pyLiveKML` package, i.e. it is *not* part of the KML specification.
+    The `ObjectState` enumeration is specific to the :mod:`pyLiveKML` package, i.e. it is
+    *not* part of the KML specification. It is used exclusively for synchronization.
+
     """
 
     IDLE = 0
@@ -206,6 +278,21 @@ class ObjectState(Enum):
 
 
 class _BaseObject(ABC):
+    """`_BaseObject` is a private class from which almost every KML tag constructor ultimately derives.
+
+    This includes the `Object` class, which is what KML objects are **meant** to derive
+    from. The primary difference between `_BaseObject` and `Object` is that `Object` sets
+    the `_suppress_id` class variable `True`, while `_BaseObject` sets it `False`. What
+    this means in practice is that KML tags that are constructed from `_BaseObject` do
+    not include an `id` attribute, so cannot be targeted by e.g. `<Change>` or `<Delete>`
+    tags.
+
+    Note that while `_BaseObject` **suppresses** it's `id` when publishing to KML, it still
+    **has** an `id` attribute.
+
+    Apart from this, `_BaseObject` and `Object` are conceptually interchangeable.
+
+    """
 
     _kml_tag: str = ""
     _kml_fields: tuple[_FieldDef, ...] = tuple()
@@ -214,14 +301,24 @@ class _BaseObject(ABC):
     _suppress_id: bool = True
 
     def __init__(self) -> None:
-        """Object instance constructor."""
+        """_BaseObject instance constructor."""
         super().__init__()
         self._id = uuid4()
         self._container: _BaseObject | None = None
         self._state: ObjectState = ObjectState.IDLE
 
     def __setattr__(self, name: str, value: Any) -> None:
-        """Object setattr method."""
+        """_BaseObject __setattr__ override method.
+
+        Kicks in when setting an attribute with the same name as an entry in
+        `_kml_fields`.
+
+        If a match is made, executes the field's parser to constrain the
+        parameter.
+
+        If a matched field changes its value, flags this by calling `field_changed()`.
+
+        """
         match = next(filter(lambda x: x.name == name, self._kml_fields), None)
         changed = False
         if match is not None:
@@ -233,7 +330,12 @@ class _BaseObject(ABC):
             self.field_changed()
 
     def __eq__(self, value: object) -> bool:
-        """Object eq method."""
+        """_BaseObject __eq__ override method.
+
+        When comparing two _BaseObject instances of the same type, considers them equal
+        if all of the attributes listed in `_kml_fields` are of equal value.
+
+        """
         return isinstance(value, self.__class__) and all(
             map(
                 lambda x: getattr(self, x.name) == getattr(value, x.name),
@@ -242,27 +344,38 @@ class _BaseObject(ABC):
         )
 
     def __str__(self) -> str:
+        """Return the `_BaseObject`'s `_kml_tag` by default."""
         return self._kml_tag
 
     def __repr__(self) -> str:
+        """Return the `_BaseObject`'s string representation by default."""
         return str(self)
 
     @property
     def id(self) -> UUID:
-        """The unique identifier of this :class:`~pyLiveKML.KMLObjects.Object`."""
+        """The unique identifier of this `_BaseObject`."""
         return self._id
 
     @property
     def state(self) -> ObjectState:
-        """The current GEP synchronization state of this :class:`~pyLiveKML.KMLObjects.Object`."""
+        """The current GEP synchronization state of this `_BaseObject`."""
         return self._state
 
     @property
     def active(self) -> bool:
-        """Flag to indicate whether the instance has been selected for display.
+        """Whether the instance has been selected for display.
 
-        True if this :class:`~pyLiveKML.KMLObjects.Object` has been created in the
-        UI and is not scheduled for deletion, otherwise False.
+        Parameters
+        ----------
+        value : bool
+            If `True`, activates the `_BaseObject`; if `False`, deactivates it.
+
+        Returns
+        -------
+        bool
+            `True` if the `_BaseObject` has been created in the UI and is not scheduled
+            for deletion, otherwise `False`.
+
         """
         return (
             ObjectState.CREATING,
@@ -276,6 +389,15 @@ class _BaseObject(ABC):
 
     @property
     def fields(self) -> Iterator[tuple[str, Any]]:
+        """A generator over the `_BaseObject`'s field names and their values.
+
+        Returns
+        -------
+        Iterator[tuple[str, Any]]
+            In each tuple, the first element is the field name, and the second element is
+            the field value.
+
+        """
         for f in self._kml_fields:
             f_obj = getattr(self, f.name, None)
             if f_obj is not None:
@@ -286,6 +408,12 @@ class _BaseObject(ABC):
         """A generator over the children of the instance.
 
         In this context, children are child objects that the parent *does not* rely upon.
+
+        Returns
+        -------
+        Iterator[ObjectChild]
+            The children, as `ObjectChild` instances.
+
         """
         for c in self._kml_children:
             c_obj = getattr(self, c.name, None)
@@ -303,6 +431,12 @@ class _BaseObject(ABC):
         In this context, dependents are child objects that the parent relies upon, rather
         than contains. For example, the Features stored under a Container are *not*
         dependents of the Container, but they are children.
+
+        Returns
+        -------
+        Iterator[ObjectChild]
+            The dependents, as `ObjectChild` instances.
+
         """
         for d in self._kml_dependents:
             d_obj = getattr(self, d.name, None)
@@ -318,7 +452,7 @@ class _BaseObject(ABC):
         """The class' KML type string.
 
         Property that specifies the name of the XML tag that forms the root of
-        the KML representation of this :class:`~pyLiveKML.KMLObjects.Object`.
+        the KML representation of this `_BaseObject`.
         """
         return self._kml_tag
 
@@ -328,17 +462,21 @@ class _BaseObject(ABC):
         with_children: bool = True,
         with_dependents: bool = True,
     ) -> None:
-        """Construct the KML content and append it to the provided etree.Element.
+        """Construct the KML content and append it to the provided `etree.Element`.
 
-        Generate the KML representation of the internal fields of this
-        :class:`~pyLiveKML.KMLObjects.Object`, and append it to the provided root
-        etree.Element.
+        Generate the KML representation of the internal fields of this `_BaseObject`, and
+        append it to the provided root `etree.Element`.
 
-        :param etree.Element root: The root XML element that will be appended to.
-        :param bool with_children: True if the children of this instance should be
-            included in the build.
-        :param bool with_dependents: True if the dependents of this instance should be
-            included in the build.
+        Parameters
+        ----------
+        root : etree.Element
+            The `etree.Element` to which the KML published for the object is to be 
+            appended.
+        with_children : bool, default = True
+            True if the children of this instance should be included in the build.
+        with_dependents : bool, default = True
+            True if the dependents of this instance should be included in the build.
+
         """
         for f in (f for f in self._kml_fields if f.dumper != NoDump):
             value = f.dumper.dump(getattr(self, f.name))
@@ -356,9 +494,21 @@ class _BaseObject(ABC):
     def construct_kml(
         self, with_children: bool = True, with_dependents: bool = True
     ) -> etree.Element:
-        """Construct this :class:`~pyLiveKML.KMLObjects.Object`'s KML representation.
+        """Construct this `_BaseObject`'s KML representation.
 
-        :returns: The KML representation of the object as an etree.Element.
+        Parameters
+        ----------
+        root : etree.Element
+        with_children : bool, default = True
+            True if the children of this instance should be included in the build.
+        with_dependents : bool, default = True
+            True if the dependents of this instance should be included in the build.
+
+        Returns
+        -------
+        etree.Element
+            The KML representation of the `_BaseObject` as an `etree.Element`.
+
         """
         attribs = None if self._suppress_id else {"id": str(self.id)}
         root = etree.Element(_tag=with_ns(self.kml_tag), attrib=attribs)
@@ -366,11 +516,21 @@ class _BaseObject(ABC):
         return root
 
     def create_kml(self, root: etree.Element, parent: "_BaseObject") -> etree.Element:
-        """Construct a complete <Create> element tree as a child of an <Update> tag.
+        """Construct a complete `<Create>` element tag as a child of an `Update`.
 
-        :param Object parent: The immediate parent :class:`~pyLiveKML.KMLObjects.Object` of this
-            :class:`~pyLiveKML.KMLObjects.Object`. The parent must be specified for GEP synchronization.
-        :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
+        Parameters
+        ----------
+        root : etree.Element
+            The etree.Element of the `<Update>` tag that will be appended to.
+        parent : _BaseObject
+            The immediate parent of this `_BaseObject`. Required for GEP synchronization,
+            specifically the `targetId` attribute.
+
+        Returns
+        -------
+        etree.Element
+            The newly constructed child tag.
+
         """
         parent_element = etree.SubElement(
             root, with_ns(parent.kml_tag), attrib={"targetId": str(parent.id)}
@@ -384,9 +544,13 @@ class _BaseObject(ABC):
         return child_element
 
     def change_kml(self, root: etree.Element) -> None:
-        """Construct a complete <Change> element tree as a child of an <Update> tag.
+        """Construct a complete `<Change>` element tag as a child of an `Update`.
 
-        :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
+        Parameters
+        ----------
+        root : etree.Element
+            The etree.Element of the `<Update>` tag that will be appended to.
+
         """
         item = etree.SubElement(
             root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)}
@@ -394,19 +558,29 @@ class _BaseObject(ABC):
         self.build_kml(item, with_children=False)
 
     def delete_kml(self, root: etree.Element) -> None:
-        """Construct a complete <Delete> element tree as a child of an <Update> tag.
+        """Construct a complete `<Delete>` element tag as a child of an `Update`.
 
-        :param etree.Element update: The etree.Element of the <Update> tag that will be appended to.
+        Parameters
+        ----------
+        root : etree.Element
+            The etree.Element of the `<Update>` tag that will be appended to.
+
         """
         etree.SubElement(
             root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)}
         )
 
     def activate(self, value: bool, cascade: bool = False) -> None:
-        """Activate or deactivate this :class:`~pyLiveKML.KMLObjects.Object` for display in GEP.
+        """Activate or deactivate this `_BaseObject` for display in GEP.
 
-        :param bool value: True for activation, False for deactivation
-        :param bool cascade: True if the activation is to be cascaded to all child Objects.
+        Parameters
+        ----------
+        value : bool
+            `True` to display the `_BaseObject`, `False` to remove it.
+        cascade : bool, default = False
+            `True` if the activation is to be cascaded to all child objects, `False`
+            otherwise.
+
         """
         if self._state == ObjectState.CREATING:
             self._state = ObjectState.IDLE if not value else self._state
@@ -429,9 +603,11 @@ class _BaseObject(ABC):
                 c.child.force_idle()
 
     def field_changed(self) -> None:
-        """Flag that a field or property of this :class:`~pyLiveKML.KMLObjects.Object` has changed.
+        """Flag that an attribute of the `_BaseObject` may have changed.
 
-        If this flag is set, it indicates that re-synchronization with GEP may be required.
+        If this method is called, it indicates that re-synchronization with GEP may be
+        required for the `_BaseObject`.
+
         """
         if self._state == ObjectState.CREATED:
             self._state = ObjectState.CHANGING
@@ -440,7 +616,11 @@ class _BaseObject(ABC):
         # if not already CREATED or DELETE_CREATED, change nothing
 
     def synchronized(self) -> None:
-        """Modify the state of the :class:`~pyLiveKML.KMLObjects.Object` to reflect that a synchronization update has been emitted."""
+        """Flag that a synchronization update has been emitted for the `_BaseObject`.
+
+        Calling this method modifies the `state` to the next appropriate value.
+
+        """
         if self._state == ObjectState.CREATING:
             self._state = ObjectState.CREATED
         elif self._state == ObjectState.CHANGING:
@@ -454,15 +634,15 @@ class _BaseObject(ABC):
             d.child.synchronized()
 
     def force_idle(self) -> None:
-        """Force this :class:`~pyLiveKML.KMLObjects.Object` and **all of its children** to the IDLE state.
+        """Force this `_BaseObject` and **all of its children** to the `IDLE` state.
 
         This is typically done after the object has been deactivated, which will cause
         it to be deleted from GEP at the next synchronization update. When the
-        :class:`~pyLiveKML.KMLObjects.Object` is deleted by GEP, all of its
-        children, and any :class:`~pyLiveKML.KMLObjects.Feature` objects that it
-        encloses, will also be automatically deleted. There is no need to emit <Delete>
+        `_BaseObject` is deleted by GEP, all of its children, and any `Feature`s that it
+        encloses, will also be automatically deleted. There is no need to emit `<Delete>`
         tags for these deletions, and in fact doing so will likely cause GEP to have
         conniptions.
+
         """
         self._state = ObjectState.IDLE
         for d in self.dependents:
@@ -472,11 +652,18 @@ class _BaseObject(ABC):
 
 
 class Object(_BaseObject, ABC):
-    """A KML 'Object', per https://developers.google.com/kml/documentation/kmlreference#object.
+    """A KML `<Object>` tag constructor.
 
-    Note that the :class:`~pyLiveKML.KMLObjects.Object` class is explicitly abstract,
-    and is the base class from which most other KML elements (anything with an :attr:`id`
-    property) derive.
+    This is an abstract base class and cannot be used directly in a KML file. It provides
+    the `id` attribute, which allows unique identification of a KML element, and the
+    `targetId` attribute, which is used to reference objects that have already been
+    loaded into Google Earth. The `id` attribute must be assigned if the <Update>
+    mechanism is to be used.
+
+    References
+    ----------
+    https://developers.google.com/kml/documentation/kmlreference#object
+
     """
 
     _suppress_id: bool = False
@@ -488,7 +675,7 @@ class Object(_BaseObject, ABC):
 
 
 class ObjectChild:
-    """Describes a parent:child relationship between two :class:`~pyLiveKML.KMLObjects.Object` instances.
+    """Describes a parent:child relationship between two `_BaseObject` instances.
 
     Parameters
     ----------
@@ -525,17 +712,21 @@ class _ListObject(_BaseObject, list[_LOB], Generic[_LOB]):
     """
 
     def clear(self) -> None:
+        """Override superclass `clear()` to call `field_changed()."""
         self.field_changed()
         super().clear()
 
     def remove(self, value: _LOB) -> None:
+        """Override superclass `remove()` to call `field_changed()."""
         self.field_changed()
         super().remove(value)
 
     def append(self, value: _LOB) -> None:
+        """Override superclass `append()` to call `field_changed()."""
         self.field_changed()
         super().append(value)
 
     def extend(self, iterable: Iterable[_LOB]) -> None:
+        """Override superclass `extend()` to call `field_changed()."""
         self.field_changed()
         super().extend(iterable)

@@ -11,6 +11,8 @@ from pyLiveKML.objects.LinearRing import LinearRing
 
 
 class _OuterBoundary(Object):
+    """Private wrapper class for polygon outer boundaries."""
+
     _kml_tag = "outerBoundaryIs"
     _kml_children = Object._kml_children + (_ChildDef("boundary"),)
     _suppress_id = True
@@ -21,6 +23,8 @@ class _OuterBoundary(Object):
 
 
 class _InnerBoundary(Object):
+    """Private wrapper class for polygon inner boundaries."""
+
     _kml_tag = "innerBoundaryIs"
     _kml_children = Object._kml_children + (_ChildDef("boundary"),)
     _suppress_id = True
@@ -31,23 +35,47 @@ class _InnerBoundary(Object):
 
 
 class Polygon(Geometry):
-    """A Polygon geometry, as per https://developers.google.com/kml/documentation/kmlreference#polygon.
+    """A KML `<Polygon>` tag constructor.
 
-    :class:`~pyLiveKML.KMLObjects.Polygon` objects are made up of an outer boundary that is a
-    :class:`~pyLiveKML.KMLObjects.LinearRing` and zero or more inner boundaries, each of which is also a
-    :class:`~pyLiveKML.KMLObjects.LinearRing`.
+    A `Polygon` is defined by an outer boundary and 0 or more inner boundaries. The
+    boundaries, in turn, are defined by `LinearRing`s. When a `Polygon` is extruded, its
+    boundaries are connected to the ground to form additional polygons, which gives the
+    appearance of a building or a box. Extruded `Polygon`s use `PolyStyle` for their
+    `color`, `color mode`, and `fill`.
 
-    :param LinearRing outer_boundary: A :class:`~pyLiveKML.KMLObjects.LinearRing` that defines the outer extents of
-        the :class:`~pyLiveKML.KMLObjects.Polygon`.
-    :param Iterable[LinearRing]|None inner_boundaries: An (optional) iterable of
-        :class:`~pyLiveKML.KMLObjects.LinearRing` objects that define any cutouts within the
-        :class:`~pyLiveKML.KMLObjects.Polygon`.
-    :param AltitudeMode|None altitude_mode: The (optional) :class:`~pyLiveKML.KML.AltitudeMode` that will be
-        applied by GEP to all the points that make up the :class:`~pyLiveKML.KMLObjects.Polygon`.
-    :param bool|None extrude: An (optional) flag to indicate whether the points that make up the
-        :class:`~pyLiveKML.KMLObjects.Polygon` should be shown in GEP connected to the ground with vertical lines.
-    :param bool|None tessellate: An (optional) flag to indicate whether the boundaries of the
-        :class:`~pyLiveKML.KMLObjects.Polygon` should follow the terrain.
+    The `coordinates` for `Polygon`s (or, more precisely, the `LinearRing`s that make up
+    `Polygon`s) **must** be specified in counterclockwise order. `Polygon`s follow the
+    "right-hand rule," which states that if you place the fingers of your right hand in
+    the direction in which the coordinates are specified, your thumb points in the
+    general direction of the geometric normal for the `Polygon`. (In 3D graphics, the
+    geometric normal is used for lighting and points away from the front face of the
+    `Polygon`.) Since Google Earth fills only the front face of `Polygon`s, you will
+    achieve the desired effect only when the coordinates are specified in the proper
+    order. Otherwise, the `Polygon` will be gray.
+
+    References
+    ----------
+    * https://developers.google.com/kml/documentation/kmlreference#polygon.
+
+    Parameters
+    ----------
+    outer_boundary : LinearRing
+    inner_boundaries : LinearRing | Iterable[LinearRing] | None = None
+    altitude_mode : AltitudeModeEnum | None = None
+        Specifies how `altitude` attributes in the `coordinates` attribute are
+        interpreted.
+    extrude : bool | None = None
+        Specifies whether to connect the Polygon to the ground. Only the vertices are
+        extruded, not the geometry itself; for example, a rectangle turns into a box with
+        five faces. The vertices of the `Polygon` are extruded toward the center of the
+        Earth's geoid.
+    tessellate : bool | None = None
+        This field is not used by Polygon.
+
+    Attributes
+    ----------
+    Same as parameters.
+
     """
 
     _kml_tag = "Polygon"

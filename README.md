@@ -1,6 +1,6 @@
 # Update Status
 
-I'm currently working on a major update to 1.0.0, with work including:
+I'm currently working on a major update to v1, with work including:
 
 | Task | Status |
 | --- | --- |
@@ -9,7 +9,15 @@ I'm currently working on a major update to 1.0.0, with work including:
 | Ensuring that classes can be instantiated directly, as well as via the live feed mechanism using `<NetworkLinkControl>` tags. Added a "simple" eval app to demonstrate this. | Done |
 | Simplifying the directory structure of the package. | Done |
 | Adding an explanation of how the implementation works. | Done |
-| Re-doing all code documentation. | Pending |
+| Re-doing all code documentation. | Mostly Done |
+
+## Work in Progress
+
+The `Schema`, and hence `Track` and `MultiTrack` classes, should not be relied upon as yet. Further, no attempt has yet been made to implement `ExtendedData`. All of these require additional work that I will carry out as time permits.
+
+## Changes from version 0
+
+This is a major revision. Code relying upon pyLiveKML will almost certainly need to be re-written to incorporate the changes, particularly around object imports.
 
 # What is pyLiveKML?
 
