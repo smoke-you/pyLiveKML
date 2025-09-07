@@ -4,11 +4,11 @@ I'm currently working on a major update to v1, with work including:
 
 | Task | Status |
 | --- | --- |
-| Adding in all of the KML (and KML extension) classes [defined by Google](https://developers.google.com/kml/documentation/kmlreference). | Done |
+| Adding in all of the KML (and KML extension) classes [defined by Google](https://developers.google.com/kml/documentation/kmlreference). | Mostly Done |
 | Reworking inheritance to minimize the amount of class-specific behaviour. | Done |
 | Ensuring that classes can be instantiated directly, as well as via the live feed mechanism using `<NetworkLinkControl>` tags. Added a "simple" eval app to demonstrate this. | Done |
 | Simplifying the directory structure of the package. | Done |
-| Adding an explanation of how the implementation works. | Done |
+| Adding an explanation of how the implementation, and the eval apps, work. | Done |
 | Re-doing all code documentation. | Mostly Done |
 
 ## Work in Progress
@@ -17,7 +17,7 @@ The `Schema`, and hence `Track` and `MultiTrack` classes, should not be relied u
 
 ## Changes from version 0
 
-This is a major revision. Code relying upon pyLiveKML will almost certainly need to be re-written to incorporate the changes, particularly around object imports.
+This is a major revision. Code relying upon pyLiveKML v0.0.x will almost certainly need to be re-written to incorporate the changes, particularly around imports.
 
 # What is pyLiveKML?
 
@@ -49,7 +49,7 @@ pyLiveKML has been tested:
 
 * Serving from Python 3.10 on Ubuntu 22.04
 
-It is possible, even probable, that pyLiveKML will work with other KML-compliant GIS's and/or other operating systems, and/or later versions of Python, but no such alternatives have been researched or tested by the author.
+It is possible, even probable, that pyLiveKML will (at least partially) work with other KML-compliant GIS's and/or other operating systems, and/or later versions of Python, but no such alternatives have been researched or tested by the author.
 
 # Evaluation Applications
 
@@ -63,7 +63,7 @@ It is possible, even probable, that pyLiveKML will work with other KML-compliant
 
 * [Simple](https://github.com/smoke-you/pyLiveKML/blob/main/evals/apps/simple/README.md)
 
-If GEP is started without any arguments, you will need to add a new NetworkLink object to "Temporary Places", with the link address set to the URI of the loader.kml file, e.g. http(s)://addr:port/loader.kml. GEP will not load loader.kml from the URI using File->Open.  However, if you start GEP with the URI of loader.kml as an argument, then it will load loader.kml on startup.
+If GEP is started without any arguments, you will need to add a new NetworkLink object to "Temporary Places", with the link address set to the URI of the loader.kml file, e.g. http(s)://addr:port/loader.kml. GEP (as of at least v7.3.6) will not load loader.kml from the URI using File->Open.  However, if you start GEP with the URI of loader.kml as an argument, then it will load loader.kml on startup.
 
 # Documentation
 
