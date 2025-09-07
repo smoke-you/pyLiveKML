@@ -122,6 +122,7 @@ class Container(_ListObject[Feature], Feature, ABC):
         Feature.__init__(
             self,
             name=name,
+            is_open=is_open,
             visibility=visibility,
             author_name=author_name,
             author_link=author_link,
@@ -140,7 +141,6 @@ class Container(_ListObject[Feature], Feature, ABC):
         ABC.__init__(self)
         self._deleted: list[Feature] = list[Feature]()
         self.features = features
-        self._is_open: bool | None = is_open
         self._update_limit: int = 0
 
     @property

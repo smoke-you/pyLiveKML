@@ -30,6 +30,11 @@ class Feature(Object, ABC):
         Specifies whether the `Feature` is drawn in the 3D viewer when it is initially
         loaded. In order for a `Feature` to be visible, the `<visibility>` tag of all
         its ancestors must also be set `True`.
+    is_open : bool | None, default = None
+        Specifies whether a `Document` or `Folder` appears closed or open when first
+        loaded into the "Places" panel. `False` or `None` is collapsed (the default),
+        `True` is expanded. This element applies only to `Document`, `Folder`, and
+        `NetworkLink`.
     author_name : str | None, default = None
         The name of the author of the `Feature`.
     author_link : str | None, default = None
@@ -88,6 +93,7 @@ class Feature(Object, ABC):
 
     _kml_fields = Object._kml_fields + (
         _FieldDef("name"),
+        _FieldDef("is_open", "open"),
         _FieldDef("visibility"),
         _FieldDef("author_name", dumper=NoDump),
         _FieldDef("author_link", dumper=NoDump),
@@ -109,6 +115,7 @@ class Feature(Object, ABC):
         self,
         name: str | None = None,
         visibility: bool | None = None,
+        is_open: bool | None = None,
         author_name: str | None = None,
         author_link: str | None = None,
         address: str | None = None,
@@ -126,6 +133,7 @@ class Feature(Object, ABC):
         Object.__init__(self)
         ABC.__init__(self)
         self.name = name
+        self.is_open = is_open
         self.visibility = visibility
         self.author_name = author_name
         self.author_link = author_link
@@ -190,7 +198,7 @@ class Feature(Object, ABC):
             Whether the `dependents` of the `Feature` should be constructed as sub-tags.
 
         """
-        super().build_kml(root, with_children)
+        super().build_kml(root, with_children, with_dependents)
         if self.author_name is not None:
             author = etree.SubElement(root, with_ns("atom:author"))
             etree.SubElement(author, with_ns("atom:name")).text = self.author_name

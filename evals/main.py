@@ -22,15 +22,7 @@ from fastapi.templating import Jinja2Templates
 from lxml import etree  # type: ignore
 
 from apps.KMLApp import find_apps, KMLControlRequest, KMLControlResponse
-from pyLiveKML import (
-    RefreshModeEnum,
-    kml_root_tag,
-    KML_DOCTYPE,
-    KML_HEADERS,
-    Folder,
-    NetworkLink,
-    NetworkLinkControl,
-)
+from pyLiveKML import *
 
 # the host address needs to be set to your local IP address, not (generally) a public one
 # note that if you are running all the components (GEP, webserver, browser) from a single
@@ -74,14 +66,16 @@ gep_loader = Folder(
     features=[
         NetworkLink(
             name="Elements",
-            href=ELEMENTS_HREF,
             is_open=True,
+            link=Link(href=ELEMENTS_HREF),
         ),
         NetworkLink(
             name="Update",
-            href=UPDATE_HREF,
-            refresh_mode=RefreshModeEnum.ON_INTERVAL,
-            refresh_interval=REFRESH_INTERVAL,
+            link=Link(
+                href=UPDATE_HREF, 
+                refresh_mode=RefreshModeEnum.ON_INTERVAL, 
+                refresh_interval=REFRESH_INTERVAL
+            ),
         ),
     ],
 )

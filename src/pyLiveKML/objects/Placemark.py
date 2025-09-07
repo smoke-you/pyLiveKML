@@ -4,10 +4,10 @@ from typing import Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import ObjectChild
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.Feature import Feature
 from pyLiveKML.objects.Geometry import Geometry
+from pyLiveKML.objects.Object import ObjectChild
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
@@ -38,6 +38,7 @@ class Placemark(Feature):
         geometry: Geometry,
         name: str | None = None,
         visibility: bool | None = None,
+        is_open: bool | None = None,
         author_name: str | None = None,
         author_link: str | None = None,
         address: str | None = None,
@@ -56,6 +57,7 @@ class Placemark(Feature):
             self,
             name=name,
             visibility=visibility,
+            is_open=is_open,
             author_name=author_name,
             author_link=author_link,
             address=address,

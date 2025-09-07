@@ -205,9 +205,7 @@ class ResourceMap(_ListObject[Alias], _BaseObject):
     """
 
     _kml_tag = "ResourceMap"
-    _kml_children = _BaseObject._kml_children + (
-        _ChildDef("resources"),
-    )
+    _kml_children = _BaseObject._kml_children + (_ChildDef("resources"),)
 
     def __init__(self, resources: Alias | Iterable[Alias] | None = None) -> None:
         """ResourceMap instance constructor."""
@@ -231,7 +229,7 @@ class ResourceMap(_ListObject[Alias], _BaseObject):
 
         """
         yield from self
-    
+
     @resources.setter
     def resources(self, value: Alias | Iterable[Alias] | None) -> None:
         if value is not None:
@@ -239,6 +237,7 @@ class ResourceMap(_ListObject[Alias], _BaseObject):
                 self.append(value)
             else:
                 self.extend(value)
+
 
 class Model(Geometry):
     """A KML `<Model>` tag constructor.

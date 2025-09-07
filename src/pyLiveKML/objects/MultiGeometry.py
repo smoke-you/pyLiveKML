@@ -8,21 +8,21 @@ from pyLiveKML.objects.Geometry import Geometry
 from pyLiveKML.objects.Object import _ChildDef, _ListObject
 
 
-# TODO: Need to be able to delete elements from a MultiGeometry. This will probably 
+# TODO: Need to be able to delete elements from a MultiGeometry. This will probably
 # require synchronization via a `_deleted` list, similar to `Container`.
-# This similarity should be able to be leveraged, perhaps with a mixin class that 
+# This similarity should be able to be leveraged, perhaps with a mixin class that
 # affords the deletion components and that is detectable by `NetworkLinkControl`.
 
 
 class MultiGeometry(_ListObject[Geometry], Geometry):
     """A KML `<MultiGeometry>` tag constructor.
-    
+
     A container for zero or more geometry primitives associated with the same feature.
 
     References
     ----------
     * https://developers.google.com/kml/documentation/kmlreference#multigeometry
-    
+
     Parameters
     ----------
     contents : Geometry | Iterable[Geometry] | None, default = None
@@ -31,13 +31,11 @@ class MultiGeometry(_ListObject[Geometry], Geometry):
     Attributes
     ----------
     Nil
-    
+
     """
 
     _kml_tag = "MultiGeometry"
-    _kml_children = Geometry._kml_children + (
-        _ChildDef("contents"),
-    )
+    _kml_children = Geometry._kml_children + (_ChildDef("contents"),)
 
     def __init__(self, contents: Geometry | Iterable[Geometry] | None = None):
         """MultiGeometry instance constructor."""

@@ -49,7 +49,7 @@ from pyLiveKML.objects.MultiGeometry import MultiGeometry
 from pyLiveKML.objects.MultiTrack import MultiTrack
 from pyLiveKML.objects.NetworkLink import NetworkLink
 from pyLiveKML.objects.NetworkLinkControl import NetworkLinkControl
-from pyLiveKML.objects.PhotoOverlay import PhotoOverlay
+from pyLiveKML.objects.PhotoOverlay import ImagePyramid, PhotoOverlay, ViewVolume
 from pyLiveKML.objects.Placemark import Placemark
 from pyLiveKML.objects.Point import Point
 from pyLiveKML.objects.PolyStyle import PolyStyle
@@ -88,6 +88,7 @@ __all__ = [
     "HotSpot",
     "Icon",
     "IconStyle",
+    "ImagePyramid",
     "ItemIcon",
     "ItemIconModeEnum",
     "KML_DOCTYPE",
@@ -139,6 +140,7 @@ __all__ = [
     "ViewRefreshModeEnum",
     "ViewerOption",
     "ViewerOptionEnum",
+    "ViewVolume",
     "Wait",
     "errors",
     "kml_root_tag",
