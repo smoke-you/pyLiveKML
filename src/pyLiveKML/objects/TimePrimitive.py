@@ -13,7 +13,7 @@ class TimePrimitive(Object, ABC):
 
     References
     ----------
-    https://developers.google.com/kml/documentation/kmlreference
+    * https://developers.google.com/kml/documentation/kmlreference
 
     Parameters
     ----------

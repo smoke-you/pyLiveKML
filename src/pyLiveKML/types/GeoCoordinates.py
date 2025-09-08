@@ -52,14 +52,15 @@ class GeoCoordinates:
         ----------
         values : tuple[float, float, float|None]
             The LLA as a tuple
-        
+
         Returns
         -------
         tuple[float, float, float|None]
             The LLA as a tuple
+
         """
         return (self.lon, self.lat, self.alt)
-    
+
     @values.setter
     def values(self, value: tuple[float, float, float | None]) -> None:
         self.lon, self.lat, self.alt = value

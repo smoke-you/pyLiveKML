@@ -77,7 +77,7 @@ class Angle90(_KMLParser):
 
     References
     ----------
-    https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    * https://developers.google.com/kml/documentation/kmlreference#kml-fields
 
     """
 
@@ -93,7 +93,7 @@ class AnglePos90(_KMLParser):
 
     References
     ----------
-    https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    * https://developers.google.com/kml/documentation/kmlreference#kml-fields
 
     """
 
@@ -109,7 +109,7 @@ class Angle180(_KMLParser):
 
     References
     ----------
-    https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    * https://developers.google.com/kml/documentation/kmlreference#kml-fields
 
     """
 
@@ -129,7 +129,7 @@ class AnglePos180(_KMLParser):
 
     References
     ----------
-    https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    * https://developers.google.com/kml/documentation/kmlreference#kml-fields
 
     """
 
@@ -145,7 +145,7 @@ class Angle360(_KMLParser):
 
     References
     ----------
-    https://developers.google.com/kml/documentation/kmlreference#kml-fields
+    * https://developers.google.com/kml/documentation/kmlreference#kml-fields
 
     """
 
@@ -470,7 +470,7 @@ class _BaseObject(ABC):
         Parameters
         ----------
         root : etree.Element
-            The `etree.Element` to which the KML published for the object is to be 
+            The `etree.Element` to which the KML published for the object is to be
             appended.
         with_children : bool, default = True
             True if the children of this instance should be included in the build.
@@ -664,7 +664,7 @@ class Object(_BaseObject, ABC):
 
     References
     ----------
-    https://developers.google.com/kml/documentation/kmlreference#object
+    * https://developers.google.com/kml/documentation/kmlreference#object
 
     """
 

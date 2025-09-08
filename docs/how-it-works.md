@@ -56,11 +56,11 @@ There are two methods of `_BaseObject` that are routinely used to publish KML ob
 
 * `build_kml(self, root: etree.Element, with_children: bool = True, with_dependents: bool = True,) -> None`
 
-  Publishes only child objects into an existing tag. When publishing child objects, `construct_kml` calls `build_kml`.
+  Publishes a KML object into an existing tag, optionally with children and/or dependents. When publishing child or dependent objects, `construct_kml` calls their `build_kml` method/s.
 
 ### Dynamic only
 
-These methods are intended to be used by `Update` instances while building their KML content. They are accessible to be overridden by subclasses of `_BaseObject` specifically to make it possible to customize dynamic `Update` behaviours, as demonstrated in the [aircraft_tracker](https://github.com/smoke-you/pyLiveKML/blob/main/evals/apps/aircraft_tracker) evaluation app.
+These methods are intended to be used by `Update` instances while building their KML content. They are accessible to be overridden by subclasses of `_BaseObject` specifically to make it possible to customize dynamic `Update` behaviours.
 
 * `create_kml(self, root: etree.Element, parent: "_BaseObject") -> etree.Element`
 

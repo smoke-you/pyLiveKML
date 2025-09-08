@@ -109,9 +109,7 @@ class Feature(Object, ABC):
         _ChildDef("regions"),
         _ChildDef("styles"),
     )
-    _kml_dependents = Object._kml_dependents + (
-        _DependentDef("time_primitive"),
-    )
+    _kml_dependents = Object._kml_dependents + (_DependentDef("time_primitive"),)
 
     def __init__(
         self,
