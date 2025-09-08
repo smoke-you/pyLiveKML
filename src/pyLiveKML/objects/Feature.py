@@ -5,8 +5,16 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _ChildDef, _DependentDef, _FieldDef, Object, NoDump
+from pyLiveKML.objects.Object import (
+    _ChildDef,
+    _DependentDef,
+    _FieldDef,
+    Object,
+    NoDump,
+    ObjectChild,
+)
 from pyLiveKML.objects.AbstractView import AbstractView
+from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
@@ -84,6 +92,13 @@ class Feature(Object, ABC):
     region : Region | None, default = None
         `Feature`s and `Geometry`'s associated with a `Region` are drawn only when the
         `Region` is active.
+    extended_data : ExtendedData | None, default = None
+        Allows you to add custom data to a KML file. This data can be:
+        * Data that references an external XML schema.
+        * Untyped data/value pairs.
+        * Typed data.
+
+        A given KML `Feature` can contain a combination of these types of custom data.
 
     Attributes
     ----------
@@ -109,7 +124,10 @@ class Feature(Object, ABC):
         _ChildDef("regions"),
         _ChildDef("styles"),
     )
-    _kml_dependents = Object._kml_dependents + (_DependentDef("time_primitive"),)
+    _kml_dependents = Object._kml_dependents + (
+        _DependentDef("time_primitive"),
+        _DependentDef("extended_data"),
+    )
 
     def __init__(
         self,
@@ -128,6 +146,7 @@ class Feature(Object, ABC):
         style_url: str | None = None,
         styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
+        extended_data: ExtendedData | None = None,
     ):
         """Feature instance constructor."""
         Object.__init__(self)
@@ -148,6 +167,7 @@ class Feature(Object, ABC):
         self._styles = list[StyleSelector]()
         self.styles = styles
         self.region = region
+        self.extended_data = extended_data
 
     @property
     def styles(self) -> Iterator[StyleSelector]:
@@ -176,6 +196,21 @@ class Feature(Object, ABC):
                 self._styles.append(value)
             else:
                 self._styles.extend(value)
+
+    # @property
+    # def dependents(self) -> Iterator[ObjectChild]:
+    #     """A generator over the dependents of the instance.
+
+    #     Overridden from `_BaseObject` because when using the default behaviour, if
+    #     `geometry` is a `MultiGeometry`, then the `MultiGeometry` itself is never
+    #     yielded.
+
+    #     :return: A generator over the dependents of the instance.
+    #     :rtype: Iterator[ObjectChild]
+    #     """
+    #     yield from super().dependents
+    #     if self.extended_data:
+    #         yield ObjectChild(self, self.extended_data)
 
     def build_kml(
         self,

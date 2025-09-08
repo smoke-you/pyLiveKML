@@ -32,6 +32,7 @@ from pyLiveKML import errors
 from pyLiveKML.objects.BalloonStyle import BalloonStyle
 from pyLiveKML.objects.Camera import Camera
 from pyLiveKML.objects.Document import Document
+from pyLiveKML.objects.ExtendedData import DataItem, ExtendedData, SchemaDataItem
 from pyLiveKML.objects.FlyTo import FlyTo
 from pyLiveKML.objects.Folder import Folder
 from pyLiveKML.objects.GroundOverlay import GroundOverlay
@@ -77,8 +78,10 @@ __all__ = [
     "BalloonStyle",
     "Camera",
     "ColorModeEnum",
+    "DataItem",
     "DisplayModeEnum",
     "Document",
+    "ExtendedData",
     "FlyTo",
     "FlyToModeEnum",
     "Folder",
@@ -122,6 +125,7 @@ __all__ = [
     "Region",
     "RotationXY",
     "Schema",
+    "SchemaDataItem",
     "ScreenOverlay",
     "ScreenXY",
     "SimpleField",

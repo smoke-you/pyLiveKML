@@ -5,13 +5,13 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.AbstractView import AbstractView
+from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
 from pyLiveKML.objects.Link import Link
 from pyLiveKML.objects.Object import _FieldDef, _ChildDef
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
-from pyLiveKML.types import RefreshModeEnum
 
 
 class NetworkLink(Feature):
@@ -89,6 +89,13 @@ class NetworkLink(Feature):
     region : Region | None, default = None
         `Feature`s and `Geometry`'s associated with a `Region` are drawn only when the
         `Region` is active.
+    extended_data : ExtendedData | None, default = None
+        Allows you to add custom data to a KML file. This data can be:
+        * Data that references an external XML schema.
+        * Untyped data/value pairs.
+        * Typed data.
+
+        A given KML `Feature` can contain a combination of these types of custom data.
     fly_to_view: bool | None, default = None
         If `True`, causes Google Earth to fly to the view of the `LookAt` or `Camera` in
         the `NetworkLinkControl` (if it exists). If the `NetworkLinkControl` does not
@@ -134,6 +141,7 @@ class NetworkLink(Feature):
         style_url: str | None = None,
         styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
+        extended_data: ExtendedData | None = None,
         # Specific to `NetworkLink`
         fly_to_view: bool | None = None,
         refresh_visibility: bool | None = None,
@@ -157,6 +165,7 @@ class NetworkLink(Feature):
             style_url=style_url,
             styles=styles,
             region=region,
+            extended_data=extended_data,
         )
         self.fly_to_view = fly_to_view
         self.refresh_visibility = refresh_visibility

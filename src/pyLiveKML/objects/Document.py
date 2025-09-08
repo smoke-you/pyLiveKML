@@ -5,10 +5,12 @@ from typing import Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
-from pyLiveKML.objects.Object import _ChildDef
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.Container import Container
+from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
+from pyLiveKML.objects.Object import _ChildDef
+from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.Schema import Schema
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
@@ -86,6 +88,13 @@ class Document(Container):
     region : Region | None, default = None
         `Feature`s and `Geometry`'s associated with a `Region` are drawn only when the
         `Region` is active.
+    extended_data : ExtendedData | None, default = None
+        Allows you to add custom data to a KML file. This data can be:
+        * Data that references an external XML schema.
+        * Untyped data/value pairs.
+        * Typed data.
+
+        A given KML `Feature` can contain a combination of these types of custom data.
     features : Feature | Iterable[Feature] | None, default = None
         The `Feature`'s contained by this `Document`.
     schemas : Schema | Iterable[Schema] | None, default = None
@@ -116,6 +125,8 @@ class Document(Container):
         time_primitive: TimePrimitive | None = None,
         style_url: str | None = None,
         styles: Iterable[StyleSelector] | None = None,
+        region: Region | None = None,
+        extended_data: ExtendedData | None = None,
         features: Feature | Iterable[Feature] | None = None,
         schemas: Schema | Iterable[Schema] | None = None,
     ):
@@ -135,6 +146,8 @@ class Document(Container):
             time_primitive=time_primitive,
             style_url=style_url,
             styles=styles,
+            region=region,
+            extended_data=extended_data,
             features=features,
         )
         self._schemas = list[Schema]()

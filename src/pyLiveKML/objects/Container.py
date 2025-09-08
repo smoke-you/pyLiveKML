@@ -6,6 +6,7 @@ from typing import Iterable, Iterator
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.AbstractView import AbstractView
+from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
 from pyLiveKML.objects.Object import _ChildDef, _ListObject, ObjectState
 from pyLiveKML.objects.Region import Region
@@ -86,6 +87,13 @@ class Container(_ListObject[Feature], Feature, ABC):
     region : Region | None, default = None
         `Feature`s and `Geometry`'s associated with a `Region` are drawn only when the
         `Region` is active.
+    extended_data : ExtendedData | None, default = None
+        Allows you to add custom data to a KML file. This data can be:
+        * Data that references an external XML schema.
+        * Untyped data/value pairs.
+        * Typed data.
+
+        A given KML `Feature` can contain a combination of these types of custom data.
     features : Feature | Iterable[Feature] | None, default = None
         The `Feature`'s contained by this `Container`.
 
@@ -116,6 +124,7 @@ class Container(_ListObject[Feature], Feature, ABC):
         style_url: str | None = None,
         styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
+        extended_data: ExtendedData | None = None,
         features: Feature | Iterable[Feature] | None = None,
     ):
         """Feature instance constructor."""
@@ -136,6 +145,7 @@ class Container(_ListObject[Feature], Feature, ABC):
             style_url=style_url,
             styles=styles,
             region=region,
+            extended_data=extended_data,
         )
         _ListObject[Feature].__init__(self)
         ABC.__init__(self)
