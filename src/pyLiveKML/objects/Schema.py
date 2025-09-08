@@ -4,8 +4,13 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _BaseObject
-from pyLiveKML.objects.Object import Object, _ListObject
+from pyLiveKML.objects.Object import (
+    _BaseObject,
+    _DependentDef,
+    _FieldDef,
+    _ListObject,
+    Object,
+)
 
 
 # TODO: This needs some work. There are issues around how `SimpleField` works.
@@ -20,32 +25,18 @@ class SimpleField(_BaseObject):
     """
 
     _kml_tag = "SimpleField"
+    _kml_fields = _BaseObject._kml_fields + (_FieldDef("display_name", "displayName"),)
 
     def __init__(
         self,
         type: str,
         name: str,
-        display_names: str | Iterable[str] | None,
+        display_name: str | None,
     ) -> None:
         """SimpleField instance constructor."""
         self.type = type
         self.name = name
-        self.display_names = list[str]()
-        if display_names:
-            if isinstance(display_names, str):
-                self.display_names.append(display_names)
-            else:
-                self.display_names.extend(display_names)
-
-    def build_kml(
-        self,
-        root: etree.Element,
-        with_children: bool = True,
-        with_dependents: bool = True,
-    ) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        for dn in self.display_names:
-            etree.SubElement(root, "displayName").text = dn
+        self.display_name = display_name
 
     def construct_kml(
         self, with_children: bool = True, with_dependents: bool = True
@@ -82,6 +73,7 @@ class Schema(_ListObject[SimpleField], Object):
     """
 
     _kml_tag = "Schema"
+    _kml_dependents = Object._kml_dependents + (_DependentDef("schema_fields"),)
 
     def __init__(
         self,

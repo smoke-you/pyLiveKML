@@ -28,6 +28,11 @@ class MultiTrack(_ListObject[Track], Geometry):
     track and jump immediately to the start of the next one, or to interpolate the
     missing values between the two tracks.
 
+    Notes
+    -----
+    * As far as I have been able to establish, extended data does not appear **at all**
+    in the elevation profile for `MultiTrack` instances.
+
     References
     ----------
     * https://developers.google.com/kml/documentation/kmlreference#multitrack
