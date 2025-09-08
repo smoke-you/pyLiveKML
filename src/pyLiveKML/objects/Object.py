@@ -555,7 +555,7 @@ class _BaseObject(ABC):
         item = etree.SubElement(
             root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)}
         )
-        self.build_kml(item, with_children=False)
+        self.build_kml(item, with_children=False, with_dependents=False)
 
     def delete_kml(self, root: etree.Element) -> None:
         """Construct a complete `<Delete>` element tag as a child of an `Update`.
@@ -599,6 +599,8 @@ class _BaseObject(ABC):
             for c in self.children:
                 c.child.activate(True, cascade)
         else:
+            for c in self.dependents:
+                c.child.force_idle()
             for c in self.children:
                 c.child.force_idle()
 

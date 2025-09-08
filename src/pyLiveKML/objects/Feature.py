@@ -104,11 +104,13 @@ class Feature(Object, ABC):
         _FieldDef("description"),
         _FieldDef("style_url", "styleUrl"),
     )
-    _kml_children: tuple[_ChildDef, ...] = Object._kml_children + (_ChildDef("styles"),)
+    _kml_children: tuple[_ChildDef, ...] = Object._kml_children + (
+        _ChildDef("abstract_view"),
+        _ChildDef("regions"),
+        _ChildDef("styles"),
+    )
     _kml_dependents = Object._kml_dependents + (
-        _DependentDef("abstract_view"),
         _DependentDef("time_primitive"),
-        _DependentDef("region"),
     )
 
     def __init__(

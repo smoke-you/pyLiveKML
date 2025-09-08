@@ -1,10 +1,10 @@
 """LookAt module."""
 
-from typing import Sequence
+from typing import Any, Iterable, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import AltitudeModeEnum, ViewerOption
+from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.Object import (
     _FieldDef,
     Angle180,
@@ -13,8 +13,8 @@ from pyLiveKML.objects.Object import (
     AnglePos90,
     NoParse,
 )
-from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
+from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates, ViewerOption
 
 
 class LookAt(AbstractView):
@@ -36,7 +36,7 @@ class LookAt(AbstractView):
         Enable or disable one or more Google Earth view modes.
     time_primitive : TimePrimitive | None, default = None
         Timestamp or timespan assigned to the object.
-    lla : tuple[float, float, float], default = (0, 0, 0)
+    lla : GeoCoordinates | tuple[float, float, float|None] | tuple[float, float], default = (0, 0, None)
         The longitude, latitude and altitude (in that order, in decimal degrees) of the
         camera position.
     angles : tuple[float, float], default (0, 0)
@@ -83,18 +83,54 @@ class LookAt(AbstractView):
 
     def __init__(
         self,
-        viewer_options: Sequence[ViewerOption] | ViewerOption | None = None,
+        viewer_options: ViewerOption | Iterable[ViewerOption] | None = None,
         time_primitive: TimePrimitive | None = None,
-        lla: tuple[float, float, float] = (0, 0, 0),
+        lla: GeoCoordinates | tuple[float, float, float|None] | tuple[float, float] = (0, 0, None),
         angles: tuple[float, float] = (0, 0),
         range: float = 0,
         altitude_mode: AltitudeModeEnum | None = None,
     ):
         """LookAt instance constructor."""
         AbstractView.__init__(self, viewer_options, time_primitive)
-        self.longitude, self.latitude, self.altitude = lla
+        self.longitude: float
+        self.latitude: float
+        self.altitude: float
+        self.lla = lla
         self.heading, self.tilt = angles
         self.range = range
         self.altitude_mode = (
             AltitudeModeEnum.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode
         )
+    
+    @property
+    def lla(self) -> tuple[float, float, float]:
+        """Get or set the longitude, latitude and altitude as a tuple.
+        
+        Parameters
+        ----------
+        value : GeoCoordinates | tuple[float, float, float|None] | tuple[float, float])
+            The longitude, latitude and altitude as a tuple with optional altitude, or as 
+            `GeoCoordinates`.
+        
+        Returns
+        -------
+        tuple[float, float, float]
+            The longitude, latitude and altitude as a tuple of floats.
+
+        """
+        return (self.longitude, self.latitude, cast(float, self.altitude))
+
+    @lla.setter
+    def lla(self, value: GeoCoordinates | tuple[float, float, float|None] | tuple[float, float]) -> None:
+        if isinstance(value, GeoCoordinates):
+            v = value.values
+            self.longitude, self.latitude = v[:2]
+            self.altitude = 0 if v[2] is None else v[2]
+        elif len(value) >= 3:
+            v = value[:3]
+            self.longitude, self.latitude = v[:2]
+            self.altitude = 0 if v[2] is None else v[2]
+        else:
+            self.longitude, self.latitude = value
+            self.altitude = 0
+

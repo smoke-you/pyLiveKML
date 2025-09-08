@@ -44,6 +44,26 @@ class GeoCoordinates:
         self.lat = lat
         self.alt = alt
 
+    @property
+    def values(self) -> tuple[float, float, float | None]:
+        """Get or set the LLA as a tuple.
+
+        Parameters
+        ----------
+        values : tuple[float, float, float|None]
+            The LLA as a tuple
+        
+        Returns
+        -------
+        tuple[float, float, float|None]
+            The LLA as a tuple
+        """
+        return (self.lon, self.lat, self.alt)
+    
+    @values.setter
+    def values(self, value: tuple[float, float, float | None]) -> None:
+        self.lon, self.lat, self.alt = value
+
     def __setattr__(self, name: str, value: Any) -> None:
         """GeoCoordinates __setattr__ implementation."""
         if name == "lon":

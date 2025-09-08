@@ -106,7 +106,10 @@ class NetworkLinkControl(_BaseObject):
         _FieldDef("link_snippet", "linkSnippet"),
         _FieldDef("link_expires", "linkExpires"),
     )
-    _kml_dependents = _BaseObject._kml_dependents + (_DependentDef("update"),)
+    _kml_dependents = _BaseObject._kml_dependents + (
+        _DependentDef("abstract_view"),
+        _DependentDef("update"),
+    )
     _suppress_id = True
 
     def __init__(

@@ -157,6 +157,7 @@ class Placemark(Feature):
         :rtype: Iterator[ObjectChild]
         """
         yield ObjectChild(self, self.geometry)
+        yield from super().dependents
 
     def activate(self, value: bool, cascade: bool = False) -> None:
         """Activate or deactivate this instance for display in GEP.

@@ -1,10 +1,12 @@
 """AircraftLocation module."""
 
-from typing import Optional, Sequence
+from typing import Optional, Sequence, cast
 
 from lxml import etree  # type: ignore
 from pyLiveKML import (
+    AltitudeModeEnum,
     IconStyle,
+    LookAt,
     Point,
     Style,
     Placemark,
@@ -33,9 +35,16 @@ class AircraftLocation(Placemark):
                 scale=1.0,
             )
         )
-        Placemark.__init__(self, geometry=point, name=flight, inline_style=style)
+        lookat = LookAt(
+            lla=positions[0].coordinates, 
+            angles=(0, 64),
+            range=40000,
+            altitude_mode=AltitudeModeEnum.ABSOLUTE,
+        )
+        Placemark.__init__(self, geometry=point, name=flight, inline_style=style, abstract_view=lookat)
         self._point = point
         self._style = style
+        self._lookat = lookat
         self._positions = positions
         self._transponder = transponder
         self._flight = flight
@@ -69,7 +78,6 @@ class AircraftLocation(Placemark):
     def synchronized(self) -> None:
         """Record that a KML update has been emitted."""
         if self._state == ObjectState.CREATING or self._state == ObjectState.CHANGING:
-            # self._state = State.CREATED
             """Note transition to CHANGING rather than CREATED"""
             self._state = ObjectState.CHANGING
         elif (
@@ -77,38 +85,14 @@ class AircraftLocation(Placemark):
             or self._state == ObjectState.DELETE_CHANGED
         ):
             self._state = ObjectState.IDLE
-
-    # Loop through the positions from 0 to len-1 then restart
-    def change_kml(self, root: etree.Element) -> None:
-        """Construct a complete <Change> KML tag."""
         self._pid += 1
         if self._pid >= len(self._positions):
             self._pid = 0
         pos = self._positions[self._pid]
         self._point.coordinates = pos.coordinates
         self._point.altitude_mode = pos.altitude_mode
-        self._point._state = ObjectState.IDLE
-        self._style._state = ObjectState.IDLE
-        if self._style.icon_style:
-            self._style.icon_style.heading = pos.heading
-            self._style.icon_style._state = ObjectState.IDLE
-
-        pm = etree.SubElement(
-            root, _tag=self.kml_tag, attrib={"targetId": str(self.id)}
-        )
-        etree.SubElement(pm, "description").text = self._build_description()
-        point = etree.SubElement(
-            root, _tag=self._point.kml_tag, attrib={"targetId": str(self._point.id)}
-        )
-        etree.SubElement(point, "coordinates").text = pos.coordinates.__str__()
-        etree.SubElement(point, "altitudeMode").text = pos.altitude_mode.value
-        style = etree.SubElement(
-            root, _tag=self._style.kml_tag, attrib={"targetId": str(self._style.id)}
-        )
-        icon_style = etree.SubElement(style, "IconStyle")
-        etree.SubElement(icon_style, "heading").text = (
-            "0" if pos.heading is None else f"{pos.heading:0.1f}"
-        )
+        cast(IconStyle, self._style.icon_style).heading = pos.heading
+        self._lookat.lla = pos.coordinates
 
     def __str__(self) -> str:
         """Return a string representation."""

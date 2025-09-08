@@ -85,6 +85,7 @@ gep_loader = Folder(
                 refresh_mode=RefreshModeEnum.ON_INTERVAL,
                 refresh_interval=REFRESH_INTERVAL,
             ),
+            fly_to_view=True,
         ),
     ],
 )
@@ -92,13 +93,14 @@ gep_loader = Folder(
 # The master synchronization controller, a NetworkLinkControl object
 gep_sync = NetworkLinkControl(
     target_href=ELEMENTS_HREF,
-    # link_name="pyLiveKML synchronizer",
-    # link_description="Synchronizes the webserver UI state with Google Earth Pro.",
+    link_name="pyLiveKML synchronizer",
+    link_description="Synchronizes the webserver UI state with Google Earth Pro.",
+    link_snippet="",
+    link_snippet_max_lines=0,
 )
 # assign a constant UUID to the container, so that it can be refreshed in GEP
 # without having to reload the pyLiveKML link after restarting the server
 gep_sync.container._id = UUID("8c2cda8e-7d56-4a29-99e7-e05e6dbaf193")
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator:
