@@ -742,12 +742,16 @@ class _ListObject(_BaseObject, list[_LOB], Generic[_LOB]):
     def clear(self) -> None:
         """Override superclass `clear()` to call `field_changed()."""
         self.field_changed()
+        if isinstance(self, _DeletableMixin):
+            self._deleted.extend(self)
         super().clear()
 
     def remove(self, value: _LOB) -> None:
         """Override superclass `remove()` to call `field_changed()."""
-        self.field_changed()
         super().remove(value)
+        self.field_changed()
+        if isinstance(self, _DeletableMixin):
+            self._deleted.append(value)
 
     def append(self, value: _LOB) -> None:
         """Override superclass `append()` to call `field_changed()."""
@@ -758,3 +762,14 @@ class _ListObject(_BaseObject, list[_LOB], Generic[_LOB]):
         """Override superclass `extend()` to call `field_changed()."""
         self.field_changed()
         super().extend(iterable)
+
+
+class _DeletableMixin:
+    """A mixin class for tracking deletion of child objects.
+    
+    Intended for use primarily with concrete `Container` implementations, but has other 
+    uses as well.
+    """
+
+    def __init__(self) -> None:
+        self._deleted = list[_BaseObject]()

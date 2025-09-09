@@ -8,18 +8,18 @@ from lxml import etree  # type: ignore
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
-from pyLiveKML.objects.Object import _ChildDef, _ListObject, ObjectState
+from pyLiveKML.objects.Object import _ChildDef, _DeletableMixin, _ListObject, ObjectState
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 
 
-class Container(_ListObject[Feature], Feature, ABC):
+class Container(_DeletableMixin, _ListObject[Feature], Feature, ABC):
     """A KML `<Container>` tag constructor.
 
     This is an abstract element and cannot be used directly in a KML file. A `Container`
     element holds one or more `Feature` elements, which may themselves be `Container`
-    instances, so allows the creation of nested hierarchies.
+    instances, allowing for the creation of nested hierarchies.
 
     References
     ----------
@@ -128,6 +128,8 @@ class Container(_ListObject[Feature], Feature, ABC):
         features: Feature | Iterable[Feature] | None = None,
     ):
         """Feature instance constructor."""
+        _DeletableMixin.__init__(self)
+        _ListObject[Feature].__init__(self)
         Feature.__init__(
             self,
             name=name,
@@ -147,9 +149,7 @@ class Container(_ListObject[Feature], Feature, ABC):
             region=region,
             extended_data=extended_data,
         )
-        _ListObject[Feature].__init__(self)
         ABC.__init__(self)
-        self._deleted: list[Feature] = list[Feature]()
         self.features = features
         self._update_limit: int = 0
 
@@ -180,29 +180,6 @@ class Container(_ListObject[Feature], Feature, ABC):
                 self.append(value)
             else:
                 self.extend(value)
-
-    def clear(self) -> None:
-        """Remove all of the `Feature`'s enclosed in this `Container`.
-
-        Effectively, moves them to the `_deleted` list.
-        """
-        self._deleted.extend(self.features)
-        super().clear()
-
-    def remove(self, value: Feature) -> None:
-        """Remove a single `Feature` from this `Container.
-
-        Effectively, moves it to the `_deleted` list.
-
-        Parameters
-        ----------
-        value : Feature
-            The feature to be removed/moved.
-
-        """
-        if value.active:
-            self._deleted.append(value)
-        super().remove(value)
 
     def force_idle(self, cascade: bool = False) -> None:
         """Force this instance, and _optionally_ its children, to the `IDLE` state.
