@@ -13,6 +13,7 @@ from pyLiveKML.objects.Container import Container
 from pyLiveKML.objects.Folder import Folder
 from pyLiveKML.objects.Object import (
     _BaseObject,
+    _DeletableMixin,
     _DependentDef,
     _FieldDef,
     ObjectChild,
@@ -223,7 +224,7 @@ class NetworkLinkControl(_BaseObject):
             if isinstance(c_obj.child, _BaseObject):
                 self._sync_child_objects(c_obj.child)
 
-        if isinstance(obj, Container):
+        if isinstance(obj, _DeletableMixin):
             limit = self.update_limit - len(self.update)
             deletes = [
                 ObjectChild(obj, delobj) for delobj in islice(obj._deleted, limit)

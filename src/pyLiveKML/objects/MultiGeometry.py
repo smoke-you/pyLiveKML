@@ -5,16 +5,10 @@ from typing import Iterable, Iterator
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Geometry import Geometry
-from pyLiveKML.objects.Object import _ChildDef, _ListObject
+from pyLiveKML.objects.Object import _ChildDef, _DeletableMixin, _ListObject
 
 
-# TODO: Need to be able to delete elements from a MultiGeometry. This will probably
-# require synchronization via a `_deleted` list, similar to `Container`.
-# This similarity should be able to be leveraged, perhaps with a mixin class that
-# affords the deletion components and that is detectable by `NetworkLinkControl`.
-
-
-class MultiGeometry(_ListObject[Geometry], Geometry):
+class MultiGeometry(_DeletableMixin, _ListObject[Geometry], Geometry):
     """A KML `<MultiGeometry>` tag constructor.
 
     A container for zero or more geometry primitives associated with the same feature.
@@ -40,8 +34,9 @@ class MultiGeometry(_ListObject[Geometry], Geometry):
 
     def __init__(self, contents: Geometry | Iterable[Geometry] | None = None):
         """MultiGeometry instance constructor."""
-        Geometry.__init__(self)
+        _DeletableMixin.__init__(self)
         _ListObject[Geometry].__init__(self)
+        Geometry.__init__(self)
         self.contents = contents
 
     @property

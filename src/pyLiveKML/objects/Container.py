@@ -8,7 +8,12 @@ from lxml import etree  # type: ignore
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
-from pyLiveKML.objects.Object import _ChildDef, _DeletableMixin, _ListObject, ObjectState
+from pyLiveKML.objects.Object import (
+    _ChildDef,
+    _DeletableMixin,
+    _ListObject,
+    ObjectState,
+)
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive

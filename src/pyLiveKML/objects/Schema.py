@@ -34,6 +34,7 @@ class SimpleField(_BaseObject):
         display_name: str | None,
     ) -> None:
         """SimpleField instance constructor."""
+        super().__init__()
         self.type = type
         self.name = name
         self.display_name = display_name
@@ -49,7 +50,7 @@ class SimpleField(_BaseObject):
         return root
 
 
-class Schema(_ListObject[SimpleField], Object):
+class Schema(Object):
     """A KML `<Schema>` tag constructor.
 
     Specifies a custom KML schema that is used to add custom data to KML `Feature`s.
@@ -82,20 +83,20 @@ class Schema(_ListObject[SimpleField], Object):
     ) -> None:
         """Construct Schema instances."""
         Object.__init__(self)
-        _ListObject[SimpleField].__init__(self)
         self.name = name
+        self._schema_fields = list[SimpleField]()
         self.schema_fields = schema_fields
 
     @property
     def schema_fields(self) -> Iterator[SimpleField]:
         """Generator over schema_fields."""
-        yield from self
+        yield from self._schema_fields
 
     @schema_fields.setter
     def schema_fields(self, value: SimpleField | Iterable[SimpleField] | None) -> None:
-        self.clear()
+        self._schema_fields.clear()
         if value is not None:
             if isinstance(value, SimpleField):
-                self.append(value)
+                self._schema_fields.append(value)
             else:
-                self.extend(value)
+                self._schema_fields.extend(value)

@@ -766,8 +766,8 @@ class _ListObject(_BaseObject, list[_LOB], Generic[_LOB]):
 
 class _DeletableMixin:
     """A mixin class for tracking deletion of child objects.
-    
-    Intended for use primarily with concrete `Container` implementations, but has other 
+
+    Intended for use primarily with concrete `Container` implementations, but has other
     uses as well.
     """
 

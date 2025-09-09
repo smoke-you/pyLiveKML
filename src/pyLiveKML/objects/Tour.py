@@ -1,11 +1,13 @@
 """Tour module."""
 
-from typing import Iterable
+from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Object import (
     _BaseObject,
+    _ChildDef,
+    _DeletableMixin,
     _DependentDef,
     _FieldDef,
     _ListObject,
@@ -14,7 +16,7 @@ from pyLiveKML.objects.Object import (
 from pyLiveKML.objects.TourPrimitive import TourPrimitive
 
 
-class Playlist(_ListObject[TourPrimitive], _BaseObject):
+class Playlist(_DeletableMixin, _ListObject[TourPrimitive], _BaseObject):
     """A KML `<Playlist>` tag constructor.
 
     Contains any number of `TourPrimitive` objects.
@@ -26,6 +28,7 @@ class Playlist(_ListObject[TourPrimitive], _BaseObject):
     Parameters
     ----------
     items : TourPrimitive | Iterable[TourPrimitive] | None, default = None
+        The `TourPrimitive` items in the playlist.
 
     Attributes
     ----------
@@ -34,18 +37,44 @@ class Playlist(_ListObject[TourPrimitive], _BaseObject):
     """
 
     _kml_tag = "gx:Playlist"
+    _kml_children = _BaseObject._kml_children + (_ChildDef("items"),)
+    _yield_self = True
 
     def __init__(
         self, items: TourPrimitive | Iterable[TourPrimitive] | None = None
     ) -> None:
         """Playlist instance constructor."""
-        _BaseObject.__init__(self)
+        _DeletableMixin.__init__(self)
         _ListObject[TourPrimitive].__init__(self)
-        if items is not None:
-            if isinstance(items, TourPrimitive):
-                self.append(items)
+        _BaseObject.__init__(self)
+        self.items = items
+
+    @property
+    def items(self) -> Iterator[TourPrimitive]:
+        """Retrieve a generator over the `TourPrimitive`s in this `Tour`.
+
+        If the property setter is called, replaces the current list of contained
+        `TourPrimitive`s with those provided.
+
+        Parameters
+        ----------
+        value : TourPrimitive | Iterable[TourPrimitive] | None
+            The new `TourPrimitive` elements for the `Tour`.
+
+        :returns: A generator over the `TourPrimitive`s in the `Tour`.
+        :rtype: Iterator[TourPrimitive]
+
+        """
+        yield from self
+
+    @items.setter
+    def items(self, value: TourPrimitive | Iterable[TourPrimitive] | None) -> None:
+        self.clear()
+        if value is not None:
+            if isinstance(value, TourPrimitive):
+                self.append(value)
             else:
-                self.extend(items)
+                self.extend(value)
 
 
 class Tour(Object):

@@ -5,7 +5,7 @@ from typing import Iterator, Iterable
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Geometry import Geometry
-from pyLiveKML.objects.Object import _ChildDef, _FieldDef, _ListObject
+from pyLiveKML.objects.Object import _ChildDef, _DeletableMixin, _FieldDef, _ListObject
 from pyLiveKML.objects.Track import Track
 from pyLiveKML.types.types import AltitudeModeEnum
 
@@ -14,7 +14,7 @@ from pyLiveKML.types.types import AltitudeModeEnum
 # possible to add and delete its contents.
 
 
-class MultiTrack(_ListObject[Track], Geometry):
+class MultiTrack(_DeletableMixin, _ListObject[Track], Geometry):
     """A KML `<MultiTrack>` tag constructor.
 
     A multi-track element is used to combine multiple track elements into a single
@@ -54,6 +54,7 @@ class MultiTrack(_ListObject[Track], Geometry):
         _FieldDef("interpolate", "gx:interpolate"),
     )
     _kml_children = Geometry._kml_children + (_ChildDef("tracks"),)
+    _yield_self = True
 
     def __init__(
         self,
@@ -62,6 +63,7 @@ class MultiTrack(_ListObject[Track], Geometry):
         tracks: Track | Iterable[Track] | None = None,
     ) -> None:
         """MultiTrack instance constructor."""
+        _DeletableMixin.__init__(self)
         _ListObject[Track].__init__(self)
         Geometry.__init__(self)
         self.altitude_mode = altitude_mode
