@@ -36,6 +36,7 @@ class MultiGeometry(_ListObject[Geometry], Geometry):
 
     _kml_tag = "MultiGeometry"
     _kml_children = Geometry._kml_children + (_ChildDef("contents"),)
+    _yield_self = True
 
     def __init__(self, contents: Geometry | Iterable[Geometry] | None = None):
         """MultiGeometry instance constructor."""

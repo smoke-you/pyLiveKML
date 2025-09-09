@@ -5,7 +5,7 @@ from typing import Iterable, Iterator
 from lxml import etree  # type: ignore
 
 from pyLiveKML.types import AltitudeModeEnum
-from pyLiveKML.objects.Object import _FieldDef, _ChildDef, Object, ObjectState
+from pyLiveKML.objects.Object import _FieldDef, _DependentDef, Object, ObjectState
 from pyLiveKML.objects.Geometry import Geometry
 from pyLiveKML.objects.LinearRing import LinearRing
 
@@ -14,7 +14,7 @@ class _OuterBoundary(Object):
     """Private wrapper class for polygon outer boundaries."""
 
     _kml_tag = "outerBoundaryIs"
-    _kml_children = Object._kml_children + (_ChildDef("boundary"),)
+    _kml_dependents = Object._kml_dependents + (_DependentDef("boundary"),)
     _suppress_id = True
 
     def __init__(self, boundary: LinearRing) -> None:
@@ -26,7 +26,7 @@ class _InnerBoundary(Object):
     """Private wrapper class for polygon inner boundaries."""
 
     _kml_tag = "innerBoundaryIs"
-    _kml_children = Object._kml_children + (_ChildDef("boundary"),)
+    _kml_dependents = Object._kml_dependents + (_DependentDef("boundary"),)
     _suppress_id = True
 
     def __init__(self, boundary: LinearRing) -> None:
@@ -84,9 +84,9 @@ class Polygon(Geometry):
         _FieldDef("extrude"),
         _FieldDef("tessellate"),
     )
-    _kml_children = Geometry._kml_children + (
-        _ChildDef("_outer_boundary"),
-        _ChildDef("_inner_boundaries"),
+    _kml_dependents = Geometry._kml_dependents + (
+        _DependentDef("_outer_boundary"),
+        _DependentDef("_inner_boundaries"),
     )
 
     def __init__(

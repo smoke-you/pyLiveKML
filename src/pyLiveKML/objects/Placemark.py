@@ -8,7 +8,7 @@ from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
 from pyLiveKML.objects.Geometry import Geometry
-from pyLiveKML.objects.Object import ObjectChild
+from pyLiveKML.objects.Object import ObjectChild, _DependentDef
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
@@ -112,6 +112,9 @@ class Placemark(Feature):
     """
 
     _kml_tag = "Placemark"
+    _kml_dependents = Feature._kml_dependents + (
+        _DependentDef("geometry"),
+    )
 
     def __init__(
         self,
@@ -154,20 +157,6 @@ class Placemark(Feature):
             extended_data=extended_data,
         )
         self.geometry = geometry
-
-    @property
-    def dependents(self) -> Iterator[ObjectChild]:
-        """A generator over the dependents of the instance.
-
-        Overridden from `_BaseObject` because when using the default behaviour, if
-        `geometry` is a `MultiGeometry`, then the `MultiGeometry` itself is never
-        yielded.
-
-        :return: A generator over the dependents of the instance.
-        :rtype: Iterator[ObjectChild]
-        """
-        yield ObjectChild(self, self.geometry)
-        yield from super().dependents
 
     def activate(self, value: bool, cascade: bool = False) -> None:
         """Activate or deactivate this instance for display in GEP.

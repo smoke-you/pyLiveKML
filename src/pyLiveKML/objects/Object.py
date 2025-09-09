@@ -417,12 +417,17 @@ class _BaseObject(ABC):
         """
         for c in self._kml_children:
             c_obj = getattr(self, c.name, None)
-            if c_obj is not None:
-                if isinstance(c_obj, Iterable):
-                    for cc in c_obj:
-                        yield ObjectChild(self, cc)
-                else:
+            if c_obj is None:
+                continue
+            elif isinstance(c_obj, _ListObject):
+                if c_obj._yield_self:
                     yield ObjectChild(self, c_obj)
+                else:
+                    yield from (ObjectChild(self, cc) for cc in c_obj)
+            elif isinstance(c_obj, Iterable):
+                yield from (ObjectChild(self, cc) for cc in c_obj)
+            else:
+                yield ObjectChild(self, c_obj)
 
     @property
     def dependents(self) -> Iterator["ObjectChild"]:
@@ -440,12 +445,17 @@ class _BaseObject(ABC):
         """
         for d in self._kml_dependents:
             d_obj = getattr(self, d.name, None)
-            if d_obj is not None:
-                if isinstance(d_obj, Iterable):
-                    for dd in d_obj:
-                        yield ObjectChild(self, dd)
-                else:
+            if d_obj is None:
+                continue
+            elif isinstance(d_obj, _ListObject):
+                if d_obj._yield_self:
                     yield ObjectChild(self, d_obj)
+                else:
+                    yield from (ObjectChild(self, dd) for dd in d_obj)
+            elif isinstance(d_obj, Iterable):
+                yield from (ObjectChild(self, dd) for dd in d_obj)
+            else:
+                yield ObjectChild(self, d_obj)
 
     @property
     def kml_tag(self) -> str:
@@ -484,11 +494,11 @@ class _BaseObject(ABC):
                 etree.SubElement(root, with_ns(f.typename)).text = value
         if with_dependents:
             for dd in self.dependents:
-                branch = dd.child.construct_kml()
+                branch = dd.child.construct_kml(with_children, with_dependents)
                 root.append(branch)
         if with_children:
             for dc in self.children:
-                branch = dc.child.construct_kml()
+                branch = dc.child.construct_kml(with_children, with_dependents)
                 root.append(branch)
 
     def construct_kml(
@@ -540,7 +550,7 @@ class _BaseObject(ABC):
         child_element = etree.SubElement(
             parent_element, with_ns(self.kml_tag), attrib=child_attribs
         )
-        self.build_kml(child_element, False)
+        self.build_kml(child_element, False, True)
         return child_element
 
     def change_kml(self, root: etree.Element) -> None:
@@ -596,11 +606,13 @@ class _BaseObject(ABC):
             self._state = ObjectState.CREATING if value else self._state
         # cascade Activate downwards for children
         if value:
+            for d in self.dependents:
+                d.child.activate(True, cascade)
             for c in self.children:
                 c.child.activate(True, cascade)
         else:
-            for c in self.dependents:
-                c.child.force_idle()
+            for d in self.dependents:
+                d.child.force_idle()
             for c in self.children:
                 c.child.force_idle()
 
@@ -625,6 +637,10 @@ class _BaseObject(ABC):
         """
         if self._state == ObjectState.CREATING:
             self._state = ObjectState.CREATED
+            # only cascade sync to dependents when the object has been created
+            # because dependents are created at the same time
+            for d in self.dependents:
+                d.child.synchronized()
         elif self._state == ObjectState.CHANGING:
             self._state = ObjectState.CREATED
         elif (
@@ -632,8 +648,6 @@ class _BaseObject(ABC):
             or self._state == ObjectState.DELETE_CHANGED
         ):
             self._state = ObjectState.IDLE
-        for d in self.dependents:
-            d.child.synchronized()
 
     def force_idle(self) -> None:
         """Force this `_BaseObject` and **all of its children** to the `IDLE` state.
@@ -712,6 +726,8 @@ class _ListObject(_BaseObject, list[_LOB], Generic[_LOB]):
     The point to this is to allow for detection and handling of changes to the contents
     of these lists.
     """
+
+    _yield_self: bool = False
 
     def clear(self) -> None:
         """Override superclass `clear()` to call `field_changed()."""

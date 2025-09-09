@@ -34,9 +34,15 @@ ground_point_style = Style(
     icon_style=IconStyle("http://maps.google.com/mapfiles/kml/paddle/red-diamond.png")
 )
 ground_linestr_style = Style(line_style=LineStyle(3, 0xFF20FF00))
-air_linestr_style = Style(line_style=LineStyle(5, 0xFF00FF20))
+air_linestr_style = Style(
+    line_style=LineStyle(5, 0xFF00FF20),
+    poly_style=PolyStyle(0x8000ff20, fill=True),
+)
 ground_linring_style = Style(line_style=LineStyle(10, 0xFFFF0000))
-air_linring_style = Style(line_style=LineStyle(5, 0xFF0000FF))
+air_linring_style = Style(
+    line_style=LineStyle(5, 0xFF0000FF),
+    poly_style=PolyStyle(0xff0000ff, fill=True),
+)
 no_cutout_poly_style = Style(
     line_style=LineStyle(1, 0xFF0000FF),  # red 1px border
     poly_style=PolyStyle(0x6000FF00, fill=True, outline=True),  # 38% green fill
@@ -141,7 +147,7 @@ linestr_folder = Folder(
             name="LineString @ 500m",
             description="A LineString located in the air, tessellated and extruded to ground, and yellowish in color.",
             snippet="",
-            style_url=f"#{ground_linestr_style.id}",
+            style_url=f"#{air_linestr_style.id}",
         ),
     ],
 )
