@@ -54,9 +54,34 @@ class Point(Geometry):
     ):
         """Point instance constructor."""
         Geometry.__init__(self)
-        if isinstance(coordinates, GeoCoordinates):
-            self.coordinates = coordinates
-        else:
-            self.coordinates = GeoCoordinates(*coordinates)
+        self._coordinates: GeoCoordinates
+        self.coordinates = coordinates
         self.extrude = extrude
         self.altitude_mode = altitude_mode
+
+    @property
+    def coordinates(self) -> GeoCoordinates:
+        """Get or set the current `coordinates` of the `Point`.
+
+        Parameters
+        ----------
+        value : GeoCoordinates | tuple[float, float, float] | tuple[float, float]
+            The new coordinates value, expressable as a 2- or 3-tuple of floats for
+            convenience.
+
+        Returns
+        -------
+        GeoCoordinates
+            The current `coordinates`, as a `GeoCoordinates` instance.
+
+        """
+        return self._coordinates
+
+    @coordinates.setter
+    def coordinates(
+        self, value: GeoCoordinates | tuple[float, float, float] | tuple[float, float]
+    ) -> None:
+        if isinstance(value, GeoCoordinates):
+            self._coordinates = value
+        else:
+            self._coordinates = GeoCoordinates(*value)

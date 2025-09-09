@@ -180,33 +180,44 @@ class NetworkLinkControl(_BaseObject):
         return root
 
     def _sync_child_objects(self, obj: _BaseObject) -> None:
+        update_generated: bool
         for d_obj in obj.dependents:
+            update_generated = False
             if d_obj.child.state == ObjectState.CREATING:
                 self.update.creates.append(d_obj)
+                update_generated = True
             elif d_obj.child.state == ObjectState.CHANGING:
                 self.update.changes.append(d_obj)
+                update_generated = True
             elif d_obj.child.state in (
                 ObjectState.DELETE_CHANGED,
                 ObjectState.DELETE_CREATED,
             ):
                 self.update.deletes.append(d_obj)
-            d_obj.child.synchronized()
+                update_generated = True
+            if update_generated:
+                d_obj.child.synchronized()
             if len(self.update) >= self.update_limit:
                 raise NetworkLinkControlUpdateLimited
             if isinstance(d_obj.child, _BaseObject):
                 self._sync_child_objects(d_obj.child)
 
         for c_obj in obj.children:
+            update_generated = False
             if c_obj.child.state == ObjectState.CREATING:
                 self.update.creates.append(c_obj)
+                update_generated = True
             elif c_obj.child.state == ObjectState.CHANGING:
                 self.update.changes.append(c_obj)
+                update_generated = True
             elif c_obj.child.state in (
                 ObjectState.DELETE_CHANGED,
                 ObjectState.DELETE_CREATED,
             ):
                 self.update.deletes.append(c_obj)
-            c_obj.child.synchronized()
+                update_generated = True
+            if update_generated:
+                c_obj.child.synchronized()
             if len(self.update) >= self.update_limit:
                 raise NetworkLinkControlUpdateLimited
             if isinstance(c_obj.child, _BaseObject):

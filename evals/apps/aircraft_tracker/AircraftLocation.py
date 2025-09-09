@@ -11,6 +11,7 @@ from pyLiveKML import (
     LabelStyle,
     LineStyle,
     LookAt,
+    MultiGeometry,
     Point,
     Style,
     Placemark,
@@ -32,6 +33,11 @@ class AircraftLocation(Placemark):
             coordinates=positions[0].coordinates,
             altitude_mode=positions[0].altitude_mode,
             extrude=True,
+        )
+        g_point = Point(
+            coordinates=(*positions[0].coordinates.values[:2], 0),
+            altitude_mode=AltitudeModeEnum.CLAMP_TO_GROUND,
+            extrude=False,
         )
         style = Style(
             balloon_style=BalloonStyle(bg_color=0x20FF4000),
@@ -61,7 +67,12 @@ class AircraftLocation(Placemark):
         camera.alt += 40000
         Placemark.__init__(
             self,
-            geometry=point,
+            geometry=MultiGeometry(
+                (
+                    point,
+                    g_point,
+                )
+            ),
             name=flight,
             description="",
             snippet="",
@@ -70,6 +81,7 @@ class AircraftLocation(Placemark):
             abstract_view=lookat,
         )
         self._point = point
+        self._g_point = g_point
         self._style = style
         self._lookat = lookat
         self._camera = camera
@@ -105,20 +117,14 @@ class AircraftLocation(Placemark):
     # This method is overridden so that the instance is always ready to provide a Change tag
     def synchronized(self) -> None:
         """Record that a KML update has been emitted."""
-        if self._state == ObjectState.CREATING or self._state == ObjectState.CHANGING:
-            """Note transition to CHANGING rather than CREATED"""
-            self._state = ObjectState.CHANGING
-        elif (
-            self._state == ObjectState.DELETE_CREATED
-            or self._state == ObjectState.DELETE_CHANGED
-        ):
-            self._state = ObjectState.IDLE
+        super().synchronized()
         self._pid += 1
         if self._pid >= len(self._positions):
             self._pid = 0
         pos = self._positions[self._pid]
         self._point.coordinates = pos.coordinates
         self._point.altitude_mode = pos.altitude_mode
+        self._g_point.coordinates = (*pos.coordinates.values[:2], 0)
         self.description = self._build_description()
         cast(IconStyle, self._style.icon_style).heading = pos.heading
         self._lookat.lla = pos.coordinates

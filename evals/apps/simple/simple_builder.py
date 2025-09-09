@@ -36,12 +36,12 @@ ground_point_style = Style(
 ground_linestr_style = Style(line_style=LineStyle(3, 0xFF20FF00))
 air_linestr_style = Style(
     line_style=LineStyle(5, 0xFF00FF20),
-    poly_style=PolyStyle(0x8000ff20, fill=True),
+    poly_style=PolyStyle(0x8000FF20, fill=True),
 )
 ground_linring_style = Style(line_style=LineStyle(10, 0xFFFF0000))
 air_linring_style = Style(
     line_style=LineStyle(5, 0xFF0000FF),
-    poly_style=PolyStyle(0xff0000ff, fill=True),
+    poly_style=PolyStyle(0xFF0000FF, fill=True),
 )
 no_cutout_poly_style = Style(
     line_style=LineStyle(1, 0xFF0000FF),  # red 1px border

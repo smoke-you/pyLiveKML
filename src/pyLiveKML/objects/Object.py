@@ -637,10 +637,10 @@ class _BaseObject(ABC):
         """
         if self._state == ObjectState.CREATING:
             self._state = ObjectState.CREATED
-            # only cascade sync to dependents when the object has been created
-            # because dependents are created at the same time
+            # force-cascade CREATED to dependents when the parent has been created,
+            # because dependents are always created at the same time
             for d in self.dependents:
-                d.child.synchronized()
+                d.child.force_created()
         elif self._state == ObjectState.CHANGING:
             self._state = ObjectState.CREATED
         elif (
@@ -649,8 +649,18 @@ class _BaseObject(ABC):
         ):
             self._state = ObjectState.IDLE
 
+    def force_created(self) -> None:
+        """Force this `_BaseObject` and **all of its dependents** to the `CREATED` state.
+
+        This is typically done after the parent object has been synchronized, i.e.
+        created.
+        """
+        self._state = ObjectState.CREATED
+        for d in self.dependents:
+            d.child.force_created()
+
     def force_idle(self) -> None:
-        """Force this `_BaseObject` and **all of its children** to the `IDLE` state.
+        """Force this `_BaseObject` and **all of its children AND dependents** to the `IDLE` state.
 
         This is typically done after the object has been deactivated, which will cause
         it to be deleted from GEP at the next synchronization update. When the

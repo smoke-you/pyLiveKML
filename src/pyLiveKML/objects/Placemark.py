@@ -112,9 +112,7 @@ class Placemark(Feature):
     """
 
     _kml_tag = "Placemark"
-    _kml_dependents = Feature._kml_dependents + (
-        _DependentDef("geometry"),
-    )
+    _kml_dependents = Feature._kml_dependents + (_DependentDef("geometry"),)
 
     def __init__(
         self,
