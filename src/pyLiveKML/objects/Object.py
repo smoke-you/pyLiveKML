@@ -1,10 +1,12 @@
 """Object module."""
 
 from abc import ABC, abstractmethod
+from datetime import datetime
 from enum import Enum
 from typing import Any, Generic, Iterable, Iterator, Type, TypeVar
 from uuid import uuid4, UUID
 
+from dateutil.parser import parse as dtparse
 from lxml import etree  # type: ignore
 
 from pyLiveKML.types.GeoColor import GeoColor
@@ -46,6 +48,8 @@ class DumpDirect(_KMLDump):
             return str(value.value)
         if isinstance(value, bool):
             return str(int(value))
+        if isinstance(value, datetime):
+            return value.isoformat()
         return str(value)
 
 
@@ -170,6 +174,17 @@ class ColorParse(_KMLParser):
         """Transform the argument."""
         if isinstance(value, int):
             return GeoColor(value)
+        return value
+
+
+class DateTimeParse(_KMLParser):
+    """Ensures that the output is a `datetime`, or `None`."""
+
+    @classmethod
+    def parse(cls, value: Any) -> Any:
+        """Transform the argument."""
+        if isinstance(value, str):
+            return dtparse(value)
         return value
 
 
@@ -459,7 +474,7 @@ class _BaseObject(ABC):
 
     @property
     def kml_tag(self) -> str:
-        """The class' KML type string.
+        """The instance's KML tag string.
 
         Property that specifies the name of the XML tag that forms the root of
         the KML representation of this `_BaseObject`.
@@ -490,7 +505,7 @@ class _BaseObject(ABC):
         """
         for f in (f for f in self._kml_fields if f.dumper != NoDump):
             value = f.dumper.dump(getattr(self, f.name))
-            if value:
+            if value is not None:
                 etree.SubElement(root, with_ns(f.typename)).text = value
         if with_dependents:
             for dd in self.dependents:
@@ -520,7 +535,16 @@ class _BaseObject(ABC):
             The KML representation of the `_BaseObject` as an `etree.Element`.
 
         """
-        attribs = None if self._suppress_id else {"id": str(self.id)}
+        # if the object is *not* in the "kml" namespace, ensure that the `id` that is
+        # assigned *is* in the "kml" namespace, or GEP is likely to crash.
+        attribs: dict[str, str] | None = None
+        if not self._suppress_id:
+            attribs = {}
+            if ":" in self._kml_tag:
+                attribs[with_ns("kml:id")] = str(self.id)
+            else:
+                attribs["id"] = str(self.id)
+
         root = etree.Element(_tag=with_ns(self.kml_tag), attrib=attribs)
         self.build_kml(root, with_children, with_dependents)
         return root
@@ -542,11 +566,25 @@ class _BaseObject(ABC):
             The newly constructed child tag.
 
         """
+        # if the parent is *not* in the "kml" namespace, ensure that the `targetId` that
+        # is assigned *is* in the "kml" namespace, or GEP is likely to crash.
+        parent_attribs = {}
+        if ":" in parent._kml_tag:
+            parent_attribs[with_ns("kml:targetId")] = str(parent.id)
+        else:
+            parent_attribs["targetId"] = str(parent.id)
         parent_element = etree.SubElement(
-            root, with_ns(parent.kml_tag), attrib={"targetId": str(parent.id)}
+            root, with_ns(parent.kml_tag), attrib=parent_attribs
         )
-
-        child_attribs = None if self._suppress_id else {"id": str(self.id)}
+        # if the child is *not* in the "kml" namespace, ensure that the `id` that is
+        # assigned *is* in the "kml" namespace, or GEP is likely to crash.
+        child_attribs: dict[str, str] | None = None
+        if not self._suppress_id:
+            child_attribs = {}
+            if ":" in self._kml_tag:
+                child_attribs[with_ns("kml:id")] = str(self.id)
+            else:
+                child_attribs["id"] = str(self.id)
         child_element = etree.SubElement(
             parent_element, with_ns(self.kml_tag), attrib=child_attribs
         )
@@ -562,9 +600,16 @@ class _BaseObject(ABC):
             The etree.Element of the `<Update>` tag that will be appended to.
 
         """
-        item = etree.SubElement(
-            root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)}
-        )
+        # if the target is *not* in the "kml" namespace, ensure that the `targetId` that
+        # is assigned *is* in the "kml" namespace, or GEP is likely to crash.
+        attribs: dict[str, str] | None = None
+        if not self._suppress_id:
+            attribs = {}
+            if ":" in self._kml_tag:
+                attribs[with_ns("kml:targetId")] = str(self.id)
+            else:
+                attribs["targetId"] = str(self.id)
+        item = etree.SubElement(root, _tag=with_ns(self.kml_tag), attrib=attribs)
         self.build_kml(item, with_children=False, with_dependents=False)
 
     def delete_kml(self, root: etree.Element) -> None:
@@ -576,9 +621,16 @@ class _BaseObject(ABC):
             The etree.Element of the `<Update>` tag that will be appended to.
 
         """
-        etree.SubElement(
-            root, _tag=with_ns(self.kml_tag), attrib={"targetId": str(self.id)}
-        )
+        # if the target is *not* in the "kml" namespace, ensure that the `targetId` that
+        # is assigned *is* in the "kml" namespace, or GEP is likely to crash.
+        attribs: dict[str, str] | None = None
+        if not self._suppress_id:
+            attribs = {}
+            if ":" in self._kml_tag:
+                attribs[with_ns("kml:targetId")] = str(self.id)
+            else:
+                attribs["targetId"] = str(self.id)
+        etree.SubElement(root, _tag=with_ns(self.kml_tag), attrib=attribs)
 
     def activate(self, value: bool, cascade: bool = False) -> None:
         """Activate or deactivate this `_BaseObject` for display in GEP.

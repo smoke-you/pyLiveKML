@@ -2,10 +2,9 @@
 
 from datetime import datetime
 
-from dateutil.parser import parse as dtparser
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _FieldDef
+from pyLiveKML.objects.Object import _FieldDef, DateTimeParse
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 
 
@@ -36,8 +35,8 @@ class TimeSpan(TimePrimitive):
 
     _kml_tag = "TimeSpan"
     _kml_fields = TimePrimitive._kml_fields + (
-        _FieldDef("begin"),
-        _FieldDef("end"),
+        _FieldDef("begin", parser=DateTimeParse),
+        _FieldDef("end", parser=DateTimeParse),
     )
 
     def __init__(
@@ -47,27 +46,5 @@ class TimeSpan(TimePrimitive):
     ):
         """TimeSpan instance constructor."""
         TimePrimitive.__init__(self)
-        self.begin: datetime | None
-        self.end: datetime | None
-        if isinstance(begin, str):
-            self.begin = dtparser(begin)
-        else:
-            self.begin = begin
-        if isinstance(end, str):
-            self.end = dtparser(end)
-        else:
-            self.end = end
-
-
-class GxTimeSpan(TimeSpan):
-    """Version of `TimeSpan` under the `gx` namespace.
-
-    Available for use by `AbstractView` subclasses.
-
-    References
-    ----------
-    * https://developers.google.com/kml/documentation/kmlreference#gx:timespan-and-gx:timestamp
-
-    """
-
-    _kml_tag = "gx:TimeSpan"
+        self.begin = begin
+        self.end = end

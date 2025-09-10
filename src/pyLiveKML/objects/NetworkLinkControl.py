@@ -104,7 +104,6 @@ class NetworkLinkControl(_BaseObject):
         _FieldDef("message"),
         _FieldDef("link_name", "linkName"),
         _FieldDef("link_description", "linkDescription"),
-        _FieldDef("link_snippet", "linkSnippet"),
         _FieldDef("link_expires", "linkExpires"),
     )
     _kml_dependents = _BaseObject._kml_dependents + (
@@ -173,11 +172,11 @@ class NetworkLinkControl(_BaseObject):
 
         """
         root = etree.Element(self.kml_tag)
+        self.build_kml(root, with_children, with_dependents)
         try:
             self._sync_child_objects(self.container)
         except NetworkLinkControlUpdateLimited:
             pass
-        super().build_kml(root, with_children, with_dependents)
         return root
 
     def _sync_child_objects(self, obj: _BaseObject) -> None:
@@ -260,4 +259,4 @@ class NetworkLinkControl(_BaseObject):
             attribs = {}
             if self.link_snippet_max_lines is not None:
                 attribs["maxLines"] = str(self.link_snippet_max_lines)
-            etree.SubElement(root, "Snippet", attribs).text = self.link_snippet
+            etree.SubElement(root, "linkSnippet", attribs).text = self.link_snippet

@@ -15,6 +15,7 @@ from pyLiveKML import (
     Point,
     Style,
     Placemark,
+    TimeSpan,
 )
 from pyLiveKML.objects.Object import ObjectState
 
@@ -55,6 +56,7 @@ class AircraftLocation(Placemark):
             tilt=64,
             range=40000,
             altitude_mode=AltitudeModeEnum.ABSOLUTE,
+            time_primitive=TimeSpan(positions[0].timestamp, positions[-1].timestamp)
         )
         # the example camera just looks straight down, to avoid having to recalcuate the
         # camera position each update

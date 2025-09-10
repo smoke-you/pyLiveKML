@@ -61,8 +61,8 @@ from pyLiveKML.objects.ScreenOverlay import ScreenOverlay
 from pyLiveKML.objects.SoundCue import SoundCue
 from pyLiveKML.objects.Style import Style
 from pyLiveKML.objects.StyleMap import StyleMap
-from pyLiveKML.objects.TimeSpan import TimeSpan, TimeSpan
-from pyLiveKML.objects.TimeStamp import TimeStamp, GxTimeStamp
+from pyLiveKML.objects.TimeSpan import TimeSpan
+from pyLiveKML.objects.TimeStamp import TimeStamp
 from pyLiveKML.objects.Tour import Tour, Playlist
 from pyLiveKML.objects.TourControl import TourControl
 from pyLiveKML.objects.Track import Track, TrackAngles, TrackCoord, TrackElement
@@ -88,7 +88,6 @@ __all__ = [
     "GeoColor",
     "GeoCoordinates",
     "GroundOverlay",
-    "GxTimeStamp",
     "HotSpot",
     "Icon",
     "IconStyle",

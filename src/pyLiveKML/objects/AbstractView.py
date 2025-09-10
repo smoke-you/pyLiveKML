@@ -1,11 +1,11 @@
 """AbstractView module."""
 
 from abc import ABC
-from typing import Iterable
+from typing import Any, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _BaseObject, _DependentDef, Object
+from pyLiveKML.objects.Object import _BaseObject, _ChildDef, Object
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 from pyLiveKML.types import ViewerOptionEnum
 from pyLiveKML.utils import with_ns
@@ -77,7 +77,7 @@ class AbstractView(Object, ABC):
 
     """
 
-    _kml_dependents = Object._kml_dependents + (_DependentDef("time_primitive"),)
+    _kml_children = Object._kml_children + (_ChildDef("time_primitive"),)
 
     def __init__(
         self,
@@ -107,3 +107,13 @@ class AbstractView(Object, ABC):
             opts = etree.SubElement(root, with_ns("gx:ViewerOptions"))
             for v in self._viewer_options:
                 v.build_kml(opts)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        """Manipulate attribute assignments.
+
+        Ensures that if a time primitive is assigned to an `AbstractView`, it's
+        `_kml_tag` is prefixed with the "gx:" namespace.
+        """
+        if name == "time_primitive" and isinstance(value, TimePrimitive):
+            value._kml_tag = f"gx:{type(value)._kml_tag}"
+        return super().__setattr__(name, value)
