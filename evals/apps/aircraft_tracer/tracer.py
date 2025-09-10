@@ -107,7 +107,12 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
     else:
         select_list = select
     for s in select_list:
-        for f in tracer.sync:
-            if s.id == f.id:
-                f.activate(s.checked, True)
-                break
+        target = next(filter(lambda x: x.id == s.id, tracer.data), None)
+        if target is None:
+            continue
+        if target in tracer.sync and not s.checked:
+            tracer.sync.remove(target)
+            target.force_idle()
+        elif target not in tracer.sync and s.checked:
+            tracer.sync.append(target)
+            target.activate(True, True)

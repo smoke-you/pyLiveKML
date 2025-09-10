@@ -5,7 +5,7 @@ import inspect
 
 from operator import attrgetter
 from pathlib import Path
-from typing import Optional
+from typing import Iterable, Iterator
 
 from fastapi import FastAPI
 from pydantic import BaseModel, UUID4
@@ -52,21 +52,23 @@ class KMLApp:
         self.description = description.strip().replace("\r", "").split("\n")
         self.path = path
         self.app = app
+        self._data = list[Feature]()
         self.data = data
         self.sync: Container
 
-    def load_data(self) -> None:
-        """Associate the app's data with the KML synchronization controller."""
-        if self.sync is None:
-            return
-        if self.data is not None:
-            if isinstance(self.data, Feature):
-                if self.data.id not in map(lambda x: x.id, self.sync):
-                    self.sync.append(self.data)
+    @property
+    def data(self) -> Iterator[Feature]:
+        """Generator over display data."""
+        yield from self._data
+
+    @data.setter
+    def data(self, value: Feature | Iterable[Feature] | None) -> None:
+        self._data.clear()
+        if value is not None:
+            if isinstance(value, Feature):
+                self._data.append(value)
             else:
-                for d in self.data:
-                    if d.id not in map(lambda x: x.id, self.sync):
-                        self.sync.append(d)
+                self._data.extend(value)
 
 
 def find_apps(basedir: Path) -> list[KMLApp]:

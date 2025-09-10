@@ -61,7 +61,7 @@ class AircraftLocation(Placemark):
             time_primitive=TimeSpan(positions[0].timestamp, positions[-1].timestamp),
             viewer_options=[
                 ViewerOption(ViewerOptionEnum.HISTORICAL_IMAGERY, False),
-                ViewerOption(ViewerOptionEnum.STREETVIEW, True),
+                ViewerOption(ViewerOptionEnum.STREETVIEW, False),
                 ViewerOption(ViewerOptionEnum.SUNLIGHT, False),
             ],
         )

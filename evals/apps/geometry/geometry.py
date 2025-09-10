@@ -119,10 +119,15 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
     else:
         select_list = select
     for s in select_list:
-        for f in geometry.sync:
-            if s.id == f.id:
-                f.activate(s.checked, True)
-                break
+        target = next(filter(lambda x: x.id == s.id, geometry.data), None)
+        if target is None:
+            continue
+        if target in geometry.sync and not s.checked:
+            geometry.sync.remove(target)
+            target.force_idle()
+        elif target not in geometry.sync and s.checked:
+            geometry.sync.append(target)
+            target.activate(True, True)
 
 
 class OriginControlRequest(BaseModel):

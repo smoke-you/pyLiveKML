@@ -114,7 +114,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     # set the gep_sync NetworkLinkControl for all of the apps, and fire it up
     for x in applist:
         x.sync = gep_elements
-        x.load_data()
     yield
     # post-yield: server shutdown
 
