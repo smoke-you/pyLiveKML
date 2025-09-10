@@ -13,7 +13,7 @@ from pyLiveKML.objects.Object import (
     Angle360,
 )
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
-from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
+from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates, ViewerOptionEnum
 
 
 class Camera(AbstractView):
@@ -66,14 +66,12 @@ class Camera(AbstractView):
     viewer_options : ViewerOption | Iterable[ViewerOption] | None, default = None
         Enable or disable one or more Google Earth view modes.
     time_primitive : TimePrimitive | None, default = None
-        Timestamp or timespan assigned to the object.
+        `TimeStamp` or `TimeSpan` assigned to the object.
 
     Attributes
     ----------
     viewer_options : list[ViewerOption]
-        Enable or disable one or more Google Earth view modes.
     time_primitive : TimePrimitive | None
-        Timestamp or timespan assigned to the object.
     lon : float
         The longitude of the camera position, in decimal degrees.
     lat : float

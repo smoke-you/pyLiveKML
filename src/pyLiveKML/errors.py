@@ -1,5 +1,7 @@
 """Definitions of exceptions and/or errors."""
 
+from typing import Iterable
+
 ##########################
 #
 # pyLiveKML base error class
@@ -9,6 +11,36 @@
 
 class KMLError(Exception):
     """Wrapper class for all pyLiveKML errors."""
+
+
+##########################
+#
+# AbstractView errors
+#
+##########################
+
+
+class AbstractViewError(KMLError):
+    """Wrapper class for errors with :class:`pyLiveKML.objects.Feature` classes and subclasses."""
+
+    pass
+
+
+class ViewerOptionInvalidError(AbstractViewError):
+    """Indicates that one or more viewer options are not available for use by an `AbstractView` subclass."""
+
+    def __init__(self, options: str | Iterable[str]):
+        """ViewerOptionInvalidError instance constructor."""
+        conc_options: list[str] = []
+        if isinstance(options, str):
+            conc_options.append(f"'{options}'")
+        else:
+            conc_options.extend((f"'{opt}'" for opt in options))
+        if len(conc_options) == 1:
+            msg = f"Viewer option {conc_options[0]} is not permitted for this `AbstractView` subclass."
+        else:
+            msg = f"Viewer options {', '.join(conc_options)} are not permitted for this `AbstractView` subclass."
+        super().__init__(msg)
 
 
 ##########################

@@ -16,8 +16,10 @@ from pyLiveKML import (
     Style,
     Placemark,
     TimeSpan,
+    ViewerOption,
+    ViewerOptionEnum,
 )
-from pyLiveKML.objects.Object import ObjectState
+from pyLiveKML.objects.Object import _BaseObject, ObjectState
 
 from .AircraftData import AircraftData
 from ..helpers import description_builder
@@ -56,7 +58,12 @@ class AircraftLocation(Placemark):
             tilt=64,
             range=40000,
             altitude_mode=AltitudeModeEnum.ABSOLUTE,
-            time_primitive=TimeSpan(positions[0].timestamp, positions[-1].timestamp)
+            time_primitive=TimeSpan(positions[0].timestamp, positions[-1].timestamp),
+            viewer_options=[
+                ViewerOption(ViewerOptionEnum.HISTORICAL_IMAGERY, False),
+                ViewerOption(ViewerOptionEnum.STREETVIEW, True),
+                ViewerOption(ViewerOptionEnum.SUNLIGHT, False),
+            ],
         )
         # the example camera just looks straight down, to avoid having to recalcuate the
         # camera position each update
@@ -91,7 +98,17 @@ class AircraftLocation(Placemark):
         self._transponder = transponder
         self._flight = flight
         self._pid = -1
-        self._state: ObjectState
+
+    def activate(self, value: bool, cascade: bool = False) -> None:
+        """Overridden to calculate the first position for display."""
+        if value:
+            self._next_position()
+        super().activate(value, cascade)
+
+    def synchronized(self) -> None:
+        """Overridden to calculate the next position for display."""
+        super().synchronized()
+        self._next_position()
 
     def _build_description(self) -> Optional[str]:
         try:
@@ -116,10 +133,7 @@ class AircraftLocation(Placemark):
         except Exception:
             return None
 
-    # This method is overridden so that the instance is always ready to provide a Change tag
-    def synchronized(self) -> None:
-        """Record that a KML update has been emitted."""
-        super().synchronized()
+    def _next_position(self) -> None:
         self._pid += 1
         if self._pid >= len(self._positions):
             self._pid = 0

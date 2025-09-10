@@ -93,7 +93,6 @@ class NetworkLinkControl(_BaseObject):
     update : Update
         An embedded `Update` instance that is used for synchronization.
 
-
     """
 
     _kml_tag = "NetworkLinkControl"
@@ -146,6 +145,24 @@ class NetworkLinkControl(_BaseObject):
         self.abstract_view = abstract_view
         self.update = Update(target_href)
 
+    def build_kml(
+        self,
+        root: etree.Element,
+        with_children: bool = True,
+        with_dependents: bool = True,
+    ) -> None:
+        """Build the KML sub-tags for this `NetworkLinkControl` and append it to the provided `etree.Element`.
+
+        Overridden from :class:`pyLiveKML.objects.Object.Object` to perform some
+        additional build steps.
+        """
+        super().build_kml(root, with_children, with_dependents)
+        if self.link_snippet is not None:
+            attribs = {}
+            if self.link_snippet_max_lines is not None:
+                attribs["maxLines"] = str(self.link_snippet_max_lines)
+            etree.SubElement(root, "linkSnippet", attribs).text = self.link_snippet
+
     def construct_sync(
         self,
         with_children: bool = True,
@@ -158,6 +175,12 @@ class NetworkLinkControl(_BaseObject):
         Walks the tree under `container`, looking at each object's state, and create,
         update or delete it as necessary.
 
+        Notes
+        -----
+        * The `with_children` and `with_dependents` parameters apply only to the
+        `NetworkLinkControl` itself, not to the synchronization update that it
+        constructs.
+
         Parameters
         ----------
         with_children : bool, default = True
@@ -167,16 +190,19 @@ class NetworkLinkControl(_BaseObject):
             Whether the `dependents` of the `NetworkLinkControl`, or any child or
             dependent objects, should be constructed as sub-tags.
 
-        :returns: A `<NetworkLinkControl>` tag, including the synchronization update.
-        :rtype: `etree.Element`
+        Returns
+        -------
+        etree.Element
+            A `<NetworkLinkControl>` KML tag, including the synchronization `<Update>`
+            tag.
 
         """
         root = etree.Element(self.kml_tag)
-        self.build_kml(root, with_children, with_dependents)
         try:
             self._sync_child_objects(self.container)
         except NetworkLinkControlUpdateLimited:
             pass
+        self.build_kml(root, with_children, with_dependents)
         return root
 
     def _sync_child_objects(self, obj: _BaseObject) -> None:
@@ -230,33 +256,3 @@ class NetworkLinkControl(_BaseObject):
             ]
             self.update.deletes.extend(deletes)
             obj._deleted = obj._deleted[len(deletes) :]
-
-    def build_kml(
-        self,
-        root: etree.Element,
-        with_children: bool = True,
-        with_dependents: bool = True,
-    ) -> None:
-        """Build the KML sub-tags for this `NetworkLinkControl` and append it to the provided `etree.Element`.
-
-        Overridden from :class:`pyLiveKML.objects.Object.Object` to perform some
-        additional build steps.
-
-        Parameters
-        ----------
-        root : etree.Element
-            The tag into which the sub-tags are to be inserted.
-        with_children : bool, default = True
-            Whether the `children` of the `NetworkLinkControl`, or any child or
-            dependents objects, should be constructed as sub-tags.
-        with_dependents : bool, default = True
-            Whether the `dependents` of the `NetworkLinkControl`, or any child or
-            dependent objects, should be constructed as sub-tags.
-
-        """
-        super().build_kml(root, with_children, with_dependents)
-        if self.link_snippet is not None:
-            attribs = {}
-            if self.link_snippet_max_lines is not None:
-                attribs["maxLines"] = str(self.link_snippet_max_lines)
-            etree.SubElement(root, "linkSnippet", attribs).text = self.link_snippet

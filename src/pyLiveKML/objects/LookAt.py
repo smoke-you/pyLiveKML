@@ -14,7 +14,7 @@ from pyLiveKML.objects.Object import (
     NoParse,
 )
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
-from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
+from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates, ViewerOptionEnum
 
 
 class LookAt(AbstractView):
@@ -56,14 +56,12 @@ class LookAt(AbstractView):
     viewer_options : ViewerOption | Iterable[ViewerOption] | None, default = None
         Enable or disable one or more Google Earth view modes.
     time_primitive : TimePrimitive | None, default = None
-        Timestamp or timespan assigned to the object.
+        `TimeStamp` or `TimeSpan` assigned to the object.
 
     Attributes
     ----------
     viewer_options : list[ViewerOption]
-        Enable or disable one or more Google Earth view modes.
     time_primitive : TimePrimitive | None
-        Timestamp or timespan assigned to the object.
     lla : tuple[float, float, float]
         The longitude, latitude (respectively, in decimal degrees) and altitude (in
         metres) of the `LookAt` target.
@@ -87,6 +85,8 @@ class LookAt(AbstractView):
     ValueError
         If `lla` is None, and either `lat` or `lon` is also `None`, a `ValueError` will
         be raised by the constructor.
+    ViewerOptionInvalidError
+        If the `GROUND_NAVIGATION` viewer option is assigned.
 
     """
 
@@ -99,6 +99,9 @@ class LookAt(AbstractView):
         _FieldDef("tilt", parser=AnglePos90),
         _FieldDef("range", parser=NoParse),
         _FieldDef("altitude_mode", "gx:altitudeMode"),
+    )
+    _disallowed_view_options = AbstractView._disallowed_view_options + (
+        ViewerOptionEnum.GROUND_NAVIGATION,
     )
 
     def __init__(
