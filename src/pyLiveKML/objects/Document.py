@@ -4,7 +4,6 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.Container import Container
 from pyLiveKML.objects.ExtendedData import ExtendedData

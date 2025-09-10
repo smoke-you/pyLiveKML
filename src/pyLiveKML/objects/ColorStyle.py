@@ -2,9 +2,9 @@
 
 from abc import ABC
 
-from pyLiveKML.types import ColorModeEnum, GeoColor
 from pyLiveKML.objects.Object import _FieldDef, ColorParse
 from pyLiveKML.objects.SubStyle import SubStyle
+from pyLiveKML.types import ColorModeEnum, GeoColor
 
 
 class ColorStyle(SubStyle, ABC):

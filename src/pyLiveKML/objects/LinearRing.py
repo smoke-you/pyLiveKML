@@ -5,8 +5,8 @@ from typing import Any, Iterable, Iterator, cast
 from lxml import etree  # type: ignore
 
 from pyLiveKML.errors import LinearRingCoordsError
-from pyLiveKML.objects.Object import _FieldDef, _KMLDump, _KMLParser
 from pyLiveKML.objects.Geometry import Geometry
+from pyLiveKML.objects.Object import _FieldDef, _KMLDump, _KMLParser
 from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
 
 

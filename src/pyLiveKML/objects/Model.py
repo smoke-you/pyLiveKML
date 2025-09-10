@@ -4,7 +4,8 @@ from typing import Iterator, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import AltitudeModeEnum
+from pyLiveKML.objects.Geometry import Geometry
+from pyLiveKML.objects.Link import Link
 from pyLiveKML.objects.Object import (
     _BaseObject,
     _ChildDef,
@@ -16,8 +17,7 @@ from pyLiveKML.objects.Object import (
     Angle360,
     Object,
 )
-from pyLiveKML.objects.Link import Link
-from pyLiveKML.objects.Geometry import Geometry
+from pyLiveKML.types import AltitudeModeEnum
 
 
 class Location(_BaseObject):

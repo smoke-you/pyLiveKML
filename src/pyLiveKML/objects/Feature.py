@@ -5,16 +5,15 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
+from pyLiveKML.objects.AbstractView import AbstractView
+from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Object import (
     _ChildDef,
     _DependentDef,
     _FieldDef,
-    Object,
     NoDump,
-    ObjectChild,
+    Object,
 )
-from pyLiveKML.objects.AbstractView import AbstractView
-from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive

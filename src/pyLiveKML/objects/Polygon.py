@@ -4,10 +4,10 @@ from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import AltitudeModeEnum
-from pyLiveKML.objects.Object import _FieldDef, _DependentDef, Object, ObjectState
 from pyLiveKML.objects.Geometry import Geometry
 from pyLiveKML.objects.LinearRing import LinearRing
+from pyLiveKML.objects.Object import _FieldDef, _DependentDef, Object, ObjectState
+from pyLiveKML.types import AltitudeModeEnum
 
 
 class _OuterBoundary(Object):

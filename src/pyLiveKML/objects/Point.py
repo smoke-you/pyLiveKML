@@ -2,9 +2,9 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
-from pyLiveKML.objects.Object import _FieldDef
 from pyLiveKML.objects.Geometry import Geometry
+from pyLiveKML.objects.Object import _FieldDef
+from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
 
 
 class Point(Geometry):

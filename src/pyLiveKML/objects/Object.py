@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Any, Generic, Iterable, Iterator, NamedTuple, Type, TypeVar, cast
+from typing import Any, Generic, Iterable, Iterator, Type, TypeVar
 from uuid import uuid4, UUID
 
 from lxml import etree  # type: ignore

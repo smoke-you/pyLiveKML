@@ -1,7 +1,6 @@
 from pyLiveKML.types.GeoColor import GeoColor
 from pyLiveKML.types.GeoCoordinates import GeoCoordinates
 from pyLiveKML.types.Vec2 import HotSpot, OverlayXY, ScreenXY, RotationXY, Size
-from pyLiveKML.types.ViewerOption import ViewerOption
 from pyLiveKML.types.types import (
     AltitudeModeEnum,
     ColorModeEnum,
@@ -41,6 +40,5 @@ __all__ = [
     "StyleStateEnum",
     "UnitsEnum",
     "ViewRefreshModeEnum",
-    "ViewerOption",
     "ViewerOptionEnum",
 ]

@@ -1,12 +1,13 @@
 """Track module."""
 
 from datetime import datetime
-from typing import Iterator, Iterable, Any
+from typing import Any, Iterator, Iterable
 
 from dateutil.parser import parse as dtparse
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import AltitudeModeEnum
+from pyLiveKML.objects.Geometry import Geometry
+from pyLiveKML.objects.Model import Model
 from pyLiveKML.objects.Object import (
     _ChildDef,
     _FieldDef,
@@ -15,9 +16,8 @@ from pyLiveKML.objects.Object import (
     Angle90,
     AnglePos180,
 )
+from pyLiveKML.types import AltitudeModeEnum
 from pyLiveKML.utils import with_ns
-from pyLiveKML.objects.Geometry import Geometry
-from pyLiveKML.objects.Model import Model
 
 
 class TrackCoord:

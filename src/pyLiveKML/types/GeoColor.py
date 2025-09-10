@@ -16,19 +16,22 @@ class GeoColor:
 
     Parameters
     ----------
-    value : int | None, default = None
-        The integral (32-bit) numeric value of the color.
-    abgr : tuple[int, int, int, int] | None, default = None
-        The color as a 4-tuple of integers, in ABGR order.
+    value : int | tuple[int, int, int, int] | None, default = None
+        The integral (32-bit) numeric value of the color, or a 4-tuple of integers in
+        ABGR order.
     rgba : tuple[int, int, int, int] | None, default = None
-        The color as a 4-tuple of integers, in RGBA order.
+        The color as a 4-tuple of integers, in RGBA order, i.e. reversed from `value`.
+
+    Raises
+    ------
+    ValueError
+        If all of the parameters are `None`.
 
     """
 
     def __init__(
         self,
-        value: int | None = None,
-        abgr: tuple[int, int, int, int] | None = None,
+        value: int | tuple[int, int, int, int] | None = None,
         rgba: tuple[int, int, int, int] | None = None,
     ):
         """GeoColor instance constructor."""
@@ -37,9 +40,10 @@ class GeoColor:
         self._b: int = 0
         self._a: int = 0
         if value is not None:
-            self.value = value
-        elif abgr is not None:
-            self.a, self.b, self.g, self.r = abgr
+            if isinstance(value, int):
+                self.value = value
+            else:
+                self.a, self.b, self.g, self.r = value
         elif rgba is not None:
             self.r, self.g, self.b, self.a = rgba
         else:
@@ -132,7 +136,7 @@ class GeoColor:
 
     def __str__(self) -> str:
         """Return a string representation."""
-        return f"{self._a:02x}{self._b:02x}{self._g:02x}{self._r:02x}"
+        return f"{self.value:08x}"
 
     def __eq__(self, other: object) -> bool:
         """Check equality."""

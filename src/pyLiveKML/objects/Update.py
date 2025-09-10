@@ -47,13 +47,14 @@ class _UpdateSequence(_BaseObject, list[UpdateSequent]):
     """A sequence of create, change and delete operations to be executed.
 
     This sequence will be executed in the order in which it is stored. The primary
-    purpose, compared to the :class:`pyLiveKML.objects.Update._UpdateList` subclasses,
-    below, is to allow a completely arbitrary sub-tag order for `<Update>` tags. This is
-    relevant to :class:`pyLiveKML.objects.AnimatedUpdate`.
+    purpose, compared to the `_UpdateList` subclasses, is to allow a completely arbitrary
+    sub-tag order for `<Update>` tags. This is particularly relevant to `AnimatedUpdate`,
+    but may be helpful for some other use-cases.
 
     References
     ----------
     * https://developers.google.com/kml/documentation/kmlreference#update
+    * https://developers.google.com/kml/documentation/kmlreference#gxanimatedupdate
     * https://developers.google.com/kml/documentation/kmlreference#example-of-create
     * https://developers.google.com/kml/documentation/kmlreference#example-of-change
     * https://developers.google.com/kml/documentation/kmlreference#example-of-delete
@@ -260,7 +261,8 @@ class Update(_BaseObject):
 
     References
     ----------
-    * https://developers.google.com/kml/documentation/kmlreference#syntax_50
+    * https://developers.google.com/kml/documentation/kmlreference#description_49
+    * https://developers.google.com/kml/documentation/kmlreference#gxanimatedupdate
 
     Parameters
     ----------

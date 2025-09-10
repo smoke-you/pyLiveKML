@@ -2,9 +2,9 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import DisplayModeEnum, GeoColor
 from pyLiveKML.objects.Object import _FieldDef, ColorParse
 from pyLiveKML.objects.SubStyle import SubStyle
+from pyLiveKML.types import DisplayModeEnum, GeoColor
 
 
 class BalloonStyle(SubStyle):

@@ -2,9 +2,9 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import RefreshModeEnum, ViewRefreshModeEnum
-from pyLiveKML.objects.Object import _FieldDef
 from pyLiveKML.objects.Link import Link
+from pyLiveKML.objects.Object import _FieldDef
+from pyLiveKML.types import RefreshModeEnum, ViewRefreshModeEnum
 
 
 class Icon(Link):

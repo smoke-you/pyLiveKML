@@ -2,9 +2,9 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import ColorModeEnum, GeoColor
-from pyLiveKML.objects.Object import _FieldDef
 from pyLiveKML.objects.ColorStyle import ColorStyle
+from pyLiveKML.objects.Object import _FieldDef
+from pyLiveKML.types import ColorModeEnum, GeoColor
 
 
 class LabelStyle(ColorStyle):

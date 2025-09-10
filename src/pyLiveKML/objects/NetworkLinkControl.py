@@ -8,7 +8,6 @@ from lxml import etree  # type: ignore
 from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.errors import NetworkLinkControlUpdateLimited
 from pyLiveKML.objects.AbstractView import AbstractView
-from pyLiveKML.objects.Update import Update
 from pyLiveKML.objects.Container import Container
 from pyLiveKML.objects.Folder import Folder
 from pyLiveKML.objects.Object import (
@@ -19,6 +18,7 @@ from pyLiveKML.objects.Object import (
     ObjectChild,
     ObjectState,
 )
+from pyLiveKML.objects.Update import Update
 
 
 class NetworkLinkControl(_BaseObject):

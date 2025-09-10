@@ -4,7 +4,7 @@ from typing import Any, Iterable, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.AbstractView import AbstractView
+from pyLiveKML.objects.AbstractView import AbstractView, ViewerOption
 from pyLiveKML.objects.Object import (
     _FieldDef,
     Angle180,
@@ -14,7 +14,7 @@ from pyLiveKML.objects.Object import (
     NoParse,
 )
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
-from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates, ViewerOption
+from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
 
 
 class LookAt(AbstractView):

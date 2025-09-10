@@ -2,10 +2,10 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types.types import StyleStateEnum
-from pyLiveKML.objects.Object import _BaseObject, _FieldDef, _DependentDef, _ChildDef
-from pyLiveKML.objects.StyleSelector import StyleSelector
+from pyLiveKML.objects.Object import _BaseObject, _ChildDef, _DependentDef, _FieldDef
 from pyLiveKML.objects.Style import Style
+from pyLiveKML.objects.StyleSelector import StyleSelector
+from pyLiveKML.types.types import StyleStateEnum
 
 
 class _StyleMap_Pair(_BaseObject):

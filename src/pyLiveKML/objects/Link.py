@@ -2,8 +2,8 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import RefreshModeEnum, ViewRefreshModeEnum
 from pyLiveKML.objects.Object import _FieldDef, Object
+from pyLiveKML.types import RefreshModeEnum, ViewRefreshModeEnum
 
 
 class Link(Object):

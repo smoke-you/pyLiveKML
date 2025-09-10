@@ -1,8 +1,8 @@
 """TimeStamp module."""
 
 from datetime import datetime
-from dateutil.parser import parse as dtparse
 
+from dateutil.parser import parse as dtparse
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Object import _FieldDef

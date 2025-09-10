@@ -2,9 +2,9 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import PlayModeEnum
 from pyLiveKML.objects.Object import _FieldDef
 from pyLiveKML.objects.TourPrimitive import TourPrimitive
+from pyLiveKML.types import PlayModeEnum
 
 
 class TourControl(TourPrimitive):

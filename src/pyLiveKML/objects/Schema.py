@@ -8,7 +8,6 @@ from pyLiveKML.objects.Object import (
     _BaseObject,
     _DependentDef,
     _FieldDef,
-    _ListObject,
     Object,
 )
 

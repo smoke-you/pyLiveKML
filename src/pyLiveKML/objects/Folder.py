@@ -2,11 +2,10 @@
 
 from typing import Iterable
 
-from pyLiveKML import KML_UPDATE_CONTAINER_LIMIT_DEFAULT
 from pyLiveKML.objects.AbstractView import AbstractView
+from pyLiveKML.objects.Container import Container
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
-from pyLiveKML.objects.Container import Container
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive

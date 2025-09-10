@@ -4,7 +4,7 @@ from typing import Iterable, cast
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.AbstractView import AbstractView
+from pyLiveKML.objects.AbstractView import AbstractView, ViewerOption
 from pyLiveKML.objects.Object import (
     _FieldDef,
     Angle90,
@@ -13,7 +13,7 @@ from pyLiveKML.objects.Object import (
     Angle360,
 )
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
-from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates, ViewerOption
+from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
 
 
 class Camera(AbstractView):

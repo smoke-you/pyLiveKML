@@ -1,8 +1,8 @@
 """TimeSpan module."""
 
 from datetime import datetime
-from dateutil.parser import parse as dtparser
 
+from dateutil.parser import parse as dtparser
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Object import _FieldDef

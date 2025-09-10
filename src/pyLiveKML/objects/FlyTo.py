@@ -2,10 +2,10 @@
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types import FlyToModeEnum
-from pyLiveKML.objects.Object import _ChildDef, _FieldDef
 from pyLiveKML.objects.AbstractView import AbstractView
+from pyLiveKML.objects.Object import _ChildDef, _FieldDef
 from pyLiveKML.objects.TourPrimitive import TourPrimitive
+from pyLiveKML.types import FlyToModeEnum
 
 
 class FlyTo(TourPrimitive):

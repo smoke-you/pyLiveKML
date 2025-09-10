@@ -1,7 +1,5 @@
 """Style module."""
 
-from typing import Iterator
-
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.BalloonStyle import BalloonStyle
@@ -9,7 +7,7 @@ from pyLiveKML.objects.IconStyle import IconStyle
 from pyLiveKML.objects.LabelStyle import LabelStyle
 from pyLiveKML.objects.LineStyle import LineStyle
 from pyLiveKML.objects.ListStyle import ListStyle
-from pyLiveKML.objects.Object import ObjectChild, _ChildDef
+from pyLiveKML.objects.Object import _ChildDef
 from pyLiveKML.objects.PolyStyle import PolyStyle
 from pyLiveKML.objects.StyleSelector import StyleSelector
 

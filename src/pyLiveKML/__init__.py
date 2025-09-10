@@ -25,10 +25,10 @@ from pyLiveKML.types import (
     StyleStateEnum,
     UnitsEnum,
     ViewRefreshModeEnum,
-    ViewerOption,
     ViewerOptionEnum,
 )
 from pyLiveKML import errors
+from pyLiveKML.objects.AbstractView import ViewerOption
 from pyLiveKML.objects.BalloonStyle import BalloonStyle
 from pyLiveKML.objects.Camera import Camera
 from pyLiveKML.objects.Document import Document

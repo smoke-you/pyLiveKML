@@ -50,8 +50,8 @@ class GeoCoordinates:
 
         Parameters
         ----------
-        values : tuple[float, float, float|None]
-            The LLA as a tuple
+        values : tuple[float, float, float|None] | tuple[float, float]
+            The LLA as a 2- or 3-tuple, in lon-lat[-alt] order.
 
         Returns
         -------
@@ -62,8 +62,13 @@ class GeoCoordinates:
         return (self.lon, self.lat, self.alt)
 
     @values.setter
-    def values(self, value: tuple[float, float, float | None]) -> None:
-        self.lon, self.lat, self.alt = value
+    def values(
+        self, value: tuple[float, float, float | None] | tuple[float, float]
+    ) -> None:
+        if len(value) == 3:
+            self.lon, self.lat, self.alt = value
+        else:
+            self.lon, self.lat, self.alt = (*value[:2], None)
 
     def __setattr__(self, name: str, value: Any) -> None:
         """GeoCoordinates __setattr__ implementation."""
