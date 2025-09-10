@@ -119,7 +119,7 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
     else:
         select_list = select
     for s in select_list:
-        for f in cast(NetworkLinkControl, geometry.sync).container:
+        for f in geometry.sync:
             if s.id == f.id:
                 f.activate(s.checked, True)
                 break

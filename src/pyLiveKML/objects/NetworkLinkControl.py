@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from itertools import islice
+from typing import Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
@@ -114,7 +115,7 @@ class NetworkLinkControl(_BaseObject):
     def __init__(
         self,
         target_href: str,
-        container: Container | None = None,
+        containers: Container | Iterable[Container] | None = None,
         update_limit: int = KML_UPDATE_CONTAINER_LIMIT_DEFAULT,
         min_refresh_period: float | None = None,
         max_session_length: float | None = None,
@@ -129,9 +130,8 @@ class NetworkLinkControl(_BaseObject):
     ):
         """NetworkLinkControl instance constructor."""
         super().__init__()
-        self.container: Container = (
-            Folder("Root", is_open=True) if container is None else container
-        )
+        self._containers = list[Container]()
+        self.containers = containers
         self.update_limit = update_limit
         self.min_refresh_period = min_refresh_period
         self.max_session_length = max_session_length
@@ -144,6 +144,20 @@ class NetworkLinkControl(_BaseObject):
         self.link_expires = link_expires
         self.abstract_view = abstract_view
         self.update = Update(target_href)
+
+    @property
+    def containers(self) -> Iterator[Container]:
+        """A generator over the synchronized containers."""
+        yield from self._containers
+    
+    @containers.setter
+    def containers(self, value: Container | Iterable[Container] | None) -> None:
+        self._containers.clear()
+        if value is not None:
+            if isinstance(value, Container):
+                self._containers.append(value)
+            else:
+                self._containers.extend(value)
 
     def build_kml(
         self,
@@ -199,7 +213,8 @@ class NetworkLinkControl(_BaseObject):
         """
         root = etree.Element(self.kml_tag)
         try:
-            self._sync_child_objects(self.container)
+            for c in self.containers:
+                self._sync_child_objects(c)
         except NetworkLinkControlUpdateLimited:
             pass
         self.build_kml(root, with_children, with_dependents)

@@ -90,17 +90,20 @@ gep_loader = Folder(
     ],
 )
 
+gep_elements = Folder(name="Root")
+# assign a constant UUID to the container, so that it can be refreshed in GEP
+# without having to reload the pyLiveKML link after restarting the server
+gep_elements._id = UUID("8c2cda8e-7d56-4a29-99e7-e05e6dbaf193")
+
 # The master synchronization controller, a NetworkLinkControl object
 gep_sync = NetworkLinkControl(
     target_href=ELEMENTS_HREF,
+    containers=gep_elements,
     link_name="pyLiveKML synchronizer",
     link_description="Synchronizes the webserver UI state with Google Earth Pro.",
     link_snippet="",
     link_snippet_max_lines=0,
 )
-# assign a constant UUID to the container, so that it can be refreshed in GEP
-# without having to reload the pyLiveKML link after restarting the server
-gep_sync.container._id = UUID("8c2cda8e-7d56-4a29-99e7-e05e6dbaf193")
 
 
 @asynccontextmanager
@@ -110,7 +113,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     global applist
     # set the gep_sync NetworkLinkControl for all of the apps, and fire it up
     for x in applist:
-        x.sync = gep_sync
+        x.sync = gep_elements
         x.load_data()
     yield
     # post-yield: server shutdown
@@ -142,7 +145,7 @@ async def _() -> RedirectResponse:
 async def _(filename: str, request: Request) -> Any:
     root = kml_root_tag()
     if filename == "index.html":
-        for c in gep_sync.container:
+        for c in gep_elements:
             c.activate(False, True)
         context = {
             "request": request,
@@ -155,10 +158,7 @@ async def _(filename: str, request: Request) -> Any:
         }
         return templates.TemplateResponse("index.html.j2", context)
     elif filename == ELEMENTS_FILE:
-        elems = etree.SubElement(
-            root, gep_sync.container._kml_tag, attrib={"id": str(gep_sync.container.id)}
-        )
-        gep_sync.container.build_kml(elems, False)
+        root.append(gep_elements.construct_kml(False, True))
     elif filename == UPDATE_FILE:
         root.append(gep_sync.construct_sync())
     elif filename == LOADER_FILE:
@@ -175,7 +175,7 @@ async def _(filename: str, request: Request) -> Any:
 
 @app.post("/clear")
 async def _() -> None:
-    for c in gep_sync.container:
+    for c in gep_elements:
         c.activate(False, True)
 
 

@@ -93,7 +93,7 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
     else:
         select_list = select
     for s in select_list:
-        for f in cast(NetworkLinkControl, trail.sync).container:
+        for f in trail.sync:
             if s.id == f.id:
                 f.activate(s.checked, True)
                 break

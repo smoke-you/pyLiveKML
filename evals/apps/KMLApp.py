@@ -10,7 +10,7 @@ from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel, UUID4
 
-from pyLiveKML import NetworkLinkControl
+from pyLiveKML.objects.Container import Container
 from pyLiveKML.objects.Feature import Feature
 
 
@@ -53,20 +53,20 @@ class KMLApp:
         self.path = path
         self.app = app
         self.data = data
-        self.sync: Optional[NetworkLinkControl] = None
+        self.sync: Container
 
     def load_data(self) -> None:
         """Associate the app's data with the KML synchronization controller."""
-        if not self.sync:
+        if self.sync is None:
             return
         if self.data is not None:
             if isinstance(self.data, Feature):
-                if self.data.id not in map(lambda x: x.id, self.sync.container):
-                    self.sync.container.append(self.data)
+                if self.data.id not in map(lambda x: x.id, self.sync):
+                    self.sync.append(self.data)
             else:
                 for d in self.data:
-                    if d.id not in map(lambda x: x.id, self.sync.container):
-                        self.sync.container.append(d)
+                    if d.id not in map(lambda x: x.id, self.sync):
+                        self.sync.append(d)
 
 
 def find_apps(basedir: Path) -> list[KMLApp]:
