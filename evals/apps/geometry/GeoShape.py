@@ -56,8 +56,8 @@ class GeoShape(Placemark, ABC):
                 ),
             ),
             geometry=Polygon(
-                outer_boundary=LinearRing(coordinates=g_outer),
-                inner_boundaries=[LinearRing(coordinates=g) for g in g_inner],
+                outer_boundary=g_outer,
+                inner_boundaries=[g for g in g_inner],
                 altitude_mode=altitude_mode,
             ),
         )

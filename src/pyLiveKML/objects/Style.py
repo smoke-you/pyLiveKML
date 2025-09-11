@@ -88,9 +88,15 @@ class Style(StyleSelector):
                 self.list_style = a
             elif isinstance(a, PolyStyle):
                 self.poly_style = a
-        self.balloon_style = balloon_style
-        self.icon_style = icon_style
-        self.label_style = label_style
-        self.line_style = line_style
-        self.list_style = list_style
-        self.poly_style = poly_style
+        if balloon_style:
+            self.balloon_style = balloon_style
+        if icon_style:
+            self.icon_style = icon_style
+        if label_style:
+            self.label_style = label_style
+        if line_style:
+            self.line_style = line_style
+        if list_style:
+            self.list_style = list_style
+        if poly_style:
+            self.poly_style = poly_style

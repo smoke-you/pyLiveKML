@@ -1,13 +1,41 @@
 """Polygon module."""
 
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, cast
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Geometry import Geometry
 from pyLiveKML.objects.LinearRing import LinearRing
 from pyLiveKML.objects.Object import _FieldDef, _DependentDef, Object, ObjectState
-from pyLiveKML.types import AltitudeModeEnum
+from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
+
+
+
+PolyBoundaryType = LinearRing | Iterable[GeoCoordinates] | Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]]
+
+def _is_boundary_iterable(val: PolyBoundaryType | Iterable[PolyBoundaryType]) -> bool:
+    if isinstance(val, LinearRing):
+        return False
+    # if it's not a LinearRing, then it _must_ be iterable
+    first_it = iter(val)
+    first_obj = next(first_it, None)
+    # if it's an iterable of LinearRings, then return True
+    if isinstance(first_obj, LinearRing):
+        return True
+    # if it's an iterable of GeoCoordinates, then return False
+    if isinstance(first_obj, GeoCoordinates):
+        return False
+    # if it's an iterable of tuples, then it could be either - further checks
+    if isinstance(first_obj, Iterable):
+        second_it = iter(first_obj)
+        second_obj = next(second_it, None)
+        if isinstance(second_obj, float):
+            return False
+        if isinstance(second_obj, (GeoCoordinates, tuple)):
+            return True
+    # if the first_obj is not of an expected type, raise a ValueError
+    raise ValueError
+
 
 
 class _OuterBoundary(Object):
@@ -17,9 +45,12 @@ class _OuterBoundary(Object):
     _kml_dependents = Object._kml_dependents + (_DependentDef("boundary"),)
     _suppress_id = True
 
-    def __init__(self, boundary: LinearRing) -> None:
+    def __init__(self, boundary: PolyBoundaryType) -> None:
         super().__init__()
-        self.boundary = boundary
+        if isinstance(boundary, LinearRing):
+            self.boundary = boundary
+        else:
+            self.boundary = LinearRing(boundary)
 
 
 class _InnerBoundary(Object):
@@ -29,10 +60,12 @@ class _InnerBoundary(Object):
     _kml_dependents = Object._kml_dependents + (_DependentDef("boundary"),)
     _suppress_id = True
 
-    def __init__(self, boundary: LinearRing) -> None:
+    def __init__(self, boundary: PolyBoundaryType) -> None:
         super().__init__()
-        self.boundary = boundary
-
+        if isinstance(boundary, LinearRing):
+            self.boundary = boundary
+        else:
+            self.boundary = LinearRing(boundary)
 
 class Polygon(Geometry):
     """A KML `<Polygon>` tag constructor.
@@ -57,10 +90,14 @@ class Polygon(Geometry):
     ----------
     * https://developers.google.com/kml/documentation/kmlreference#polygon.
 
+    Typing
+    ------
+    PolyBoundaryType : LinearRing | Iterable[GeoCoordinates] | Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]]
+
     Parameters
     ----------
-    outer_boundary : LinearRing
-    inner_boundaries : LinearRing | Iterable[LinearRing] | None = None
+    outer_boundary : PolyBoundaryType
+    inner_boundaries : PolyBoundaryType | Iterable[PolyBoundaryType] | None = None
     altitude_mode : AltitudeModeEnum | None = None
         Specifies how `altitude` attributes in the `coordinates` attribute are
         interpreted.
@@ -91,15 +128,15 @@ class Polygon(Geometry):
 
     def __init__(
         self,
-        outer_boundary: LinearRing,
-        inner_boundaries: LinearRing | Iterable[LinearRing] | None = None,
+        outer_boundary: PolyBoundaryType,
+        inner_boundaries: PolyBoundaryType | Iterable[PolyBoundaryType] | None = None,
         altitude_mode: AltitudeModeEnum | None = None,
         extrude: bool | None = None,
         tessellate: bool | None = None,
     ):
         """Polygon instance constructor."""
         Geometry.__init__(self)
-        self._outer_boundary = _OuterBoundary(outer_boundary)
+        self.outer_boundary = outer_boundary
         self._inner_boundaries = list[_InnerBoundary]()
         self.inner_boundaries = inner_boundaries
         self.extrude = extrude
@@ -112,9 +149,10 @@ class Polygon(Geometry):
         return self._outer_boundary.boundary
 
     @outer_boundary.setter
-    def outer_boundary(self, value: LinearRing) -> None:
+    def outer_boundary(self, value: PolyBoundaryType) -> None:
         self._outer_boundary = _OuterBoundary(value)
-        self._outer_boundary.boundary._state = ObjectState.CHANGING
+        if self.active:
+            self._outer_boundary.boundary._state = ObjectState.CHANGING
 
     @property
     def inner_boundaries(self) -> Iterator[LinearRing]:
@@ -123,12 +161,13 @@ class Polygon(Geometry):
             yield b.boundary
 
     @inner_boundaries.setter
-    def inner_boundaries(self, value: LinearRing | Iterable[LinearRing] | None) -> None:
+    def inner_boundaries(self, value: PolyBoundaryType | Iterable[PolyBoundaryType] | None) -> None:
         self._inner_boundaries.clear()
-        if value is not None:
-            if isinstance(value, LinearRing):
-                self._inner_boundaries.append(_InnerBoundary(value))
+        if value:
+            if not _is_boundary_iterable(value):
+                self._inner_boundaries.append(_InnerBoundary(cast(PolyBoundaryType, value)))
             else:
-                self._inner_boundaries.extend(map(_InnerBoundary, value))
-        for b in self._inner_boundaries:
-            b.boundary._state = ObjectState.CHANGING
+                self._inner_boundaries.extend(map(_InnerBoundary, cast(Iterable[PolyBoundaryType], value)))
+        if self.active:
+            for b in self._inner_boundaries:
+                b.boundary._state = ObjectState.CHANGING
