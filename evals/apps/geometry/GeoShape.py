@@ -46,13 +46,13 @@ class GeoShape(Placemark, ABC):
             self,
             name=name,
             inline_style=StyleMap(
-                normal_style_ref=Style(
-                    line_style=LineStyle(width=border_width, color=border_color),
-                    poly_style=PolyStyle(color=fill_color),
+                Style(
+                    LineStyle(width=border_width, color=border_color),
+                    PolyStyle(color=fill_color),
                 ),
-                highlight_style_ref=Style(
-                    line_style=LineStyle(width=border_width * 3, color=border_color),
-                    poly_style=PolyStyle(color=fill_color),
+                Style(
+                    LineStyle(width=border_width * 3, color=border_color),
+                    PolyStyle(color=fill_color),
                 ),
             ),
             geometry=Polygon(

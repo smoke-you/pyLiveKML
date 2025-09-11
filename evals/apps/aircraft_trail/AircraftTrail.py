@@ -23,14 +23,12 @@ class AircraftTrail(Folder):
             self,
             name=data[0].flight,
             is_open=False,
-            styles=[
-                Style(
-                    list_style=ListStyle(
-                        list_item_type=ListItemTypeEnum.CHECK_HIDE_CHILDREN,
-                        bg_color=0xFF404000,
-                    )
+            styles=Style(
+                ListStyle(
+                    list_item_type=ListItemTypeEnum.CHECK_HIDE_CHILDREN,
+                    bg_color=0xFF404000,
                 )
-            ],
+            ),
         )
         self.data = data
         self.trail_sz = trail_sz

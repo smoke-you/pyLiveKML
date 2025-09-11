@@ -34,12 +34,12 @@ def build_simple_doc(root_path: str) -> Document:
     """
     # global styles
     root_style = Style(
-        balloon_style=BalloonStyle(
+        BalloonStyle(
             0x40400000,
             0xFF0000FF,
             "This popup's text is set in the root Document's balloon style, rather than in the Document itself.",
         ),
-        list_style=ListStyle(
+        ListStyle(
             icons=(
                 ItemIcon(
                     icon_state=ItemIconModeEnum.OPEN,
@@ -53,31 +53,29 @@ def build_simple_doc(root_path: str) -> Document:
         ),
     )
     ground_point_style = Style(
-        icon_style=IconStyle(
-            "https://maps.google.com/mapfiles/kml/paddle/red-diamond.png"
-        )
+        IconStyle("https://maps.google.com/mapfiles/kml/paddle/red-diamond.png")
     )
-    ground_linestr_style = Style(line_style=LineStyle(3, 0xFF20FF00))
+    ground_linestr_style = Style(LineStyle(3, 0xFF20FF00))
     air_linestr_style = Style(
-        line_style=LineStyle(5, 0xFF00FF20),
-        poly_style=PolyStyle(0x8000FF20, fill=True),
+        LineStyle(5, 0xFF00FF20),
+        PolyStyle(0x8000FF20, fill=True),
     )
-    ground_linring_style = Style(line_style=LineStyle(10, 0xFFFF0000))
+    ground_linring_style = Style(LineStyle(10, 0xFFFF0000))
     air_linring_style = Style(
-        line_style=LineStyle(5, 0xFF0000FF),
-        poly_style=PolyStyle(0xFF0000FF, fill=True),
+        LineStyle(5, 0xFF0000FF),
+        PolyStyle(0xFF0000FF, fill=True),
     )
     no_cutout_poly_style = Style(
-        line_style=LineStyle(1, 0xFF0000FF),  # red 1px border
-        poly_style=PolyStyle(0x6000FF00, fill=True, outline=True),  # 38% green fill
+        LineStyle(1, 0xFF0000FF),  # red 1px border
+        PolyStyle(0x6000FF00, fill=True, outline=True),  # 38% green fill
     )
     with_cutout_poly_style_normal = Style(
-        line_style=LineStyle(5, 0xFF00FF00),  # green 5px border
-        poly_style=PolyStyle(0x60FF0000, fill=True, outline=True),  # 38% blue fill
+        LineStyle(5, 0xFF00FF00),  # green 5px border
+        PolyStyle(0x60FF0000, fill=True, outline=True),  # 38% blue fill
     )
     with_cutout_poly_style_highlight = Style(
-        line_style=LineStyle(5, 0xFF00FF00),  # green 5px border
-        poly_style=PolyStyle(0x600000FF, fill=True, outline=True),  # 38% red fill
+        LineStyle(5, 0xFF00FF00),  # green 5px border
+        PolyStyle(0x600000FF, fill=True, outline=True),  # 38% red fill
     )
     with_cutout_poly_style = StyleMap(
         f"#{with_cutout_poly_style_normal.id}",
@@ -331,21 +329,21 @@ def build_simple_doc(root_path: str) -> Document:
                 snippet="",
                 inline_style=StyleMap(
                     Style(
-                        icon_style=IconStyle(
+                        IconStyle(
                             "https://maps.google.com/mapfiles/kml/paddle/red-diamond.png"
                         ),
-                        line_style=LineStyle(1, 0xFF0080FF),
-                        poly_style=PolyStyle(0x6000FF00, fill=True, outline=True),
-                        label_style=LabelStyle(0),
+                        LineStyle(1, 0xFF0080FF),
+                        PolyStyle(0x6000FF00, fill=True, outline=True),
+                        LabelStyle(0),
                     ),
                     Style(
-                        icon_style=IconStyle(
+                        IconStyle(
                             "https://maps.google.com/mapfiles/kml/paddle/wht-stars.png",
                             2,
                         ),
-                        line_style=LineStyle(2, 0xFFFF8000),
-                        poly_style=PolyStyle(0xFFFF0000, fill=True, outline=True),
-                        label_style=LabelStyle(0),
+                        LineStyle(2, 0xFFFF8000),
+                        PolyStyle(0xFFFF0000, fill=True, outline=True),
+                        LabelStyle(0),
                     ),
                 ),
             )

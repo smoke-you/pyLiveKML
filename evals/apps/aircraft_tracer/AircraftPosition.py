@@ -34,17 +34,12 @@ class AircraftPosition(Placemark):
             self,
             geometry=Point(
                 coordinates=GeoCoordinates(lon, lat, alt),
-                altitude_mode=(
-                    AltitudeModeEnum.CLAMP_TO_GROUND
-                    if alt is None
-                    else AltitudeModeEnum.ABSOLUTE
-                ),
+                altitude_mode=(None if alt is None else AltitudeModeEnum.ABSOLUTE),
             ),
             inline_style=Style(
-                icon_style=IconStyle(
+                IconStyle(
                     icon="http://maps.google.com/mapfiles/kml/shapes/track.png",
                     heading=heading,
-                    scale=1.0,
                 )
             ),
         )

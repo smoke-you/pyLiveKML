@@ -25,7 +25,7 @@ class AircraftPosition(Placemark):
         )
         point = Point(coordinates=data.coordinates, altitude_mode=altitude_mode)
         style = Style(
-            icon_style=IconStyle(
+            IconStyle(
                 icon="http://maps.google.com/mapfiles/kml/shapes/track.png",
                 heading=data.heading,
             )

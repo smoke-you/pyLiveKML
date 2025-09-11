@@ -43,14 +43,14 @@ class AircraftLocation(Placemark):
             extrude=False,
         )
         style = Style(
-            balloon_style=BalloonStyle(bg_color=0x20FF4000),
-            icon_style=IconStyle(
+            BalloonStyle(bg_color=0x20FF4000),
+            IconStyle(
                 icon="http://maps.google.com/mapfiles/kml/shapes/track.png",
                 heading=positions[0].heading,
                 scale=1.0,
             ),
-            label_style=LabelStyle(color=0xC00000FF),
-            line_style=LineStyle(color=0xFF0000FF),
+            LabelStyle(color=0xC00000FF),
+            LineStyle(color=0xFF0000FF),
         )
         # the example lookat is simpler to use than the camera, so we'll use that instead
         lookat = LookAt(
@@ -69,11 +69,10 @@ class AircraftLocation(Placemark):
         # camera position each update
         # leaving it here as an explanatory note
         camera = Camera(
-            lla=positions[0].coordinates,
+            lla=(*positions[0].coordinates.values[:2], 50000),
             tilt=0,
             altitude_mode=AltitudeModeEnum.ABSOLUTE,
         )
-        camera.alt += 40000
         Placemark.__init__(
             self,
             geometry=MultiGeometry(

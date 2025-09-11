@@ -1,5 +1,7 @@
 """Style module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.BalloonStyle import BalloonStyle
@@ -10,6 +12,7 @@ from pyLiveKML.objects.ListStyle import ListStyle
 from pyLiveKML.objects.Object import _ChildDef
 from pyLiveKML.objects.PolyStyle import PolyStyle
 from pyLiveKML.objects.StyleSelector import StyleSelector
+from pyLiveKML.objects.SubStyle import SubStyle
 
 
 class Style(StyleSelector):
@@ -27,6 +30,10 @@ class Style(StyleSelector):
 
     Parameters
     ----------
+    *args | SubStyle
+        Any number of positional `SubStyle` arguments. They will be assigned to the
+        attribute of the correct type. There is only one instance of each attribute, so
+        duplicates will overwrite any previous attribute value.
     balloon_style : BalloonStyle | None, default = None
     icon_style : IconStyle | None, default = None
     label_style : LabelStyle | None, default = None
@@ -52,6 +59,7 @@ class Style(StyleSelector):
 
     def __init__(
         self,
+        *args: SubStyle,
         balloon_style: BalloonStyle | None = None,
         icon_style: IconStyle | None = None,
         label_style: LabelStyle | None = None,
@@ -61,6 +69,25 @@ class Style(StyleSelector):
     ):
         """Style instance constructor."""
         StyleSelector.__init__(self)
+        self.balloon_style: BalloonStyle | None
+        self.icon_style: IconStyle | None
+        self.label_style: LabelStyle | None
+        self.line_style: LineStyle | None
+        self.list_style: ListStyle | None
+        self.poly_style: PolyStyle | None
+        for a in args:
+            if isinstance(a, BalloonStyle):
+                self.balloon_style = a
+            elif isinstance(a, IconStyle):
+                self.icon_style = a
+            elif isinstance(a, LabelStyle):
+                self.label_style = a
+            elif isinstance(a, LineStyle):
+                self.line_style = a
+            elif isinstance(a, ListStyle):
+                self.list_style = a
+            elif isinstance(a, PolyStyle):
+                self.poly_style = a
         self.balloon_style = balloon_style
         self.icon_style = icon_style
         self.label_style = label_style
