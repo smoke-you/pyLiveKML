@@ -69,12 +69,12 @@ class Style(StyleSelector):
     ):
         """Style instance constructor."""
         StyleSelector.__init__(self)
-        self.balloon_style: BalloonStyle | None
-        self.icon_style: IconStyle | None
-        self.label_style: LabelStyle | None
-        self.line_style: LineStyle | None
-        self.list_style: ListStyle | None
-        self.poly_style: PolyStyle | None
+        self.balloon_style: BalloonStyle | None = None
+        self.icon_style: IconStyle | None = None
+        self.label_style: LabelStyle | None = None
+        self.line_style: LineStyle | None = None
+        self.list_style: ListStyle | None = None
+        self.poly_style: PolyStyle | None = None
         for a in args:
             if isinstance(a, BalloonStyle):
                 self.balloon_style = a

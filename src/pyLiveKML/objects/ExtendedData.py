@@ -112,7 +112,7 @@ class SchemaDataItem(_ExtendedDataItem):
         self, with_children: bool = True, with_dependents: bool = True
     ) -> etree.Element:
         """Override `construct_kml` for fine control."""
-        root = etree.Element(self._kml_tag, attrib={"name": self.schema_ref})
+        root = etree.Element(self._kml_tag, attrib={"schemaUrl": self.schema_ref})
         self.build_kml(root, with_children, with_dependents)
         return root
 

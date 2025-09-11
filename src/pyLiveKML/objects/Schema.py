@@ -25,7 +25,7 @@ class SimpleField(_BaseObject):
         self,
         type: str,
         name: str,
-        display_name: str | None,
+        display_name: str | None = None,
     ) -> None:
         """SimpleField instance constructor."""
         super().__init__()
@@ -94,3 +94,12 @@ class Schema(Object):
                 self._schema_fields.append(value)
             else:
                 self._schema_fields.extend(value)
+
+    def construct_kml(self, with_children: bool = True, with_dependents: bool = True) -> etree.Element:
+        """Construct this instances' KML representation.
+        
+        Adds the `name` attribute to the returned tag.
+        """
+        root = super().construct_kml(with_children, with_dependents)
+        root.set("name", self.name)
+        return root

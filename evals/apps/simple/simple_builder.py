@@ -24,6 +24,9 @@ from pyLiveKML import (
     Point,
     Polygon,
     PolyStyle,
+    Schema,
+    SchemaDataItem,
+    SimpleField,
     Style,
     StyleMap,
 )
@@ -86,6 +89,14 @@ def build_simple_doc(root_path: str) -> Document:
     camera = Camera(
         (151.21343, -33.88354, 10000), altitude_mode=AltitudeModeEnum.ABSOLUTE
     )
+    root_schema = Schema(
+        "root_schema",
+        (
+            SimpleField("int", "000", "Field I"),
+            SimpleField("float", "001"),
+            SimpleField("str", "002", "Field S"),
+        ),
+    )
 
     # root Document, contains the various Folders for the Placemarks
     # Global Styles are stored here
@@ -110,11 +121,21 @@ def build_simple_doc(root_path: str) -> Document:
             with_cutout_poly_style_highlight,
             with_cutout_poly_style,
         ],
+        schemas=root_schema,
+    )
+
+    xd_folder = Folder(
+        "Extended Data",
+        snippet="click me for extended data",
         extended_data=ExtendedData(
             items=(
                 DataItem("field 0", "Field: 0", "abc"),
                 DataItem("field 1", "Field: 1", "def"),
                 DataItem("field 2", "Field: 2", "ghi"),
+                SchemaDataItem(
+                    f"#{root_schema.id}",
+                    {"000": "123", "001": "34.5", "002": "some string"},
+                ),
             ),
         ),
     )
@@ -350,6 +371,7 @@ def build_simple_doc(root_path: str) -> Document:
 
     build_data.extend(
         (
+            xd_folder,
             points_folder,
             linestr_folder,
             linring_folder,
