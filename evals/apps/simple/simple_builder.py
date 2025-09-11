@@ -5,6 +5,7 @@ from lxml import etree  # type: ignore
 from pyLiveKML import (
     AltitudeModeEnum,
     BalloonStyle,
+    Camera,
     DataItem,
     Document,
     ExtendedData,
@@ -17,6 +18,7 @@ from pyLiveKML import (
     LineString,
     LineStyle,
     ListStyle,
+    LookAt,
     MultiGeometry,
     Placemark,
     Point,
@@ -81,6 +83,9 @@ def build_simple_doc(root_path: str) -> Document:
         f"#{with_cutout_poly_style_normal.id}",
         f"#{with_cutout_poly_style_highlight.id}",
     )
+    camera = Camera(
+        (151.21343, -33.88354, 10000), altitude_mode=AltitudeModeEnum.ABSOLUTE
+    )
 
     # root Document, contains the various Folders for the Placemarks
     # Global Styles are stored here
@@ -91,6 +96,7 @@ def build_simple_doc(root_path: str) -> Document:
         snippet="",
         author_name="smoke-you",
         author_link="https://github.com/smoke-you/pyLiveKML",
+        abstract_view=camera,
         style_url=f"#{root_style.id}",
         styles=[
             root_style,
@@ -298,6 +304,7 @@ def build_simple_doc(root_path: str) -> Document:
         is_open=True,
         description="Contains a Placemark hosting MultiGeometry geometries.",
         snippet="",
+        abstract_view=LookAt((151.18843, -33.90354, 200), 11, 72, 3700),
         features=[
             Placemark(
                 MultiGeometry(
@@ -316,11 +323,12 @@ def build_simple_doc(root_path: str) -> Document:
                 ),
                 name="[Point @ 200m, Poly @ Ground]",
                 description="A MultiGeometry hosting a Point @ 200m and a Polygon clamped to ground.\nBoth Point and Polygon respond to mouse hover.",
-                snippet="",
+                snippet="Double-click this folder to change view",
                 inline_style=StyleMap(
                     Style(
                         IconStyle(
-                            "https://maps.google.com/mapfiles/kml/paddle/red-diamond.png"
+                            "https://maps.google.com/mapfiles/kml/paddle/red-diamond-lv.png",
+                            0.4,
                         ),
                         LineStyle(1, 0xFF0080FF),
                         PolyStyle(0x6000FF00, fill=True, outline=True),

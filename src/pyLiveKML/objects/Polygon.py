@@ -10,32 +10,42 @@ from pyLiveKML.objects.Object import _FieldDef, _DependentDef, Object, ObjectSta
 from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
 
 
+PolyBoundaryType = (
+    LinearRing
+    | Iterable[GeoCoordinates]
+    | Iterable[tuple[float, float, float]]
+    | Iterable[tuple[float, float]]
+)
 
-PolyBoundaryType = LinearRing | Iterable[GeoCoordinates] | Iterable[tuple[float, float, float]] | Iterable[tuple[float, float]]
 
 def _is_boundary_iterable(val: PolyBoundaryType | Iterable[PolyBoundaryType]) -> bool:
+    """Test whether the argument is a PolyBoundaryType, or an iterable of PolyBoundaryType."""
+    # if it's a LinearRing, then it's singular
     if isinstance(val, LinearRing):
         return False
-    # if it's not a LinearRing, then it _must_ be iterable
+    # if it's not a LinearRing, then it _must_ be iterable - further checks
     first_it = iter(val)
     first_obj = next(first_it, None)
-    # if it's an iterable of LinearRings, then return True
+    # if it's an iterable of LinearRings, then it's multiple
     if isinstance(first_obj, LinearRing):
         return True
-    # if it's an iterable of GeoCoordinates, then return False
+    # if it's an iterable of GeoCoordinates, then it's singular
     if isinstance(first_obj, GeoCoordinates):
         return False
-    # if it's an iterable of tuples, then it could be either - further checks
+    # if it's an iterable, then it could be either - further checks
     if isinstance(first_obj, Iterable):
         second_it = iter(first_obj)
         second_obj = next(second_it, None)
+        # if it's an iterable of floats, then its singular
         if isinstance(second_obj, float):
             return False
+        # if it's an iterable of GeoCoordinate or tuples, then it's multiple
         if isinstance(second_obj, (GeoCoordinates, tuple)):
             return True
-    # if the first_obj is not of an expected type, raise a ValueError
-    raise ValueError
-
+    # if we arrive here, it hasn't been recognized; raise a ValueError
+    raise ValueError(
+        "Unable to determine whether boundary argument is singular or multiple."
+    )
 
 
 class _OuterBoundary(Object):
@@ -66,6 +76,7 @@ class _InnerBoundary(Object):
             self.boundary = boundary
         else:
             self.boundary = LinearRing(boundary)
+
 
 class Polygon(Geometry):
     """A KML `<Polygon>` tag constructor.
@@ -161,13 +172,19 @@ class Polygon(Geometry):
             yield b.boundary
 
     @inner_boundaries.setter
-    def inner_boundaries(self, value: PolyBoundaryType | Iterable[PolyBoundaryType] | None) -> None:
+    def inner_boundaries(
+        self, value: PolyBoundaryType | Iterable[PolyBoundaryType] | None
+    ) -> None:
         self._inner_boundaries.clear()
         if value:
             if not _is_boundary_iterable(value):
-                self._inner_boundaries.append(_InnerBoundary(cast(PolyBoundaryType, value)))
+                self._inner_boundaries.append(
+                    _InnerBoundary(cast(PolyBoundaryType, value))
+                )
             else:
-                self._inner_boundaries.extend(map(_InnerBoundary, cast(Iterable[PolyBoundaryType], value)))
+                self._inner_boundaries.extend(
+                    map(_InnerBoundary, cast(Iterable[PolyBoundaryType], value))
+                )
         if self.active:
             for b in self._inner_boundaries:
                 b.boundary._state = ObjectState.CHANGING
