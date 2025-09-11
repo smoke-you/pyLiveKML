@@ -161,14 +161,14 @@ async def _(ctrl: KMLControlRequest) -> KMLControlResponse:
         if origin:
             origin = OriginControlRequest(**origin)
             for g in geodata:
-                if g.id == origin.id:
+                if g.id == str(origin.id):
                     g.origin = GeoCoordinates(origin.lon, origin.lat, origin.alt)
                     break
         fill = ctrl.req.get("fill", None)
         if fill:
             fill = RGBControlRequest(**fill)
             for g in geodata:
-                if g.id == fill.id:
+                if g.id == str(fill.id):
                     g.fill_rgb = fill.rgb[1:]
                     g.fill_alpha = fill.alpha
                     g._styles[0].field_changed()
@@ -177,7 +177,7 @@ async def _(ctrl: KMLControlRequest) -> KMLControlResponse:
         if border:
             border = RGBControlRequest(**border)
             for g in geodata:
-                if g.id == border.id:
+                if g.id == str(border.id):
                     g.border_rgb = border.rgb[1:]
                     g.border_alpha = border.alpha
                     g._styles[0].field_changed()
@@ -186,7 +186,7 @@ async def _(ctrl: KMLControlRequest) -> KMLControlResponse:
         if rotate:
             rotate = RotationControlRequest(**rotate)
             for g in geodata:
-                if g.id == rotate.id:
+                if g.id == str(rotate.id):
                     g.rotate_shape(Rotation.from_euler("z", rotate.value, degrees=True))
                     break
     except ValueError:

@@ -6,6 +6,7 @@ from typing import Optional, cast
 import numpy
 from pyproj import Geod
 from pyLiveKML import (
+    GeoColor,
     GeoCoordinates,
     AltitudeModeEnum,
     LineStyle,
@@ -13,6 +14,7 @@ from pyLiveKML import (
     PolyStyle,
     Polygon,
     Style,
+    StyleMap,
 )
 from pyLiveKML.objects.Placemark import Placemark
 from scipy.spatial.transform import Rotation
@@ -43,9 +45,15 @@ class GeoShape(Placemark, ABC):
         Placemark.__init__(
             self,
             name=name,
-            inline_style=Style(
-                line_style=LineStyle(width=border_width, color=border_color),
-                poly_style=PolyStyle(color=fill_color),
+            inline_style=StyleMap(
+                normal_style_ref=Style(
+                    line_style=LineStyle(width=border_width, color=border_color),
+                    poly_style=PolyStyle(color=fill_color),
+                ),
+                highlight_style_ref=Style(
+                    line_style=LineStyle(width=border_width * 3, color=border_color),
+                    poly_style=PolyStyle(color=fill_color),
+                )
             ),
             geometry=Polygon(
                 outer_boundary=LinearRing(coordinates=g_outer),
@@ -55,6 +63,14 @@ class GeoShape(Placemark, ABC):
         )
         ABC.__init__(self)
         self.activate(selected)
+
+    @property
+    def normal_style(self) -> Style:
+        return cast(Style, cast(StyleMap, self._styles[0]).normal)
+
+    @property
+    def highlight_style(self) -> Style:
+        return cast(Style, cast(StyleMap, self._styles[0]).highlight)
 
     @property
     def polygon(self) -> Polygon:
@@ -92,10 +108,8 @@ class GeoShape(Placemark, ABC):
         bo, bi = self.build()
         """It's not possible to change the boundary LinearRing objects, but changing their coordinates is OK"""
         self.polygon.outer_boundary.coordinates = bo
-        # self.polygon.outer_boundary.field_changed()
         for i, b in enumerate(self.polygon.inner_boundaries):
             b.coordinates = bi[i]
-            # b.field_changed()
 
     def build(self) -> tuple[list[GeoCoordinates], list[list[GeoCoordinates]]]:
         """Construct the GeoShape instance."""
@@ -109,95 +123,63 @@ class GeoShape(Placemark, ABC):
     @property
     def fill_rgb(self) -> str:
         """RGB-value of the fill of a polygon."""
-        try:
-            styles = [s for s in self.styles if isinstance(s, Style)]
-            if styles[0].poly_style and styles[0].poly_style.color:
-                psc = styles[0].poly_style.color
-                return f"{psc.rgb:06x}"
-        except Exception:
-            pass
-        return "000000"
+        psc = cast(GeoColor, cast(PolyStyle, self.normal_style.poly_style).color)
+        return f"{psc.rgb:06x}"
 
     @fill_rgb.setter
     def fill_rgb(self, val: str) -> None:
-        try:
-            c = int(val, 16)
-            styles = [s for s in self.styles if isinstance(s, Style)]
-            for s in styles:
-                if s.poly_style and s.poly_style.color:
-                    s.poly_style.color.rgb = c
-                    s.poly_style.field_changed()
-        except Exception:
-            pass
+        c = int(val, 16)
+        sn = cast(PolyStyle, self.normal_style.poly_style)
+        cast(GeoColor, sn.color).rgb = c
+        sn.field_changed()
+        sh = cast(PolyStyle, self.highlight_style.poly_style)
+        cast(GeoColor, sh.color).rgb = c
+        sh.field_changed()
 
     @property
     def fill_alpha(self) -> int:
         """A-value of the fill of a polygon."""
-        try:
-            styles = [s for s in self.styles if isinstance(s, Style)]
-            if styles and styles[0].poly_style and styles[0].poly_style.color:
-                return styles[0].poly_style.color.a
-        except Exception:
-            pass
-        return 0
+        return cast(GeoColor, cast(PolyStyle, self.normal_style.poly_style).color).a
 
     @fill_alpha.setter
     def fill_alpha(self, val: int) -> None:
-        try:
-            a = int(val)
-            a = 0 if val < 0 else 255 if val > 255 else val
-            styles = [s for s in self.styles if isinstance(s, Style)]
-            for s in styles:
-                if s.poly_style and s.poly_style.color:
-                    s.poly_style.color.a = a
-                    s.poly_style.field_changed()
-        except Exception:
-            pass
+        a = int(val)
+        a = 0 if val < 0 else 255 if val > 255 else val
+        sn = cast(PolyStyle, self.normal_style.poly_style)
+        cast(GeoColor, sn.color).a = a
+        sn.field_changed()
+        sh = cast(PolyStyle, self.highlight_style.poly_style)
+        cast(GeoColor, sh.color).a = a
+        sh.field_changed()
 
     @property
     def border_rgb(self) -> str:
         """RGB-value of the border of a polygon."""
-        try:
-            styles = [s for s in self.styles if isinstance(s, Style)]
-            if styles and styles[0].line_style and styles[0].line_style.color:
-                psc = styles[0].line_style.color
-                return f"{psc.rgb:06x}"
-        except Exception:
-            pass
-        return "000000"
+        psc = cast(GeoColor, cast(LineStyle, self.normal_style.line_style).color)
+        return f"{psc.rgb:06x}"
 
     @border_rgb.setter
     def border_rgb(self, val: str) -> None:
-        try:
-            c = int(val, 16)
-            styles = [s for s in self.styles if isinstance(s, Style)]
-            for s in styles:
-                if s.line_style and s.line_style.color:
-                    s.line_style.color.rgb = c
-                    s.line_style.field_changed()
-        except Exception:
-            pass
+        c = int(val, 16)
+        sn = cast(LineStyle, self.normal_style.line_style)
+        cast(GeoColor, sn.color).rgb = c
+        sn.field_changed()
+        sh = cast(LineStyle, self.highlight_style.line_style)
+        cast(GeoColor, sh.color).rgb = c
+        sh.field_changed()
 
     @property
     def border_alpha(self) -> int:
         """A-value of the border of a polygon."""
-        try:
-            styles = [s for s in self.styles if isinstance(s, Style)]
-            if styles and styles[0].line_style and styles[0].line_style.color:
-                return styles[0].line_style.color.a
-        except Exception:
-            pass
-        return 0
+        return cast(GeoColor, cast(LineStyle, self.normal_style.line_style).color).a
 
     @border_alpha.setter
     def border_alpha(self, val: int) -> None:
-        try:
-            a = int(val)
-            a = 0 if val < 0 else 255 if val > 255 else val
-            styles = [s for s in self.styles if isinstance(s, Style)]
-            for s in styles:
-                if s.line_style and s.line_style.color:
-                    s.line_style.color.a = a
-                    s.line_style.field_changed()
-        except Exception:
-            pass
+        a = int(val)
+        a = 0 if val < 0 else 255 if val > 255 else val
+        sn = cast(LineStyle, self.normal_style.line_style)
+        cast(GeoColor, sn.color).a = a
+        sn.field_changed()
+        sh = cast(LineStyle, self.highlight_style.line_style)
+        cast(GeoColor, sh.color).a = a
+        sh.field_changed()
