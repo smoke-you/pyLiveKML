@@ -7,11 +7,11 @@ from lxml import etree  # type: ignore
 from pyLiveKML.objects.AbstractView import AbstractView, ViewerOption
 from pyLiveKML.objects.Object import (
     _FieldDef,
-    Angle180,
-    Angle360,
-    Angle90,
-    AnglePos90,
-    NoParse,
+    _Angle180,
+    _Angle360,
+    _Angle90,
+    _AnglePos90,
+    _NoParse,
 )
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates, ViewerOptionEnum
@@ -92,12 +92,12 @@ class LookAt(AbstractView):
 
     _kml_tag = "LookAt"
     _kml_fields = AbstractView._kml_fields + (
-        _FieldDef("lon", "longitude", parser=Angle180),
-        _FieldDef("lat", "latitude", parser=Angle90),
+        _FieldDef("lon", "longitude", parser=_Angle180),
+        _FieldDef("lat", "latitude", parser=_Angle90),
         _FieldDef("alt", "altitude"),
-        _FieldDef("heading", parser=Angle360),
-        _FieldDef("tilt", parser=AnglePos90),
-        _FieldDef("range", parser=NoParse),
+        _FieldDef("heading", parser=_Angle360),
+        _FieldDef("tilt", parser=_AnglePos90),
+        _FieldDef("range", parser=_NoParse),
         _FieldDef("altitude_mode", "gx:altitudeMode"),
     )
     _disallowed_view_options = AbstractView._disallowed_view_options + (

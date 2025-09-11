@@ -8,29 +8,17 @@ from lxml import etree  # type: ignore
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
+from pyLiveKML.objects.Icon import Icon
 from pyLiveKML.objects.Object import (
-    _BaseObject,
     _ChildDef,
     _FieldDef,
-    ColorParse,
-    NoDump,
+    _ColorParse,
+    _NoDump,
 )
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 from pyLiveKML.types import GeoColor
-
-
-class _Overlay_Icon(_BaseObject):
-    """A minimalist Icon class, used only within `Overlay`."""
-
-    _kml_tag = "Icon"
-    _kml_fields = _BaseObject._kml_fields + (_FieldDef("href"),)
-
-    def __init__(self, href: str):
-        """_Overlay_Icon instance constructor."""
-        super().__init__()
-        self.href = href
 
 
 class Overlay(Feature, ABC):
@@ -49,11 +37,12 @@ class Overlay(Feature, ABC):
 
     Parameters
     ----------
-    icon : str | None, default = None
+    icon : str | Icon | None, default = None
         Defines the location of the image to be used as the `Overlay`. This location can
         be either on a local file system or on a web server. If this attribute is `None`,
         a rectangle is drawn using the color and size defined by the ground or screen
-        overlay.
+        overlay. If a simple `str` is supplied, then it will be used as the `href` of an
+        `Icon`.
     color : GeoColor | int | None, default = None
         The image or rectangle color and transparency.
     draw_order : int | None, default = None
@@ -135,16 +124,16 @@ class Overlay(Feature, ABC):
     """
 
     _kml_tag = ""
-    _kml_fields: tuple[_FieldDef, ...] = Feature._kml_fields + (
-        _FieldDef("icon", dumper=NoDump),
-        _FieldDef("color", parser=ColorParse),
+    _kml_fields = Feature._kml_fields + (
+        _FieldDef("icon", dumper=_NoDump),
+        _FieldDef("color", parser=_ColorParse),
         _FieldDef("draw_order", "drawOrder"),
     )
     _kml_children = Feature._kml_children + (_ChildDef("icon"),)
 
     def __init__(
         self,
-        icon: str | None = None,
+        icon: str | Icon | None = None,
         color: GeoColor | int | None = None,
         draw_order: int | None = None,
         name: str | None = None,
@@ -185,29 +174,6 @@ class Overlay(Feature, ABC):
             extended_data=extended_data,
         )
         ABC.__init__(self)
-        self._icon = _Overlay_Icon(icon) if icon else None
+        self.icon = Icon(href=icon) if isinstance(icon, str) else icon
         self.draw_order = draw_order
         self.color = cast(GeoColor | None, color)
-
-    @property
-    def icon(self) -> str | None:
-        """The location of the icon image file.
-
-        Parameters
-        ----------
-        value : str | None
-
-        :return: The (optional) location of the icon image file.
-        :rtype: str | None
-
-        """
-        return self._icon.href if self._icon else None
-
-    @icon.setter
-    def icon(self, value: str | None) -> None:
-        if value is None:
-            self._icon = None
-        elif self._icon is None:
-            self._icon = _Overlay_Icon(value)
-        else:
-            self._icon.href = value

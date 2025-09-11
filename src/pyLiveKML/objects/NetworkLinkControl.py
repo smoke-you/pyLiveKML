@@ -149,7 +149,7 @@ class NetworkLinkControl(_BaseObject):
     def containers(self) -> Iterator[Container]:
         """A generator over the synchronized containers."""
         yield from self._containers
-    
+
     @containers.setter
     def containers(self, value: Container | Iterable[Container] | None) -> None:
         self._containers.clear()

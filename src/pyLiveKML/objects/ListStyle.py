@@ -4,7 +4,7 @@ from typing import Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _BaseObject, _ChildDef, _FieldDef, ColorParse
+from pyLiveKML.objects.Object import _BaseObject, _ChildDef, _FieldDef, _ColorParse
 from pyLiveKML.objects.SubStyle import SubStyle
 from pyLiveKML.types import ItemIconModeEnum, ListItemTypeEnum, GeoColor
 
@@ -78,7 +78,7 @@ class ListStyle(SubStyle):
     _kml_tag = "ListStyle"
     _kml_fields = SubStyle._kml_fields + (
         _FieldDef("list_item_type", "listItemType"),
-        _FieldDef("bg_color", "bgColor", ColorParse),
+        _FieldDef("bg_color", "bgColor", _ColorParse),
     )
     _kml_children = SubStyle._kml_children + (_ChildDef("icons"),)
 

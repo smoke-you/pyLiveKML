@@ -119,7 +119,7 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
     else:
         select_list = select
     for s in select_list:
-        target = next(filter(lambda x: x.id == s.id, geometry.data), None)
+        target = next(filter(lambda x: x.id == str(s.id), geometry.data), None)
         if target is None:
             continue
         if target in geometry.sync and not s.checked:

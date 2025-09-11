@@ -7,14 +7,15 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
+from pyLiveKML.objects.Icon import Icon
 from pyLiveKML.objects.Object import (
     _BaseObject,
     _ChildDef,
     _FieldDef,
     _KMLDump,
     _KMLParser,
-    Angle180,
-    Angle90,
+    _Angle180,
+    _Angle90,
     Object,
 )
 from pyLiveKML.objects.Overlay import Overlay
@@ -63,11 +64,11 @@ class LatLonBox(Object):
 
     _kml_tag = "LatLonBox"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("north", parser=Angle90),
-        _FieldDef("south", parser=Angle90),
-        _FieldDef("east", parser=Angle180),
-        _FieldDef("west", parser=Angle180),
-        _FieldDef("rotation", parser=Angle180),
+        _FieldDef("north", parser=_Angle90),
+        _FieldDef("south", parser=_Angle90),
+        _FieldDef("east", parser=_Angle180),
+        _FieldDef("west", parser=_Angle180),
+        _FieldDef("rotation", parser=_Angle180),
     )
     _suppress_id = True
 
@@ -93,10 +94,10 @@ class _QuadParser(_KMLParser):
     @classmethod
     def parse(cls, value: Any) -> Any:
         return (
-            (Angle180.parse(value[0][0]), Angle90.parse(value[0][1])),
-            (Angle180.parse(value[1][0]), Angle90.parse(value[1][1])),
-            (Angle180.parse(value[2][0]), Angle90.parse(value[2][1])),
-            (Angle180.parse(value[3][0]), Angle90.parse(value[3][1])),
+            (_Angle180.parse(value[0][0]), _Angle90.parse(value[0][1])),
+            (_Angle180.parse(value[1][0]), _Angle90.parse(value[1][1])),
+            (_Angle180.parse(value[2][0]), _Angle90.parse(value[2][1])),
+            (_Angle180.parse(value[3][0]), _Angle90.parse(value[3][1])),
         )
 
 
@@ -173,8 +174,12 @@ class GroundOverlay(Overlay):
         A non-rectilinear bounding box definition
     box : LatLonBox | None, default = None
         A rectilinear bounding box definition
-    icon : str | None, default = None
-        The href of the icon
+    icon : str | Icon | None, default = None
+        Defines the location of the image to be used as the `Overlay`. This location can
+        be either on a local file system or on a web server. If this attribute is `None`,
+        a rectangle is drawn using the color and size defined by the ground or screen
+        overlay. If a simple `str` is supplied, then it will be used as the `href` of an
+        `Icon`.
     draw_order : int | None, default = None
         Defines the stacking order for the images in overlapping overlays. Overlays with
         higher `draw_order` values are drawn on top of overlays with lower `draw_order`
@@ -266,7 +271,7 @@ class GroundOverlay(Overlay):
         quad: LatLonQuad | None = None,
         box: LatLonBox | None = None,
         # Overlay parameters
-        icon: str | None = None,
+        icon: str | Icon | None = None,
         draw_order: int | None = None,
         color: GeoColor | int | None = None,
         # Feature parameters

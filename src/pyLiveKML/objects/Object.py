@@ -27,7 +27,7 @@ class _KMLDump(ABC):
         raise NotImplementedError
 
 
-class NoDump(_KMLDump):
+class _NoDump(_KMLDump):
     """Dump nothing, i.e. an empty string."""
 
     @classmethod
@@ -36,7 +36,7 @@ class NoDump(_KMLDump):
         return ""
 
 
-class DumpDirect(_KMLDump):
+class _DumpDirect(_KMLDump):
     """Dump to string."""
 
     @classmethod
@@ -67,7 +67,7 @@ class _KMLParser(ABC):
         raise NotImplementedError
 
 
-class NoParse(_KMLParser):
+class _NoParse(_KMLParser):
     """A value that will not be changed."""
 
     @classmethod
@@ -76,7 +76,7 @@ class NoParse(_KMLParser):
         return value
 
 
-class Angle90(_KMLParser):
+class _Angle90(_KMLParser):
     """A value in the range -90 to +90.
 
     References
@@ -92,7 +92,7 @@ class Angle90(_KMLParser):
         return 90 if value > 90 else -90 if value < -90 else value
 
 
-class AnglePos90(_KMLParser):
+class _AnglePos90(_KMLParser):
     """A value in the range 0 to +90.
 
     References
@@ -108,7 +108,7 @@ class AnglePos90(_KMLParser):
         return 90 if value > 90 else 0 if value < 0 else value
 
 
-class Angle180(_KMLParser):
+class _Angle180(_KMLParser):
     """A value in the range -180 to +180.
 
     References
@@ -128,7 +128,7 @@ class Angle180(_KMLParser):
         return value
 
 
-class AnglePos180(_KMLParser):
+class _AnglePos180(_KMLParser):
     """A value in the range 0 to +180.
 
     References
@@ -144,7 +144,7 @@ class AnglePos180(_KMLParser):
         return 180 if value > 180 else 0 if value < 0 else value
 
 
-class Angle360(_KMLParser):
+class _Angle360(_KMLParser):
     """A value in the range -360 to +360.
 
     References
@@ -162,7 +162,7 @@ class Angle360(_KMLParser):
         )
 
 
-class ColorParse(_KMLParser):
+class _ColorParse(_KMLParser):
     """Ensures that the output is a `GeoColor`, or `None`.
 
     Primarily intended to convert an `int` to a `GeoColor`.
@@ -177,7 +177,7 @@ class ColorParse(_KMLParser):
         return value
 
 
-class DateTimeParse(_KMLParser):
+class _DateTimeParse(_KMLParser):
     """Ensures that the output is a `datetime`, or `None`."""
 
     @classmethod
@@ -218,8 +218,8 @@ class _FieldDef:
         self,
         name: str,
         tag: str | None = None,
-        parser: Type[_KMLParser] = NoParse,
-        dumper: Type[_KMLDump] = DumpDirect,
+        parser: Type[_KMLParser] = _NoParse,
+        dumper: Type[_KMLDump] = _DumpDirect,
     ):
         """_FieldDef instance constructor."""
         self.name = name
@@ -318,7 +318,7 @@ class _BaseObject(ABC):
     def __init__(self) -> None:
         """_BaseObject instance constructor."""
         super().__init__()
-        self._id = uuid4()
+        self._id: Any = uuid4()
         self._container: _BaseObject | None = None
         self._state: ObjectState = ObjectState.IDLE
 
@@ -367,9 +367,9 @@ class _BaseObject(ABC):
         return str(self)
 
     @property
-    def id(self) -> UUID:
+    def id(self) -> str:
         """The unique identifier of this `_BaseObject`."""
-        return self._id
+        return str(self._id)
 
     @property
     def state(self) -> ObjectState:
@@ -503,7 +503,7 @@ class _BaseObject(ABC):
             True if the dependents of this instance should be included in the build.
 
         """
-        for f in (f for f in self._kml_fields if f.dumper != NoDump):
+        for f in (f for f in self._kml_fields if f.dumper != _NoDump):
             value = f.dumper.dump(getattr(self, f.name))
             if value is not None:
                 etree.SubElement(root, with_ns(f.typename)).text = value
@@ -541,9 +541,9 @@ class _BaseObject(ABC):
         if not self._suppress_id:
             attribs = {}
             if ":" in self._kml_tag:
-                attribs[with_ns("kml:id")] = str(self.id)
+                attribs[with_ns("kml:id")] = self.id
             else:
-                attribs["id"] = str(self.id)
+                attribs["id"] = self.id
 
         root = etree.Element(_tag=with_ns(self.kml_tag), attrib=attribs)
         self.build_kml(root, with_children, with_dependents)
@@ -570,9 +570,9 @@ class _BaseObject(ABC):
         # is assigned *is* in the "kml" namespace, or GEP is likely to crash.
         parent_attribs = {}
         if ":" in parent._kml_tag:
-            parent_attribs[with_ns("kml:targetId")] = str(parent.id)
+            parent_attribs[with_ns("kml:targetId")] = parent.id
         else:
-            parent_attribs["targetId"] = str(parent.id)
+            parent_attribs["targetId"] = parent.id
         parent_element = etree.SubElement(
             root, with_ns(parent.kml_tag), attrib=parent_attribs
         )
@@ -582,9 +582,9 @@ class _BaseObject(ABC):
         if not self._suppress_id:
             child_attribs = {}
             if ":" in self._kml_tag:
-                child_attribs[with_ns("kml:id")] = str(self.id)
+                child_attribs[with_ns("kml:id")] = self.id
             else:
-                child_attribs["id"] = str(self.id)
+                child_attribs["id"] = self.id
         child_element = etree.SubElement(
             parent_element, with_ns(self.kml_tag), attrib=child_attribs
         )
@@ -606,9 +606,9 @@ class _BaseObject(ABC):
         if not self._suppress_id:
             attribs = {}
             if ":" in self._kml_tag:
-                attribs[with_ns("kml:targetId")] = str(self.id)
+                attribs[with_ns("kml:targetId")] = self.id
             else:
-                attribs["targetId"] = str(self.id)
+                attribs["targetId"] = self.id
         item = etree.SubElement(root, _tag=with_ns(self.kml_tag), attrib=attribs)
         self.build_kml(item, with_children=False, with_dependents=False)
 
@@ -627,9 +627,9 @@ class _BaseObject(ABC):
         if not self._suppress_id:
             attribs = {}
             if ":" in self._kml_tag:
-                attribs[with_ns("kml:targetId")] = str(self.id)
+                attribs[with_ns("kml:targetId")] = self.id
             else:
-                attribs["targetId"] = str(self.id)
+                attribs["targetId"] = self.id
         etree.SubElement(root, _tag=with_ns(self.kml_tag), attrib=attribs)
 
     def activate(self, value: bool, cascade: bool = False) -> None:

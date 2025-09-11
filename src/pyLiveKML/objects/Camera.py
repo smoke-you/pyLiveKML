@@ -7,10 +7,10 @@ from lxml import etree  # type: ignore
 from pyLiveKML.objects.AbstractView import AbstractView, ViewerOption
 from pyLiveKML.objects.Object import (
     _FieldDef,
-    Angle90,
-    Angle180,
-    AnglePos180,
-    Angle360,
+    _Angle90,
+    _Angle180,
+    _AnglePos180,
+    _Angle360,
 )
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates, ViewerOptionEnum
@@ -90,12 +90,12 @@ class Camera(AbstractView):
 
     _kml_tag = "Camera"
     _kml_fields = AbstractView._kml_fields + (
-        _FieldDef("lon", "longitude", parser=Angle180),
-        _FieldDef("lat", "latitude", parser=Angle90),
+        _FieldDef("lon", "longitude", parser=_Angle180),
+        _FieldDef("lat", "latitude", parser=_Angle90),
         _FieldDef("alt", "altitude"),
-        _FieldDef("heading", parser=Angle360),
-        _FieldDef("tilt", parser=AnglePos180),
-        _FieldDef("roll", parser=Angle180),
+        _FieldDef("heading", parser=_Angle360),
+        _FieldDef("tilt", parser=_AnglePos180),
+        _FieldDef("roll", parser=_Angle180),
         _FieldDef("altitude_mode", "gx:altitudeMode"),
     )
 

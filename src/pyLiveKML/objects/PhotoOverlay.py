@@ -7,12 +7,13 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
+from pyLiveKML.objects.Icon import Icon
 from pyLiveKML.objects.Object import (
     _BaseObject,
     _ChildDef,
     _FieldDef,
-    Angle180,
-    Angle90,
+    _Angle180,
+    _Angle90,
 )
 from pyLiveKML.objects.Overlay import Overlay
 from pyLiveKML.objects.Point import Point
@@ -60,10 +61,10 @@ class ViewVolume(_BaseObject):
 
     _kml_tag = "ViewVolume"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("left_fov", "leftFov", Angle180),
-        _FieldDef("right_fov", "rightFov", Angle180),
-        _FieldDef("bottom_fov", "bottomFov", Angle90),
-        _FieldDef("top_fov", "topFov", Angle90),
+        _FieldDef("left_fov", "leftFov", _Angle180),
+        _FieldDef("right_fov", "rightFov", _Angle180),
+        _FieldDef("bottom_fov", "bottomFov", _Angle90),
+        _FieldDef("top_fov", "topFov", _Angle90),
         _FieldDef("near"),
     )
 
@@ -195,11 +196,12 @@ class PhotoOverlay(Overlay):
         For very large images, you'll need to construct an image pyramid, which is a
         hierarchical set of images, each of which is an increasingly lower resolution
         version of the original image.
-    icon : str | None, default = None
+    icon : str | Icon | None, default = None
         Defines the location of the image to be used as the `Overlay`. This location can
         be either on a local file system or on a web server. If this attribute is `None`,
         a rectangle is drawn using the color and size defined by the ground or screen
-        overlay.
+        overlay. If a simple `str` is supplied, then it will be used as the `href` of an
+        `Icon`.
     color : GeoColor | int | None, default = None
         The image or rectangle color and transparency.
     draw_order : int | None, default = None
@@ -300,7 +302,7 @@ class PhotoOverlay(Overlay):
         view_volume: ViewVolume | None = None,
         image_pyramid: ImagePyramid | None = None,
         # Overlay parameters
-        icon: str | None = None,
+        icon: str | Icon | None = None,
         color: GeoColor | int | None = None,
         draw_order: int | None = None,
         # Feature parameters

@@ -2,7 +2,7 @@
 
 from abc import ABC
 
-from pyLiveKML.objects.Object import _FieldDef, ColorParse
+from pyLiveKML.objects.Object import _FieldDef, _ColorParse
 from pyLiveKML.objects.SubStyle import SubStyle
 from pyLiveKML.types import ColorModeEnum, GeoColor
 
@@ -29,7 +29,7 @@ class ColorStyle(SubStyle, ABC):
     """
 
     _kml_fields: tuple[_FieldDef, ...] = SubStyle._kml_fields + (
-        _FieldDef("color", parser=ColorParse),
+        _FieldDef("color", parser=_ColorParse),
         _FieldDef("color_mode", "colorMode"),
     )
 

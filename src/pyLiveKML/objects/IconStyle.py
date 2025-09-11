@@ -3,20 +3,9 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.ColorStyle import ColorStyle
-from pyLiveKML.objects.Object import _BaseObject, _DependentDef, _FieldDef, NoDump
+from pyLiveKML.objects.Icon import Icon
+from pyLiveKML.objects.Object import _ChildDef, _DependentDef, _FieldDef, _NoDump
 from pyLiveKML.types import ColorModeEnum, GeoColor, HotSpot
-
-
-class _IconStyle_Icon(_BaseObject):
-    """A minimalist Icon class, used only within `IconStyle`."""
-
-    _kml_tag = "Icon"
-    _kml_fields = _BaseObject._kml_fields + (_FieldDef("href"),)
-
-    def __init__(self, href: str):
-        """_IconStyle_Icon instance constructor."""
-        super().__init__()
-        self.href = href
 
 
 class IconStyle(ColorStyle):
@@ -33,8 +22,9 @@ class IconStyle(ColorStyle):
 
     Parameters
     ----------
-    icon: str
-        An HTTP address or a local file specification used to load an icon.
+    icon: str | Icon
+        An HTTP address, or a local file specification, or an `Icon`, used to load an
+        icon for display.
     scale: float, default = 1.0
         Resizes the icon.
     heading: float | None, default = None
@@ -54,18 +44,17 @@ class IconStyle(ColorStyle):
 
     _kml_tag = "IconStyle"
     _kml_fields = ColorStyle._kml_fields + (
-        _FieldDef("icon", dumper=NoDump),
+        _FieldDef("icon", dumper=_NoDump),
+        _FieldDef("hot_spot", dumper=_NoDump),
         _FieldDef("scale"),
         _FieldDef("heading"),
     )
-    _kml_dependents = ColorStyle._kml_dependents + (
-        _DependentDef("icon"),
-        _DependentDef("hot_spot"),
-    )
+    _kml_dependents = ColorStyle._kml_dependents + (_DependentDef("hot_spot"),)
+    _kml_children = ColorStyle._kml_children + (_ChildDef("icon"),)
 
     def __init__(
         self,
-        icon: str,
+        icon: str | Icon,
         scale: float = 1.0,
         heading: float | None = None,
         color: GeoColor | int | None = None,
@@ -76,5 +65,5 @@ class IconStyle(ColorStyle):
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
         self.scale = scale
         self.heading = heading
-        self.icon = _IconStyle_Icon(icon)
+        self.icon: Icon = Icon(href=icon) if isinstance(icon, str) else icon
         self.hot_spot = hot_spot

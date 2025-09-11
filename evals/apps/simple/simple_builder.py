@@ -3,25 +3,23 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML import (
-    kml_root_tag,
-    KML_DOCTYPE,
     AltitudeModeEnum,
-    Document,
-    Folder,
-    Placemark,
-    Point,
-    LineString,
-    LinearRing,
-    Polygon,
-    MultiGeometry,
-    Track,
-    MultiTrack,
-    Style,
     BalloonStyle,
+    DataItem,
+    Document,
+    ExtendedData,
+    Folder,
     IconStyle,
     LabelStyle,
+    LinearRing,
+    LineString,
     LineStyle,
+    MultiGeometry,
+    Placemark,
+    Point,
+    Polygon,
     PolyStyle,
+    Style,
     StyleMap,
 )
 
@@ -81,6 +79,13 @@ build_data = Document(
         with_cutout_poly_style_highlight,
         with_cutout_poly_style,
     ],
+    extended_data=ExtendedData(
+        items=(
+            DataItem("field 0", "Field: 0", "abc"),
+            DataItem("field 1", "Field: 1", "def"),
+            DataItem("field 2", "Field: 2", "ghi"),
+        ),
+    ),
 )
 
 points_folder = Folder(

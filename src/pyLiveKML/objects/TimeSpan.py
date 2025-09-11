@@ -4,7 +4,7 @@ from datetime import datetime
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _FieldDef, DateTimeParse
+from pyLiveKML.objects.Object import _FieldDef, _DateTimeParse
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 
 
@@ -35,8 +35,8 @@ class TimeSpan(TimePrimitive):
 
     _kml_tag = "TimeSpan"
     _kml_fields = TimePrimitive._kml_fields + (
-        _FieldDef("begin", parser=DateTimeParse),
-        _FieldDef("end", parser=DateTimeParse),
+        _FieldDef("begin", parser=_DateTimeParse),
+        _FieldDef("end", parser=_DateTimeParse),
     )
 
     def __init__(

@@ -107,7 +107,7 @@ async def _(select: KMLSelect | list[KMLSelect]) -> None:
     else:
         select_list = select
     for s in select_list:
-        target = next(filter(lambda x: x.id == s.id, tracer.data), None)
+        target = next(filter(lambda x: x.id == str(s.id), tracer.data), None)
         if target is None:
             continue
         if target in tracer.sync and not s.checked:

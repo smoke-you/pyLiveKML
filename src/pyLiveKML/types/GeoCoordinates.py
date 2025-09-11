@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from pyLiveKML.objects.Object import Angle90, Angle180
+from pyLiveKML.objects.Object import _Angle90, _Angle180
 
 
 class GeoCoordinates:
@@ -73,9 +73,9 @@ class GeoCoordinates:
     def __setattr__(self, name: str, value: Any) -> None:
         """GeoCoordinates __setattr__ implementation."""
         if name == "lon":
-            value = Angle180.parse(value)
+            value = _Angle180.parse(value)
         elif name == "lat":
-            value = Angle90.parse(value)
+            value = _Angle90.parse(value)
         super().__setattr__(name, value)
 
     def __str__(self) -> str:

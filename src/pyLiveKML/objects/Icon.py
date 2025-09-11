@@ -48,20 +48,20 @@ class Icon(Link):
         * [kmlVersion]
         * [clientName]
         * [language]
-    x: int, default = 0
+    x: int | None, default = None
         If `href` specifies an icon palette, `x` and `y` identify the offsets, in
         pixels, from the lower-left corner of the icon palette. If no values are
         specified for `x` and `y`, the lower left corner of the icon palette is assumed
         to be the lower-left corner of the icon to use.
-    y: int, default = 0
+    y: int | None, default = None
         If `href` specifies an icon palette, `x` and `y` identify the offsets, in
         pixels, from the lower-left corner of the icon palette. If no values are
         specified for `x` and `y`, the lower left corner of the icon palette is assumed
         to be the lower-left corner of the icon to use.
-    w: int, default = -1
+    w: int | None, default = None
         If `href` specifies an icon palette, `w` and `h` specify the width and height, in
         pixels, of the icon to use.
-    h: int, default = -1
+    h: int | None, default = None
         If `href` specifies an icon palette, `w` and `h` specify the width and height, in
         pixels, of the icon to use.
 
@@ -89,10 +89,10 @@ class Icon(Link):
         view_bound_scale: float | None = None,
         view_format: str | None = None,
         http_query: str | None = None,
-        x: int = 0,
-        y: int = 0,
-        w: int = -1,
-        h: int = -1,
+        x: int | None = None,
+        y: int | None = None,
+        w: int | None = None,
+        h: int | None = None,
     ):
         """Icon instance constructor."""
         Link.__init__(

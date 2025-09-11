@@ -11,10 +11,10 @@ from pyLiveKML.objects.Model import Model
 from pyLiveKML.objects.Object import (
     _ChildDef,
     _FieldDef,
-    Angle180,
-    Angle360,
-    Angle90,
-    AnglePos180,
+    _Angle180,
+    _Angle360,
+    _Angle90,
+    _AnglePos180,
 )
 from pyLiveKML.types import AltitudeModeEnum
 from pyLiveKML.utils import with_ns
@@ -49,8 +49,8 @@ class TrackCoord:
     ):
         """TrackCoord instance constructor."""
         super().__init__()
-        self.lon = Angle180.parse(lon)
-        self.lat = Angle90.parse(lat)
+        self.lon = _Angle180.parse(lon)
+        self.lat = _Angle90.parse(lat)
         self.alt = alt
 
     def __str__(self) -> str:
@@ -87,9 +87,9 @@ class TrackAngles:
     ) -> None:
         """TrackAngles instance constructor."""
         super().__init__()
-        self.heading = Angle360.parse(heading)
-        self.tilt = AnglePos180.parse(tilt)
-        self.roll = Angle180.parse(roll)
+        self.heading = _Angle360.parse(heading)
+        self.tilt = _AnglePos180.parse(tilt)
+        self.roll = _Angle180.parse(roll)
 
     def __str__(self) -> str:
         """Return a string representation."""

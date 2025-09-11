@@ -11,10 +11,10 @@ from pyLiveKML.objects.Object import (
     _ChildDef,
     _FieldDef,
     _ListObject,
-    Angle90,
-    Angle180,
-    AnglePos180,
-    Angle360,
+    _Angle90,
+    _Angle180,
+    _AnglePos180,
+    _Angle360,
     Object,
 )
 from pyLiveKML.types import AltitudeModeEnum
@@ -48,8 +48,8 @@ class Location(_BaseObject):
 
     _kml_tag = "Location"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("longitude", parser=Angle180),
-        _FieldDef("latitude", parser=Angle90),
+        _FieldDef("longitude", parser=_Angle180),
+        _FieldDef("latitude", parser=_Angle90),
         _FieldDef("altitude"),
     )
 
@@ -92,9 +92,9 @@ class Orientation(_BaseObject):
 
     _kml_tag = "Orientation"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("heading", parser=Angle360),
-        _FieldDef("tilt", parser=AnglePos180),
-        _FieldDef("roll", parser=Angle180),
+        _FieldDef("heading", parser=_Angle360),
+        _FieldDef("tilt", parser=_AnglePos180),
+        _FieldDef("roll", parser=_Angle180),
     )
 
     def __init__(self, heading: float = 0, tilt: float = 0, roll: float = 0):

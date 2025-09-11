@@ -7,6 +7,7 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
+from pyLiveKML.objects.Icon import Icon
 from pyLiveKML.objects.Object import _ChildDef, _FieldDef
 from pyLiveKML.objects.Overlay import Overlay
 from pyLiveKML.objects.Region import Region
@@ -54,11 +55,12 @@ class ScreenOverlay(Overlay):
         rotation. The value is an angle in degrees counterclockwise starting from north.
         Use ±180 to indicate the rotation of the parent object from 0. The center of the
         `rotation`, if not (.5,.5), is specified in `rotation_xy`.
-    icon : str | None, default = None
+    icon : str | Icon | None, default = None
         Defines the location of the image to be used as the `Overlay`. This location can
         be either on a local file system or on a web server. If this attribute is `None`,
         a rectangle is drawn using the color and size defined by the ground or screen
-        overlay.
+        overlay. If a simple `str` is supplied, then it will be used as the `href` of an
+        `Icon`.
     color : GeoColor | int | None, default = None
         The image or rectangle color and transparency.
     draw_order : int | None, default = None
@@ -157,7 +159,7 @@ class ScreenOverlay(Overlay):
         size: Size,
         rotation: float = 0,
         # Overlay parameters
-        icon: str | None = None,
+        icon: str | Icon | None = None,
         draw_order: int | None = None,
         color: GeoColor | int | None = None,
         name: str | None = None,
