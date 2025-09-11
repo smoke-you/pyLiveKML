@@ -11,6 +11,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
 from fastapi.responses import (
+    Response,
     FileResponse,
     PlainTextResponse,
     RedirectResponse,
@@ -23,13 +24,18 @@ from lxml import etree  # type: ignore
 
 from apps.KMLApp import find_apps, KMLControlRequest, KMLControlResponse
 from pyLiveKML import (
+    Document,
     Folder,
+    ItemIcon,
+    ItemIconModeEnum,
     KML_DOCTYPE,
     KML_HEADERS,
     Link,
+    ListStyle,
     NetworkLink,
     NetworkLinkControl,
     RefreshModeEnum,
+    Style,
     kml_root_tag,
 )
 
@@ -90,10 +96,29 @@ gep_loader = Folder(
     ],
 )
 
-gep_elements = Folder(name="Root")
-# assign a constant UUID to the container, so that it can be refreshed in GEP
+
+elem_styles = (
+    Style(
+        list_style=ListStyle(
+            icons=(
+                ItemIcon(
+                    icon_state=ItemIconModeEnum.OPEN,
+                    href="static/img/google-mapfiles-kml-pal3-icon47.png",
+                ),
+                ItemIcon(
+                    icon_state=ItemIconModeEnum.CLOSED,
+                    href="static/img/google-mapfiles-kml-pal3-icon41.png",
+                ),
+            ),
+        )
+    ),
+)
+gep_elements = Document(
+    name="Root", style_url=f"#{elem_styles[0].id}", styles=elem_styles
+)
+# assign a constant `id` to the container, so that it can be refreshed in GEP
 # without having to reload the pyLiveKML link after restarting the server
-gep_elements._id = UUID("8c2cda8e-7d56-4a29-99e7-e05e6dbaf193")
+gep_elements._id = "elements"
 
 # The master synchronization controller, a NetworkLinkControl object
 gep_sync = NetworkLinkControl(
@@ -135,13 +160,18 @@ async def _() -> FileResponse:
     return FileResponse(local_dir.joinpath("static/img/earth.png"))
 
 
+@app.get("/static/images/{filename}")
+async def _(filename: str, request: Request) -> FileResponse:
+    return FileResponse(local_dir.joinpath(f"static/img/{filename}"))
+
+
 @app.get("/")
 async def _() -> RedirectResponse:
     return RedirectResponse("index.html")
 
 
 @app.get("/{filename}")
-async def _(filename: str, request: Request) -> Any:
+async def _(filename: str, request: Request) -> Response:
     root = kml_root_tag()
     if filename == "index.html":
         for c in gep_elements:
@@ -157,7 +187,7 @@ async def _(filename: str, request: Request) -> Any:
         }
         return templates.TemplateResponse("index.html.j2", context)
     elif filename == ELEMENTS_FILE:
-        root.append(gep_elements.construct_kml(False, True))
+        root.append(gep_elements.construct_kml(True, True))
     elif filename == UPDATE_FILE:
         root.append(gep_sync.construct_sync())
     elif filename == LOADER_FILE:

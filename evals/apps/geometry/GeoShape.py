@@ -53,7 +53,7 @@ class GeoShape(Placemark, ABC):
                 highlight_style_ref=Style(
                     line_style=LineStyle(width=border_width * 3, color=border_color),
                     poly_style=PolyStyle(color=fill_color),
-                )
+                ),
             ),
             geometry=Polygon(
                 outer_boundary=LinearRing(coordinates=g_outer),
@@ -66,10 +66,12 @@ class GeoShape(Placemark, ABC):
 
     @property
     def normal_style(self) -> Style:
+        """Retrieve the normal style of the `GeoShape`."""
         return cast(Style, cast(StyleMap, self._styles[0]).normal)
 
     @property
     def highlight_style(self) -> Style:
+        """Retrieve the highlight style of the `GeoShape`."""
         return cast(Style, cast(StyleMap, self._styles[0]).highlight)
 
     @property

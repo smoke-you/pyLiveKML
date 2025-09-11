@@ -123,7 +123,7 @@ class Document(Container):
         abstract_view: AbstractView | None = None,
         time_primitive: TimePrimitive | None = None,
         style_url: str | None = None,
-        styles: Iterable[StyleSelector] | None = None,
+        styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
         extended_data: ExtendedData | None = None,
         features: Feature | Iterable[Feature] | None = None,

@@ -12,9 +12,12 @@ from fastapi.requests import Request
 from fastapi.templating import Jinja2Templates
 from lxml import etree  # type: ignore
 from pyLiveKML import (
+    AltitudeModeEnum,
+    Camera,
     Document,
     Folder,
-    NetworkLinkControl,
+    GeoCoordinates,
+    Point,
     TimeSpan,
     kml_root_tag,
     KML_DOCTYPE,
@@ -49,14 +52,50 @@ def load_adsb_exchange_data(filename: Path) -> Folder:
                     t[5] if isinstance(t[5], (float, int)) else 0,
                 )
                 kmldata.append(p)
-            except BaseException as x:
-                print(x)
+            except BaseException as ex:
+                print(ex)
         kmldata.time_primitive = TimeSpan(
             cast(AircraftPosition, kmldata[0]).timestamp,
             cast(AircraftPosition, kmldata[-1]).timestamp,
         )
-    except BaseException as x:
-        print(x)
+        min_lon = min(
+            map(
+                lambda x: cast(
+                    Point, cast(AircraftPosition, x).geometry
+                ).coordinates.lon,
+                kmldata.features,
+            )
+        )
+        max_lon = max(
+            map(
+                lambda x: cast(
+                    Point, cast(AircraftPosition, x).geometry
+                ).coordinates.lon,
+                kmldata.features,
+            )
+        )
+        min_lat = min(
+            map(
+                lambda x: cast(
+                    Point, cast(AircraftPosition, x).geometry
+                ).coordinates.lat,
+                kmldata.features,
+            )
+        )
+        max_lat = max(
+            map(
+                lambda x: cast(
+                    Point, cast(AircraftPosition, x).geometry
+                ).coordinates.lat,
+                kmldata.features,
+            )
+        )
+        kmldata.abstract_view = Camera(
+            GeoCoordinates((min_lon + max_lon) / 2, (min_lat + max_lat) / 2, 2500000),
+            altitude_mode=AltitudeModeEnum.ABSOLUTE,
+        )
+    except BaseException as ex:
+        print(ex)
     return kmldata
 
 

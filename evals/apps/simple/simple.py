@@ -13,7 +13,7 @@ from lxml import etree  # type: ignore
 from pyLiveKML import kml_root_tag, KML_DOCTYPE, KML_HEADERS
 
 from ..KMLApp import KMLApp
-from .simple_builder import build_data
+from .simple_builder import build_simple_doc
 
 simple_app = FastAPI()
 locdir = Path(__file__).parent
@@ -34,7 +34,7 @@ async def _(request: Request) -> HTMLResponse:
 @simple_app.get("/simple_data.kml")
 async def _(request: Request) -> PlainTextResponse:
     root = kml_root_tag()
-    root.append(build_data.construct_kml())
+    root.append(build_simple_doc(str(request.base_url)).construct_kml())
     return PlainTextResponse(
         content=etree.tostring(
             root, doctype=KML_DOCTYPE, encoding="utf-8", pretty_print=True

@@ -12,11 +12,6 @@ from pyLiveKML.objects.Object import (
 )
 
 
-# TODO: This needs some work. There are issues around how `SimpleField` works.
-# Also need to consider the `<ExtendedData>` tag/class, and `SimpleArrayData` in `Track.`
-# Too much complexity to deal with at this point.
-
-
 class SimpleField(_BaseObject):
     """SimpleField class.
 
