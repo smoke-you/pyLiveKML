@@ -95,9 +95,11 @@ class Schema(Object):
             else:
                 self._schema_fields.extend(value)
 
-    def construct_kml(self, with_children: bool = True, with_dependents: bool = True) -> etree.Element:
+    def construct_kml(
+        self, with_children: bool = True, with_dependents: bool = True
+    ) -> etree.Element:
         """Construct this instances' KML representation.
-        
+
         Adds the `name` attribute to the returned tag.
         """
         root = super().construct_kml(with_children, with_dependents)

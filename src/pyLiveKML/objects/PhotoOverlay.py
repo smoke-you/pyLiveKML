@@ -146,6 +146,7 @@ class ImagePyramid(_BaseObject):
         grid_origin: GridOriginEnum = GridOriginEnum.LOWER_LEFT,
     ) -> None:
         """_PhotoOverlay_ImagePyramid instance constructor."""
+        super().__init__()
         self.tile_size = tile_size
         self.max_width = max_width
         self.max_height = max_height
@@ -346,7 +347,6 @@ class PhotoOverlay(Overlay):
             region=region,
             extended_data=extended_data,
         )
-        ABC.__init__(self)
         self.point = point
         self.shape = shape
         self.rotation = rotation

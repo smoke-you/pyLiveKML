@@ -38,20 +38,17 @@ class Vec2(_BaseObject, ABC):
         self.x_units = x_units
         self.y_units = y_units
 
-    def build_kml(
-        self,
-        root: etree.Element,
-        with_children: bool = True,
-        with_dependents: bool = True,
-    ) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
+    def construct_kml(
+        self, with_children: bool = True, with_dependents: bool = True
+    ) -> etree.Element:
+        """Construct this instances' KML representation."""
         attribs = {
             "x": str(self.x),
             "y": str(self.y),
-            "xunits": self.x_units.value,
-            "yunits": self.y_units.value,
+            "xunits": str(self.x_units.value),
+            "yunits": str(self.y_units.value),
         }
-        etree.SubElement(root, self._kml_tag, attrib=attribs)
+        return etree.Element(self.kml_tag, attrib=attribs)
 
     def __eq__(self, other: object) -> bool:
         """Check equality."""

@@ -22,7 +22,7 @@ from pyLiveKML.objects.Overlay import Overlay
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
-from pyLiveKML.types.GeoColor import GeoColor
+from pyLiveKML.types import AltitudeModeEnum, GeoColor
 
 
 class LatLonBox(Object):
@@ -81,6 +81,7 @@ class LatLonBox(Object):
         rotation: float = 0,
     ) -> None:
         """LatLonBox instance constructor."""
+        super().__init__()
         self.north = north
         self.south = south
         self.east = east
@@ -152,6 +153,7 @@ class LatLonQuad(Object):
         ],
     ) -> None:
         """LatLonQuad instance constructor."""
+        super().__init__()
         self.coordinates = coordinates
 
 
@@ -268,6 +270,8 @@ class GroundOverlay(Overlay):
     def __init__(
         self,
         # GroundOverlay parameters
+        altitude: float | None = None,
+        altitude_mode: AltitudeModeEnum | None = None,
         quad: LatLonQuad | None = None,
         box: LatLonBox | None = None,
         # Overlay parameters
@@ -313,6 +317,7 @@ class GroundOverlay(Overlay):
             region=region,
             extended_data=extended_data,
         )
-        ABC.__init__(self)
+        self.altitude = altitude
+        self.altitude_mode = altitude_mode
         self.quad = quad
         self.box = box

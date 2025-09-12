@@ -35,7 +35,7 @@ from pyLiveKML.objects.Document import Document
 from pyLiveKML.objects.ExtendedData import DataItem, ExtendedData, SchemaDataItem
 from pyLiveKML.objects.FlyTo import FlyTo
 from pyLiveKML.objects.Folder import Folder
-from pyLiveKML.objects.GroundOverlay import GroundOverlay
+from pyLiveKML.objects.GroundOverlay import GroundOverlay, LatLonBox, LatLonQuad
 from pyLiveKML.objects.Icon import Icon
 from pyLiveKML.objects.IconStyle import IconStyle
 from pyLiveKML.objects.LabelStyle import LabelStyle
@@ -99,6 +99,8 @@ __all__ = [
     "KML_UPDATE_CONTAINER_LIMIT_DEFAULT",
     "LabelStyle",
     "LatLonAltBox",
+    "LatLonBox",
+    "LatLonQuad",
     "LevelOfDetail",
     "LineString",
     "LineStyle",

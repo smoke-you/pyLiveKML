@@ -11,10 +11,14 @@ from pyLiveKML import (
     Document,
     ExtendedData,
     Folder,
+    GroundOverlay,
+    Icon,
     IconStyle,
     ItemIcon,
     ItemIconModeEnum,
     LabelStyle,
+    LatLonBox,
+    LatLonQuad,
     LinearRing,
     LineString,
     LineStyle,
@@ -23,15 +27,22 @@ from pyLiveKML import (
     LookAt,
     Model,
     MultiGeometry,
+    OverlayXY,
+    PhotoOverlay,
     Placemark,
     Point,
     Polygon,
     PolyStyle,
+    RotationXY,
     Schema,
     SchemaDataItem,
+    ScreenOverlay,
+    ScreenXY,
     SimpleField,
+    Size,
     Style,
     StyleMap,
+    UnitsEnum,
 )
 
 
@@ -372,12 +383,11 @@ def build_simple_doc(root_path: str) -> Document:
         ],
     )
 
-
-    # This is commented out because I don't think I can put the CU Macky building .dae 
-    # model, obtained from 
-    # https://developers.google.com/static/kml/documentation/MackyBldg.kmz as linked at 
+    # This is commented out because I don't think I can put the CU Macky building .dae
+    # model, obtained from
+    # https://developers.google.com/static/kml/documentation/MackyBldg.kmz as linked at
     # https://developers.google.com/kml/documentation/models into my github archive.
-    # Nonetheless, the <Model> implementation works - the model is displayed in GEP, and 
+    # Nonetheless, the <Model> implementation works - the model is displayed in GEP, and
     # all of it's texture files are retrieved using the <ResourceMap> aliases.
     # It should be quite straightforward to replicate.
 
@@ -419,6 +429,51 @@ def build_simple_doc(root_path: str) -> Document:
     #     ]
     # )
 
+    overlay_folder = Folder(
+        "Overlays",
+        description="Contains an instance of each concrete Overlay subclass",
+        snippet="",
+        features=[
+            GroundOverlay(
+                name="Ground overlay (box)",
+                description='Overlays a semi-transparent "earth" icon into a square box with 45deg rotation',
+                box=LatLonBox(-33.86354, -33.87354, 151.20843, 151.21843, 45),
+                color=0xA0FFFFFF,
+                icon=Icon(f"{root_path}/static/img/earth.png"),
+            ),
+            GroundOverlay(
+                name="Ground overlay (quad)",
+                description="Overlays a semi-transparent blue-green rhombus",
+                quad=LatLonQuad(
+                    (
+                        (151.22843, -33.86354),
+                        (151.24043, -33.86354),
+                        (151.23843, -33.87354),
+                        (151.22643, -33.87354),
+                    )
+                ),
+                color=0x80FF4000,
+            ),
+            ScreenOverlay(
+                name="Screen overlay",
+                description='Overlays a "pyLiveKML" icon onto the screen in the bottom-left corner.\nColor is purple, semi-transparent.',
+                size=Size(
+                    0, 64, UnitsEnum.PIXELS, UnitsEnum.PIXELS
+                ),  # 64px high, maintain aspect ratio
+                overlay_xy=OverlayXY(0, 0),  # place at bottom left corner of icon
+                screen_xy=ScreenXY(
+                    0.05, 0.08
+                ),  # place at 0.05,0.08 of screen fullscale from origin
+                rotation_xy=RotationXY(
+                    0.05, 0.08
+                ),  # rotation around 0.05,0.08 of screen fullscale from origin
+                rotation=30,  # rotate 30deg around rotation_xy
+                icon=Icon(f"{root_path}/static/img/pyLiveKML-overlay.png"),
+                color=0xA08000FF,
+            ),
+        ],
+    )
+
     build_data.extend(
         (
             xd_folder,
@@ -428,6 +483,7 @@ def build_simple_doc(root_path: str) -> Document:
             poly_folder,
             multigeo_folder,
             # model_folder,
+            overlay_folder,
         )
     )
 

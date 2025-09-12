@@ -153,10 +153,10 @@ class ScreenOverlay(Overlay):
     def __init__(
         self,
         # ScreenOverlay parameters
-        overlay_xy: OverlayXY,
-        screen_xy: ScreenXY,
-        rotation_xy: RotationXY,
-        size: Size,
+        overlay_xy: OverlayXY | None = None,
+        screen_xy: ScreenXY | None = None,
+        rotation_xy: RotationXY | None = None,
+        size: Size | None = None,
         rotation: float = 0,
         # Overlay parameters
         icon: str | Icon | None = None,

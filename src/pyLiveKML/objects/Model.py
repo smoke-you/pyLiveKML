@@ -265,7 +265,7 @@ class Model(Geometry):
         Specifies the file to load and optional refresh parameters.
     altitude_mode : AltitudeModeEnum | None, default = None
     location : GeoCoordinates | tuple[float, float, float|None] | tuple[float, float], default = (0, 0, 0)
-        The location of the model, as a tuple of (longitude, latitude, altitude). 
+        The location of the model, as a tuple of (longitude, latitude, altitude).
         Altitude is optional (may be `None`, or not provided).
     orientation : tuple[float, float, float], default = (0, 0, 0)
         The orientation of the model, as a tuple of (heading, tilt, roll).
@@ -306,7 +306,9 @@ class Model(Geometry):
         self,
         link: Link,
         altitude_mode: AltitudeModeEnum | None = None,
-        location: GeoCoordinates | tuple[float, float, float|None] | tuple[float, float] = (0, 0, 0),
+        location: (
+            GeoCoordinates | tuple[float, float, float | None] | tuple[float, float]
+        ) = (0, 0, 0),
         orientation: tuple[float, float, float] = (0, 0, 0),
         scales: tuple[float, float, float] = (0, 0, 0),
         resources: Alias | Iterable[Alias] | None = None,
