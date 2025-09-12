@@ -3,6 +3,7 @@
 from lxml import etree  # type: ignore
 
 from pyLiveKML import (
+    Alias,
     AltitudeModeEnum,
     BalloonStyle,
     Camera,
@@ -17,8 +18,10 @@ from pyLiveKML import (
     LinearRing,
     LineString,
     LineStyle,
+    Link,
     ListStyle,
     LookAt,
+    Model,
     MultiGeometry,
     Placemark,
     Point,
@@ -369,6 +372,53 @@ def build_simple_doc(root_path: str) -> Document:
         ],
     )
 
+
+    # This is commented out because I don't think I can put the CU Macky building .dae 
+    # model, obtained from 
+    # https://developers.google.com/static/kml/documentation/MackyBldg.kmz as linked at 
+    # https://developers.google.com/kml/documentation/models into my github archive.
+    # Nonetheless, the <Model> implementation works - the model is displayed in GEP, and 
+    # all of it's texture files are retrieved using the <ResourceMap> aliases.
+    # It should be quite straightforward to replicate.
+
+    # model_folder = Folder(
+    #     name="Models",
+    #     is_open=True,
+    #     description="Contains a Placemark hosting a Model.",
+    #     snippet="",
+    #     features=[
+    #         Placemark(
+    #             geometry=Model(
+    #                 Link(href=f"{root_path}static/dae/CU Macky.dae"),
+    #                 location=(151.20643, -33.90554),
+    #                 scales=(20, 20, 20),
+    #                 resources=(
+    #                     Alias("resources/CU-Macky---Center-StairsnoCulling.jpg", "../files/CU-Macky---Center-StairsnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-4sideturretnoCulling.jpg", "../files/CU-Macky-4sideturretnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-Back-NorthnoCulling.jpg", "../files/CU-Macky-Back-NorthnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-BrickwallnoCulling.jpg", "../files/CU-Macky-BrickwallnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-East-WingnoCulling.jpg", "../files/CU-Macky-East-WingnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-EastdetaildoornoCulling.jpg", "../files/CU-Macky-EastdetaildoornoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-EastnoCulling.jpg", "../files/CU-Macky-EastnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-EntrancenoCulling.jpg", "../files/CU-Macky-EntrancenoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-Front--TurretnoCulling.jpg", "../files/CU-Macky-Front--TurretnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-FrontbrickwallnoCulling.jpg", "../files/CU-Macky-FrontbrickwallnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-FrontnoCulling.jpg", "../files/CU-Macky-FrontnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-FrontofTowernoCulling.jpg", "../files/CU-Macky-FrontofTowernoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-NortheastUnivnoCulling.jpg", "../files/CU-Macky-NortheastUnivnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-NorthnoCulling.jpg", "../files/CU-Macky-NorthnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-RoofnoCulling.jpg", "../files/CU-Macky-RoofnoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-Tower-SidenoCulling.jpg", "../files/CU-Macky-Tower-SidenoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-TowerBasenoCulling.jpg", "../files/CU-Macky-TowerBasenoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-TowernoCulling.jpg", "../files/CU-Macky-TowernoCulling.jpg"),
+    #                     Alias("resources/CU-Macky-_Side_BrickwallnoCulling.jpg", "../files/CU-Macky-_Side_BrickwallnoCulling.jpg"),
+    #                     Alias("resources/roofnoCulling.jpg", "../files/roofnoCulling.jpg"),
+    #                 )
+    #             )
+    #         )
+    #     ]
+    # )
+
     build_data.extend(
         (
             xd_folder,
@@ -377,6 +427,7 @@ def build_simple_doc(root_path: str) -> Document:
             linring_folder,
             poly_folder,
             multigeo_folder,
+            # model_folder,
         )
     )
 

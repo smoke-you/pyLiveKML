@@ -160,11 +160,6 @@ async def _() -> FileResponse:
     return FileResponse(local_dir.joinpath("static/img/earth.png"))
 
 
-@app.get("/static/images/{filename}")
-async def _(filename: str, request: Request) -> FileResponse:
-    return FileResponse(local_dir.joinpath(f"static/img/{filename}"))
-
-
 @app.get("/")
 async def _() -> RedirectResponse:
     return RedirectResponse("index.html")

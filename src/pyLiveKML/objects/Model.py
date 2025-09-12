@@ -17,7 +17,7 @@ from pyLiveKML.objects.Object import (
     _Angle360,
     Object,
 )
-from pyLiveKML.types import AltitudeModeEnum
+from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
 
 
 class Location(_BaseObject):
@@ -48,17 +48,17 @@ class Location(_BaseObject):
 
     _kml_tag = "Location"
     _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("longitude", parser=_Angle180),
-        _FieldDef("latitude", parser=_Angle90),
-        _FieldDef("altitude"),
+        _FieldDef("lon", "longitude", parser=_Angle180),
+        _FieldDef("lat", "latitude", parser=_Angle90),
+        _FieldDef("alt", "altitude"),
     )
 
-    def __init__(self, longitude: float = 0, latitude: float = 0, altitude: float = 0):
+    def __init__(self, lon: float = 0, lat: float = 0, alt: float | None = None):
         """Location instance constructor."""
         super().__init__()
-        self.longitude = longitude
-        self.latitude = latitude
-        self.altitude = altitude
+        self.lon: float = lon
+        self.lat: float = lat
+        self.alt: float = 0 if not alt else alt
 
 
 class Orientation(_BaseObject):
@@ -206,6 +206,7 @@ class ResourceMap(_ListObject[Alias], _BaseObject):
 
     _kml_tag = "ResourceMap"
     _kml_children = _BaseObject._kml_children + (_ChildDef("resources"),)
+    _yield_self = True
 
     def __init__(self, resources: Alias | Iterable[Alias] | None = None) -> None:
         """ResourceMap instance constructor."""
@@ -263,8 +264,9 @@ class Model(Geometry):
     link : Link
         Specifies the file to load and optional refresh parameters.
     altitude_mode : AltitudeModeEnum | None, default = None
-    location : tuple[float, float, float], default = (0, 0, 0)
-        The location of the model, as a tuple of (longitude, latitude, altitude).
+    location : GeoCoordinates | tuple[float, float, float|None] | tuple[float, float], default = (0, 0, 0)
+        The location of the model, as a tuple of (longitude, latitude, altitude). 
+        Altitude is optional (may be `None`, or not provided).
     orientation : tuple[float, float, float], default = (0, 0, 0)
         The orientation of the model, as a tuple of (heading, tilt, roll).
     scales : tuple[float, float, float], default = (0, 0, 0)
@@ -296,7 +298,7 @@ class Model(Geometry):
         _ChildDef("link"),
         _ChildDef("location"),
         _ChildDef("orientation"),
-        _ChildDef("scale"),
+        _ChildDef("scales"),
         _ChildDef("resources"),
     )
 
@@ -304,7 +306,7 @@ class Model(Geometry):
         self,
         link: Link,
         altitude_mode: AltitudeModeEnum | None = None,
-        location: tuple[float, float, float] = (0, 0, 0),
+        location: GeoCoordinates | tuple[float, float, float|None] | tuple[float, float] = (0, 0, 0),
         orientation: tuple[float, float, float] = (0, 0, 0),
         scales: tuple[float, float, float] = (0, 0, 0),
         resources: Alias | Iterable[Alias] | None = None,
@@ -316,7 +318,12 @@ class Model(Geometry):
             AltitudeModeEnum.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode
         )
         self.altitude_mode = altitude_mode
-        self.location = Location(*location)
+        if isinstance(location, GeoCoordinates):
+            self.location = Location(*location.values)
+        elif len(location) == 2 or (len(location) == 3 and location[2] is None):
+            self.location = Location(*location[:2])
+        else:
+            self.location = Location(*location)
         self.orientation = Orientation(*orientation)
         self.scales = Scales(*scales)
         self.resources = ResourceMap(resources)
