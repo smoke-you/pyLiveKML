@@ -18,6 +18,7 @@ from pyLiveKML import (
     ItemIcon,
     ItemIconModeEnum,
     LabelStyle,
+    LatLonAltBox,
     LatLonBox,
     LatLonQuad,
     LinearRing,
@@ -25,6 +26,7 @@ from pyLiveKML import (
     LineStyle,
     Link,
     ListStyle,
+    LevelOfDetail,
     LookAt,
     Model,
     MultiGeometry,
@@ -35,6 +37,7 @@ from pyLiveKML import (
     Point,
     Polygon,
     PolyStyle,
+    Region,
     RotationXY,
     Schema,
     SchemaDataItem,
@@ -142,6 +145,7 @@ def build_simple_doc(root_path: str) -> Document:
         ],
         schemas=root_schema,
     )
+
 
     xd_folder = Folder(
         "Extended Data",
@@ -445,6 +449,9 @@ def build_simple_doc(root_path: str) -> Document:
         description="Contains an instance of each concrete Overlay subclass",
         snippet="",
         is_open=True,
+        # Regions **work**, in that GEP accepts them, but... I can't seem to make them 
+        # become active?
+        # region=Region(LatLonAltBox(-33.86354, -33.87354, 151.20843, 151.21843)),
         features=[
             GroundOverlay(
                 name="Ground overlay (box)",
@@ -494,7 +501,7 @@ def build_simple_doc(root_path: str) -> Document:
                 color=0x60FFFFFF,
                 icon=Icon(f"{root_path}/static/img/earth.png"),
                 abstract_view=LookAt(
-                    (151.24043, -33.90554, 0), 90, 70, 10000, AltitudeModeEnum.ABSOLUTE
+                    (151.24043, -33.90554, 0), -90, 70, 10000, AltitudeModeEnum.ABSOLUTE
                 ),
                 view_volume=ViewVolume(-25, 25, -25, 25, 9000),
                 shape=OverlayShapeEnum.RECTANGLE,

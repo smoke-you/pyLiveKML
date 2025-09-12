@@ -26,11 +26,11 @@ class LatLonAltBox(_BaseObject):
         Specifies the longitude of the east edge of the bounding box, in decimal degrees.
     west : float
         Specifies the longitude of the west edge of the bounding box, in decimal degrees.
-    min_altitude : float, default = 0
+    min_altitude : float | None, default = None
         Specified in meters (and is affected by the altitude mode specification).
-    max_altitude : float, default = 0
+    max_altitude : float | None, default = None
         Specified in meters (and is affected by the altitude mode specification).
-    altitude_mode : AltitudeModeEnum, default = AltitudeModeEnum.CLAMP_TO_GROUND
+    altitude_mode : AltitudeModeEnum | None, default = None
 
     Attributes
     ----------
@@ -55,9 +55,9 @@ class LatLonAltBox(_BaseObject):
         south: float,
         east: float,
         west: float,
-        min_altitude: float = 0,
-        max_altitude: float = 0,
-        altitude_mode: AltitudeModeEnum = AltitudeModeEnum.CLAMP_TO_GROUND,
+        min_altitude: float | None = None,
+        max_altitude: float | None = None,
+        altitude_mode: AltitudeModeEnum | None = None,
     ):
         """LatLonAltBox instance constructor."""
         super().__init__()
@@ -157,7 +157,7 @@ class Region(Object):
     box : LatLonAltBox
         A bounding box that describes an area of interest defined by geographic
         coordinates and altitudes.
-    lod : LevelOfDetail
+    lod : LevelOfDetail | None, default = None
         Describes the size of the projected region on the screen that is required in
         order for the region to be considered "active."
 
@@ -168,7 +168,7 @@ class Region(Object):
     """
 
     _kml_tag = "Region"
-    _kml_depdendents = Object._kml_dependents + (
+    _kml_dependents = Object._kml_dependents + (
         _DependentDef("box"),
         _DependentDef("lod"),
     )
@@ -176,7 +176,7 @@ class Region(Object):
     def __init__(
         self,
         box: LatLonAltBox,
-        lod: LevelOfDetail,
+        lod: LevelOfDetail | None = None,
     ) -> None:
         """Region instance constructor."""
         Object.__init__(self)

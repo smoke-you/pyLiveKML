@@ -120,7 +120,7 @@ class Feature(Object, ABC):
     )
     _kml_children: tuple[_ChildDef, ...] = Object._kml_children + (
         _ChildDef("abstract_view"),
-        _ChildDef("regions"),
+        _ChildDef("region"),
         _ChildDef("styles"),
     )
     _kml_dependents = Object._kml_dependents + (
