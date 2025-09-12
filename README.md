@@ -10,6 +10,7 @@ I'm currently working on a major update to v1, with work including:
 | Simplifying the directory structure of the package. | Done |
 | Adding an explanation of how the implementation, and the eval apps, work. | Done |
 | Re-doing all code documentation. | Mostly Done |
+| Verification that all of the classes actually *work*.<br>See the [test log](https://github.com/smoke-you/pyLiveKML/blob/main/test_log.md). | Underway |
 
 ## Work in Progress
 
