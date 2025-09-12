@@ -12,10 +12,6 @@ I'm currently working on a major update to v1, with work including:
 | Re-doing all code documentation. | Mostly Done |
 | Verification that all of the classes actually *work*.<br>See the [test log](https://github.com/smoke-you/pyLiveKML/blob/main/test_log.md). | Underway |
 
-## Work in Progress
-
-The `Schema`, and hence `Track` and `MultiTrack` classes, should not be relied upon as yet. Further, no attempt has yet been made to implement `ExtendedData`. All of these require additional work that I will carry out as time permits.
-
 ## Changes from version 0
 
 This is a major revision. Code relying upon pyLiveKML v0.0.x will almost certainly need to be re-written to incorporate the changes, particularly around imports.
