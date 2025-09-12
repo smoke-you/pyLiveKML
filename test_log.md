@@ -25,9 +25,7 @@
 | PhotoOverlay | simple |  |
 | Placemark | simple | evals |
 | Point | simple | tracker, tracer, trail |
-| Polygon | simple |
-| with and without cutouts | geometry |
-| with and without cutouts |
+| Polygon | simple<br>with and without cutouts | geometry<br>with and without cutouts |
 | PolyStyle | simple | geometry |
 | Region | simple<br>work, i.e. are loadable, but I haven’t been able to get one to become active |  |
 | Schema | simple |  |
