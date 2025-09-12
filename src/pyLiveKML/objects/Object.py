@@ -435,7 +435,9 @@ class _BaseObject(ABC):
             if c_obj is None:
                 continue
             elif isinstance(c_obj, _ListObject):
-                if c_obj._yield_self:
+                if not c_obj._yield_if_empty and len(c_obj) <= 0:
+                    continue
+                elif c_obj._yield_self:
                     yield ObjectChild(self, c_obj)
                 else:
                     yield from (ObjectChild(self, cc) for cc in c_obj)
@@ -463,7 +465,9 @@ class _BaseObject(ABC):
             if d_obj is None:
                 continue
             elif isinstance(d_obj, _ListObject):
-                if d_obj._yield_self:
+                if not d_obj._yield_if_empty and len(d_obj) <= 0:
+                    continue
+                elif d_obj._yield_self:
                     yield ObjectChild(self, d_obj)
                 else:
                     yield from (ObjectChild(self, dd) for dd in d_obj)
@@ -790,6 +794,7 @@ class _ListObject(_BaseObject, list[_LOB], Generic[_LOB]):
     """
 
     _yield_self: bool = False
+    _yield_if_empty: bool = True
 
     def clear(self) -> None:
         """Override superclass `clear()` to call `field_changed()."""

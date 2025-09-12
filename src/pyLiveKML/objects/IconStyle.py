@@ -22,7 +22,7 @@ class IconStyle(ColorStyle):
 
     Parameters
     ----------
-    icon: str | Icon
+    icon: str | Icon | None, default = None
         An HTTP address, or a local file specification, or an `Icon`, used to load an
         icon for display.
     scale: float, default = 1.0
@@ -54,7 +54,7 @@ class IconStyle(ColorStyle):
 
     def __init__(
         self,
-        icon: str | Icon,
+        icon: str | Icon | None = None,
         scale: float = 1.0,
         heading: float | None = None,
         color: GeoColor | int | None = None,
@@ -65,5 +65,5 @@ class IconStyle(ColorStyle):
         ColorStyle.__init__(self, color=color, color_mode=color_mode)
         self.scale = scale
         self.heading = heading
-        self.icon: Icon = Icon(href=icon) if isinstance(icon, str) else icon
+        self.icon: Icon | None = Icon(href=icon) if isinstance(icon, str) else icon
         self.hot_spot = hot_spot

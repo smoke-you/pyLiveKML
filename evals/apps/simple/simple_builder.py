@@ -14,6 +14,7 @@ from pyLiveKML import (
     GroundOverlay,
     Icon,
     IconStyle,
+    ImagePyramid,
     ItemIcon,
     ItemIconModeEnum,
     LabelStyle,
@@ -27,6 +28,7 @@ from pyLiveKML import (
     LookAt,
     Model,
     MultiGeometry,
+    OverlayShapeEnum,
     OverlayXY,
     PhotoOverlay,
     Placemark,
@@ -43,6 +45,9 @@ from pyLiveKML import (
     Style,
     StyleMap,
     UnitsEnum,
+    ViewerOption,
+    ViewerOptionEnum,
+    ViewVolume,
 )
 
 
@@ -339,7 +344,13 @@ def build_simple_doc(root_path: str) -> Document:
         is_open=True,
         description="Contains a Placemark hosting MultiGeometry geometries.",
         snippet="",
-        abstract_view=LookAt((151.18843, -33.90354, 200), 11, 72, 3700),
+        abstract_view=LookAt(
+            (151.18843, -33.90354, 200),
+            11,
+            72,
+            3700,
+            viewer_options=ViewerOption(ViewerOptionEnum.SUNLIGHT, False),
+        ),
         features=[
             Placemark(
                 MultiGeometry(
@@ -433,10 +444,12 @@ def build_simple_doc(root_path: str) -> Document:
         "Overlays",
         description="Contains an instance of each concrete Overlay subclass",
         snippet="",
+        is_open=True,
         features=[
             GroundOverlay(
                 name="Ground overlay (box)",
                 description='Overlays a semi-transparent "earth" icon into a square box with 45deg rotation',
+                snippet="",
                 box=LatLonBox(-33.86354, -33.87354, 151.20843, 151.21843, 45),
                 color=0xA0FFFFFF,
                 icon=Icon(f"{root_path}/static/img/earth.png"),
@@ -444,6 +457,7 @@ def build_simple_doc(root_path: str) -> Document:
             GroundOverlay(
                 name="Ground overlay (quad)",
                 description="Overlays a semi-transparent blue-green rhombus",
+                snippet="",
                 quad=LatLonQuad(
                     (
                         (151.22843, -33.86354),
@@ -457,6 +471,7 @@ def build_simple_doc(root_path: str) -> Document:
             ScreenOverlay(
                 name="Screen overlay",
                 description='Overlays a "pyLiveKML" icon onto the screen in the bottom-left corner.\nColor is purple, semi-transparent.',
+                snippet="",
                 size=Size(
                     0, 64, UnitsEnum.PIXELS, UnitsEnum.PIXELS
                 ),  # 64px high, maintain aspect ratio
@@ -470,6 +485,28 @@ def build_simple_doc(root_path: str) -> Document:
                 rotation=30,  # rotate 30deg around rotation_xy
                 icon=Icon(f"{root_path}/static/img/pyLiveKML-overlay.png"),
                 color=0xA08000FF,
+            ),
+            PhotoOverlay(
+                name="Photo overlay",
+                description='Photo overlay of an "earth" icon onto a point, with a LookAt facing it.',
+                snippet="",
+                point=Point((151.24043, -33.90554)),
+                color=0x60FFFFFF,
+                icon=Icon(f"{root_path}/static/img/earth.png"),
+                abstract_view=LookAt(
+                    (151.24043, -33.90554, 0), 90, 70, 10000, AltitudeModeEnum.ABSOLUTE
+                ),
+                view_volume=ViewVolume(-25, 25, -25, 25, 9000),
+                shape=OverlayShapeEnum.RECTANGLE,
+                styles=StyleMap(
+                    Style(IconStyle(scale=0)),
+                    Style(
+                        IconStyle(
+                            "http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png",
+                            2,
+                        )
+                    ),
+                ),
             ),
         ],
     )

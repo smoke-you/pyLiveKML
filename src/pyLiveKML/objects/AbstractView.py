@@ -6,7 +6,14 @@ from typing import Any, Iterable, Iterator
 from lxml import etree  # type: ignore
 
 from pyLiveKML.errors import ViewerOptionInvalidError
-from pyLiveKML.objects.Object import _BaseObject, _ChildDef, _DependentDef, Object
+from pyLiveKML.objects.Object import (
+    _BaseObject,
+    _ChildDef,
+    _DependentDef,
+    _ListObject,
+    Object,
+    ObjectChild,
+)
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 from pyLiveKML.types import ViewerOptionEnum
 from pyLiveKML.utils import with_ns
@@ -53,7 +60,7 @@ class ViewerOption(_BaseObject):
         root.attrib["enabled"] = str(int(self.enabled))
 
 
-class _ViewerOptions(_BaseObject):
+class _ViewerOptions(_ListObject[ViewerOption], _BaseObject):
     """A KML `<gx:ViewerOptions>` tag constructor.
 
     Private class to manage viewer options in `AbstractView` subclasses.
@@ -75,6 +82,7 @@ class _ViewerOptions(_BaseObject):
     _kml_tag = "gx:ViewerOptions"
     _kml_dependents = _BaseObject._kml_dependents + (_DependentDef("items"),)
     _yield_self = True
+    _yield_if_empty = False
 
     def __init__(
         self,
@@ -84,22 +92,20 @@ class _ViewerOptions(_BaseObject):
         """ViewerOptions instance constructor."""
         super().__init__()
         self.disallowed_view_options = disallowed_view_options
-        self._items = list[ViewerOption]()
         self.items = items
 
     @property
     def items(self) -> Iterator[ViewerOption]:
-
-        yield from self._items
+        yield from self
 
     @items.setter
     def items(self, value: Iterable[ViewerOption] | ViewerOption | None) -> None:
-        self._items.clear()
+        self.clear()
         if value is not None:
             if isinstance(value, ViewerOption):
                 if value.option in self.disallowed_view_options:
                     raise ViewerOptionInvalidError(value.option.value)
-                self._items.append(value)
+                self.append(value)
             else:
                 final = {v.option: v.enabled for v in value}
                 errors = [
@@ -107,15 +113,7 @@ class _ViewerOptions(_BaseObject):
                 ]
                 if errors:
                     raise ViewerOptionInvalidError(errors)
-                self._items.extend(ViewerOption(k, v) for k, v in final.items())
-
-    def build_kml(
-        self,
-        root: etree.Element,
-        with_children: bool = True,
-        with_dependents: bool = True,
-    ) -> None:
-        return super().build_kml(root, with_children, with_dependents)
+                self.extend(ViewerOption(k, v) for k, v in final.items())
 
 
 class AbstractView(Object, ABC):
