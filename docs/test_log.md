@@ -1,11 +1,11 @@
 | Class | Static | Dynamic |
 | --- | --- | --- |
-| AnimatedUpdate |  | N/A |
+| AnimatedUpdate | simple | N/A |
 | BalloonStyle | simple | tracker |
 | Camera | simple | tracer |
 | Document | simple | evals |
 | ExtendedData | simple |  |
-| FlyTo |  | N/A |
+| FlyTo | simple | N/A |
 | Folder | simple | evals |
 | GroundOverlay | simple |  |
 | Icon | simple | tracker |
@@ -30,13 +30,13 @@
 | Region | simple<br>work, i.e. are loadable, but I haven’t been able to get one to become active |  |
 | Schema | simple |  |
 | ScreenOverlay | simple |  |
-| SoundCue |  | N/A |
+| SoundCue | simple | N/A |
 | Style | simple | evals |
 | StyleMap | simple | geometry |
 | TimeSpan | simple | tracer |
 | TimeStamp |  | tracer |
-| Tour |  | N/A |
-| TourControl |  | N/A |
+| Tour | simple | N/A |
+| TourControl | simple | N/A |
 | Track | simple | N/A |
-| Update |  | evals |
-| Wait |  | N/A |
+| Update | simple | evals |
+| Wait | simple | N/A |

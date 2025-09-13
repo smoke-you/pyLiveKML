@@ -417,30 +417,89 @@ def build_doc(root_path: str) -> Document:
     #                 location=(151.20643, -33.90554),
     #                 scales=(20, 20, 20),
     #                 resources=(
-    #                     Alias("resources/CU-Macky---Center-StairsnoCulling.jpg", "../files/CU-Macky---Center-StairsnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-4sideturretnoCulling.jpg", "../files/CU-Macky-4sideturretnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-Back-NorthnoCulling.jpg", "../files/CU-Macky-Back-NorthnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-BrickwallnoCulling.jpg", "../files/CU-Macky-BrickwallnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-East-WingnoCulling.jpg", "../files/CU-Macky-East-WingnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-EastdetaildoornoCulling.jpg", "../files/CU-Macky-EastdetaildoornoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-EastnoCulling.jpg", "../files/CU-Macky-EastnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-EntrancenoCulling.jpg", "../files/CU-Macky-EntrancenoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-Front--TurretnoCulling.jpg", "../files/CU-Macky-Front--TurretnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-FrontbrickwallnoCulling.jpg", "../files/CU-Macky-FrontbrickwallnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-FrontnoCulling.jpg", "../files/CU-Macky-FrontnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-FrontofTowernoCulling.jpg", "../files/CU-Macky-FrontofTowernoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-NortheastUnivnoCulling.jpg", "../files/CU-Macky-NortheastUnivnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-NorthnoCulling.jpg", "../files/CU-Macky-NorthnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-RoofnoCulling.jpg", "../files/CU-Macky-RoofnoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-Tower-SidenoCulling.jpg", "../files/CU-Macky-Tower-SidenoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-TowerBasenoCulling.jpg", "../files/CU-Macky-TowerBasenoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-TowernoCulling.jpg", "../files/CU-Macky-TowernoCulling.jpg"),
-    #                     Alias("resources/CU-Macky-_Side_BrickwallnoCulling.jpg", "../files/CU-Macky-_Side_BrickwallnoCulling.jpg"),
-    #                     Alias("resources/roofnoCulling.jpg", "../files/roofnoCulling.jpg"),
-    #                 )
+    #                     Alias(
+    #                         "resources/CU-Macky---Center-StairsnoCulling.jpg",
+    #                         "../files/CU-Macky---Center-StairsnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-4sideturretnoCulling.jpg",
+    #                         "../files/CU-Macky-4sideturretnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-Back-NorthnoCulling.jpg",
+    #                         "../files/CU-Macky-Back-NorthnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-BrickwallnoCulling.jpg",
+    #                         "../files/CU-Macky-BrickwallnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-East-WingnoCulling.jpg",
+    #                         "../files/CU-Macky-East-WingnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-EastdetaildoornoCulling.jpg",
+    #                         "../files/CU-Macky-EastdetaildoornoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-EastnoCulling.jpg",
+    #                         "../files/CU-Macky-EastnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-EntrancenoCulling.jpg",
+    #                         "../files/CU-Macky-EntrancenoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-Front--TurretnoCulling.jpg",
+    #                         "../files/CU-Macky-Front--TurretnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-FrontbrickwallnoCulling.jpg",
+    #                         "../files/CU-Macky-FrontbrickwallnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-FrontnoCulling.jpg",
+    #                         "../files/CU-Macky-FrontnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-FrontofTowernoCulling.jpg",
+    #                         "../files/CU-Macky-FrontofTowernoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-NortheastUnivnoCulling.jpg",
+    #                         "../files/CU-Macky-NortheastUnivnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-NorthnoCulling.jpg",
+    #                         "../files/CU-Macky-NorthnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-RoofnoCulling.jpg",
+    #                         "../files/CU-Macky-RoofnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-Tower-SidenoCulling.jpg",
+    #                         "../files/CU-Macky-Tower-SidenoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-TowerBasenoCulling.jpg",
+    #                         "../files/CU-Macky-TowerBasenoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-TowernoCulling.jpg",
+    #                         "../files/CU-Macky-TowernoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/CU-Macky-_Side_BrickwallnoCulling.jpg",
+    #                         "../files/CU-Macky-_Side_BrickwallnoCulling.jpg",
+    #                     ),
+    #                     Alias(
+    #                         "resources/roofnoCulling.jpg", "../files/roofnoCulling.jpg"
+    #                     ),
+    #                 ),
     #             )
     #         )
-    #     ]
+    #     ],
     # )
 
     overlay_folder = Folder(

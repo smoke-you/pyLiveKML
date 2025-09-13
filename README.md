@@ -4,13 +4,12 @@ I'm currently working on a major update to v1, with work including:
 
 | Task | Status |
 | --- | --- |
-| Adding in all of the KML (and KML extension) classes [defined by Google](https://developers.google.com/kml/documentation/kmlreference). | Mostly Done |
+| Adding in all of the KML (and KML extension) classes [defined by Google](https://developers.google.com/kml/documentation/kmlreference). | Done? |
 | Reworking inheritance to minimize the amount of class-specific behaviour. | Done |
-| Ensuring that classes can be instantiated directly, as well as via the live feed mechanism using `<NetworkLinkControl>` tags. Added a "simple" eval app to demonstrate this. | Done |
 | Simplifying the directory structure of the package. | Done |
 | Adding an explanation of how the implementation, and the eval apps, work. | Done |
-| Re-doing all code documentation. | Mostly Done |
-| Verification that all of the classes actually *work*.<br>See the [test log](https://github.com/smoke-you/pyLiveKML/blob/main/test_log.md). | Underway |
+| Re-doing all code documentation. | Done |
+| Verification that all of the classes actually *work*.<br>See the [test log](https://github.com/smoke-you/pyLiveKML/blob/main/docs/test_log.md). | Static: Done<br>Dynamic: Underway |
 
 ## Changes from version 0
 
@@ -34,7 +33,7 @@ See [how-it-works](https://github.com/smoke-you/pyLiveKML/blob/main/docs/how-it-
 
 # Has the entire KML specification been implemented?
 
-From version 1.0.0, all of the KML classes described in the [KML specification](https://developers.google.com/kml/documentation/kmlreference) have been implemented.
+From version 1.0.0, all of the KML classes described in the [KML specification](https://developers.google.com/kml/documentation/kmlreference) have been implemented. If anything is missing, please let me know.
 
 # GIS and OS Compatibility
 

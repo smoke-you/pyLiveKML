@@ -30,6 +30,7 @@ from pyLiveKML.types import (
 )
 from pyLiveKML import errors
 from pyLiveKML.objects.AbstractView import ViewerOption
+from pyLiveKML.objects.AnimatedUpdate import AnimatedUpdate
 from pyLiveKML.objects.BalloonStyle import BalloonStyle
 from pyLiveKML.objects.Camera import Camera
 from pyLiveKML.objects.Document import Document
@@ -76,6 +77,7 @@ __all__ = [
     "Alias",
     "AltitudeModeEnum",
     "AltitudeModeEnum",
+    "AnimatedUpdate",
     "BalloonStyle",
     "Camera",
     "ColorModeEnum",

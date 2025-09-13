@@ -33,7 +33,7 @@ class Wait(TourPrimitive):
     """
 
     _kml_tag = "gx:Wait"
-    _kml_fields = TourPrimitive._kml_fields + (_FieldDef("duration"),)
+    _kml_fields = TourPrimitive._kml_fields + (_FieldDef("duration", "gx:duration"),)
 
     def __init__(
         self,
