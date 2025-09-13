@@ -196,21 +196,6 @@ class Feature(Object, ABC):
             else:
                 self._styles.extend(value)
 
-    # @property
-    # def dependents(self) -> Iterator[ObjectChild]:
-    #     """A generator over the dependents of the instance.
-
-    #     Overridden from `_BaseObject` because when using the default behaviour, if
-    #     `geometry` is a `MultiGeometry`, then the `MultiGeometry` itself is never
-    #     yielded.
-
-    #     :return: A generator over the dependents of the instance.
-    #     :rtype: Iterator[ObjectChild]
-    #     """
-    #     yield from super().dependents
-    #     if self.extended_data:
-    #         yield ObjectChild(self, self.extended_data)
-
     def build_kml(
         self,
         root: etree.Element,

@@ -35,9 +35,9 @@ class NetworkLinkControl(_BaseObject):
     ----------
     target_href : str
         Used to construct an embedded `Update` instance.
-    container : Container | None, default = None
-        The root `Container` for synchronization. If `None`, a `Folder` named "root" will
-        be created.
+    containers : Container | Iterable[Container] | None, default = None
+        The `Container`s that will be synchronized. If `None`, a `Folder` named "root"
+        will be created.
     update_limit : int, default = KML_UPDATE_CONTAINER_LIMIT_DEFAULT
         The maximum number of entries per synchronization update.
     min_refresh_period : float | None, default = None
@@ -79,7 +79,7 @@ class NetworkLinkControl(_BaseObject):
 
     Attributes
     ----------
-    container : Container | None
+    containers : Iterator[Container]
     update_limit : int
     min_refresh_period : float | None
     max_session_length : float | None
@@ -153,7 +153,9 @@ class NetworkLinkControl(_BaseObject):
     @containers.setter
     def containers(self, value: Container | Iterable[Container] | None) -> None:
         self._containers.clear()
-        if value is not None:
+        if value is None:
+            self._containers.append(Folder("root"))
+        else:
             if isinstance(value, Container):
                 self._containers.append(value)
             else:
@@ -270,4 +272,4 @@ class NetworkLinkControl(_BaseObject):
                 ObjectChild(obj, delobj) for delobj in islice(obj._deleted, limit)
             ]
             self.update.deletes.extend(deletes)
-            obj._deleted = obj._deleted[len(deletes) :]
+            del obj._deleted[: len(deletes)]

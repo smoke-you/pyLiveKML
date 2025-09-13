@@ -1,11 +1,11 @@
 | Class | Static | Dynamic |
 | --- | --- | --- |
-| AnimatedUpdate |  |  |
+| AnimatedUpdate |  | N/A |
 | BalloonStyle | simple | tracker |
 | Camera | simple | tracer |
 | Document | simple | evals |
 | ExtendedData | simple |  |
-| FlyTo |  |  |
+| FlyTo |  | N/A |
 | Folder | simple | evals |
 | GroundOverlay | simple |  |
 | Icon | simple | tracker |
@@ -19,24 +19,24 @@
 | LookAt | simple | tracker |
 | Model | shown to work, but free-use models are difficult to find |  |
 | MultiGeometry | simple | tracker |
-| MultiTrack |  |  |
-| NetworkLink | loader |  |
-| NetworkLinkControl | update |  |
+| MultiTrack | simple | N/A |
+| NetworkLink | loader | N/A |
+| NetworkLinkControl | update | N/A |
 | PhotoOverlay | simple |  |
 | Placemark | simple | evals |
 | Point | simple | tracker, tracer, trail |
-| Polygon | simple<br>with and without cutouts | geometry<br>with and without cutouts |
+| Polygon | simple<br>with and without inner boundaries | geometry<br>with and without inner boundaries, but not possible to alter **number** of inner boundaries! |
 | PolyStyle | simple | geometry |
 | Region | simple<br>work, i.e. are loadable, but I haven’t been able to get one to become active |  |
 | Schema | simple |  |
 | ScreenOverlay | simple |  |
-| SoundCue |  |  |
+| SoundCue |  | N/A |
 | Style | simple | evals |
 | StyleMap | simple | geometry |
-| TimeSpan |  | tracer |
+| TimeSpan | simple | tracer |
 | TimeStamp |  | tracer |
-| Tour |  |  |
-| TourControl |  |  |
-| Track |  |  |
+| Tour |  | N/A |
+| TourControl |  | N/A |
+| Track | simple | N/A |
 | Update |  | evals |
-| Wait |  |  |
+| Wait |  | N/A |

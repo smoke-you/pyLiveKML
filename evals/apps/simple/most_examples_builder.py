@@ -54,7 +54,7 @@ from pyLiveKML import (
 )
 
 
-def build_simple_doc(root_path: str) -> Document:
+def build_doc(root_path: str) -> Document:
     """Construct a simple KML document.
 
     Main purpose is to prepend the server root path to icon links.
@@ -145,7 +145,6 @@ def build_simple_doc(root_path: str) -> Document:
         ],
         schemas=root_schema,
     )
-
 
     xd_folder = Folder(
         "Extended Data",
@@ -449,7 +448,7 @@ def build_simple_doc(root_path: str) -> Document:
         description="Contains an instance of each concrete Overlay subclass",
         snippet="",
         is_open=True,
-        # Regions **work**, in that GEP accepts them, but... I can't seem to make them 
+        # Regions **work**, in that GEP accepts them, but... I can't seem to make them
         # become active?
         # region=Region(LatLonAltBox(-33.86354, -33.87354, 151.20843, 151.21843)),
         features=[

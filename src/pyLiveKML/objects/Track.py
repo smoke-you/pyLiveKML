@@ -108,7 +108,7 @@ class TrackElement:
 
     Parameters
     ----------
-    when : datetime | str
+    when : datetime | str | None, default = None
         The timestamp of the `TrackElement`. If a `str` is provided, it will be parsed
         with dateutils. Highly recommended to use an ISO format timestring.
     coords : TrackCoord | tuple[float, float, float] | tuple[float, float] | None, default = None
@@ -130,8 +130,10 @@ class TrackElement:
 
     def __init__(
         self,
-        when: datetime | str,
-        coords: TrackCoord | tuple[float, float, float] | tuple[float, float] | None,
+        when: datetime | str | None = None,
+        coords: (
+            TrackCoord | tuple[float, float, float] | tuple[float, float] | None
+        ) = None,
         angles: (
             TrackAngles
             | tuple[float, float, float]
@@ -139,15 +141,16 @@ class TrackElement:
             | tuple[float]
             | float
             | None
-        ),
+        ) = None,
         extended_data: dict[str, dict[str, Any]] | None = None,
     ) -> None:
         """TrackElement instance constructor."""
         super().__init__()
-        if isinstance(when, datetime):
-            self.when = when
-        else:
+        self.when: datetime | None
+        if isinstance(when, str):
             self.when = dtparse(when)
+        else:
+            self.when = when
         self.coords: TrackCoord | None = None
         if coords is None or isinstance(coords, TrackCoord):
             self.coords = coords
@@ -280,7 +283,8 @@ class Track(Geometry):
         super().build_kml(root, with_children)
         value: str
         for e in self.elements:
-            etree.SubElement(root, with_ns("when")).text = e.when.isoformat()
+            value = "" if e.when is None else e.when.isoformat()
+            etree.SubElement(root, with_ns("when")).text = value
         for e in self.elements:
             value = "" if e.coords is None else str(e.coords)
             etree.SubElement(root, with_ns("gx:coord")).text = value
