@@ -1,15 +1,15 @@
 # Update Status
 
-I'm currently working on a major update to v1, with work including:
+I'm currently working on a major update to v1.1, with work including:
 
 | Task | Status |
 | --- | --- |
 | Adding in all of the KML (and KML extension) classes [defined by Google](https://developers.google.com/kml/documentation/kmlreference). | Done? |
-| Reworking inheritance to minimize the amount of class-specific behaviour. | Done |
+| Reworking inheritance to minimize the amount of class-specific behaviour. | Done? |
 | Simplifying the directory structure of the package. | Done |
 | Adding an explanation of how the implementation, and the eval apps, work. | Done |
 | Re-doing all code documentation. | Done |
-| Verification that all of the classes actually *work*.<br>See the [test log](https://github.com/smoke-you/pyLiveKML/blob/main/docs/test_log.md). | Static: Done<br>Dynamic: Underway |
+| Verification that all of the classes actually *work*.<br>See the [test log](https://github.com/smoke-you/pyLiveKML/blob/main/docs/test_log.md). | Static: Done<br>Dynamic: Done? |
 
 ## Changes from version 0
 
