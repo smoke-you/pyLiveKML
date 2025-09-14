@@ -8,6 +8,7 @@ from pyLiveKML.objects.Object import (
     _BaseObject,
     _DependentDef,
     _FieldDef,
+    _RootAttribDef,
     Object,
 )
 
@@ -20,6 +21,10 @@ class SimpleField(_BaseObject):
 
     _kml_tag = "SimpleField"
     _kml_fields = _BaseObject._kml_fields + (_FieldDef("display_name", "displayName"),)
+    _kml_root_attribs = _BaseObject._kml_root_attribs + (
+        _RootAttribDef("type", "type"),
+        _RootAttribDef("name", "name"),
+    )
 
     def __init__(
         self,
@@ -32,16 +37,6 @@ class SimpleField(_BaseObject):
         self.type = type
         self.name = name
         self.display_name = display_name
-
-    def construct_kml(
-        self, with_children: bool = True, with_dependents: bool = True
-    ) -> etree.Element:
-        """Construct this instances' KML representation."""
-        root = etree.Element(
-            self.kml_tag, attrib={"type": self.type, "name": self.name}
-        )
-        self.build_kml(root, with_children, with_dependents)
-        return root
 
 
 class Schema(Object):

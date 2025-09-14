@@ -8,16 +8,32 @@ from lxml import etree  # type: ignore
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Object import (
+    _FieldAttribDef,
+    _BaseObject,
     _ChildDef,
     _DependentDef,
     _FieldDef,
     _NoDump,
+    _NoValue,
     Object,
 )
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 from pyLiveKML.utils import with_ns
+
+
+class _Author(_BaseObject):
+
+    _kml_tag = "atom:author"
+
+    _kml_fields = _BaseObject._kml_fields + (
+        _FieldDef("name", "atom:name"),
+    )
+
+    def __init__(self, name: str) -> None:
+        super().__init__()
+        self.name = name
 
 
 class Feature(Object, ABC):
@@ -109,21 +125,26 @@ class Feature(Object, ABC):
         _FieldDef("name"),
         _FieldDef("is_open", "open"),
         _FieldDef("visibility"),
-        _FieldDef("author_name", dumper=_NoDump),
-        _FieldDef("author_link", dumper=_NoDump),
+        _FieldDef("author_link", "atom:link", dumper=_NoValue),
         _FieldDef("address"),
-        _FieldDef("snippet", dumper=_NoDump),
-        _FieldDef("snippet_max_line", dumper=_NoDump),
+        _FieldDef("snippet", "Snippet"),
+        _FieldDef("snippet_max_lines", dumper=_NoDump),
         _FieldDef("phone_number", "phoneNumber"),
         _FieldDef("description"),
         _FieldDef("style_url", "styleUrl"),
     )
+    _kml_attribs = Object._kml_field_attribs + (
+        _FieldAttribDef("maxLines", "snippet_max_lines", "snippet"),
+        _FieldAttribDef("href", "author_link", "author_link"),
+    )
+
     _kml_children: tuple[_ChildDef, ...] = Object._kml_children + (
         _ChildDef("abstract_view"),
         _ChildDef("region"),
         _ChildDef("styles"),
     )
     _kml_dependents = Object._kml_dependents + (
+        _DependentDef("_author"),
         _DependentDef("time_primitive"),
         _DependentDef("extended_data"),
     )
@@ -150,6 +171,8 @@ class Feature(Object, ABC):
         """Feature instance constructor."""
         Object.__init__(self)
         ABC.__init__(self)
+        self._author: _Author | None = None
+        self._styles = list[StyleSelector]()
         self.name = name
         self.is_open = is_open
         self.visibility = visibility
@@ -163,10 +186,24 @@ class Feature(Object, ABC):
         self.abstract_view = abstract_view
         self.time_primitive = time_primitive
         self.style_url = style_url
-        self._styles = list[StyleSelector]()
         self.styles = styles
         self.region = region
         self.extended_data = extended_data
+
+
+    @property
+    def author_name(self) -> str | None:
+        """Get or set the name of the author of the `Feature`."""
+        return None if not self._author else self._author.name
+    
+    @author_name.setter
+    def author_name(self, value: str | None) -> None:
+        if value is None:
+            self._author = None
+        elif self._author:
+            self._author.name = value
+        else:
+            self._author = _Author(value)
 
     @property
     def styles(self) -> Iterator[StyleSelector]:
@@ -195,41 +232,6 @@ class Feature(Object, ABC):
                 self._styles.append(value)
             else:
                 self._styles.extend(value)
-
-    def build_kml(
-        self,
-        root: etree.Element,
-        with_children: bool = True,
-        with_dependents: bool = True,
-    ) -> None:
-        """Build the KML sub-tags for this `Feature` and append it to the provided `etree.Element`.
-
-        Overridden from :class:`pyLiveKML.objects.Object.Object` to perform some
-        additional build steps.
-
-        Parameters
-        ----------
-        root : etree.Element
-            The tag into which the sub-tags are to be inserted.
-        with_children : bool, default = True
-            Whether the `children` of the `Feature` should be constructed as sub-tags.
-        with_dependents : bool, default = True
-            Whether the `dependents` of the `Feature` should be constructed as sub-tags.
-
-        """
-        super().build_kml(root, with_children, with_dependents)
-        if self.author_name is not None:
-            author = etree.SubElement(root, with_ns("atom:author"))
-            etree.SubElement(author, with_ns("atom:name")).text = self.author_name
-        if self.author_link is not None:
-            etree.SubElement(
-                root, with_ns("atom:link"), attrib={"href": self.author_link}
-            )
-        if self.snippet is not None:
-            attribs = {}
-            if self.snippet_max_lines is not None:
-                attribs["maxLines"] = str(self.snippet_max_lines)
-            etree.SubElement(root, "Snippet", attribs).text = self.snippet
 
     def __str__(self) -> str:
         """Return a string representation."""

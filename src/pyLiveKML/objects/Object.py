@@ -27,13 +27,20 @@ class _KMLDump(ABC):
         raise NotImplementedError
 
 
-class _NoDump(_KMLDump):
+class _NoValue(_KMLDump):
     """Dump nothing, i.e. an empty string."""
 
     @classmethod
     def dump(cls, value: Any) -> Any:
         """Dump and format a KML object field."""
         return ""
+
+
+class _NoDump(_KMLDump):
+    """Dump nothing, i.e. an empty string.
+
+    However, the field should not be constructed at all.
+    """
 
 
 class _DumpDirect(_KMLDump):
@@ -188,6 +195,32 @@ class _DateTimeParse(_KMLParser):
         return value
 
 
+class _FieldAttribDef:
+    def __init__(
+        self,
+        name: str,
+        value_field: str,
+        target_field: str,
+        dumper: Type[_KMLDump] = _DumpDirect
+    ) -> None:
+        self.name = name
+        self.value_field = value_field
+        self.target_field = target_field
+        self.dumper = dumper
+
+
+class _RootAttribDef:
+    def __init__(
+        self,
+        name: str,
+        value_field: str,
+        dumper: Type[_KMLDump] = _DumpDirect
+    ) -> None:
+        self.name = name
+        self.value_field = value_field
+        self.dumper = dumper
+
+
 class _FieldDef:
     """Describes how a field of a KML object is to be published.
 
@@ -311,6 +344,8 @@ class _BaseObject(ABC):
 
     _kml_tag: str = ""
     _kml_fields: tuple[_FieldDef, ...] = tuple()
+    _kml_field_attribs: tuple[_FieldAttribDef, ...] = tuple()
+    _kml_root_attribs: tuple[_RootAttribDef, ...] = tuple()
     _kml_children: tuple[_ChildDef, ...] = tuple()
     _kml_dependents: tuple[_DependentDef, ...] = tuple()
     _suppress_id: bool = True
@@ -508,9 +543,16 @@ class _BaseObject(ABC):
 
         """
         for f in (f for f in self._kml_fields if f.dumper != _NoDump):
-            value = f.dumper.dump(getattr(self, f.name))
-            if value is not None:
-                etree.SubElement(root, with_ns(f.typename)).text = value
+            f_val = f.dumper.dump(getattr(self, f.name, None))
+            if f_val is None or f_val == "":
+                continue
+            f_elem = etree.SubElement(root, with_ns(f.typename))
+            f_elem.text = f_val
+            for adef in filter(lambda a: a.target_field == f.name, self._kml_field_attribs):
+                a_val = getattr(self, adef.value_field, None)
+                if a_val is None:
+                    continue
+                f_elem.set(with_ns(adef.name), adef.dumper.dump(a_val))
         if with_dependents:
             for dd in self.dependents:
                 branch = dd.child.construct_kml(with_children, with_dependents)
@@ -539,17 +581,18 @@ class _BaseObject(ABC):
             The KML representation of the `_BaseObject` as an `etree.Element`.
 
         """
+        root = etree.Element(_tag=with_ns(self.kml_tag))
         # if the object is *not* in the "kml" namespace, ensure that the `id` that is
         # assigned *is* in the "kml" namespace, or GEP is likely to crash.
-        attribs: dict[str, str] | None = None
         if not self._suppress_id:
-            attribs = {}
             if ":" in self._kml_tag:
-                attribs[with_ns("kml:id")] = self.id
+                root.set(with_ns("kml:id"), self.id)
             else:
-                attribs["id"] = self.id
-
-        root = etree.Element(_tag=with_ns(self.kml_tag), attrib=attribs)
+                root.set("id", self.id)
+        for a_def in self._kml_root_attribs:
+            a_val = getattr(self, a_def.value_field)
+            if a_val is not None and a_val != "":
+                root.set(with_ns(a_def.name), a_def.dumper.dump(a_val))
         self.build_kml(root, with_children, with_dependents)
         return root
 

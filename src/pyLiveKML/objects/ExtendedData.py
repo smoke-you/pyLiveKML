@@ -9,6 +9,7 @@ from pyLiveKML.objects.Object import (
     _BaseObject,
     _DependentDef,
     _FieldDef,
+    _RootAttribDef,
 )
 
 
@@ -44,6 +45,9 @@ class DataItem(_ExtendedDataItem):
     """
 
     _kml_tag = "Data"
+    _kml_root_attribs = _BaseObject._kml_root_attribs + (
+        _RootAttribDef("name", "name"),
+    )
     _kml_fields = _BaseObject._kml_fields + (
         _FieldDef("display_name", "displayName"),
         _FieldDef("value"),
@@ -60,14 +64,6 @@ class DataItem(_ExtendedDataItem):
         self.name = name
         self.display_name = display_name
         self.value = value
-
-    def construct_kml(
-        self, with_children: bool = True, with_dependents: bool = True
-    ) -> etree.Element:
-        """Override `construct_kml` for fine control."""
-        root = etree.Element(self._kml_tag, attrib={"name": self.name})
-        self.build_kml(root, with_children, with_dependents)
-        return root
 
 
 class SchemaDataItem(_ExtendedDataItem):
@@ -97,6 +93,9 @@ class SchemaDataItem(_ExtendedDataItem):
     """
 
     _kml_tag = "SchemaData"
+    _kml_root_attribs = _BaseObject._kml_root_attribs + (
+        _RootAttribDef("schemaUrl", "schema_ref"),
+    )
 
     def __init__(
         self,
@@ -107,14 +106,6 @@ class SchemaDataItem(_ExtendedDataItem):
         super().__init__()
         self.schema_ref = schema_ref
         self.data = data
-
-    def construct_kml(
-        self, with_children: bool = True, with_dependents: bool = True
-    ) -> etree.Element:
-        """Override `construct_kml` for fine control."""
-        root = etree.Element(self._kml_tag, attrib={"schemaUrl": self.schema_ref})
-        self.build_kml(root, with_children, with_dependents)
-        return root
 
     def build_kml(
         self,

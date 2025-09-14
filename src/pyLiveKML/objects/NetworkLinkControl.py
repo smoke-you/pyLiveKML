@@ -12,10 +12,12 @@ from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.Container import Container
 from pyLiveKML.objects.Folder import Folder
 from pyLiveKML.objects.Object import (
+    _FieldAttribDef,
     _BaseObject,
     _DeletableMixin,
     _DependentDef,
     _FieldDef,
+    _NoDump,
     ObjectChild,
     ObjectState,
 )
@@ -105,6 +107,11 @@ class NetworkLinkControl(_BaseObject):
         _FieldDef("link_name", "linkName"),
         _FieldDef("link_description", "linkDescription"),
         _FieldDef("link_expires", "linkExpires"),
+        _FieldDef("link_snippet", "linkSnippet",),
+        _FieldDef("link_snippet_max_line", dumper=_NoDump),
+    )
+    _kml_attribs = _BaseObject._kml_field_attribs + (
+        _FieldAttribDef("maxLines", "link_snippet_max_lines", "link_snippet"),
     )
     _kml_dependents = _BaseObject._kml_dependents + (
         _DependentDef("abstract_view"),
@@ -160,24 +167,6 @@ class NetworkLinkControl(_BaseObject):
                 self._containers.append(value)
             else:
                 self._containers.extend(value)
-
-    def build_kml(
-        self,
-        root: etree.Element,
-        with_children: bool = True,
-        with_dependents: bool = True,
-    ) -> None:
-        """Build the KML sub-tags for this `NetworkLinkControl` and append it to the provided `etree.Element`.
-
-        Overridden from :class:`pyLiveKML.objects.Object.Object` to perform some
-        additional build steps.
-        """
-        super().build_kml(root, with_children, with_dependents)
-        if self.link_snippet is not None:
-            attribs = {}
-            if self.link_snippet_max_lines is not None:
-                attribs["maxLines"] = str(self.link_snippet_max_lines)
-            etree.SubElement(root, "linkSnippet", attribs).text = self.link_snippet
 
     def construct_sync(
         self,
