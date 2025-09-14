@@ -20,16 +20,13 @@ from pyLiveKML.objects.Object import (
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
-from pyLiveKML.utils import with_ns
 
 
 class _Author(_BaseObject):
 
     _kml_tag = "atom:author"
 
-    _kml_fields = _BaseObject._kml_fields + (
-        _FieldDef("name", "atom:name"),
-    )
+    _kml_fields = _BaseObject._kml_fields + (_FieldDef("name", "atom:name"),)
 
     def __init__(self, name: str) -> None:
         super().__init__()
@@ -133,7 +130,7 @@ class Feature(Object, ABC):
         _FieldDef("description"),
         _FieldDef("style_url", "styleUrl"),
     )
-    _kml_attribs = Object._kml_field_attribs + (
+    _kml_field_attribs = Object._kml_field_attribs + (
         _FieldAttribDef("maxLines", "snippet_max_lines", "snippet"),
         _FieldAttribDef("href", "author_link", "author_link"),
     )
@@ -190,12 +187,11 @@ class Feature(Object, ABC):
         self.region = region
         self.extended_data = extended_data
 
-
     @property
     def author_name(self) -> str | None:
         """Get or set the name of the author of the `Feature`."""
         return None if not self._author else self._author.name
-    
+
     @author_name.setter
     def author_name(self, value: str | None) -> None:
         if value is None:

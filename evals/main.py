@@ -126,8 +126,8 @@ gep_sync = NetworkLinkControl(
     containers=gep_elements,
     link_name="pyLiveKML synchronizer",
     link_description="Synchronizes the webserver UI state with Google Earth Pro.",
-    link_snippet="",
-    link_snippet_max_lines=0,
+    link_snippet="UI synchronizer",
+    link_snippet_max_lines=1,
 )
 
 
@@ -136,7 +136,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     """FastAPI lifespan context manager."""
     # pre-yield: server startup
     global applist
-    # set the gep_sync NetworkLinkControl for all of the apps, and fire it up
+    # set the gep_elements `Container` as the synchronization root `Container` for all of
+    # the eval apps, then start the server
     for x in applist:
         x.sync = gep_elements
     yield

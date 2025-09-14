@@ -107,10 +107,13 @@ class NetworkLinkControl(_BaseObject):
         _FieldDef("link_name", "linkName"),
         _FieldDef("link_description", "linkDescription"),
         _FieldDef("link_expires", "linkExpires"),
-        _FieldDef("link_snippet", "linkSnippet",),
+        _FieldDef(
+            "link_snippet",
+            "linkSnippet",
+        ),
         _FieldDef("link_snippet_max_line", dumper=_NoDump),
     )
-    _kml_attribs = _BaseObject._kml_field_attribs + (
+    _kml_field_attribs = _BaseObject._kml_field_attribs + (
         _FieldAttribDef("maxLines", "link_snippet_max_lines", "link_snippet"),
     )
     _kml_dependents = _BaseObject._kml_dependents + (

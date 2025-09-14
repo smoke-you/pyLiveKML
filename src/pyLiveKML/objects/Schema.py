@@ -64,13 +64,14 @@ class Schema(Object):
 
     _kml_tag = "Schema"
     _kml_dependents = Object._kml_dependents + (_DependentDef("schema_fields"),)
+    _kml_root_attribs = Object._kml_root_attribs + (_RootAttribDef("name", "name"),)
 
     def __init__(
         self,
         name: str,
         schema_fields: SimpleField | Iterable[SimpleField] | None = None,
     ) -> None:
-        """Construct Schema instances."""
+        """Construct Schema instance."""
         Object.__init__(self)
         self.name = name
         self._schema_fields = list[SimpleField]()
@@ -78,7 +79,7 @@ class Schema(Object):
 
     @property
     def schema_fields(self) -> Iterator[SimpleField]:
-        """Generator over schema_fields."""
+        """Generator over schema fields."""
         yield from self._schema_fields
 
     @schema_fields.setter
@@ -89,14 +90,3 @@ class Schema(Object):
                 self._schema_fields.append(value)
             else:
                 self._schema_fields.extend(value)
-
-    def construct_kml(
-        self, with_children: bool = True, with_dependents: bool = True
-    ) -> etree.Element:
-        """Construct this instances' KML representation.
-
-        Adds the `name` attribute to the returned tag.
-        """
-        root = super().construct_kml(with_children, with_dependents)
-        root.set("name", self.name)
-        return root

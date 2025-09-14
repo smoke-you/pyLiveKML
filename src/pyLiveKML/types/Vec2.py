@@ -5,7 +5,7 @@ from abc import ABC
 from lxml import etree  # type: ignore
 
 from pyLiveKML.types.types import UnitsEnum
-from pyLiveKML.objects.Object import _BaseObject
+from pyLiveKML.objects.Object import _BaseObject, _RootAttribDef
 
 
 class Vec2(_BaseObject, ABC):
@@ -24,6 +24,13 @@ class Vec2(_BaseObject, ABC):
 
     """
 
+    _kml_root_attribs = _BaseObject._kml_root_attribs + (
+        _RootAttribDef("x", "x"),
+        _RootAttribDef("y", "y"),
+        _RootAttribDef("xunits", "x_units"),
+        _RootAttribDef("yunits", "y_units"),
+    )
+
     def __init__(
         self,
         x: float = 0.5,
@@ -37,18 +44,6 @@ class Vec2(_BaseObject, ABC):
         self.y = y
         self.x_units = x_units
         self.y_units = y_units
-
-    def construct_kml(
-        self, with_children: bool = True, with_dependents: bool = True
-    ) -> etree.Element:
-        """Construct this instances' KML representation."""
-        attribs = {
-            "x": str(self.x),
-            "y": str(self.y),
-            "xunits": str(self.x_units.value),
-            "yunits": str(self.y_units.value),
-        }
-        return etree.Element(self.kml_tag, attrib=attribs)
 
     def __eq__(self, other: object) -> bool:
         """Check equality."""

@@ -10,6 +10,7 @@ from pyLiveKML.objects.Geometry import Geometry
 from pyLiveKML.objects.Model import Model
 from pyLiveKML.objects.Object import (
     _ChildDef,
+    _DumpNotNone,
     _FieldDef,
     _Angle180,
     _Angle360,
@@ -283,24 +284,23 @@ class Track(Geometry):
         super().build_kml(root, with_children)
         value: str
         for e in self.elements:
-            value = "" if e.when is None else e.when.isoformat()
-            etree.SubElement(root, with_ns("when")).text = value
+            etree.SubElement(root, with_ns("when")).text = _DumpNotNone.dump(e.when)
         for e in self.elements:
-            value = "" if e.coords is None else str(e.coords)
-            etree.SubElement(root, with_ns("gx:coord")).text = value
+            etree.SubElement(root, with_ns("gx:coord")).text = _DumpNotNone.dump(
+                e.coords
+            )
         for e in self.elements:
-            value = "" if e.angles is None else str(e.angles)
-            etree.SubElement(root, with_ns("gx:angles")).text = value
+            etree.SubElement(root, with_ns("gx:angles")).text = _DumpNotNone.dump(
+                e.angles
+            )
         if self._schemas:
             e_xd = etree.SubElement(root, "ExtendedData")
             for sch, fields in self._schemas.items():
-                e_sch = etree.SubElement(e_xd, "SchemaData", attrib={"schemaUrl": sch})
+                e_sch = etree.SubElement(e_xd, "SchemaData")
+                e_sch.set("schemaUrl", sch)
                 for f in sorted(fields):
-                    e_field = etree.SubElement(
-                        e_sch,
-                        with_ns("gx:SimpleArrayData"),
-                        attrib={with_ns("kml:name"): f},
-                    )
+                    e_field = etree.SubElement(e_sch, with_ns("gx:SimpleArrayData"))
+                    e_field.set(with_ns("kml:name"), f)
                     for e in self.elements:
                         value = ""
                         if (

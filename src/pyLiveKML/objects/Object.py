@@ -36,7 +36,7 @@ class _NoValue(_KMLDump):
         return ""
 
 
-class _NoDump(_KMLDump):
+class _NoDump(_NoValue):
     """Dump nothing, i.e. an empty string.
 
     However, the field should not be constructed at all.
@@ -44,7 +44,7 @@ class _NoDump(_KMLDump):
 
 
 class _DumpDirect(_KMLDump):
-    """Dump to string."""
+    """Dump to `None` or string."""
 
     @classmethod
     def dump(cls, value: Any) -> Any:
@@ -58,6 +58,15 @@ class _DumpDirect(_KMLDump):
         if isinstance(value, datetime):
             return value.isoformat()
         return str(value)
+
+
+class _DumpNotNone(_DumpDirect):
+    """Dump to string."""
+
+    @classmethod
+    def dump(cls, value: Any) -> Any:
+        """Dump and format a KML object field."""
+        return "" if value is None else super().dump(value)
 
 
 class _KMLParser(ABC):
@@ -201,7 +210,7 @@ class _FieldAttribDef:
         name: str,
         value_field: str,
         target_field: str,
-        dumper: Type[_KMLDump] = _DumpDirect
+        dumper: Type[_KMLDump] = _DumpDirect,
     ) -> None:
         self.name = name
         self.value_field = value_field
@@ -213,11 +222,11 @@ class _RootAttribDef:
     def __init__(
         self,
         name: str,
-        value_field: str,
-        dumper: Type[_KMLDump] = _DumpDirect
+        value_field: str | None = None,
+        dumper: Type[_KMLDump] = _DumpDirect,
     ) -> None:
         self.name = name
-        self.value_field = value_field
+        self.value_field = name if not value_field else value_field
         self.dumper = dumper
 
 
@@ -544,15 +553,19 @@ class _BaseObject(ABC):
         """
         for f in (f for f in self._kml_fields if f.dumper != _NoDump):
             f_val = f.dumper.dump(getattr(self, f.name, None))
-            if f_val is None or f_val == "":
+            if f_val is None:
                 continue
+            if f_val == "":
+                f_val = None
             f_elem = etree.SubElement(root, with_ns(f.typename))
             f_elem.text = f_val
-            for adef in filter(lambda a: a.target_field == f.name, self._kml_field_attribs):
-                a_val = getattr(self, adef.value_field, None)
+            for a_def in filter(
+                lambda a: a.target_field == f.name, self._kml_field_attribs
+            ):
+                a_val = getattr(self, a_def.value_field, None)
                 if a_val is None:
                     continue
-                f_elem.set(with_ns(adef.name), adef.dumper.dump(a_val))
+                f_elem.set(with_ns(a_def.name), a_def.dumper.dump(a_val))
         if with_dependents:
             for dd in self.dependents:
                 branch = dd.child.construct_kml(with_children, with_dependents)

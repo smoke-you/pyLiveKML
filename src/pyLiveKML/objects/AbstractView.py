@@ -11,6 +11,7 @@ from pyLiveKML.objects.Object import (
     _ChildDef,
     _DependentDef,
     _ListObject,
+    _RootAttribDef,
     Object,
     ObjectChild,
 )
@@ -42,22 +43,16 @@ class ViewerOption(_BaseObject):
     """
 
     _kml_tag = "gx:option"
+    _kml_root_attribs = _BaseObject._kml_root_attribs + (
+        _RootAttribDef("name", "option"),
+        _RootAttribDef("enabled"),
+    )
 
     def __init__(self, option: ViewerOptionEnum, enabled: bool):
         """GxViewerOption instance constructor."""
         super().__init__()
         self.option = option
         self.enabled = enabled
-
-    def build_kml(
-        self,
-        root: etree.Element,
-        with_children: bool = True,
-        with_dependents: bool = True,
-    ) -> None:
-        """Construct the KML content and append it to the provided etree.Element."""
-        root.attrib["name"] = self.option.value
-        root.attrib["enabled"] = str(int(self.enabled))
 
 
 class _ViewerOptions(_ListObject[ViewerOption], _BaseObject):
