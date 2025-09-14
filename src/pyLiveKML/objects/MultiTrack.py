@@ -1,3 +1,19 @@
+# pyLiveKML: A python library that streams geospatial data using the KML protocol.
+# Copyright (C) 2022 smoke-you
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 """MultiTrack module."""
 
 from typing import Iterator, Iterable
@@ -8,10 +24,6 @@ from pyLiveKML.objects.Geometry import Geometry
 from pyLiveKML.objects.Object import _ChildDef, _DeletableMixin, _FieldDef, _ListObject
 from pyLiveKML.objects.Track import Track
 from pyLiveKML.types.types import AltitudeModeEnum
-
-
-# TODO: As with MultiGeometry, MultiTrack is in practice a Container, so it must be
-# possible to add and delete its contents.
 
 
 class MultiTrack(_DeletableMixin, _ListObject[Track], Geometry):
