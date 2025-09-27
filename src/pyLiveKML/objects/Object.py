@@ -588,15 +588,19 @@ class _BaseObject(ABC):
                 continue
             if f_val == "":
                 f_val = None
-            f_elem = etree.SubElement(root, with_ns(f.typename))
-            f_elem.text = f_val
-            for a_def in filter(
-                lambda a: a.target_field == f.name, self._kml_field_attribs
-            ):
+
+            a_items = list[tuple[str, str]]()
+            for a_def in filter(lambda a: a.target_field == f.name, self._kml_field_attribs):
                 a_val = getattr(self, a_def.value_field, None)
                 if a_val is None:
                     continue
-                f_elem.set(with_ns(a_def.name), a_def.dumper.dump(a_val))
+                a_items.append((with_ns(a_def.name), a_def.dumper.dump(a_val)))
+            if f_val or a_items:
+                f_elem = etree.SubElement(root, with_ns(f.typename))
+                f_elem.text = f_val
+                for a_item in a_items:
+                    f_elem.set(*a_item)
+
         if with_dependents:
             for dd in self.dependents:
                 branch = dd.child.construct_kml(with_children, with_dependents)
