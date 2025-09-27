@@ -119,9 +119,10 @@ class LinearRing(Geometry):
         extrude: bool | None = None,
         tessellate: bool | None = None,
         altitude_offset: float | None = None,
+        **kwargs: Any,
     ):
         """LinearRing instance constructor."""
-        Geometry.__init__(self)
+        Geometry.__init__(self, **kwargs)
         self.altitude_offset = altitude_offset
         self.extrude = extrude
         self.tessellate = tessellate

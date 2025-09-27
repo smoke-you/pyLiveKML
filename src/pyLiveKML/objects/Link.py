@@ -16,9 +16,11 @@
 
 """Link module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _FieldDef, Object
+from pyLiveKML.objects.Object import Object, _FieldDef
 from pyLiveKML.types import RefreshModeEnum, ViewRefreshModeEnum
 
 
@@ -113,9 +115,10 @@ class Link(Object):
         view_bound_scale: float | None = None,
         view_format: str | None = None,
         http_query: str | None = None,
+        **kwargs: Any,
     ):
         """Link instance constructor."""
-        Object.__init__(self)
+        Object.__init__(self, **kwargs)
         self.href = href
         self.refresh_mode = refresh_mode
         self.refresh_interval = refresh_interval

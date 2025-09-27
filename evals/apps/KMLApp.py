@@ -18,13 +18,12 @@
 
 import importlib
 import inspect
-
 from operator import attrgetter
 from pathlib import Path
 from typing import Iterable, Iterator
 
 from fastapi import FastAPI
-from pydantic import BaseModel, UUID4
+from pydantic import UUID4, BaseModel
 
 from pyLiveKML.objects.Container import Container
 from pyLiveKML.objects.Feature import Feature

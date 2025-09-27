@@ -17,11 +17,12 @@
 """GeoEllipse module."""
 
 import math
-from typing import Optional, Iterator
+from typing import Iterator, Optional
 
-from numpy import ndarray, array
+from numpy import array, ndarray
 from scipy.spatial.transform import Rotation
-from pyLiveKML import GeoCoordinates, AltitudeModeEnum
+
+from pyLiveKML import AltitudeModeEnum, GeoCoordinates
 
 from .GeoShape import GeoShape
 

@@ -18,34 +18,33 @@
 
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Mapping, Any, AsyncGenerator, cast
+from typing import Any, AsyncGenerator, Mapping, cast
 from uuid import UUID
 
 import uvicorn
-
+from apps.KMLApp import KMLControlRequest, KMLControlResponse, find_apps
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
 from fastapi.responses import (
-    Response,
     FileResponse,
     PlainTextResponse,
     RedirectResponse,
+    Response,
 )
 from fastapi.routing import Mount
-from starlette.routing import BaseRoute
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from lxml import etree  # type: ignore
+from starlette.routing import BaseRoute
 
-from apps.KMLApp import find_apps, KMLControlRequest, KMLControlResponse
 from pyLiveKML import (
+    KML_DOCTYPE,
+    KML_HEADERS,
     Document,
     Folder,
     ItemIcon,
     ItemIconModeEnum,
-    KML_DOCTYPE,
-    KML_HEADERS,
     Link,
     ListStyle,
     NetworkLink,
@@ -98,7 +97,19 @@ gep_loader = Folder(
         NetworkLink(
             name="Elements",
             is_open=True,
-            link=Link(href=ELEMENTS_HREF),
+            link=Link(
+                href=ELEMENTS_HREF,
+                # view_format="BBOX=[bboxWest],[bboxSouth],[bboxEast],[bboxNorth]"
+                # view_format="BBOX=[bboxWest],[bboxSouth],[bboxEast],[bboxNorth];"
+                #     "CAMERA=[lookatLon],[lookatLat],[lookatRange],[lookatTilt],[lookatHeading];"
+                #     "VIEW=[horizFov],[vertFov],[horizPixels],[vertPixels],[terrainEnabled]",
+                # http_query="client_version=[clientVersion]"
+                #     "&kml_version=[kmlVersion]"
+                #     "&client_name=[clientName]"
+                #     "&language=[language]",
+                _suppress_id=True,
+            ),
+            _suppress_id=True,
         ),
         NetworkLink(
             name="Update",
@@ -106,16 +117,24 @@ gep_loader = Folder(
                 href=UPDATE_HREF,
                 refresh_mode=RefreshModeEnum.ON_INTERVAL,
                 refresh_interval=REFRESH_INTERVAL,
+                # view_format="BBOX=[bboxWest],[bboxSouth],[bboxEast],[bboxNorth]"
+                # "&CAMERA=[lookatLon],[lookatLat],[lookatRange],[lookatTilt],[lookatHeading]"
+                # "&VIEW=[horizFov],[vertFov],[horizPixels],[vertPixels],[terrainEnabled]",
+                # http_query="client_version=[clientVersion]"
+                #     "&kml_version=[kmlVersion]"
+                #     "&client_name=[clientName]"
+                #     "&language=[language]",
+                _suppress_id=True,
             ),
             fly_to_view=True,
+            _suppress_id=True,
         ),
     ],
 )
 
-
 elem_styles = (
     Style(
-        list_style=ListStyle(
+        ListStyle(
             icons=(
                 ItemIcon(
                     icon_state=ItemIconModeEnum.OPEN,
@@ -130,11 +149,10 @@ elem_styles = (
     ),
 )
 gep_elements = Document(
-    name="Root", style_url=f"#{elem_styles[0].id}", styles=elem_styles
+    name="Root", style_url=f"#{elem_styles[0].id}", styles=elem_styles, _id="elements"
 )
 # assign a constant `id` to the container, so that it can be refreshed in GEP
 # without having to reload the pyLiveKML link after restarting the server
-gep_elements._id = "elements"
 
 # The master synchronization controller, a NetworkLinkControl object
 gep_sync = NetworkLinkControl(

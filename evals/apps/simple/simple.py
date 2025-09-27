@@ -26,14 +26,15 @@ from fastapi.responses import PlainTextResponse, Response
 from fastapi.templating import Jinja2Templates
 from lxml import etree  # type: ignore
 
-from pyLiveKML import kml_root_tag, KML_DOCTYPE, KML_HEADERS, Document
+from pyLiveKML import KML_DOCTYPE, KML_HEADERS, Document, kml_root_tag
 
 from ..KMLApp import KMLApp
-from . import most_examples_builder
-from . import track_example_builder
-from . import multitrack_example_builder
-from . import tour_example_builder
-
+from . import (
+    most_examples_builder,
+    multitrack_example_builder,
+    tour_example_builder,
+    track_example_builder,
+)
 
 simple_app = FastAPI()
 locdir = Path(__file__).parent

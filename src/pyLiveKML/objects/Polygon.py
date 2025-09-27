@@ -16,15 +16,14 @@
 
 """Polygon module."""
 
-from typing import Iterable, Iterator, cast
+from typing import Any, Iterable, Iterator, cast
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Geometry import Geometry
 from pyLiveKML.objects.LinearRing import LinearRing
-from pyLiveKML.objects.Object import _FieldDef, _DependentDef, Object, ObjectState
+from pyLiveKML.objects.Object import Object, ObjectState, _DependentDef, _FieldDef
 from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
-
 
 PolyBoundaryType = (
     LinearRing
@@ -71,8 +70,8 @@ class _OuterBoundary(Object):
     _kml_dependents = Object._kml_dependents + (_DependentDef("boundary"),)
     _suppress_id = True
 
-    def __init__(self, boundary: PolyBoundaryType) -> None:
-        super().__init__()
+    def __init__(self, boundary: PolyBoundaryType, **kwargs: Any) -> None:
+        Object.__init__(self, **kwargs)
         if isinstance(boundary, LinearRing):
             self.boundary = boundary
         else:
@@ -86,8 +85,8 @@ class _InnerBoundary(Object):
     _kml_dependents = Object._kml_dependents + (_DependentDef("boundary"),)
     _suppress_id = True
 
-    def __init__(self, boundary: PolyBoundaryType) -> None:
-        super().__init__()
+    def __init__(self, boundary: PolyBoundaryType, **kwargs: Any) -> None:
+        Object.__init__(self, **kwargs)
         if isinstance(boundary, LinearRing):
             self.boundary = boundary
         else:
@@ -160,9 +159,10 @@ class Polygon(Geometry):
         altitude_mode: AltitudeModeEnum | None = None,
         extrude: bool | None = None,
         tessellate: bool | None = None,
+        **kwargs: Any,
     ):
         """Polygon instance constructor."""
-        Geometry.__init__(self)
+        Geometry.__init__(self, **kwargs)
         self.outer_boundary = outer_boundary
         self._inner_boundaries = list[_InnerBoundary]()
         self.inner_boundaries = inner_boundaries

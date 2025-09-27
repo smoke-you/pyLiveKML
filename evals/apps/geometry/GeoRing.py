@@ -16,11 +16,12 @@
 
 """GeoRing module."""
 
-from typing import Optional, Iterator
+from typing import Iterator, Optional
 
-from numpy import ndarray, array
-from pyLiveKML import GeoCoordinates, AltitudeModeEnum
+from numpy import array, ndarray
 from scipy.spatial.transform import Rotation
+
+from pyLiveKML import AltitudeModeEnum, GeoCoordinates
 
 from .GeoShape import GeoShape
 

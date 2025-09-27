@@ -17,7 +17,7 @@
 """ExtendedData module."""
 
 from abc import ABC
-from typing import Iterable, Iterator
+from typing import Any, Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
@@ -32,9 +32,9 @@ from pyLiveKML.objects.Object import (
 class _ExtendedDataItem(_BaseObject, ABC):
     """Private base class for `ExtendedData` items."""
 
-    def __init__(self) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         """_ExtendedDataItem instance constructor."""
-        _BaseObject.__init__(self)
+        _BaseObject.__init__(self, **kwargs)
         ABC.__init__(self)
 
 
@@ -74,9 +74,10 @@ class DataItem(_ExtendedDataItem):
         name: str,
         display_name: str | None,
         value: str | None,
+        **kwargs: Any,
     ) -> None:
         """DataItem instance constructor."""
-        super().__init__()
+        _ExtendedDataItem.__init__(self, **kwargs)
         self.name = name
         self.display_name = display_name
         self.value = value
@@ -117,9 +118,10 @@ class SchemaDataItem(_ExtendedDataItem):
         self,
         schema_ref: str,
         data: dict[str, str],
+        **kwargs: Any,
     ) -> None:
         """SchemaDataItem instance constructor."""
-        super().__init__()
+        _ExtendedDataItem.__init__(self, **kwargs)
         self.schema_ref = schema_ref
         self.data = data
 
@@ -172,9 +174,10 @@ class ExtendedData(_BaseObject):
     def __init__(
         self,
         items: _ExtendedDataItem | Iterable[_ExtendedDataItem] | None = None,
+        **kwargs: Any,
     ) -> None:
         """Construct Schema instances."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self._items = list[_ExtendedDataItem]()
         self.items = items
 

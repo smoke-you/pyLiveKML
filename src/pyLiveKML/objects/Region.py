@@ -16,9 +16,11 @@
 
 """Region module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _BaseObject, _DependentDef, _FieldDef, Object
+from pyLiveKML.objects.Object import Object, _BaseObject, _DependentDef, _FieldDef
 from pyLiveKML.types import AltitudeModeEnum
 
 
@@ -74,9 +76,10 @@ class LatLonAltBox(_BaseObject):
         min_altitude: float | None = None,
         max_altitude: float | None = None,
         altitude_mode: AltitudeModeEnum | None = None,
+        **kwargs: Any,
     ):
         """LatLonAltBox instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.north = north
         self.south = south
         self.east = east
@@ -140,9 +143,10 @@ class LevelOfDetail(_BaseObject):
         max_lod_pixels: float = -1,
         min_fade_extent: float = 0,
         max_fade_extent: float = 0,
+        **kwargs: Any,
     ):
         """Lod instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.min_lod_pixels = min_lod_pixels
         self.max_lod_pixels = max_lod_pixels
         self.min_fade_extent = min_fade_extent
@@ -193,8 +197,9 @@ class Region(Object):
         self,
         box: LatLonAltBox,
         lod: LevelOfDetail | None = None,
+        **kwargs: Any,
     ) -> None:
         """Region instance constructor."""
-        Object.__init__(self)
+        Object.__init__(self, **kwargs)
         self.box = box
         self.lod = lod

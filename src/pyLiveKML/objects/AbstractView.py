@@ -23,17 +23,15 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.errors import ViewerOptionInvalidError
 from pyLiveKML.objects.Object import (
+    Object,
     _BaseObject,
     _ChildDef,
     _DependentDef,
     _ListObject,
     _RootAttribDef,
-    Object,
-    ObjectChild,
 )
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 from pyLiveKML.types import ViewerOptionEnum
-from pyLiveKML.utils import with_ns
 
 
 class ViewerOption(_BaseObject):
@@ -99,9 +97,11 @@ class _ViewerOptions(_ListObject[ViewerOption], _BaseObject):
         self,
         disallowed_view_options: tuple[ViewerOptionEnum, ...],
         items: Iterable[ViewerOption] | ViewerOption | None = None,
+        **kwargs: Any,
     ) -> None:
         """ViewerOptions instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
+        _ListObject.__init__(self)
         self.disallowed_view_options = disallowed_view_options
         self.items = items
 

@@ -16,16 +16,16 @@
 
 """Schema module."""
 
-from typing import Iterable, Iterator
+from typing import Any, Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Object import (
+    Object,
     _BaseObject,
     _DependentDef,
     _FieldDef,
     _RootAttribDef,
-    Object,
 )
 
 
@@ -47,9 +47,10 @@ class SimpleField(_BaseObject):
         type: str,
         name: str,
         display_name: str | None = None,
+        **kwargs: Any,
     ) -> None:
         """SimpleField instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.type = type
         self.name = name
         self.display_name = display_name

@@ -16,10 +16,12 @@
 
 """LineStyle module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.ColorStyle import ColorStyle
-from pyLiveKML.objects.Object import _FieldDef, _ColorParse
+from pyLiveKML.objects.Object import _ColorParse, _FieldDef
 from pyLiveKML.types.GeoColor import GeoColor
 
 
@@ -79,9 +81,10 @@ class LineStyle(ColorStyle):
         outer_width: float | None = None,
         physical_width: float | None = None,
         label_visibility: bool | None = None,
+        **kwargs: Any,
     ):
         """LineStyle instance constructor."""
-        ColorStyle.__init__(self, color)
+        ColorStyle.__init__(self, color=color, **kwargs)
         self.width = width
         self.outer_color = outer_color
         self.outer_width = outer_width

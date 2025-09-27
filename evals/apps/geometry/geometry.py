@@ -25,8 +25,12 @@ from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from lxml import etree  # type: ignore
-from pydantic import BaseModel, UUID4
+from pydantic import UUID4, BaseModel
+from scipy.spatial.transform import Rotation
+
 from pyLiveKML import (
+    KML_DOCTYPE,
+    KML_HEADERS,
     AltitudeModeEnum,
     BalloonStyle,
     DisplayModeEnum,
@@ -35,17 +39,13 @@ from pyLiveKML import (
     NetworkLinkControl,
     Style,
     kml_root_tag,
-    KML_DOCTYPE,
-    KML_HEADERS,
 )
 from pyLiveKML.objects.Feature import Feature
-from scipy.spatial.transform import Rotation
 
+from ..KMLApp import KMLApp, KMLControlRequest, KMLControlResponse, KMLSelect
 from .GeoEllipse import GeoEllipse
 from .GeoRing import GeoRing
 from .GeoShape import GeoShape
-from ..KMLApp import KMLApp, KMLControlRequest, KMLControlResponse, KMLSelect
-
 
 origin = GeoCoordinates(lon=-85.844, lat=40.019, alt=1000)
 # the GeoShapes that will be manipulated

@@ -16,7 +16,7 @@
 
 """MultiTrack module."""
 
-from typing import Iterator, Iterable
+from typing import Any, Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
@@ -73,11 +73,12 @@ class MultiTrack(_DeletableMixin, _ListObject[Track], Geometry):
         altitude_mode: AltitudeModeEnum | None = None,
         interpolate: bool = False,
         tracks: Track | Iterable[Track] | None = None,
+        **kwargs: Any,
     ) -> None:
         """MultiTrack instance constructor."""
-        _DeletableMixin.__init__(self)
+        Geometry.__init__(self, **kwargs)
         _ListObject[Track].__init__(self)
-        Geometry.__init__(self)
+        _DeletableMixin.__init__(self)
         self.altitude_mode = altitude_mode
         self.interpolate = interpolate
         self.tracks = tracks

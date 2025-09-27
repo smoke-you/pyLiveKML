@@ -20,7 +20,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from enum import Enum
 from typing import Any, Generic, Iterable, Iterator, Type, TypeVar
-from uuid import uuid4, UUID
+from uuid import UUID, uuid4
 
 from dateutil.parser import parse as dtparse
 from lxml import etree  # type: ignore
@@ -360,10 +360,22 @@ class _BaseObject(ABC):
     not include an `id` attribute, so cannot be targeted by e.g. `<Change>` or `<Delete>`
     tags.
 
-    Note that while `_BaseObject` **suppresses** it's `id` when publishing to KML, it still
-    **has** an `id` attribute.
+    Note that while `_BaseObject` **suppresses** it's `id` by default when publishing to
+    KML, it still **has** an `id` attribute.
 
     Apart from this, `_BaseObject` and `Object` are conceptually interchangeable.
+
+    Parameters
+    ----------
+    **kwargs : Any
+        Keyword arguments, passed down through every other class that ultimately derives
+        from `_BaseObject`. Two keywords are supported: "_id":`Any`, and
+        "_suppress_id":`bool`. In each case, if they are present, they are injected into
+        the private attribute of the same name. The intent is to allow a) any object
+        (typically, but not necessarily, a `str`) to be used as the KML `id` attribute;
+        and b) to suppress the inclusion of the KML `id` attribute if it is not required
+        for a particular object. Either of these could be set after object instantiation,
+        but the keyword arguments approach simplifies code.
 
     """
 
@@ -375,11 +387,14 @@ class _BaseObject(ABC):
     _kml_dependents: tuple[_DependentDef, ...] = tuple()
     _suppress_id: bool = True
 
-    def __init__(self) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         """_BaseObject instance constructor."""
         super().__init__()
-        self._id: Any = uuid4()
-        self._container: _BaseObject | None = None
+        _id = kwargs.get("_id", None)
+        self._id: Any = uuid4() if _id is None else _id
+        _suppress_id = kwargs.get("_suppress_id", None)
+        if isinstance(_suppress_id, bool):
+            self._suppress_id = _suppress_id
         self._state: ObjectState = ObjectState.IDLE
 
     def __setattr__(self, name: str, value: Any) -> None:
@@ -823,9 +838,9 @@ class Object(_BaseObject, ABC):
     _suppress_id: bool = False
     _kml_children: tuple[_ChildDef, ...] = _BaseObject._kml_children
 
-    def __init__(self) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         """Object instance constructor."""
-        super().__init__()
+        super().__init__(**kwargs)
 
 
 class ObjectChild:

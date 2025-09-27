@@ -18,7 +18,7 @@
 
 from datetime import datetime
 from itertools import islice
-from typing import Iterable, Iterator
+from typing import Any, Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
@@ -28,14 +28,14 @@ from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.Container import Container
 from pyLiveKML.objects.Folder import Folder
 from pyLiveKML.objects.Object import (
-    _FieldAttribDef,
+    ObjectChild,
+    ObjectState,
     _BaseObject,
     _DeletableMixin,
     _DependentDef,
+    _FieldAttribDef,
     _FieldDef,
     _NoDump,
-    ObjectChild,
-    ObjectState,
 )
 from pyLiveKML.objects.Update import Update
 
@@ -153,9 +153,10 @@ class NetworkLinkControl(_BaseObject):
         link_snippet_max_lines: int = 2,
         link_expires: datetime | None = None,
         abstract_view: AbstractView | None = None,
+        **kwargs: Any,
     ):
         """NetworkLinkControl instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self._containers = list[Container]()
         self.containers = containers
         self.update_limit = update_limit

@@ -18,7 +18,6 @@
 
 from lxml import etree  # type: ignore
 
-
 KML_UPDATE_CONTAINER_LIMIT_DEFAULT: int = 100
 """The default value for the container update limit.
 

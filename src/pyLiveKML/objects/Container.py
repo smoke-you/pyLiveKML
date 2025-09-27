@@ -17,7 +17,7 @@
 """Container module."""
 
 from abc import ABC
-from typing import Iterable, Iterator
+from typing import Any, Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
@@ -25,10 +25,10 @@ from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
 from pyLiveKML.objects.Object import (
+    ObjectState,
     _ChildDef,
     _DeletableMixin,
     _ListObject,
-    ObjectState,
 )
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
@@ -147,10 +147,9 @@ class Container(_DeletableMixin, _ListObject[Feature], Feature, ABC):
         region: Region | None = None,
         extended_data: ExtendedData | None = None,
         features: Feature | Iterable[Feature] | None = None,
+        **kwargs: Any,
     ):
         """Feature instance constructor."""
-        _DeletableMixin.__init__(self)
-        _ListObject[Feature].__init__(self)
         Feature.__init__(
             self,
             name=name,
@@ -169,7 +168,10 @@ class Container(_DeletableMixin, _ListObject[Feature], Feature, ABC):
             styles=styles,
             region=region,
             extended_data=extended_data,
+            **kwargs,
         )
+        _ListObject[Feature].__init__(self)
+        _DeletableMixin.__init__(self)
         ABC.__init__(self)
         self.features = features
         self._update_limit: int = 0

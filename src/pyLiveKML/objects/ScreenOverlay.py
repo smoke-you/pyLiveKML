@@ -17,7 +17,7 @@
 """ScreenOverlay module."""
 
 from abc import ABC
-from typing import Iterable
+from typing import Any, Iterable
 
 from lxml import etree  # type: ignore
 
@@ -193,6 +193,7 @@ class ScreenOverlay(Overlay):
         styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
         extended_data: ExtendedData | None = None,
+        **kwargs: Any,
     ):
         """IconStyle instance constructor."""
         Overlay.__init__(
@@ -215,6 +216,7 @@ class ScreenOverlay(Overlay):
             styles=styles,
             region=region,
             extended_data=extended_data,
+            **kwargs,
         )
         ABC.__init__(self)
         self.overlay_xy = overlay_xy

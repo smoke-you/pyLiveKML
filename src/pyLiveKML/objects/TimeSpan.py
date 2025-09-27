@@ -17,10 +17,11 @@
 """TimeSpan module."""
 
 from datetime import datetime
+from typing import Any
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _FieldDef, _DateTimeParse
+from pyLiveKML.objects.Object import _DateTimeParse, _FieldDef
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 
 
@@ -59,8 +60,9 @@ class TimeSpan(TimePrimitive):
         self,
         begin: datetime | str | None = None,
         end: datetime | str | None = None,
+        **kwargs: Any,
     ):
         """TimeSpan instance constructor."""
-        TimePrimitive.__init__(self)
+        TimePrimitive.__init__(self, **kwargs)
         self.begin = begin
         self.end = end

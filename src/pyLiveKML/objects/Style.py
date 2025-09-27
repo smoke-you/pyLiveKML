@@ -82,9 +82,10 @@ class Style(StyleSelector):
         line_style: LineStyle | None = None,
         list_style: ListStyle | None = None,
         poly_style: PolyStyle | None = None,
+        **kwargs: Any,
     ):
         """Style instance constructor."""
-        StyleSelector.__init__(self)
+        StyleSelector.__init__(self, **kwargs)
         self.balloon_style: BalloonStyle | None = None
         self.icon_style: IconStyle | None = None
         self.label_style: LabelStyle | None = None

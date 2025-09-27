@@ -16,8 +16,7 @@
 
 """PhotoOverlay module."""
 
-from abc import ABC
-from typing import Iterable
+from typing import Any, Iterable
 
 from lxml import etree  # type: ignore
 
@@ -25,11 +24,11 @@ from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Icon import Icon
 from pyLiveKML.objects.Object import (
+    _Angle90,
+    _Angle180,
     _BaseObject,
     _ChildDef,
     _FieldDef,
-    _Angle180,
-    _Angle90,
 )
 from pyLiveKML.objects.Overlay import Overlay
 from pyLiveKML.objects.Point import Point
@@ -91,9 +90,10 @@ class ViewVolume(_BaseObject):
         bottom_fov: float = 0,
         top_fov: float = 0,
         near: float = 0,
+        **kwargs: Any,
     ) -> None:
         """_PhotoOverlay_ViewVolume instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.left_fov = left_fov
         self.right_fov = right_fov
         self.bottom_fov = bottom_fov
@@ -160,9 +160,10 @@ class ImagePyramid(_BaseObject):
         max_width: int = 0,
         max_height: int = 0,
         grid_origin: GridOriginEnum = GridOriginEnum.LOWER_LEFT,
+        **kwargs: Any,
     ) -> None:
         """_PhotoOverlay_ImagePyramid instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.tile_size = tile_size
         self.max_width = max_width
         self.max_height = max_height
@@ -339,6 +340,7 @@ class PhotoOverlay(Overlay):
         styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
         extended_data: ExtendedData | None = None,
+        **kwargs: Any,
     ):
         """PhotoOverlay instance constructor."""
         Overlay.__init__(
@@ -362,6 +364,7 @@ class PhotoOverlay(Overlay):
             styles=styles,
             region=region,
             extended_data=extended_data,
+            **kwargs,
         )
         self.point = point
         self.shape = shape

@@ -17,7 +17,6 @@
 """trail module."""
 
 import json
-
 from datetime import datetime
 from pathlib import Path
 from typing import cast
@@ -27,12 +26,13 @@ from fastapi.exceptions import HTTPException
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
+
 from pyLiveKML import NetworkLinkControl
 from pyLiveKML.objects.Feature import Feature
 
+from ..KMLApp import KMLApp, KMLControlRequest, KMLControlResponse, KMLSelect
 from .AircraftData import AircraftData
 from .AircraftTrail import AircraftTrail
-from ..KMLApp import KMLApp, KMLControlRequest, KMLControlResponse, KMLSelect
 
 
 def load_adsb_exchange_data(filename: str, trailsz: int = 20) -> AircraftTrail:

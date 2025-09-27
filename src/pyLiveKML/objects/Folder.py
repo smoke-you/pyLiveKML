@@ -16,7 +16,7 @@
 
 """Folder module."""
 
-from typing import Iterable
+from typing import Any, Iterable
 
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.Container import Container
@@ -135,9 +135,11 @@ class Folder(Container):
         region: Region | None = None,
         extended_data: ExtendedData | None = None,
         features: Feature | Iterable[Feature] | None = None,
+        **kwargs: Any,
     ):
         """Folder instance constructor."""
-        super().__init__(
+        Container.__init__(
+            self,
             name=name,
             visibility=visibility,
             is_open=is_open,
@@ -155,4 +157,5 @@ class Folder(Container):
             region=region,
             extended_data=extended_data,
             features=features,
+            **kwargs,
         )

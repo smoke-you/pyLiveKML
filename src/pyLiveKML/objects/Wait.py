@@ -16,6 +16,8 @@
 
 """Wait module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Object import _FieldDef
@@ -54,7 +56,8 @@ class Wait(TourPrimitive):
     def __init__(
         self,
         duration: float = 0,
+        **kwargs: Any,
     ) -> None:
         """Wait instance constructor."""
-        TourPrimitive.__init__(self)
+        TourPrimitive.__init__(self, **kwargs)
         self.duration = duration

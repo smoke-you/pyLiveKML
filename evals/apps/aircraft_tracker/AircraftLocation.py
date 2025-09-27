@@ -19,6 +19,7 @@
 from typing import Optional, Sequence, cast
 
 from lxml import etree  # type: ignore
+
 from pyLiveKML import (
     AltitudeModeEnum,
     BalloonStyle,
@@ -28,17 +29,17 @@ from pyLiveKML import (
     LineStyle,
     LookAt,
     MultiGeometry,
+    Placemark,
     Point,
     Style,
-    Placemark,
     TimeSpan,
     ViewerOption,
     ViewerOptionEnum,
 )
-from pyLiveKML.objects.Object import _BaseObject, ObjectState
+from pyLiveKML.objects.Object import ObjectState, _BaseObject
 
-from .AircraftData import AircraftData
 from ..helpers import description_builder
+from .AircraftData import AircraftData
 
 
 class AircraftLocation(Placemark):

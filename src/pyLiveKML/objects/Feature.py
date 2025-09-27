@@ -17,21 +17,21 @@
 """Feature module."""
 
 from abc import ABC
-from typing import Iterable, Iterator
+from typing import Any, Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Object import (
-    _FieldAttribDef,
+    Object,
     _BaseObject,
     _ChildDef,
     _DependentDef,
+    _FieldAttribDef,
     _FieldDef,
     _NoDump,
     _NoValue,
-    Object,
 )
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
@@ -44,8 +44,8 @@ class _Author(_BaseObject):
 
     _kml_fields = _BaseObject._kml_fields + (_FieldDef("name", "atom:name"),)
 
-    def __init__(self, name: str) -> None:
-        super().__init__()
+    def __init__(self, name: str, **kwargs: Any) -> None:
+        _BaseObject.__init__(self, **kwargs)
         self.name = name
 
 
@@ -180,9 +180,10 @@ class Feature(Object, ABC):
         styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
         extended_data: ExtendedData | None = None,
+        **kwargs: Any,
     ):
         """Feature instance constructor."""
-        Object.__init__(self)
+        Object.__init__(self, **kwargs)
         ABC.__init__(self)
         self._author: _Author | None = None
         self._styles = list[StyleSelector]()

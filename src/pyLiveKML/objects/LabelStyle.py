@@ -14,7 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-"""ColorStyle module."""
+"""LabelStyle module."""
+
+from typing import Any
 
 from lxml import etree  # type: ignore
 
@@ -53,7 +55,8 @@ class LabelStyle(ColorStyle):
         scale: float | None = None,
         color: GeoColor | int | None = None,
         color_mode: ColorModeEnum | None = None,
+        **kwargs: Any,
     ):
         """ColorStyle instance constructor."""
-        super().__init__(color=color, color_mode=color_mode)
+        ColorStyle.__init__(self, color=color, color_mode=color_mode, **kwargs)
         self.scale = scale

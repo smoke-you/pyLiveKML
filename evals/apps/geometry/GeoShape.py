@@ -21,19 +21,20 @@ from typing import Optional, cast
 
 import numpy
 from pyproj import Geod
+from scipy.spatial.transform import Rotation
+
 from pyLiveKML import (
+    AltitudeModeEnum,
     GeoColor,
     GeoCoordinates,
-    AltitudeModeEnum,
-    LineStyle,
     LinearRing,
-    PolyStyle,
+    LineStyle,
     Polygon,
+    PolyStyle,
     Style,
     StyleMap,
 )
 from pyLiveKML.objects.Placemark import Placemark
-from scipy.spatial.transform import Rotation
 
 from .geography import project_shape
 

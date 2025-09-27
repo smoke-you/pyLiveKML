@@ -17,6 +17,7 @@
 """AircraftPosition module."""
 
 from typing import cast
+
 from pyLiveKML import (
     AltitudeModeEnum,
     GeoCoordinates,

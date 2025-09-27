@@ -21,9 +21,9 @@ from lxml import etree  # type: ignore
 from pyLiveKML import Folder, ListItemTypeEnum, ListStyle, Style
 from pyLiveKML.objects.Object import ObjectState, _BaseObject
 
+from ..helpers import description_builder
 from .AircraftData import AircraftData
 from .AircraftPosition import AircraftPosition
-from ..helpers import description_builder
 
 
 class AircraftTrail(Folder):

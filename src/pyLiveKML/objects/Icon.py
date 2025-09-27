@@ -16,6 +16,8 @@
 
 """Icon module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Link import Link
@@ -109,6 +111,7 @@ class Icon(Link):
         y: int | None = None,
         w: int | None = None,
         h: int | None = None,
+        **kwargs: Any,
     ):
         """Icon instance constructor."""
         Link.__init__(
@@ -121,6 +124,7 @@ class Icon(Link):
             view_bound_scale=view_bound_scale,
             view_format=view_format,
             http_query=http_query,
+            **kwargs,
         )
         self.x = x
         self.y = y

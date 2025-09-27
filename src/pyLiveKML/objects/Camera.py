@@ -16,17 +16,17 @@
 
 """Camera module."""
 
-from typing import Iterable, cast
+from typing import Any, Iterable, cast
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.AbstractView import AbstractView, ViewerOption
 from pyLiveKML.objects.Object import (
-    _FieldDef,
     _Angle90,
     _Angle180,
-    _AnglePos180,
     _Angle360,
+    _AnglePos180,
+    _FieldDef,
 )
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates, ViewerOptionEnum
@@ -132,9 +132,10 @@ class Camera(AbstractView):
         alt: float | None = None,
         viewer_options: Iterable[ViewerOption] | ViewerOption | None = None,
         time_primitive: TimePrimitive | None = None,
+        **kwargs: Any,
     ):
         """Camera instance constructor."""
-        AbstractView.__init__(self, viewer_options, time_primitive)
+        AbstractView.__init__(self, viewer_options, time_primitive, **kwargs)
         self.lon: float
         self.lat: float
         self.alt: float

@@ -16,7 +16,7 @@
 
 """Tour module."""
 
-from typing import Iterable, Iterator
+from typing import Any, Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
@@ -24,13 +24,12 @@ from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
 from pyLiveKML.objects.Object import (
+    Object,
     _BaseObject,
     _ChildDef,
     _DeletableMixin,
     _DependentDef,
-    _FieldDef,
     _ListObject,
-    Object,
 )
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
@@ -63,12 +62,14 @@ class Playlist(_DeletableMixin, _ListObject[TourPrimitive], _BaseObject):
     _yield_self = True
 
     def __init__(
-        self, items: TourPrimitive | Iterable[TourPrimitive] | None = None
+        self,
+        items: TourPrimitive | Iterable[TourPrimitive] | None = None,
+        **kwargs: Any,
     ) -> None:
         """Playlist instance constructor."""
-        _DeletableMixin.__init__(self)
+        _BaseObject.__init__(self, **kwargs)
         _ListObject[TourPrimitive].__init__(self)
-        _BaseObject.__init__(self)
+        _DeletableMixin.__init__(self)
         self.items = items
 
     @property
@@ -207,9 +208,11 @@ class Tour(Feature):
         region: Region | None = None,
         extended_data: ExtendedData | None = None,
         playlist: TourPrimitive | Iterable[TourPrimitive] | None = None,
+        **kwargs: Any,
     ) -> None:
         """Tour instance constructor."""
-        super().__init__(
+        Feature.__init__(
+            self,
             name=name,
             visibility=visibility,
             is_open=is_open,
@@ -226,5 +229,6 @@ class Tour(Feature):
             styles=styles,
             region=region,
             extended_data=extended_data,
+            **kwargs,
         )
         self.playlist = Playlist(playlist)

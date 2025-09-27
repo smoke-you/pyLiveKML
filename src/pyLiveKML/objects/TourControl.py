@@ -16,6 +16,8 @@
 
 """TourControl module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Object import _FieldDef
@@ -48,7 +50,8 @@ class TourControl(TourPrimitive):
     def __init__(
         self,
         play_mode: PlayModeEnum = PlayModeEnum.PAUSE,
+        **kwargs: Any,
     ) -> None:
         """GxTourControl instance constructor."""
-        TourPrimitive.__init__(self)
+        TourPrimitive.__init__(self, **kwargs)
         self.play_mode = play_mode

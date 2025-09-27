@@ -16,13 +16,13 @@
 
 """ListStyle module."""
 
-from typing import Iterable
+from typing import Any, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _BaseObject, _ChildDef, _FieldDef, _ColorParse
+from pyLiveKML.objects.Object import _BaseObject, _ChildDef, _ColorParse, _FieldDef
 from pyLiveKML.objects.SubStyle import SubStyle
-from pyLiveKML.types import ItemIconModeEnum, ListItemTypeEnum, GeoColor
+from pyLiveKML.types import GeoColor, ItemIconModeEnum, ListItemTypeEnum
 
 
 class ItemIcon(_BaseObject):
@@ -58,9 +58,10 @@ class ItemIcon(_BaseObject):
         self,
         icon_state: ItemIconModeEnum | None = None,
         href: str | None = None,
+        **kwargs: Any,
     ):
         """ItemIcon instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.icon_state = icon_state
         self.href = href
 
@@ -103,9 +104,10 @@ class ListStyle(SubStyle):
         list_item_type: ListItemTypeEnum | None = None,
         bg_color: GeoColor | int | None = None,
         icons: ItemIcon | Iterable[ItemIcon] | None = None,
+        **kwargs: Any,
     ):
         """ListStyle instance constructor."""
-        SubStyle.__init__(self)
+        SubStyle.__init__(self, **kwargs)
         self.list_item_type = list_item_type
         self.bg_color = bg_color
         self._icons = list[ItemIcon]()

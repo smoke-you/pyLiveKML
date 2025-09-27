@@ -17,8 +17,9 @@
 """SubStyle module."""
 
 from abc import ABC
+from typing import Any
 
-from pyLiveKML.objects.Object import _FieldDef, Object
+from pyLiveKML.objects.Object import Object, _FieldDef
 
 
 class SubStyle(Object, ABC):
@@ -47,7 +48,7 @@ class SubStyle(Object, ABC):
 
     _kml_fields: tuple[_FieldDef, ...] = tuple()
 
-    def __init__(self) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         """SubStyle instance constructor."""
-        Object.__init__(self)
+        Object.__init__(self, **kwargs)
         ABC.__init__(self)

@@ -16,7 +16,6 @@
 
 """GroundOverlay module."""
 
-from abc import ABC
 from typing import Any, Iterable
 
 from lxml import etree  # type: ignore
@@ -25,14 +24,14 @@ from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Icon import Icon
 from pyLiveKML.objects.Object import (
+    Object,
+    _Angle90,
+    _Angle180,
     _BaseObject,
     _ChildDef,
     _FieldDef,
     _KMLDump,
     _KMLParser,
-    _Angle180,
-    _Angle90,
-    Object,
 )
 from pyLiveKML.objects.Overlay import Overlay
 from pyLiveKML.objects.Region import Region
@@ -95,9 +94,10 @@ class LatLonBox(Object):
         east: float,
         west: float,
         rotation: float = 0,
+        **kwargs: Any,
     ) -> None:
         """LatLonBox instance constructor."""
-        super().__init__()
+        Object.__init__(self, **kwargs)
         self.north = north
         self.south = south
         self.east = east
@@ -167,9 +167,10 @@ class LatLonQuad(Object):
             tuple[float, float],
             tuple[float, float],
         ],
+        **kwargs: Any,
     ) -> None:
         """LatLonQuad instance constructor."""
-        super().__init__()
+        Object.__init__(self, **kwargs)
         self.coordinates = coordinates
 
 
@@ -310,6 +311,7 @@ class GroundOverlay(Overlay):
         styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
         extended_data: ExtendedData | None = None,
+        **kwargs: Any,
     ):
         """IconStyle instance constructor."""
         Overlay.__init__(
@@ -332,6 +334,7 @@ class GroundOverlay(Overlay):
             styles=styles,
             region=region,
             extended_data=extended_data,
+            **kwargs,
         )
         self.altitude = altitude
         self.altitude_mode = altitude_mode

@@ -17,7 +17,7 @@
 """Track module."""
 
 from datetime import datetime
-from typing import Any, Iterator, Iterable
+from typing import Any, Iterable, Iterator
 
 from dateutil.parser import parse as dtparse
 from lxml import etree  # type: ignore
@@ -25,13 +25,13 @@ from lxml import etree  # type: ignore
 from pyLiveKML.objects.Geometry import Geometry
 from pyLiveKML.objects.Model import Model
 from pyLiveKML.objects.Object import (
+    _Angle90,
+    _Angle180,
+    _Angle360,
+    _AnglePos180,
     _ChildDef,
     _DumpNotNone,
     _FieldDef,
-    _Angle180,
-    _Angle360,
-    _Angle90,
-    _AnglePos180,
 )
 from pyLiveKML.types import AltitudeModeEnum
 from pyLiveKML.utils import with_ns
@@ -258,9 +258,10 @@ class Track(Geometry):
         altitude_mode: AltitudeModeEnum | None = None,
         elements: TrackElement | Iterable[TrackElement] | None = None,
         model: Model | None = None,
+        **kwargs: Any,
     ) -> None:
         """Track instance constructor."""
-        Geometry.__init__(self)
+        Geometry.__init__(self, **kwargs)
         self.altitude_mode = altitude_mode
         self.model = model
         self._schemas = dict[str, set[str]]()

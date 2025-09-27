@@ -17,10 +17,11 @@
 """TimeStamp module."""
 
 from datetime import datetime
+from typing import Any
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _FieldDef, _DateTimeParse
+from pyLiveKML.objects.Object import _DateTimeParse, _FieldDef
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
 
 
@@ -54,7 +55,8 @@ class TimeStamp(TimePrimitive):
     def __init__(
         self,
         when: datetime | str,
+        **kwargs: Any,
     ):
         """TimeStamp instance constructor."""
-        TimePrimitive.__init__(self)
+        TimePrimitive.__init__(self, **kwargs)
         self.when = when

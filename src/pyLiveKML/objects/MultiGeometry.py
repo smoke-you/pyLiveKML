@@ -16,7 +16,7 @@
 
 """MultiGeometry module."""
 
-from typing import Iterable, Iterator
+from typing import Any, Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
@@ -48,11 +48,13 @@ class MultiGeometry(_DeletableMixin, _ListObject[Geometry], Geometry):
     _kml_children = Geometry._kml_children + (_ChildDef("contents"),)
     _yield_self = True
 
-    def __init__(self, contents: Geometry | Iterable[Geometry] | None = None):
+    def __init__(
+        self, contents: Geometry | Iterable[Geometry] | None = None, **kwargs: Any
+    ):
         """MultiGeometry instance constructor."""
-        _DeletableMixin.__init__(self)
+        Geometry.__init__(self, **kwargs)
         _ListObject[Geometry].__init__(self)
-        Geometry.__init__(self)
+        _DeletableMixin.__init__(self)
         self.contents = contents
 
     @property

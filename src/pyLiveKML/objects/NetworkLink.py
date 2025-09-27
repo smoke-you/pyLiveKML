@@ -16,7 +16,7 @@
 
 """NetworkLink module."""
 
-from typing import Iterable
+from typing import Any, Iterable
 
 from lxml import etree  # type: ignore
 
@@ -24,7 +24,7 @@ from pyLiveKML.objects.AbstractView import AbstractView
 from pyLiveKML.objects.ExtendedData import ExtendedData
 from pyLiveKML.objects.Feature import Feature
 from pyLiveKML.objects.Link import Link
-from pyLiveKML.objects.Object import _FieldDef, _ChildDef
+from pyLiveKML.objects.Object import _ChildDef, _FieldDef
 from pyLiveKML.objects.Region import Region
 from pyLiveKML.objects.StyleSelector import StyleSelector
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
@@ -162,6 +162,7 @@ class NetworkLink(Feature):
         fly_to_view: bool | None = None,
         refresh_visibility: bool | None = None,
         link: Link | None = None,
+        **kwargs: Any,
     ):
         """NetworkLink instance constructor."""
         Feature.__init__(
@@ -182,6 +183,7 @@ class NetworkLink(Feature):
             styles=styles,
             region=region,
             extended_data=extended_data,
+            **kwargs,
         )
         self.fly_to_view = fly_to_view
         self.refresh_visibility = refresh_visibility

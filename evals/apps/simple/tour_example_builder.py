@@ -20,22 +20,21 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML import (
     AnimatedUpdate,
+    Document,
     FlyTo,
     FlyToModeEnum,
+    IconStyle,
+    LookAt,
+    Placemark,
     PlayModeEnum,
+    Point,
     SoundCue,
+    Style,
     Tour,
     TourControl,
     UpdateSequent,
     UpdateType,
     Wait,
-    Document,
-    IconStyle,
-    LookAt,
-    Placemark,
-    Point,
-    Style,
-    Tour,
 )
 
 
@@ -60,8 +59,8 @@ def build_doc(root_path: str) -> Document:
     # Now, we can change the new `IconStyle` and use it when constructing a `<Change>`
     # for the `AnimatedUpdate` via an `UpdateSequent`.
     anim_base_style = IconStyle()
-    anim_update_style = IconStyle(scale=3)
-    anim_update_style._id = anim_base_style._id
+    anim_update_style = IconStyle(scale=3, _id=anim_base_style._id)
+    # anim_update_style._id = anim_base_style._id
     anim_style = Style(anim_base_style)
     anim_update = UpdateSequent(UpdateType.CHANGE, anim_base_style, anim_update_style)
 

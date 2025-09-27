@@ -16,6 +16,8 @@
 
 """IconStyle module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.ColorStyle import ColorStyle
@@ -76,9 +78,10 @@ class IconStyle(ColorStyle):
         color: GeoColor | int | None = None,
         color_mode: ColorModeEnum | None = None,
         hot_spot: HotSpot | None = None,
+        **kwargs: Any,
     ):
         """IconStyle instance constructor."""
-        ColorStyle.__init__(self, color=color, color_mode=color_mode)
+        ColorStyle.__init__(self, color=color, color_mode=color_mode, **kwargs)
         self.scale = scale
         self.heading = heading
         self.icon: Icon | None = Icon(href=icon) if isinstance(icon, str) else icon

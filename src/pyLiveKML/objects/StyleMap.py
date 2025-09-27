@@ -16,6 +16,8 @@
 
 """StyleMap module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Object import _BaseObject, _ChildDef, _DependentDef, _FieldDef
@@ -34,9 +36,9 @@ class _StyleMap_Pair(_BaseObject):
     )
     _kml_dependents = _BaseObject._kml_dependents + (_DependentDef("style"),)
 
-    def __init__(self, key: StyleStateEnum, style_ref: str | Style):
+    def __init__(self, key: StyleStateEnum, style_ref: str | Style, **kwargs: Any):
         """_StyleMap_Pair instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.key = key
         self.style: Style | None
         self.style_url: str | None
@@ -97,9 +99,10 @@ class StyleMap(StyleSelector):
         self,
         normal_style_ref: str | Style,
         highlight_style_ref: str | Style,
+        **kwargs: Any,
     ):
         """StyleMap instance constructor."""
-        super().__init__()
+        StyleSelector.__init__(self, **kwargs)
         self._normal = _StyleMap_Pair(StyleStateEnum.NORMAL, normal_style_ref)
         self._highlight = _StyleMap_Pair(StyleStateEnum.HIGHLIGHT, highlight_style_ref)
 

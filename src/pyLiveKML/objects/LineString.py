@@ -124,9 +124,10 @@ class LineString(Geometry):
         tessellate: bool | None = None,
         altitude_offset: float | None = None,
         draw_order: int = 0,
+        **kwargs: Any,
     ):
         """LineString instance constructor."""
-        Geometry.__init__(self)
+        Geometry.__init__(self, **kwargs)
         self.altitude_offset = altitude_offset
         self.extrude = extrude
         self.tessellate = tessellate

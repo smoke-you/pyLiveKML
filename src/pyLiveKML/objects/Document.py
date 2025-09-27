@@ -16,7 +16,7 @@
 
 """Document module."""
 
-from typing import Iterable
+from typing import Any, Iterable
 
 from lxml import etree  # type: ignore
 
@@ -144,9 +144,11 @@ class Document(Container):
         extended_data: ExtendedData | None = None,
         features: Feature | Iterable[Feature] | None = None,
         schemas: Schema | Iterable[Schema] | None = None,
+        **kwargs: Any,
     ):
         """Document instance constructor."""
-        super().__init__(
+        Container.__init__(
+            self,
             name=name,
             visibility=visibility,
             is_open=is_open,
@@ -164,6 +166,7 @@ class Document(Container):
             region=region,
             extended_data=extended_data,
             features=features,
+            **kwargs,
         )
         self._schemas = list[Schema]()
         self.schemas = schemas

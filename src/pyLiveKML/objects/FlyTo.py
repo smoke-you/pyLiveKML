@@ -16,6 +16,8 @@
 
 """FlyTo module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.AbstractView import AbstractView
@@ -63,9 +65,10 @@ class FlyTo(TourPrimitive):
         duration: float,
         fly_to_mode: FlyToModeEnum,
         abstract_view: AbstractView,
+        **kwargs: Any,
     ) -> None:
         """Track instance constructor."""
-        TourPrimitive.__init__(self)
+        TourPrimitive.__init__(self, **kwargs)
         self.duration = duration
         self.fly_to_mode = fly_to_mode
         self.abstract_view = abstract_view

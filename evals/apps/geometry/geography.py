@@ -22,8 +22,8 @@ import numpy
 from numpy import ndarray
 from pyproj import Proj, Transformer
 from scipy.spatial.transform import Rotation
-from pyLiveKML import GeoCoordinates
 
+from pyLiveKML import GeoCoordinates
 
 ecef = Proj(proj="geocent", ellps="WGS84", datum="WGS84")
 lla = Proj(proj="latlong", ellps="WGS84", datum="WGS84")

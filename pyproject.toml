@@ -37,9 +37,11 @@ skip-magic-trailing-comma = false
 
 [tool.ruff.lint]
 ignore = ["E501", "D203", "D213"]
-exclude = []
+exclude = [
+    "__init__.py",
+]
 select = [
-    "D"
+    "D", "I",
 ]
 per-file-ignores = {"__init__.py"=["D104"]}
 

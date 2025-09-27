@@ -16,6 +16,8 @@
 
 """Point module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Geometry import Geometry
@@ -67,9 +69,10 @@ class Point(Geometry):
         coordinates: GeoCoordinates | tuple[float, float, float] | tuple[float, float],
         altitude_mode: AltitudeModeEnum | None = None,
         extrude: bool | None = None,
+        **kwargs: Any,
     ):
         """Point instance constructor."""
-        Geometry.__init__(self)
+        Geometry.__init__(self, **kwargs)
         self._coordinates: GeoCoordinates
         self.coordinates = coordinates
         self.extrude = extrude

@@ -20,6 +20,7 @@ from datetime import datetime
 from typing import Optional, cast
 
 from apps.helpers import description_builder
+
 from pyLiveKML import (
     AltitudeModeEnum,
     GeoCoordinates,

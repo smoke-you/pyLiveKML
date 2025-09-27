@@ -16,6 +16,8 @@
 
 """PolyStyle module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.ColorStyle import ColorStyle
@@ -61,8 +63,9 @@ class PolyStyle(ColorStyle):
         color_mode: ColorModeEnum | None = None,
         fill: bool | None = None,
         outline: bool | None = None,
+        **kwargs: Any,
     ):
         """PolyStyle instance constructor."""
-        ColorStyle.__init__(self, color, color_mode)
+        ColorStyle.__init__(self, color=color, color_mode=color_mode, **kwargs)
         self.fill = fill
         self.outline = outline

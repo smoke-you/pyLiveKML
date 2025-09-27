@@ -16,22 +16,22 @@
 
 """Model module."""
 
-from typing import Iterator, Iterable
+from typing import Any, Iterable, Iterator
 
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Geometry import Geometry
 from pyLiveKML.objects.Link import Link
 from pyLiveKML.objects.Object import (
+    Object,
+    _Angle90,
+    _Angle180,
+    _Angle360,
+    _AnglePos180,
     _BaseObject,
     _ChildDef,
     _FieldDef,
     _ListObject,
-    _Angle90,
-    _Angle180,
-    _AnglePos180,
-    _Angle360,
-    Object,
 )
 from pyLiveKML.types import AltitudeModeEnum, GeoCoordinates
 
@@ -69,9 +69,11 @@ class Location(_BaseObject):
         _FieldDef("alt", "altitude"),
     )
 
-    def __init__(self, lon: float = 0, lat: float = 0, alt: float | None = None):
+    def __init__(
+        self, lon: float = 0, lat: float = 0, alt: float | None = None, **kwargs: Any
+    ):
         """Location instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.lon: float = lon
         self.lat: float = lat
         self.alt: float = 0 if not alt else alt
@@ -113,9 +115,11 @@ class Orientation(_BaseObject):
         _FieldDef("roll", parser=_Angle180),
     )
 
-    def __init__(self, heading: float = 0, tilt: float = 0, roll: float = 0):
+    def __init__(
+        self, heading: float = 0, tilt: float = 0, roll: float = 0, **kwargs: Any
+    ):
         """Location instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.heading = heading
         self.tilt = tilt
         self.roll = roll
@@ -151,9 +155,9 @@ class Scales(_BaseObject):
         _FieldDef("z"),
     )
 
-    def __init__(self, x: float = 0, y: float = 0, z: float = 0):
+    def __init__(self, x: float = 0, y: float = 0, z: float = 0, **kwargs: Any):
         """Scale instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.x = x
         self.y = y
         self.z = z
@@ -193,9 +197,9 @@ class Alias(_BaseObject):
         _FieldDef("source_href", "sourceHref"),
     )
 
-    def __init__(self, target_href: str, source_href: str):
+    def __init__(self, target_href: str, source_href: str, **kwargs: Any):
         """Alias instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.target_href = target_href
         self.source_href = source_href
 
@@ -224,9 +228,12 @@ class ResourceMap(_ListObject[Alias], _BaseObject):
     _kml_children = _BaseObject._kml_children + (_ChildDef("resources"),)
     _yield_self = True
 
-    def __init__(self, resources: Alias | Iterable[Alias] | None = None) -> None:
+    def __init__(
+        self, resources: Alias | Iterable[Alias] | None = None, **kwargs: Any
+    ) -> None:
         """ResourceMap instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
+        _ListObject[Alias].__init__(self)
         self.resources = resources
 
     @property
@@ -328,9 +335,10 @@ class Model(Geometry):
         orientation: tuple[float, float, float] = (0, 0, 0),
         scales: tuple[float, float, float] = (0, 0, 0),
         resources: Alias | Iterable[Alias] | None = None,
+        **kwargs: Any,
     ) -> None:
         """Model instance constructor."""
-        Object.__init__(self)
+        Geometry.__init__(self, **kwargs)
         self.link = link
         altitude_mode = (
             AltitudeModeEnum.CLAMP_TO_GROUND if altitude_mode is None else altitude_mode

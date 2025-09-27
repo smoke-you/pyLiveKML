@@ -16,9 +16,11 @@
 
 """BalloonStyle module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _FieldDef, _ColorParse
+from pyLiveKML.objects.Object import _ColorParse, _FieldDef
 from pyLiveKML.objects.SubStyle import SubStyle
 from pyLiveKML.types import DisplayModeEnum, GeoColor
 
@@ -70,9 +72,10 @@ class BalloonStyle(SubStyle):
         text_color: GeoColor | int | None = None,
         text: str | None = None,
         display_mode: DisplayModeEnum | None = None,
+        **kwargs: Any,
     ):
         """BalloonStyle instance constructor."""
-        SubStyle.__init__(self)
+        SubStyle.__init__(self, **kwargs)
         self.bg_color = bg_color
         self.text_color = text_color
         self.text = text

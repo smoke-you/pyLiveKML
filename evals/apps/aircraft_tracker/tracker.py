@@ -17,7 +17,6 @@
 """tracker module."""
 
 import json
-
 from datetime import datetime
 from pathlib import Path
 from typing import cast
@@ -27,11 +26,12 @@ from fastapi.requests import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from .AircraftData import AircraftData
-from .AircraftLocation import AircraftLocation
-from ..KMLApp import KMLApp, KMLSelect
 from pyLiveKML import NetworkLinkControl
 from pyLiveKML.objects.Feature import Feature
+
+from ..KMLApp import KMLApp, KMLSelect
+from .AircraftData import AircraftData
+from .AircraftLocation import AircraftLocation
 
 
 def load_adsb_exchange_data(filename: Path) -> AircraftLocation:

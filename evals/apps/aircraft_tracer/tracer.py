@@ -17,17 +17,19 @@
 """tracer module."""
 
 import json
-
 from datetime import datetime
 from pathlib import Path
 from typing import cast
 
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.requests import Request
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from lxml import etree  # type: ignore
+
 from pyLiveKML import (
+    KML_DOCTYPE,
+    KML_HEADERS,
     AltitudeModeEnum,
     Camera,
     Document,
@@ -36,13 +38,11 @@ from pyLiveKML import (
     Point,
     TimeSpan,
     kml_root_tag,
-    KML_DOCTYPE,
-    KML_HEADERS,
 )
 from pyLiveKML.objects.Feature import Feature
 
-from .AircraftPosition import AircraftPosition
 from ..KMLApp import KMLApp, KMLSelect
+from .AircraftPosition import AircraftPosition
 
 
 def load_adsb_exchange_data(filename: Path) -> Folder:

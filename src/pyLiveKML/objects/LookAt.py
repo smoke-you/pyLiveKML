@@ -22,11 +22,11 @@ from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.AbstractView import AbstractView, ViewerOption
 from pyLiveKML.objects.Object import (
-    _FieldDef,
+    _Angle90,
     _Angle180,
     _Angle360,
-    _Angle90,
     _AnglePos90,
+    _FieldDef,
     _NoParse,
 )
 from pyLiveKML.objects.TimePrimitive import TimePrimitive
@@ -137,9 +137,12 @@ class LookAt(AbstractView):
         alt: float | None = None,
         viewer_options: ViewerOption | Iterable[ViewerOption] | None = None,
         time_primitive: TimePrimitive | None = None,
+        **kwargs: Any,
     ):
         """LookAt instance constructor."""
-        AbstractView.__init__(self, viewer_options, time_primitive)
+        AbstractView.__init__(
+            self, viewer_options=viewer_options, time_primitive=time_primitive, **kwargs
+        )
         self.lon: float
         self.lat: float
         self.alt: float

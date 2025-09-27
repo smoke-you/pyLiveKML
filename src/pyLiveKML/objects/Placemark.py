@@ -16,7 +16,7 @@
 
 """Placemark module."""
 
-from typing import Iterator
+from typing import Any
 
 from lxml import etree  # type: ignore
 
@@ -149,6 +149,7 @@ class Placemark(Feature):
         style_url: str | None = None,
         region: Region | None = None,
         extended_data: ExtendedData | None = None,
+        **kwargs: Any,
     ):
         """Placemark instance constructor."""
         Feature.__init__(
@@ -169,6 +170,7 @@ class Placemark(Feature):
             styles=inline_style,
             region=region,
             extended_data=extended_data,
+            **kwargs,
         )
         self.geometry = geometry
 

@@ -17,7 +17,7 @@
 """Overlay module."""
 
 from abc import ABC
-from typing import Iterable, cast
+from typing import Any, Iterable, cast
 
 from lxml import etree  # type: ignore
 
@@ -27,8 +27,8 @@ from pyLiveKML.objects.Feature import Feature
 from pyLiveKML.objects.Icon import Icon
 from pyLiveKML.objects.Object import (
     _ChildDef,
-    _FieldDef,
     _ColorParse,
+    _FieldDef,
     _NoDump,
 )
 from pyLiveKML.objects.Region import Region
@@ -168,6 +168,7 @@ class Overlay(Feature, ABC):
         styles: StyleSelector | Iterable[StyleSelector] | None = None,
         region: Region | None = None,
         extended_data: ExtendedData | None = None,
+        **kwargs: Any,
     ):
         """Overlay instance constructor."""
         Feature.__init__(
@@ -188,6 +189,7 @@ class Overlay(Feature, ABC):
             styles=styles,
             region=region,
             extended_data=extended_data,
+            **kwargs,
         )
         ABC.__init__(self)
         self.icon = Icon(href=icon) if isinstance(icon, str) else icon

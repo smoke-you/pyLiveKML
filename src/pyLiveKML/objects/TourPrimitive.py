@@ -17,6 +17,7 @@
 """TourPrimitive module."""
 
 from abc import ABC
+from typing import Any
 
 from pyLiveKML.objects.Object import Object
 
@@ -44,7 +45,7 @@ class TourPrimitive(Object, ABC):
 
     """
 
-    def __init__(self) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         """TourPrimitive instance constructor."""
-        Object.__init__(self)
+        Object.__init__(self, **kwargs)
         ABC.__init__(self)

@@ -16,13 +16,13 @@
 
 """AnimatedUpdate module."""
 
-from typing import Iterable
+from typing import Any, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Update import Update, UpdateSequent
 from pyLiveKML.objects.Object import _ChildDef, _FieldDef
 from pyLiveKML.objects.TourPrimitive import TourPrimitive
+from pyLiveKML.objects.Update import Update, UpdateSequent
 
 
 class AnimatedUpdate(TourPrimitive):
@@ -81,9 +81,10 @@ class AnimatedUpdate(TourPrimitive):
         delayed_start: float = 0,
         target_href: str = "",
         sequence: UpdateSequent | Iterable[UpdateSequent] | None = None,
+        **kwargs: Any,
     ) -> None:
         """GxAnimatedUpdate instance constructor."""
-        TourPrimitive.__init__(self)
+        TourPrimitive.__init__(self, **kwargs)
         self.delayed_start = delayed_start
         self.duration = duration
         self.update = Update(target_href, sequence=sequence)

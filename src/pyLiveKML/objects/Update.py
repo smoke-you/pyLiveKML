@@ -18,11 +18,11 @@
 
 from abc import ABC
 from enum import Enum
-from typing import Iterable
+from typing import Any, Iterable
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.objects.Object import _BaseObject, _FieldDef, ObjectChild
+from pyLiveKML.objects.Object import ObjectChild, _BaseObject, _FieldDef
 
 
 class UpdateType(Enum):
@@ -87,8 +87,9 @@ class _UpdateSequence(_BaseObject, list[UpdateSequent]):
     def __init__(
         self,
         items: UpdateSequent | Iterable[UpdateSequent] | None = None,
+        **kwargs: Any,
     ):
-        _BaseObject.__init__(self)
+        _BaseObject.__init__(self, **kwargs)
         list[UpdateSequent].__init__(self)
         if items is not None:
             if isinstance(items, UpdateSequent):
@@ -133,8 +134,9 @@ class _UpdateList(_BaseObject, list[ObjectChild], ABC):
     def __init__(
         self,
         items: ObjectChild | Iterable[ObjectChild] | None = None,
+        **kwargs: Any,
     ) -> None:
-        _BaseObject.__init__(self)
+        _BaseObject.__init__(self, **kwargs)
         list[ObjectChild].__init__(self)
         ABC.__init__(self)
         if items is not None:
@@ -308,9 +310,10 @@ class Update(_BaseObject):
         changes: ObjectChild | Iterable[ObjectChild] | None = None,
         deletes: ObjectChild | Iterable[ObjectChild] | None = None,
         sequence: UpdateSequent | Iterable[UpdateSequent] | None = None,
+        **kwargs: Any,
     ):
         """Update instance constructor."""
-        super().__init__()
+        _BaseObject.__init__(self, **kwargs)
         self.target_href = target_href
         self.creates = _CreateList(creates)
         self.changes = _ChangeList(changes)

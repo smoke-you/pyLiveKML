@@ -17,8 +17,9 @@
 """ColorStyle module."""
 
 from abc import ABC
+from typing import Any
 
-from pyLiveKML.objects.Object import _FieldDef, _ColorParse
+from pyLiveKML.objects.Object import _ColorParse, _FieldDef
 from pyLiveKML.objects.SubStyle import SubStyle
 from pyLiveKML.types import ColorModeEnum, GeoColor
 
@@ -53,9 +54,10 @@ class ColorStyle(SubStyle, ABC):
         self,
         color: GeoColor | int | None = None,
         color_mode: ColorModeEnum | None = None,
+        **kwargs: Any,
     ):
         """ColorStyle instance constructor."""
-        SubStyle.__init__(self)
+        SubStyle.__init__(self, **kwargs)
         ABC.__init__(self)
         self.color_mode = color_mode
         self.color = GeoColor(color) if isinstance(color, int) else color

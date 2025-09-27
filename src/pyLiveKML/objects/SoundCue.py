@@ -16,6 +16,8 @@
 
 """SoundCue module."""
 
+from typing import Any
+
 from lxml import etree  # type: ignore
 
 from pyLiveKML.objects.Object import _FieldDef
@@ -60,8 +62,9 @@ class SoundCue(TourPrimitive):
         self,
         href: str,
         delayed_start: float = 0,
+        **kwargs: Any,
     ) -> None:
         """SoundCue instance constructor."""
-        TourPrimitive.__init__(self)
+        TourPrimitive.__init__(self, **kwargs)
         self.href = href
         self.delayed_start = delayed_start

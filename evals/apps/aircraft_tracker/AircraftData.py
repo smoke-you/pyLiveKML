@@ -19,7 +19,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pyLiveKML import GeoCoordinates, AltitudeModeEnum
+from pyLiveKML import AltitudeModeEnum, GeoCoordinates
 
 
 class AircraftData:

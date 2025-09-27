@@ -20,8 +20,8 @@ from abc import ABC
 
 from lxml import etree  # type: ignore
 
-from pyLiveKML.types.types import UnitsEnum
 from pyLiveKML.objects.Object import _BaseObject, _RootAttribDef
+from pyLiveKML.types.types import UnitsEnum
 
 
 class Vec2(_BaseObject, ABC):
