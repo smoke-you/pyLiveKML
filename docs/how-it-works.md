@@ -6,11 +6,15 @@ As noted in the readme, pyLiveKML is an implementation of Google's
 (GEP). GEP is updated on the fly using an implementation of the mechanism described in 
 [Google's documentation](https://developers.google.com/kml/documentation/updates). KML tags are created, updated and deleted in GEP to maintain synchronization between the Python application and GEP.
 
+## Disclaimer
+
+Google Earth (TM) and Google Maps (TM) are registered trademarks of Google Inc. pyLiveKML is not affiliated with Google.
+
 # Static -vs- Dynamic Publishing
 
-Static publishing produces a KML file that can be loaded directly into GEP, but that (as a general rule) cannot be updated via pyLiveKML once it has been opened in GEP.  The top-layer object in a static KML file will typically be a `<Document>` or `<Folder>`, or may also be a `<NetworkLink>`.
+Static publishing produces a KML file that can be loaded directly into GEP, but that (as a general rule) cannot be updated via pyLiveKML once it has been opened in GEP.  The top-layer tag in a static KML file will typically be a `<Document>` or `<Folder>`, or may also be a `<NetworkLink>`.
 
-Dynamic publishing produces a KML file that can be retrieved by GEP and used to modify GEP's state.  As a general rule, in order to perform dynamic publishing, two (or more) `NetworkLink` objects must be loaded into GEP using static publishing to construct their tags. One of the `<NetworkLink>` tags hosts the other dynamically published KML objects, and the other `<NetworkLink>` tag periodically accesses a `NetworkLinkControl` object that publishes `<Update>` tags that describe how the first `<NetworkLink>` tag's contents should be manipulated.
+Dynamic publishing produces a KML file that can be retrieved by GEP and used to modify GEP's state.  As a general rule, in order to perform dynamic publishing, two (or more) `NetworkLink` tags must be loaded into GEP using static publishing. One of the `<NetworkLink>` tags hosts the other dynamically published KML tags, and the other `<NetworkLink>` tag periodically retrieves a dynamically constructed `NetworkLinkControl` tag that encloses `<Update>` tags that describe how the first `<NetworkLink>` tag's contents should be manipulated.
 
 # KML Objects
 
@@ -34,13 +38,15 @@ Python representations of KML objects derive from the abstract `Object` class, w
 
 * `_suppress_id` : `bool`
 
-  Controls whether the instance's tag will be published with an `id` attribute.
+  Controls whether the object's tag will be published with an `id` attribute.
 
 ## Children -vs- Dependents
 
 Children and dependents are treated identically during static publishing, but differently during dynamic publishing.
 
-During dynamic publishing, descendants are created and published at the same time as, and as child tags of, the parent; while children are published in (and as children of) `<Update>` tags that describe how the child should be created, modified or deleted.
+* During static publishing, all dependents and children are created and published as child tags of the parent.
+
+* During dynamic publishing, dependents are created and published at the same time as, and as child tags of, the parent; while children are published in (and as children of) `<Update>` tags that describe how the child should be created, modified or deleted.
 
 Note that in order for KML tags to be manipulated using `<Update>` tags, it is necessary that both the parent and child tags include their `id` as an attribute.
 
@@ -68,7 +74,11 @@ These methods are intended to be used by `Update` instances while building their
 
 * `delete_kml(self, root: etree.Element) -> None`
 
-`NetworkLinkControl` exposes another dynamic KML publishing method, `def construct_sync(self, with_children: bool = True, with_dependents: bool = True) -> etree.Element`. It's operation is discussed [below](https://github.com/smoke-you/pyLiveKML/blob/main/docs/how-it-works.md#networklinkcontrol). `construct_sync` ultimately calls `build_kml` and the above three methods in order to publish the corresponding tags.
+`NetworkLinkControl` exposes another dynamic KML publishing method:
+
+* `def construct_sync(self, with_children: bool = True, with_dependents: bool = True) -> etree.Element`
+
+It's operation is discussed [below](https://github.com/smoke-you/pyLiveKML/blob/main/docs/how-it-works.md#networklinkcontrol). `construct_sync` ultimately calls `build_kml` and the above three methods in order to publish the corresponding tags.
 
 ## Synchronization
 
@@ -93,15 +103,15 @@ Several methods are exposed by `_BaseObject` to facilitate state management, rat
 
 * `activate(self, value: bool, cascade: bool = False) -> None`
 
-  Publish the object to GEP, if `value` is `True`; or delete it if `value` is `False`.
+  Begin synchronizing the object to GEP, if `value` is `True`; or flag it for deletion and desynchronization it if `value` is `False`.  If `cascade` is `True`, `value` is also applied to all children.
 
 * `field_changed(self) -> None`
 
-  Flag that a field of the object has been changed and that the change needs to be published to GEP.
+  Flag that a field of the object has been changed and that the change needs to be published to GEP. Detection of field changes is automatically handled, up to a point, by a customized `_BaseObject.__setattr__` method that should be adequate for the standard classes. `field_changed` may need to be called for custom classes.
 
 * `synchronized(self)`
 
-  Flag that the object has been synchronized with GEP.
+  Flag that the object has been synchronized with GEP. This method is typically automatically executed during execution of `construct_sync`, but may need to be called for custom implementations.
 
 * `force_idle(self) -> None`
 
@@ -111,7 +121,7 @@ Several methods are exposed by `_BaseObject` to facilitate state management, rat
 
 A `NetworkLinkControl` object, or "NLC", is the primary means of performing dynamic publishing.
 
-The NLC hosts a `Container` (which may be either a `Document` or `Folder`, in terms of concrete classes), and works to keep that `Container` synchronized with GEP. Each time the NLC's `construct_sync` method is executed, it walks the tree of it's `Container`, looking for and noting KML objects with a state that is not IDLE or CREATED. It will record no more than `update_limit` `Create`, `Change` or `Delete` operations before publishing an `<Update>` tag containing all of the synchronization updates that it has gathered. As objects are listed for synchronization, their `synchronized` method is called.
+The NLC hosts a list of `Container`s (each of which may be either a `Document` or `Folder`, in terms of concrete classes), and works to keep the list of `Container`s synchronized with GEP. Each time the NLC's `construct_sync` method is executed, it walks the tree of it's `Container`s, looking for and noting KML objects with a state that is not IDLE or CREATED. It will record no more than `update_limit` `Create`, `Change` or `Delete` operations before publishing an `<Update>` tag containing all of the synchronization updates that it has gathered. As objects are listed for synchronization, their `synchronized` method is called.
 
 It is also possible to statically publish an NLC, using it's conventional `construct_kml` and/or `build_kml` methods. Before calling these methods, the required operations - create, change, and delete, or a custom sequence, - should first be added to the NLC's `update` attribute.
 
@@ -159,16 +169,16 @@ In order to publish KML data, it must be collected into a properly-constructed K
 
 # Setting up a Live Feed
 
-In order to set up a live feed, it is necessary to load (at least) two `<NetworkLink>` tags into GEP: one tag to host live content, and the other to retrieve that content. This mechanism is detailed well in [Google's documentation](https://developers.google.com/kml/documentation/updates). It is also implemented in [the evaluation application](https://github.com/smoke-you/pyLiveKML/blob/main/evals/main.py), where the various file endpoints /loader.kml, /elements.kml and /update.kml return files that perform distinct functions.
+In order to set up a live feed, it is necessary to load (at least) two `<NetworkLink>` tags into GEP: one tag to host live content, and the other to retrieve that content. This mechanism is detailed well in [Google's documentation](https://developers.google.com/kml/documentation/updates). It is also implemented in [the evaluation application](https://github.com/smoke-you/pyLiveKML/blob/main/evals/main.py), where the various file endpoints `/loader.kml`, `/elements.kml` and `/update.kml` return files that perform distinct functions.
 
-* /loader.kml
+* `/loader.kml`
 
-  Delivers a KML file containing the two `<NetworkLink>` tags, named "Elements" and "Update". The "Elements" link retrieves /elements.kml once only, while the "Update" link periodically retrieves /update.kml.
+  Delivers a KML file containing the two `<NetworkLink>` tags, named "Elements" and "Update". The "Elements" link retrieves `/elements.kml` once only, while the "Update" link periodically retrieves `/update.kml`.
 
-* /elements.kml
+* `/elements.kml`
 
-  Delivers a KML file that must use a `<Container>` (a `<Document>` or `<Folder>`, as concrete subclasses) tag as it's root element. The /update.kml file will target this `<Container>` (or one or more child `<Container>`'s under it), creating new (or changing, or deleting, existing) tags under the target. As discussed [above](https://github.com/smoke-you/pyLiveKML/blob/main/docs/how-it-works.md#networklinkcontrol), target `<Container>`'s are referenced in the Python implementation of `<NetworkLinkControl>` as the objects that it is to monitor and synchronize with GEP.
+  Delivers a KML file that must use a `<Container>` (a `<Document>` or `<Folder>`, as concrete subclasses) tag as it's root element. The `/update.kml` file will target this `<Container>` (or one or more child `<Container>`'s under it), creating new (or changing, or deleting, existing) tags under the target. As discussed [above](https://github.com/smoke-you/pyLiveKML/blob/main/docs/how-it-works.md#networklinkcontrol), target `<Container>`'s are referenced in the Python implementation of `<NetworkLinkControl>` as the objects that it is to monitor and synchronize with GEP.
 
-* / update.kml
+* `/ update.kml`
 
   Delivers a KML file containing a `<NetworkLinkControl>` tag, with it's child `<Update>` tag and a collection of `<Create>`, `<Change>` and `<Delete>` tags that describe the next synchronization update.

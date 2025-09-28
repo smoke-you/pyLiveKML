@@ -1,20 +1,3 @@
-# Update Status
-
-I'm currently working on a major update to v1.1, with work including:
-
-| Task | Status |
-| --- | --- |
-| Adding in all of the KML (and KML extension) classes [defined by Google](https://developers.google.com/kml/documentation/kmlreference). | Done? |
-| Reworking inheritance to minimize the amount of class-specific behaviour. | Done? |
-| Simplifying the directory structure of the package. | Done |
-| Adding an explanation of how the implementation, and the eval apps, work. | Done |
-| Re-doing all code documentation. | Done |
-| Verification that all of the classes actually *work*.<br>See the [test log](https://github.com/smoke-you/pyLiveKML/blob/main/docs/test_log.md). | Static: Done<br>Dynamic: Done? |
-
-## Changes from version 0
-
-This is a major revision. Code relying upon pyLiveKML v0.0.x will almost certainly need to be re-written to incorporate the changes, particularly around imports.
-
 # What is pyLiveKML?
 
 pyLiveKML is an implementation of Google's 
@@ -27,13 +10,21 @@ pyLiveKML also provides a means of constructing static KML files from Python.
 
 Several simple evaluation apps are included with the pyLiveKML source.  These projects use [Uvicorn](https://www.uvicorn.org/) and [FastAPI](https://fastapi.tiangolo.com/) to serve KML files to GEP, and to serve HTML etc files to provide a user interface via a browser.
 
+## Disclaimer
+
+Google Earth (TM) and Google Maps (TM) are registered trademarks of Google Inc. pyLiveKML is not affiliated with Google.
+
+## Changes from version 0 to version 1
+
+v1 is a major revision. Code relying upon pyLiveKML v0.0.x will need to be re-written to incorporate the changes, particularly around imports.
+
 # How does pyLiveKML work?
 
 See [how-it-works](https://github.com/smoke-you/pyLiveKML/blob/main/docs/how-it-works.md) for a reasonably detailed explanation.
 
 # Has the entire KML specification been implemented?
 
-From version 1.0.0, all of the KML classes described in the [KML specification](https://developers.google.com/kml/documentation/kmlreference) have been implemented. If anything is missing, please let me know.
+From version 1.0.0, all of the KML classes described in [Google's KML specification](https://developers.google.com/kml/documentation/kmlreference) have been implemented. If anything is missing, please let me know.
 
 # GIS and OS Compatibility
 
@@ -59,7 +50,7 @@ It is possible, even probable, that pyLiveKML will (at least partially) work wit
 
 * [Simple](https://github.com/smoke-you/pyLiveKML/blob/main/evals/apps/simple/README.md)
 
-If GEP is started without any arguments, you will need to add a new NetworkLink object to "Temporary Places", with the link address set to the URI of the loader.kml file, e.g. http(s)://addr:port/loader.kml. GEP (as of at least v7.3.6) will not load loader.kml from the URI using File->Open.  However, if you start GEP with the URI of loader.kml as an argument, then it will load loader.kml on startup.
+If GEP is started without any arguments, you will need to add a new NetworkLink object to "Temporary Places", with the link address set to the URI of the loader.kml file, e.g. `http(s)://addr:port/loader.kml`. GEP (as of at least v7.3.6) will not load loader.kml from the URI using File->Open.  However, if you start GEP with the URI of `loader.kml` as an argument, then it will load `loader.kml` on startup.
 
 # Documentation
 
@@ -71,4 +62,4 @@ The code is reasonably thoroughly documented via docstrings.
 
 # Contributions
 
-While I've done a fair bit of testing, particularly with the revision from 0.0.4 to 1.0.0, I have no doubt that there are bugs. If you encounter something that needs to be fixed, please let me know via a [Github](https://github.com/smoke-you/pyLiveKML) Issue, Discussion topic and/or PR.
+While I've done a fair bit of testing, I have no doubt that there are bugs. If you encounter something that needs to be fixed, please let me know via a [Github](https://github.com/smoke-you/pyLiveKML) Issue, Discussion topic and/or PR.

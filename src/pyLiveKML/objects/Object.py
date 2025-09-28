@@ -582,25 +582,24 @@ class _BaseObject(ABC):
             True if the dependents of this instance should be included in the build.
 
         """
+        a_items = dict[str, str]()
         for f in (f for f in self._kml_fields if f.dumper != _NoDump):
             f_val = f.dumper.dump(getattr(self, f.name, None))
             if f_val is None:
                 continue
             if f_val == "":
                 f_val = None
-
-            a_items = list[tuple[str, str]]()
+            a_items.clear()
             for a_def in filter(lambda a: a.target_field == f.name, self._kml_field_attribs):
                 a_val = getattr(self, a_def.value_field, None)
                 if a_val is None:
                     continue
-                a_items.append((with_ns(a_def.name), a_def.dumper.dump(a_val)))
+                a_items[with_ns(a_def.name)] = a_def.dumper.dump(a_val)
             if f_val or a_items:
                 f_elem = etree.SubElement(root, with_ns(f.typename))
                 f_elem.text = f_val
-                for a_item in a_items:
-                    f_elem.set(*a_item)
-
+                for k, v in a_items.items():
+                    f_elem.set(k, v)
         if with_dependents:
             for dd in self.dependents:
                 branch = dd.child.construct_kml(with_children, with_dependents)
